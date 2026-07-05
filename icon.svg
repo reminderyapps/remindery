@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="248 48 528 856">
+  <!-- Remindery: Geburtstage - Markenmotiv (Cupcake mit Herzflamme).
+       Quelle: App-Repo, lib/theme/brand_icon.dart (generiert). -->
+  <rect x="490" y="222" width="44" height="250" rx="16" fill="#FAF7F2" stroke="#2B2622" stroke-width="17"/>
+  <path d="M 340 660 L 684 660 L 652 838 Q 512 876 372 838 Z" fill="#E8604C"/>
+  <clipPath id="cup"><path d="M 340 660 L 684 660 L 652 838 Q 512 876 372 838 Z"/></clipPath>
+  <g clip-path="url(#cup)">
+    <path d="M 398 660 L 421 856" fill="none" stroke="#2B2622" stroke-width="10.5"/>
+    <path d="M 455 660 L 466 862" fill="none" stroke="#2B2622" stroke-width="10.5"/>
+    <path d="M 512 660 L 512 864" fill="none" stroke="#2B2622" stroke-width="10.5"/>
+    <path d="M 569 660 L 558 862" fill="none" stroke="#2B2622" stroke-width="10.5"/>
+    <path d="M 626 660 L 603 856" fill="none" stroke="#2B2622" stroke-width="10.5"/>
+  </g>
+  <path d="M 340 660 L 684 660 L 652 838 Q 512 876 372 838 Z" fill="none" stroke="#2B2622" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 322 692 C 282 676 272 612 306 584 C 318 574 334 566 352 560 C 326 542 318 500 348 476 C 360 466 374 460 390 456 C 372 438 372 402 400 384 C 428 366 468 356 512 356 C 556 356 596 366 624 384 C 652 402 652 438 634 456 C 650 460 664 466 676 476 C 706 500 698 542 672 560 C 690 566 706 574 718 584 C 752 612 742 676 702 692 C 640 708 576 712 512 712 C 448 712 384 708 322 692 Z" fill="#FAF7F2" stroke="#2B2622" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 354 558 C 450 592 590 588 674 652" fill="none" stroke="#2B2622" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 392 452 C 470 486 570 484 648 538" fill="none" stroke="#2B2622" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 512 212 C 498 202 446 166 446 118 C 446 92 466 76 488 76 C 499 76 508 83 512 92 C 516 83 525 76 536 76 C 558 76 578 92 578 118 C 578 166 526 202 512 212 Z" fill="#E8604C" stroke="#2B2622" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

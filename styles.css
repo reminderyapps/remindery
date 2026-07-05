@@ -1,0 +1,156 @@
+/* Remindery – Web-Look (Basis: docs/design.md der App-Familie).
+   Bewusst OHNE externe Fonts/Ressourcen: die Seite lädt nichts von
+   Dritten – passend zum Datenschutz-Versprechen der Apps. */
+
+:root {
+  --bg: #FAF7F2;
+  --card: #FFFFFF;
+  --text: #2B2622;
+  --text-soft: #6E6258;
+  --accent: #E8604C;
+  --shadow: 0 10px 40px rgba(43, 38, 34, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #211A15;
+    --card: #2C231C;
+    --text: #F4EDE4;
+    --text-soft: #B3A697;
+    --accent: #ED705C;
+    --shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, .brand {
+  font-family: Georgia, "Times New Roman", ui-serif, serif;
+  line-height: 1.25;
+}
+
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 24px 64px;
+}
+
+/* --- Landingpage --- */
+
+.hero {
+  min-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+}
+
+.hero img.logo {
+  width: 132px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 6vw, 3rem);
+  margin: 0;
+}
+
+.hero h1 .family { color: var(--accent); }
+
+.claim {
+  font-family: Georgia, "Times New Roman", ui-serif, serif;
+  font-size: clamp(1.15rem, 3.4vw, 1.5rem);
+  margin: 10px 0 4px;
+}
+
+.pitch {
+  color: var(--text-soft);
+  max-width: 34em;
+  margin: 0 auto;
+}
+
+.badge {
+  display: inline-block;
+  margin-top: 28px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #FFF8F3;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+footer {
+  text-align: center;
+  padding: 28px 24px 40px;
+  color: var(--text-soft);
+  font-size: 0.9rem;
+}
+
+footer nav {
+  margin-bottom: 10px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* --- Textseiten (Datenschutz) --- */
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+
+.page-header img { width: 44px; height: auto; }
+
+.page-header .brand {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.lang-switch {
+  float: right;
+  font-size: 0.9rem;
+}
+
+article {
+  background: var(--card);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  padding: clamp(24px, 5vw, 48px);
+  margin-top: 20px;
+}
+
+article h1 { font-size: 1.7rem; margin-top: 0; }
+article h2 { font-size: 1.2rem; margin-top: 2em; }
+
+article blockquote {
+  margin: 1em 0;
+  padding: 12px 18px;
+  border-left: 4px solid var(--accent);
+  background: var(--bg);
+  border-radius: 0 14px 14px 0;
+  color: var(--text-soft);
+}
+
+.updated { color: var(--text-soft); font-size: 0.95rem; }
+
+.back { display: inline-block; margin-top: 24px; }
