@@ -81,22 +81,37 @@ main {
   margin: 0 auto;
 }
 
-.badge {
+/* Offizielles Google-Play-Badge (google-play-badge-de.png, unverändert
+   von play.google.com/intl/de_de/badges/). Laut Google-Branding-Guidelines
+   nur proportional skalieren – nicht zuschneiden, umfärben, drehen oder
+   verzerren. Der weiße Rand im PNG ist die vorgeschriebene Schutzzone
+   (1/4 der Badge-Höhe), er muss sichtbar bleiben. */
+.store-badge {
   display: inline-block;
-  margin-top: 28px;
-  padding: 10px 22px;
-  border-radius: 999px;
-  background: var(--accent);
-  color: #FFF8F3;
-  font-weight: 600;
-  letter-spacing: 0.01em;
+  margin-top: 16px;
+  line-height: 0;
 }
+
+/* 232 px Breite ≈ 90 px Bildhöhe, davon ~60 px Badge selbst;
+   width + height:auto skaliert auf schmalen Screens verzerrungsfrei. */
+.store-badge img {
+  width: 232px;
+  height: auto;
+  max-width: 100%;
+}
+
+.store-badge:hover { text-decoration: none; }
 
 footer {
   text-align: center;
   padding: 28px 24px 40px;
   color: var(--text-soft);
   font-size: 0.9rem;
+}
+
+footer .trademark {
+  margin: 12px 0 0;
+  font-size: 0.78rem;
 }
 
 footer nav {
