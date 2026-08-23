@@ -141,6 +141,11 @@ a:hover { text-decoration: underline; }
   font-weight: 700;
 }
 
+/* Die Wortmarke im Seitenkopf fuehrt zurueck zur Uebersicht, soll aber nicht
+   wie ein gewoehnlicher Link aussehen. */
+.page-header .brand a { color: var(--text); }
+.page-header .brand a:hover { color: var(--accent); text-decoration: none; }
+
 .lang-switch {
   float: right;
   font-size: 0.9rem;
@@ -182,3 +187,70 @@ article blockquote {
 .updated { color: var(--text-soft); font-size: 0.95rem; }
 
 .back { display: inline-block; margin-top: 24px; }
+
+/* --- Familien-Landingpage: Übersicht aller Apps -------------------------
+   Der Kopf trägt `favicon.svg`, das Zeichen des Herausgebers – nicht
+   `icon.svg`, das Remindery: Geburtstage gehört. */
+
+.lp-head img.logo {
+  width: 104px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.lp-head {
+  text-align: center;
+  padding: 24px 0 8px;
+}
+
+.lp-head h1 {
+  font-size: clamp(1.9rem, 5.5vw, 2.75rem);
+  margin: 0;
+}
+
+.lp-head h1 .family { color: var(--accent); }
+
+.apps {
+  display: grid;
+  gap: 20px;
+  margin-top: 44px;
+}
+
+.app-card {
+  background: var(--card);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  padding: clamp(24px, 5vw, 36px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.app-card h2 {
+  font-size: 1.45rem;
+  margin: 0;
+}
+
+.app-card h2 a { color: var(--text); }
+.app-card h2 a:hover { color: var(--accent); text-decoration: none; }
+
+.app-card p { margin: 0; color: var(--text-soft); }
+
+.app-card .store-badge { margin-top: 4px; }
+
+/* Platzhalter, solange eine App noch nicht im Store ist – bewusst kein
+   Play-Badge: das Badge darf laut Google-Guidelines nur einen echten
+   Store-Eintrag verlinken. */
+.app-card .soon {
+  align-self: flex-start;
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: var(--text-soft);
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 5px 16px;
+}
+
+/* --- Weiterleitungsseiten (alte Pfade) --- */
+
+.redirect { text-align: center; }
