@@ -12,21 +12,20 @@
   HERKUNFT DES APP-TEILS — bitte vor jeder Änderung lesen.
 
   Der Abschnitt „Die App Uhr lesen lernen" ist NICHT von einer Schwester-App
-  kopiert. Er ist die Web-Fassung des Textes, der in der App selbst steht
-  (lib/l10n/app_localizations_de.dart, privacy*-Schlüssel), und dieser Text
-  wiederum ist am Code verifiziert (docs/manifest-baseline.md):
-  null uses-permission im Release-Manifest, kein Netzwerkaufruf in lib/,
-  zwei lokale Hive-Boxen, kein TTS-Plugin, allowBackup="false".
+  kopiert und auch nicht hier erfunden. Er ist die Web-Fassung des Textes, der
+  in der App selbst steht (lib/l10n/app_localizations_de.dart, privacy*-
+  Schlüssel), und dieser Text ist am Code verifiziert
+  (apps/uhr-app/docs/manifest-baseline.md).
 
-  OFFENE ANGLEICHUNG (Auftrag C, Stand 02.09.2026):
-  Sobald Auftrag A die Play Billing Library einbaut, stimmen ZWEI Aussagen
-  hier nicht mehr, und zwar in der App wie auf dieser Seite:
-    1. „Es gibt keine Käufe in der App."
-    2. „Die App fordert keine Internet-Berechtigung an."
-  Billing bringt INTERNET + com.android.vending.BILLING mit, und der Kauf
-  ist dann real. Dann gilt: ERST den App-Text neu fassen, DANN diese Seite
-  daraus ableiten — nie umgekehrt. Der Ablauf steht in
-  apps/uhr-app/docs/store/console-session.md § 5.
+  Stand 03.09.2026, NACH dem Billing-Einbau durch Strang A: Die App führt
+  jetzt drei Berechtigungen, alle aus Googles Play-Billing-Bibliothek
+  (INTERNET, ACCESS_NETWORK_STATE, com.android.vending.BILLING). Der Abschnitt
+  „Internet, Berechtigungen und der Kauf" und der neue Abschnitt „Was beim
+  Kauf passiert" sind daraus abgeleitet.
+
+  DIE REIHENFOLGE IST VERBINDLICH: Ändert sich die Verarbeitung, wird ERST der
+  App-Text neu gefasst und DANN diese Seite daraus abgeleitet — nie umgekehrt.
+  Die App ist die Quelle, weil nur sie am Code prüfbar ist.
 -->
 <body>
   <main>
@@ -76,12 +75,29 @@
       keinen Text an Dritte. Sie nimmt nichts auf; auf das Mikrofon greift sie
       nicht zu.</p>
 
-      <h3>Kein Internet, keine Weitergabe</h3>
-      <p>Die installierte App fordert keine Internet-Berechtigung an und baut
-      keine Verbindung zu Servern auf – weder zu unseren noch zu fremden. Sie
-      fragt überhaupt keine Berechtigungen ab: kein Mikrofon, keine Kamera,
-      keine Kontakte, keinen Standort. Es gibt keine Käufe in der App und
-      keine Weitergabe von Daten an Dritte.</p>
+      <h3>Internet, Berechtigungen und der Kauf</h3>
+      <p>Die App selbst baut keine Verbindung zu Servern auf – weder zu
+      unseren noch zu fremden; <strong>wir betreiben keine</strong>. Sie fragt
+      kein Mikrofon, keine Kamera, keine Kontakte und keinen Standort ab.</p>
+      <p>Seit dem Einbau des Kaufs führt die installierte App drei
+      Berechtigungen, die sämtlich aus Googles Play-Billing-Bibliothek
+      stammen: die Internet-Berechtigung und die Abfrage des
+      Verbindungsstatus sowie die Berechtigung für die Abrechnung über Google
+      Play. Sie sind nötig, damit das Gerät einen Kauf mit Google Play
+      abwickeln kann. Wir nutzen sie für nichts anderes: es gibt weiterhin
+      keine Werbung, keine Statistik- oder Analyse-Dienste und keine
+      Weitergabe von Daten an Dritte.</p>
+
+      <h3>Was beim Kauf passiert</h3>
+      <p>Die App ist kostenlos ladbar; ein einmaliger Kauf öffnet alle
+      Übungen dauerhaft. Der Kauf läuft vollständig über Google Play. Dort
+      entstehen Zahlungs- und Kaufdaten, für die <strong>Google
+      verantwortlich ist – nicht wir</strong>. Wir erhalten von Google keine
+      personenbezogenen Daten.</p>
+      <p>In der App bleibt vom Kauf nur ein Vermerk auf dem Gerät, dass
+      gekauft wurde. Ein Konto oder eine Anmeldung braucht die App dafür
+      nicht: wiederhergestellt wird der Kauf über die Kaufhistorie des
+      Play-Kontos, das ohnehin auf dem Gerät eingerichtet ist.</p>
 
       <h3>Keine Geräte-Sicherung (Backup)</h3>
       <p>Anders als viele Apps ist Uhr lesen lernen ausdrücklich
@@ -141,7 +157,8 @@
       Leere – bei uns liegen keine Daten, die wir jemandem zuordnen könnten.
       Für E-Mail-Anfragen und die Server-Logs dieser Website gilt das nicht;
       bei den Logs ist GitHub der richtige Adressat, da wir selbst keinen
-      Zugriff darauf haben.</p>
+      Zugriff darauf haben. Zu Käufen, Zahlungsdaten und Kaufhistorie ist
+      Google der richtige Adressat.</p>
 
       <p>Bei Fragen zum Datenschutz erreichen Sie uns jederzeit unter:
       <strong>reminderyapps@gmail.com</strong></p>
