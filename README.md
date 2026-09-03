@@ -20,8 +20,9 @@ Gehostet über GitHub Pages (Branch `main`, Root):
 
 **App-Ebene** – ein Unterordner je App, gleicher Zuschnitt:
 
-    geburtstage/    index.html, datenschutz.html, datenschutz-en.html
-    silben-lesen/   index.html, datenschutz.html
+    geburtstage/       index.html, datenschutz.html, datenschutz-en.html
+    silben-lesen/      index.html, datenschutz.html
+    uhr-lesen-lernen/  index.html, datenschutz.html
 
 Eine neue App bekommt einen neuen Ordner – **keine Dateien mehr im Root**.
 Jede App-Datenschutzerklärung enthält den Website-Teil noch einmal
