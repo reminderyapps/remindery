@@ -141,6 +141,15 @@ a:hover { text-decoration: underline; }
   font-weight: 700;
 }
 
+/* Zusatz zur Wortmarke auf den Ox-Seiten: „Ox" allein steht auf einer
+   Rechtstextseite zu nackt da, der volle Store-Titel liest sich dort wie ein
+   Schlagwortband. Deshalb der schlichte Gattungsname daneben. */
+.page-header .brand-sub {
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--text-soft);
+}
+
 /* Die Wortmarke im Seitenkopf fuehrt zurueck zur Uebersicht, soll aber nicht
    wie ein gewoehnlicher Link aussehen. */
 .page-header .brand a { color: var(--text); }

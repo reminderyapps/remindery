@@ -18,6 +18,16 @@
   abgeleitet — nie umgekehrt. Die App ist die Quelle, weil nur sie am Code
   prüfbar ist.
 
+  ABGLEICH GEGEN DEN CODE, 06.09.2026 (vor dem Store-Eintrag):
+  Vier Aussagen waren enger als der Server — das Korrektur-Log haengt nicht an
+  einer Korrektur (app.py:138 legt bei JEDER Extraktion ab), die
+  Installations-Kennung tut mehr als Fotos zaehlen (quota.py, zugang.py), der
+  Audio-Abruf traegt sie mit (app.py:416), und /api/abrechnen meldet die Zahl
+  der uebernommenen Woerter (zugang.py:361). Dazu neu: Betriebsprotokolle
+  (schutz.py:174, 14 Tage laut template.yaml:173) und ein abgesetzter
+  Widerspruchs-Hinweis nach Art. 21 Abs. 4 DSGVO. Der App-Text traegt
+  dieselben Korrekturen.
+
   ABWEICHUNG, STAND 06.09.2026 — hier steht mehr als in der App:
   Der Abschnitt „Was beim Kauf passiert" hat in der App noch keine
   Entsprechung. Der In-App-Kauf ist gebaut (Pakete M1–M5), der Datenschutztext
@@ -34,14 +44,16 @@
   <main>
     <header class="page-header">
       <span class="brand">Ox</span>
+      <span class="brand-sub">Vokabeltrainer</span>
     </header>
 
     <article>
       <h1>Datenschutzerklärung</h1>
       <p class="updated">Stand: September 2026</p>
 
-      <p>Diese Erklärung betrifft die <strong>App Ox</strong> und – soweit Sie
-      diese Seite im Browser lesen – den Betrieb dieser Website.</p>
+      <p>Diese Erklärung betrifft die <strong>App Ox – Vokabeltrainer für
+      jedes Englischbuch</strong> und – soweit Sie diese Seite im Browser
+      lesen – den Betrieb dieser Website.</p>
 
       <h2>Verantwortlicher</h2>
       <p>Verantwortlich im Sinne der Datenschutz-Grundverordnung (DSGVO):</p>
@@ -78,23 +90,32 @@
       Kontoebene abgeschaltet.</p>
       <p>Das Foto wird dabei nur im Arbeitsspeicher verarbeitet und danach
       sofort verworfen – <strong>es wird nicht gespeichert</strong>.</p>
-      <p>Wenn Sie erkannte Wörter vor dem Speichern korrigieren, werden die
-      korrigierten Wörter an unseren Dienst geschickt und dort
-      <strong>90 Tage</strong> aufbewahrt, damit wir die Erkennung prüfen und
-      verbessern können. Dabei geht eine <strong>zufällige
-      Installations-Kennung</strong> mit, die die App beim ersten Foto erzeugt.
-      Sie enthält keine Angaben zu Ihnen oder Ihrem Gerät und begrenzt nur, wie
-      viele Fotos am Tag verarbeitet werden.</p>
+      <p>Das <strong>Ergebnis</strong> der Erkennung – die Liste der erkannten
+      Wörter – bewahren wir dagegen <strong>90 Tage</strong> bei unserem Dienst
+      auf. Korrigieren Sie Wörter vor dem Speichern, kommen Ihre Korrekturen
+      hinzu. Wir brauchen beides, um zu messen, wie zuverlässig die Erkennung
+      arbeitet, und um sie zu verbessern. Nach 90 Tagen löscht sich der Eintrag
+      von selbst.</p>
+
       <p>Bitte beachten Sie: Auf einem Arbeitsblatt kann der Name eines Kindes
       stehen. Ein solches Foto wird zwar nicht gespeichert, aber es wird
       übertragen und vom Modell gelesen. Wenn Sie das vermeiden möchten,
       decken Sie den Namen ab oder tragen Sie die Wörter von Hand ein – das
       geht ohne Übertragung und ohne Begrenzung.</p>
 
+      <h3>Die Installations-Kennung</h3>
+      <p>Beim ersten Zugriff auf unseren Dienst erzeugt die App eine
+      Zufallszahl, die <strong>Installations-Kennung</strong>. Sie enthält
+      keine Angaben zu Ihnen oder Ihrem Gerät und ist mit keinem Konto
+      verknüpft. Wir verwenden sie, um die Zahl der Fotos und Sprachclips pro
+      Tag zu begrenzen, um gekauftes Guthaben der richtigen Installation
+      zuzuordnen und um die Einträge im Korrektur-Log zusammenzuführen.</p>
+
       <h3>Was bei der Aussprache passiert</h3>
       <p>Die Sprachclips erzeugt unser Dienst über <strong>Amazon Polly</strong>
-      (Rechenzentrum in den USA). Übertragen werden dabei nur das englische
-      Wort und der Beispielsatz – kein Foto, kein Lernstand. Fertige Clips
+      (Rechenzentrum in den USA). Übertragen werden dabei das englische Wort,
+      der Beispielsatz und die Installations-Kennung – kein Foto, kein
+      Lernstand. Fertige Clips
       werden auf dem Telefon und bei unserem Dienst gespeichert, damit sie
       nicht erneut erzeugt werden müssen.</p>
 
@@ -122,8 +143,19 @@
 
       <h3>Keine Werbung, kein Tracking</h3>
       <p>Ox enthält keine Werbung und keine Analyse-Dienste Dritter. Was in der
-      App getan wird, wird nur auf dem Gerät gezählt und nirgendwohin gesendet.
+      App getan wird, wird nur auf dem Gerät gezählt. An unseren Dienst geht
+      davon nichts – <strong>außer der Zahl der Wörter, die Sie aus einem Foto
+      übernehmen</strong>, denn sie ist die Grundlage der Abrechnung.
       Wenn Sie die App bewerten, öffnet sich dafür der Dialog von Google Play.</p>
+
+      <h3>Was unser Dienst protokolliert</h3>
+      <p>Bei jedem Zugriff auf unseren Dienst entsteht eine Protokollzeile mit
+      Zeitstempel, Art des Vorgangs, Status, Dauer und den <strong>ersten acht
+      Zeichen</strong> der Installations-Kennung. Wörter, Bildinhalte und
+      IP-Adressen stehen dort nicht. Diese Protokolle löschen sich nach
+      <strong>14 Tagen</strong>; Rechtsgrundlage ist unser berechtigtes
+      Interesse an einem sicheren und funktionierenden Betrieb
+      (Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;f DSGVO).</p>
 
       <h3>Keine Geräte-Sicherung (Backup)</h3>
       <p>Ox ist ausdrücklich <strong>von der Android-Sicherung ausgenommen</strong>
@@ -151,12 +183,22 @@
       <h3>Rechtsgrundlagen und Speicherdauer</h3>
       <p>Die Verarbeitung des Fotos und die Erzeugung der Sprachclips sind zur
       Erfüllung des Nutzungsvertrags erforderlich (Art.&nbsp;6 Abs.&nbsp;1
-      lit.&nbsp;b DSGVO). Das Korrektur-Log dient unserem berechtigten
-      Interesse an einer verlässlichen Erkennung (Art.&nbsp;6 Abs.&nbsp;1
-      lit.&nbsp;f DSGVO) und wird nach 90 Tagen automatisch gelöscht. Die
+      lit.&nbsp;b DSGVO). Das Korrektur-Log – die erkannten Wörter und Ihre
+      Korrekturen dazu – dient unserem berechtigten Interesse an einer
+      verlässlichen Erkennung (Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;f DSGVO) und
+      wird nach 90 Tagen automatisch gelöscht; die Betriebsprotokolle nach
+      14 Tagen. Die
       Kaufeinträge sind für die Erfüllung des Kaufvertrags und den Schutz vor
       missbräuchlichen Belegen erforderlich (Art.&nbsp;6 Abs.&nbsp;1
       lit.&nbsp;b und lit.&nbsp;f DSGVO). Fotos werden nicht gespeichert.</p>
+
+      <h3>Ihr Widerspruchsrecht</h3>
+      <p><strong>Sie haben das Recht, der Verarbeitung Ihrer Daten jederzeit zu
+      widersprechen, soweit wir sie auf ein berechtigtes Interesse stützen</strong>
+      (Art.&nbsp;21 DSGVO). Das betrifft das Korrektur-Log, den Schutz vor
+      missbräuchlichen Kaufbelegen und die Betriebsprotokolle. Ein formloser
+      Hinweis an <a href="mailto:reminderyapps@gmail.com">reminderyapps@gmail.com</a>
+      genügt.</p>
 
       <h3>Kinder als Nutzer</h3>
       <p>Ox richtet sich an Schülerinnen und Schüler ab Klasse 5. Die App
@@ -212,10 +254,10 @@
       (Art.&nbsp;20) und Widerspruch (Art.&nbsp;21) sowie ein Beschwerderecht
       bei einer Datenschutz-Aufsichtsbehörde (Art.&nbsp;77).</p>
       <p>Weil die App weder Namen noch Konto kennt, können wir einen Eintrag
-      keiner Person zuordnen. Für das Korrektur-Log heißt das: Wir können nicht
-      feststellen, welche Zeilen von Ihnen stammen, und diese Rechte laufen
-      dort in der Praxis ins Leere; die Zeilen löschen sich ohnehin nach
-      90 Tagen. Einen Kaufeintrag finden wir über die Bestellnummer aus Ihrer
+      keiner Person zuordnen (Art.&nbsp;11 DSGVO). Für das Korrektur-Log heißt
+      das: Die Einträge tragen nur die zufällige Installations-Kennung, und wir
+      können nicht feststellen, welche von Ihnen stammen; die Zeilen löschen
+      sich ohnehin nach 90 Tagen. Einen Kaufeintrag finden wir über die Bestellnummer aus Ihrer
       Google-Play-Bestätigung. Bei den Server-Logs dieser Website ist GitHub
       der richtige Adressat, da wir selbst keinen Zugriff darauf haben. Zu
       Käufen, Zahlungsdaten und Kaufhistorie ist Google der richtige
@@ -236,6 +278,7 @@
   <footer>
     <nav>
       <a href="index.html">Ox</a>
+      <a href="nutzungsbedingungen.html">Nutzungsbedingungen</a>
       <a href="../impressum.html">Impressum</a>
       <a href="../">Alle Apps</a>
     </nav>
