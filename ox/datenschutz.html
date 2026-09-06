@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Datenschutzerklärung – Ox</title>
+  <meta name="description" content="Datenschutzerklärung für die App Ox: was auf dem Gerät bleibt, was beim Fotografieren an den Dienst in Frankfurt geht und was beim Kauf über Google Play passiert.">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<!--
+  HERKUNFT DES APP-TEILS — bitte vor jeder Änderung lesen.
+
+  Der Abschnitt „Die App Ox" ist die Web-Fassung des Textes, der in der App
+  selbst steht (apps/vokabel-app/app/lib/features/mehr/datenschutz_seite.dart).
+  Die Reihenfolge ist verbindlich wie bei den Schwester-Apps: Ändert sich die
+  Verarbeitung, wird ERST der App-Text neu gefasst und DANN diese Seite daraus
+  abgeleitet — nie umgekehrt. Die App ist die Quelle, weil nur sie am Code
+  prüfbar ist.
+
+  ABWEICHUNG, STAND 06.09.2026 — hier steht mehr als in der App:
+  Der Abschnitt „Was beim Kauf passiert" hat in der App noch keine
+  Entsprechung. Der In-App-Kauf ist gebaut (Pakete M1–M5), der Datenschutztext
+  der App ist ihm aber noch nicht nachgezogen; das ist Paket M6. Diese Seite
+  muss den Kauf trotzdem benennen, weil sie die Datenschutz-URL des
+  Store-Eintrags ist und für sich allein vollständig sein muss. Sobald M6
+  gebaut ist, ist der App-Text wieder die Quelle und diese Seite dagegen zu
+  halten.
+
+  Grundlage der Server-Aussagen: apps/vokabel-app/docs/auftrag-hosting-aws.md
+  (Teil A.5, B8) und server/zugang.py, server/kauf.py, server/audio.py.
+-->
+<body>
+  <main>
+    <header class="page-header">
+      <span class="brand">Ox</span>
+    </header>
+
+    <article>
+      <h1>Datenschutzerklärung</h1>
+      <p class="updated">Stand: September 2026</p>
+
+      <p>Diese Erklärung betrifft die <strong>App Ox</strong> und – soweit Sie
+      diese Seite im Browser lesen – den Betrieb dieser Website.</p>
+
+      <h2>Verantwortlicher</h2>
+      <p>Verantwortlich im Sinne der Datenschutz-Grundverordnung (DSGVO):</p>
+      <blockquote>
+        Patrick Steinborn<br>
+        Remindery Apps<br>
+        Wulfsdorfer Weg 85b<br>
+        22926 Ahrensburg, Deutschland<br>
+        Telefon: +49&nbsp;156&nbsp;79823172<br>
+        E-Mail: reminderyapps@gmail.com
+      </blockquote>
+
+      <h2 class="part">Die App Ox</h2>
+
+      <h3>Kurz gesagt</h3>
+      <p><strong>Ox hat kein Konto und fragt nicht nach Namen oder Alter.</strong>
+      Es gibt keine Werbung und keine Statistik- oder Analyse-Dienste. Der
+      Lernstand bleibt auf dem Gerät. Anders als unsere übrigen Apps ist Ox
+      aber <strong>nicht offline</strong>: Wer eine Buchseite fotografiert,
+      schickt dieses Foto an unseren Dienst. Was dabei passiert, steht
+      vollständig weiter unten.</p>
+
+      <h3>Was auf dem Gerät bleibt</h3>
+      <p>Karten, Stapel, Tests und der Lernstand liegen ausschließlich im
+      Speicher der App auf Ihrem Gerät. <strong>Wir haben darauf keinen
+      Zugriff.</strong> Name, Alter oder Geburtsdatum werden nie abgefragt.</p>
+
+      <h3>Was beim Fotografieren passiert</h3>
+      <p>Das Foto einer Buchseite wird verschlüsselt an unseren Dienst in
+      <strong>Frankfurt am Main</strong> übertragen (Amazon Web Services,
+      Region eu-central-1). Dort liest ein KI-Modell die Wörter heraus:
+      <strong>Claude von Anthropic, betrieben über Amazon Bedrock in der
+      EU</strong>. Für dieses Modell ist die Aufbewahrung von Eingaben auf
+      Kontoebene abgeschaltet.</p>
+      <p>Das Foto wird dabei nur im Arbeitsspeicher verarbeitet und danach
+      sofort verworfen – <strong>es wird nicht gespeichert</strong>.</p>
+      <p>Wenn Sie erkannte Wörter vor dem Speichern korrigieren, werden die
+      korrigierten Wörter an unseren Dienst geschickt und dort
+      <strong>90 Tage</strong> aufbewahrt, damit wir die Erkennung prüfen und
+      verbessern können. Dabei geht eine <strong>zufällige
+      Installations-Kennung</strong> mit, die die App beim ersten Foto erzeugt.
+      Sie enthält keine Angaben zu Ihnen oder Ihrem Gerät und begrenzt nur, wie
+      viele Fotos am Tag verarbeitet werden.</p>
+      <p>Bitte beachten Sie: Auf einem Arbeitsblatt kann der Name eines Kindes
+      stehen. Ein solches Foto wird zwar nicht gespeichert, aber es wird
+      übertragen und vom Modell gelesen. Wenn Sie das vermeiden möchten,
+      decken Sie den Namen ab oder tragen Sie die Wörter von Hand ein – das
+      geht ohne Übertragung und ohne Begrenzung.</p>
+
+      <h3>Was bei der Aussprache passiert</h3>
+      <p>Die Sprachclips erzeugt unser Dienst über <strong>Amazon Polly</strong>
+      (Rechenzentrum in den USA). Übertragen werden dabei nur das englische
+      Wort und der Beispielsatz – kein Foto, kein Lernstand. Fertige Clips
+      werden auf dem Telefon und bei unserem Dienst gespeichert, damit sie
+      nicht erneut erzeugt werden müssen.</p>
+
+      <h3>Was beim Kauf passiert</h3>
+      <p>Die App ist kostenlos. Wörter von Hand einzutragen bleibt kostenlos.
+      Bezahlt wird nur das Übernehmen aus dem Foto, entweder einmalig für ein
+      Wortpaket oder als monatliches Abo.</p>
+      <p>Der Kauf läuft vollständig über <strong>Google Play</strong>. Dort
+      entstehen Zahlungs- und Kaufdaten, für die <strong>Google verantwortlich
+      ist – nicht wir</strong>. Wir erhalten von Google keine
+      personenbezogenen Daten und sehen weder Namen noch Zahlungsmittel.</p>
+      <p>Bei unserem Dienst entsteht zu jedem Kauf ein Eintrag, der aus dem
+      <strong>Kaufbeleg von Google</strong>, der zufälligen
+      Installations-Kennung und dem verbleibenden Guthaben besteht. Wir
+      brauchen ihn aus zwei Gründen: um bei Google zu prüfen, ob ein Kauf echt
+      ist, und damit ein gekauftes Guthaben nach einer Neuinstallation über
+      „Käufe wiederherstellen" zurückgeholt werden kann. Ein laufendes Abo
+      fragen wir höchstens alle sechs Stunden bei Google nach, um zu sehen, ob
+      es noch gilt. Diese Einträge enthalten <strong>keinen Namen und keine
+      Zahlungsdaten</strong>.</p>
+
+      <h3>Benachrichtigungen</h3>
+      <p>Erinnerungen plant die App auf dem Telefon selbst. Es gibt keinen
+      Server, der weiß, wann geübt wird.</p>
+
+      <h3>Keine Werbung, kein Tracking</h3>
+      <p>Ox enthält keine Werbung und keine Analyse-Dienste Dritter. Was in der
+      App getan wird, wird nur auf dem Gerät gezählt und nirgendwohin gesendet.
+      Wenn Sie die App bewerten, öffnet sich dafür der Dialog von Google Play.</p>
+
+      <h3>Keine Geräte-Sicherung (Backup)</h3>
+      <p>Ox ist ausdrücklich <strong>von der Android-Sicherung ausgenommen</strong>
+      (<code>allowBackup="false"</code>). Der Lernstand wandert also nicht in
+      ein Google-Backup und verlässt das Gerät auch auf diesem Weg nicht. Die
+      Kehrseite: Bei einem Gerätewechsel beginnt der Lernstand von vorn.
+      Gekauftes Guthaben geht dabei nicht verloren, es wird über „Käufe
+      wiederherstellen" zurückgeholt.</p>
+
+      <h3>Der App-Store</h3>
+      <p>Wenn Sie die App über einen App-Store geladen haben, erhebt dessen
+      Betreiber eigene Daten zum Download und zur Installation. Dafür ist der
+      Store-Betreiber verantwortlich, nicht wir – wir bekommen von dort keine
+      personenbezogenen Daten.</p>
+
+      <h3>Auftragsverarbeiter</h3>
+      <p>Für den Betrieb des Dienstes setzen wir <strong>Amazon Web Services
+      EMEA SARL</strong> ein (38 Avenue John F. Kennedy, 1855 Luxemburg). Die
+      Verarbeitung der Fotos und der Betrieb des Modells finden in der EU
+      statt; die Sprachausgabe über Amazon Polly findet in den USA statt, wobei
+      dorthin ausschließlich einzelne englische Wörter und Beispielsätze
+      gelangen. Grundlage sind der Auftragsverarbeitungsvertrag von AWS und die
+      EU-Standardvertragsklauseln.</p>
+
+      <h3>Rechtsgrundlagen und Speicherdauer</h3>
+      <p>Die Verarbeitung des Fotos und die Erzeugung der Sprachclips sind zur
+      Erfüllung des Nutzungsvertrags erforderlich (Art.&nbsp;6 Abs.&nbsp;1
+      lit.&nbsp;b DSGVO). Das Korrektur-Log dient unserem berechtigten
+      Interesse an einer verlässlichen Erkennung (Art.&nbsp;6 Abs.&nbsp;1
+      lit.&nbsp;f DSGVO) und wird nach 90 Tagen automatisch gelöscht. Die
+      Kaufeinträge sind für die Erfüllung des Kaufvertrags und den Schutz vor
+      missbräuchlichen Belegen erforderlich (Art.&nbsp;6 Abs.&nbsp;1
+      lit.&nbsp;b und lit.&nbsp;f DSGVO). Fotos werden nicht gespeichert.</p>
+
+      <h3>Kinder als Nutzer</h3>
+      <p>Ox richtet sich an Schülerinnen und Schüler ab Klasse 5. Die App
+      fragt keine personenbezogenen Daten ab und verlangt kein Konto. Käufe
+      können nur über das Google-Play-Konto des Geräts ausgelöst werden; der
+      Weg dorthin liegt bewusst im Eltern-Bereich. Wir empfehlen, das
+      Fotografieren von Arbeitsblättern mit Namen gemeinsam mit einem
+      Erwachsenen zu besprechen.</p>
+
+      <h3>Daten löschen</h3>
+      <p>Alles, was auf dem Gerät liegt, löschen Sie durch Deinstallation oder
+      über die Android-Einstellungen.</p>
+      <p>Das Korrektur-Log bei unserem Dienst löscht sich nach 90 Tagen von
+      selbst; wir müssen dafür nichts tun und Sie auch nicht. Einen
+      Kaufeintrag löschen wir auf Zuruf – schreiben Sie uns an die unten
+      genannte Adresse und nennen Sie die <strong>Bestellnummer aus Ihrer
+      Google-Play-Bestätigung</strong>. Über sie finden wir den Eintrag.
+      Bitte beachten Sie, dass mit dem Eintrag auch das gekaufte Guthaben
+      erlischt und sich danach nicht mehr wiederherstellen lässt.</p>
+
+      <h2 class="part">Diese Website</h2>
+
+      <h3>Hosting (GitHub Pages)</h3>
+      <p>Diese Seite wird bei GitHub&nbsp;Inc., 88 Colin P. Kelly Jr. St.,
+      San Francisco, CA 94107, USA, als „GitHub Pages" gehostet. Beim Aufruf
+      verarbeitet GitHub technisch notwendige Daten, insbesondere die
+      <strong>IP-Adresse</strong> Ihres Geräts, in Server-Logs. Zweck ist die
+      Auslieferung der Seite sowie die Stabilität und Sicherheit des Betriebs.
+      <strong>Wir selbst haben keinen Zugriff auf diese Logs.</strong>
+      Rechtsgrundlage ist Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;f DSGVO. GitHub ist
+      nach dem EU-US Data Privacy Framework zertifiziert; Einzelheiten in
+      GitHubs Datenschutzerklärung:
+      <a href="https://docs.github.com/privacy">https://docs.github.com/privacy</a></p>
+
+      <h3>Keine Cookies</h3>
+      <p>Diese Seite setzt <strong>keine Cookies</strong> und bindet keine
+      externen Schriften, Skripte oder Tracker ein – alle Ressourcen liegen auf
+      demselben Server. Deshalb gibt es hier auch keinen Cookie-Banner: Es gibt
+      nichts, worin Sie einwilligen müssten.</p>
+
+      <h3>Kontaktaufnahme</h3>
+      <p>Wenn Sie uns per E-Mail schreiben, verarbeiten wir Ihre E-Mail-Adresse
+      und den Inhalt Ihrer Nachricht ausschließlich, um Ihre Anfrage zu
+      bearbeiten (Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;b bzw. lit.&nbsp;f DSGVO).
+      Wir löschen Ihre Nachricht, sobald die Anfrage erledigt ist und keine
+      gesetzlichen Aufbewahrungspflichten entgegenstehen. Anbieter unseres
+      E-Mail-Postfachs ist Google (Gmail).</p>
+
+      <h2>Ihre Rechte als betroffene Person</h2>
+      <p>Die DSGVO gewährt Ihnen unter anderem Rechte auf Auskunft
+      (Art.&nbsp;15), Berichtigung (Art.&nbsp;16), Löschung (Art.&nbsp;17),
+      Einschränkung der Verarbeitung (Art.&nbsp;18), Datenübertragbarkeit
+      (Art.&nbsp;20) und Widerspruch (Art.&nbsp;21) sowie ein Beschwerderecht
+      bei einer Datenschutz-Aufsichtsbehörde (Art.&nbsp;77).</p>
+      <p>Weil die App weder Namen noch Konto kennt, können wir einen Eintrag
+      keiner Person zuordnen. Für das Korrektur-Log heißt das: Wir können nicht
+      feststellen, welche Zeilen von Ihnen stammen, und diese Rechte laufen
+      dort in der Praxis ins Leere; die Zeilen löschen sich ohnehin nach
+      90 Tagen. Einen Kaufeintrag finden wir über die Bestellnummer aus Ihrer
+      Google-Play-Bestätigung. Bei den Server-Logs dieser Website ist GitHub
+      der richtige Adressat, da wir selbst keinen Zugriff darauf haben. Zu
+      Käufen, Zahlungsdaten und Kaufhistorie ist Google der richtige
+      Adressat.</p>
+
+      <p>Bei Fragen zum Datenschutz erreichen Sie uns jederzeit unter:
+      <strong>reminderyapps@gmail.com</strong></p>
+
+      <h2>Änderungen dieser Datenschutzerklärung</h2>
+      <p>Sollten künftige Funktionen der App eine weitergehende Verarbeitung
+      erforderlich machen, passen wir diese Erklärung an und veröffentlichen
+      sie in der App sowie an dieser Stelle. Es gilt jeweils die hier
+      veröffentlichte aktuelle Fassung.</p>
+
+      <a class="back" href="index.html">&larr; Zur&uuml;ck zu Ox</a>
+    </article>
+  </main>
+  <footer>
+    <nav>
+      <a href="index.html">Ox</a>
+      <a href="../impressum.html">Impressum</a>
+      <a href="../">Alle Apps</a>
+    </nav>
+    &copy; 2026 Remindery Apps
+  </footer>
+</body>
+</html>
