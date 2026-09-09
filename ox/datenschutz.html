@@ -87,11 +87,14 @@
       Region eu-central-1). Dort liest ein KI-Modell die Wörter heraus:
       <strong>Claude von Anthropic, betrieben über Amazon Bedrock in der
       EU</strong>. Für dieses Modell ist die Aufbewahrung von Eingaben auf
-      Kontoebene abgeschaltet.</p>
+      Kontoebene abgeschaltet. Anthropic selbst erhält dabei nichts: Das
+      Modell läuft in den Rechenzentren von Amazon Web Services, nicht bei
+      Anthropic.</p>
       <p>Das Foto wird dabei nur im Arbeitsspeicher verarbeitet und danach
       sofort verworfen – <strong>es wird nicht gespeichert</strong>.</p>
       <p>Das <strong>Ergebnis</strong> der Erkennung – die Liste der erkannten
-      Wörter – bewahren wir dagegen <strong>90 Tage</strong> bei unserem Dienst
+      Wörter mit Beispielsätzen, nicht aber die freie Bemerkung des Modells
+      zur Seite – bewahren wir dagegen <strong>90 Tage</strong> bei unserem Dienst
       auf. Korrigieren Sie Wörter vor dem Speichern, kommen Ihre Korrekturen
       hinzu. Wir brauchen beides, um zu messen, wie zuverlässig die Erkennung
       arbeitet, und um sie zu verbessern. Nach 90 Tagen löscht sich der Eintrag
@@ -99,9 +102,12 @@
 
       <p>Bitte beachten Sie: Auf einem Arbeitsblatt kann der Name eines Kindes
       stehen. Ein solches Foto wird zwar nicht gespeichert, aber es wird
-      übertragen und vom Modell gelesen. Wenn Sie das vermeiden möchten,
-      decken Sie den Namen ab oder tragen Sie die Wörter von Hand ein – das
-      geht ohne Übertragung und ohne Begrenzung.</p>
+      übertragen und vom Modell gelesen. Das Modell ist angewiesen, Namen,
+      Klassen, Schulen, Daten und Noten in kein Feld zu übernehmen, und seine
+      freie Bemerkung zur Seite wird nicht aufbewahrt. Wenn Sie die
+      Übertragung ganz vermeiden möchten, decken Sie den Namen ab oder tragen
+      Sie die Wörter von Hand ein – das geht ohne Übertragung und ohne
+      Begrenzung.</p>
 
       <h3>Die Installations-Kennung</h3>
       <p>Beim ersten Zugriff auf unseren Dienst erzeugt die App eine
@@ -109,13 +115,16 @@
       keine Angaben zu Ihnen oder Ihrem Gerät und ist mit keinem Konto
       verknüpft. Wir verwenden sie, um die Zahl der Fotos und Sprachclips pro
       Tag zu begrenzen, um gekauftes Guthaben der richtigen Installation
-      zuzuordnen und um die Einträge im Korrektur-Log zusammenzuführen.</p>
+      zuzuordnen und um die Einträge im Korrektur-Log zusammenzuführen. Die
+      App speichert die Kennung auf dem Gerät; das ist für den Dienst
+      unbedingt erforderlich und bedarf deshalb keiner Einwilligung
+      (§&nbsp;25 Abs.&nbsp;2 Nr.&nbsp;2 TDDDG).</p>
 
       <h3>Was bei der Aussprache passiert</h3>
       <p>Die Sprachclips erzeugt unser Dienst über <strong>Amazon Polly</strong>
-      (Rechenzentrum in den USA). Übertragen werden dabei das englische Wort,
-      der Beispielsatz und die Installations-Kennung – kein Foto, kein
-      Lernstand. Fertige Clips
+      (Rechenzentrum in den USA). An unseren Dienst gehen dabei das englische
+      Wort, der Beispielsatz und die Installations-Kennung – kein Foto, kein
+      Lernstand. Polly selbst erhält nur den englischen Text. Fertige Clips
       werden auf dem Telefon und bei unserem Dienst gespeichert, damit sie
       nicht erneut erzeugt werden müssen.</p>
 
@@ -125,17 +134,25 @@
       Wortpaket oder als monatliches Abo.</p>
       <p>Der Kauf läuft vollständig über <strong>Google Play</strong>. Dort
       entstehen Zahlungs- und Kaufdaten, für die <strong>Google verantwortlich
-      ist – nicht wir</strong>. Wir erhalten von Google keine
-      personenbezogenen Daten und sehen weder Namen noch Zahlungsmittel.</p>
+      ist – nicht wir</strong>. Wir sehen weder Namen noch Zahlungsmittel.
+      Von Google erhalten wir nur den Kaufbeleg (ein technisches Kauf-Token)
+      und die Bestellnummer; beides kann allein Google einer Person
+      zuordnen.</p>
       <p>Bei unserem Dienst entsteht zu jedem Kauf ein Eintrag, der aus dem
       <strong>Kaufbeleg von Google</strong>, der zufälligen
       Installations-Kennung und dem verbleibenden Guthaben besteht. Wir
       brauchen ihn aus zwei Gründen: um bei Google zu prüfen, ob ein Kauf echt
       ist, und damit ein gekauftes Guthaben nach einer Neuinstallation über
-      „Käufe wiederherstellen" zurückgeholt werden kann. Ein laufendes Abo
+      „Käufe wiederherstellen" zurückgeholt werden kann. Für diese Prüfung
+      senden wir den Kaufbeleg an die Google Play Developer API (Google LLC,
+      USA). Ein laufendes Abo
       fragen wir höchstens alle sechs Stunden bei Google nach, um zu sehen, ob
       es noch gilt. Diese Einträge enthalten <strong>keinen Namen und keine
       Zahlungsdaten</strong>.</p>
+      <p>Ein Kaufeintrag bleibt, solange das Wortpaket Guthaben hat oder das
+      Abo läuft, und danach bis zum Ende der regelmäßigen Verjährungsfrist von
+      drei Jahren (§&nbsp;195 BGB), weil so lange Ansprüche aus dem Kauf
+      geltend gemacht werden können. Dann löschen wir ihn.</p>
 
       <h3>Benachrichtigungen</h3>
       <p>Erinnerungen plant die App auf dem Telefon selbst. Es gibt keinen
@@ -171,14 +188,23 @@
       Store-Betreiber verantwortlich, nicht wir – wir bekommen von dort keine
       personenbezogenen Daten.</p>
 
-      <h3>Auftragsverarbeiter</h3>
+      <h3>Auftragsverarbeiter und Empfänger</h3>
       <p>Für den Betrieb des Dienstes setzen wir <strong>Amazon Web Services
       EMEA SARL</strong> ein (38 Avenue John F. Kennedy, 1855 Luxemburg). Die
       Verarbeitung der Fotos und der Betrieb des Modells finden in der EU
       statt; die Sprachausgabe über Amazon Polly findet in den USA statt, wobei
       dorthin ausschließlich einzelne englische Wörter und Beispielsätze
       gelangen. Grundlage sind der Auftragsverarbeitungsvertrag von AWS und die
-      EU-Standardvertragsklauseln.</p>
+      EU-Standardvertragsklauseln; Amazon Web Services, Inc. ist zudem nach dem
+      EU-US Data Privacy Framework zertifiziert. Anthropic, der Hersteller des
+      Modells, erhält keine Daten von uns.</p>
+      <p><strong>Google</strong> (Google Ireland Limited, Gordon House, Barrow
+      Street, Dublin 4, Irland) ist für den Kauf über Google Play eigener
+      Verantwortlicher. Für die Prüfung eines Kaufbelegs senden wir diesen an
+      die Google Play Developer API von Google LLC (USA); Google LLC ist nach
+      dem EU-US Data Privacy Framework zertifiziert. Einzelheiten in Googles
+      Datenschutzerklärung:
+      <a href="https://policies.google.com/privacy">https://policies.google.com/privacy</a></p>
 
       <h3>Rechtsgrundlagen und Speicherdauer</h3>
       <p>Die Verarbeitung des Fotos und die Erzeugung der Sprachclips sind zur
@@ -190,7 +216,17 @@
       14 Tagen. Die
       Kaufeinträge sind für die Erfüllung des Kaufvertrags und den Schutz vor
       missbräuchlichen Belegen erforderlich (Art.&nbsp;6 Abs.&nbsp;1
-      lit.&nbsp;b und lit.&nbsp;f DSGVO). Fotos werden nicht gespeichert.</p>
+      lit.&nbsp;b und lit.&nbsp;f DSGVO) und werden bis drei Jahre nach dem
+      Ende von Guthaben oder Abo aufbewahrt (§&nbsp;195 BGB). Fotos werden
+      nicht gespeichert.</p>
+      <p>Auf eine Einwilligung stützen wir keine Verarbeitung; deshalb kommt es
+      auch nicht auf das Alter der Nutzerin oder des Nutzers an
+      (Art.&nbsp;8 DSGVO). Den Nutzungsvertrag über die App schließen bei
+      Kindern die Eltern, die die App installieren und einen Kauf im
+      Eltern-Bereich freigeben. Bei der Abwägung unserer berechtigten
+      Interessen berücksichtigen wir, dass die Nutzer überwiegend Kinder sind,
+      und halten die Datenmenge deshalb so klein wie möglich: kein Konto, kein
+      Name, kein gespeichertes Foto.</p>
 
       <h3>Ihr Widerspruchsrecht</h3>
       <p><strong>Sie haben das Recht, der Verarbeitung Ihrer Daten jederzeit zu
@@ -202,7 +238,8 @@
 
       <h3>Kinder als Nutzer</h3>
       <p>Ox richtet sich an Schülerinnen und Schüler ab Klasse 5. Die App
-      fragt keine personenbezogenen Daten ab und verlangt kein Konto. Käufe
+      fragt keine personenbezogenen Daten ab, verlangt kein Konto und enthält
+      weder Werbung noch Analyse-Dienste. Käufe
       können nur über das Google-Play-Konto des Geräts ausgelöst werden; der
       Weg dorthin liegt bewusst im Eltern-Bereich. Wir empfehlen, das
       Fotografieren von Arbeitsblättern mit Namen gemeinsam mit einem
