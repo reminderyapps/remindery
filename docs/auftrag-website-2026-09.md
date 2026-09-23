@@ -1,6 +1,6 @@
 # Auftrag: Website remindery.de „tip top" (PO 23.09.2026)
 
-Stand: W1+W2 fertig, wartet auf PO-Wahl (Richtung + Claim). Zustand dieses Pakets lebt in dieser Datei
+Stand: PO wählte am 23.09. Richtung A; Startseite ist live. Landingpages, Bilder (außer Uhr), Kontakt/Hoster (W5) und Ox-Badge (W6) offen – nächste Session. Zustand dieses Pakets lebt in dieser Datei
 (Haken, Protokoll), nicht im Chatverlauf.
 
 ## Anlass
@@ -69,7 +69,7 @@ Hoster-Nennung (siehe Punkt 5). Styles in `styles.css` (eine Datei, CSS-Variable
 - [ ] **W3 Bilder.** Hero je App aus dem Store-Renderer (1024×500 und 2×), Uhr
       mit Zahlen-Zifferblatt der aktuellen Version; Ox aus `final/v1`. Dateigröße
       < 150 KB je Bild (WebP mit PNG-Fallback prüfen).
-- [ ] **W4 Umbau.** Gewählte Richtung auf alle fünf Seiten, `styles.css`
+- [ ] **W4 Umbau.** Startseite fertig (A). Offen: die vier Landingpages in A-Struktur (Hero links/Bild rechts, drei Nutzen, Listen, Preis-Block wie in `docs/studie/a/uhr.html`), Texte aus `docs/texte-2026-09.md`; keine Grundsätze-Leiste; `styles.css`
       konsolidieren, Phone-Breite prüfen (16 px Gutter, kein Querscroll).
 - [ ] **W5 Kontakt/Hoster.** Kontaktadresse auf kontakt@remindery.de, in den
       Datenschutztexten der Website Hetzner statt Gmail als Postfach-Hoster
@@ -84,6 +84,7 @@ Hoster-Nennung (siehe Punkt 5). Styles in `styles.css` (eine Datei, CSS-Variable
 | Datum | Paket | Ergebnis |
 |---|---|---|
 | 2026-09-23 | – | Auftrag angelegt; Badges Silben/Uhr live (75a611f) |
+| 2026-09-23 | W4 (Teil) | **PO-Wahl: A.** Startseite live (3235007): Claim „Apps, die dich ans Ziel bringen.“ + Pitch ohne App-Aufzählung (PO wollte keine konkreten Apps und **keine Grundsätze-Leiste** – „die sind noch zu schlecht“, Konto/Werbung könnten sich ändern); Apps untereinander (Text links, Badge rechts, PO: breit lässt mehr Raum für eine spätere Pitch-Seite); App-Icons 192px aus den Store-Icons; Namen wie im Store (Remindery: Geburtstagskalender, Ox – Vokabeltrainer). Uhr-Hero = Store-Feature-Grafik (W3 für Uhr erledigt). |
 | 2026-09-23 | W1+W2 | Texte und drei Richtungen gebaut (dd283a3), Übersicht im Browser geöffnet; Frequenzprüfung per Skill auf W4 verschoben; Uhr-Hero in der Studie ist ein SVG-Platzhalter mit Zahlen-Zifferblatt |
 
 ## Startprompt (frische Session, cwd `C:\dev\web\remindery-site`)
