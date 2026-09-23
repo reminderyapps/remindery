@@ -1,0 +1,76 @@
+/* Richtung A – „Ruhig / Aquarell“: Weiterführung des heutigen Looks.
+   Warmes Papier, Serifen-Headlines, weiche Karten, ein Aquarell-Fleck als
+   einziger Schmuck. Vertraut, elterlich, leise. */
+:root {
+  --bg: #FAF7F2; --card: #FFFFFF; --text: #2B2622; --soft: #6E6258;
+  --accent: #E8604C; --accent-2: #3F7DBF; --line: #EAE2D8;
+  --shadow: 0 10px 40px rgba(43,38,34,.08);
+  --silben: #3F7DBF; --uhr: #E8604C; --ox: #6B8E23; --geb: #C2647A;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #211A15; --card: #2C231C; --text: #F4EDE4; --soft: #B3A697;
+  --accent: #ED705C; --line: #3B3129; --shadow: 0 10px 40px rgba(0,0,0,.35);
+}}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text);
+  font: 17px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+h1, h2, h3, .brand { font-family: Georgia, "Times New Roman", ui-serif, serif; line-height: 1.2; margin: 0; }
+a { color: var(--accent); }
+main { max-width: 960px; margin: 0 auto; padding: 40px 16px 64px; }
+.top { display: flex; align-items: center; gap: 12px; margin-bottom: 40px; }
+.top img { width: 40px; height: 40px; }
+.top .brand { font-size: 1.25rem; }
+.top nav { margin-left: auto; display: flex; gap: 18px; font-size: .95rem; }
+.top nav a { color: var(--soft); text-decoration: none; }
+
+/* Hero mit Aquarell-Fleck */
+.hero { position: relative; padding: 32px 0 48px; max-width: 640px; }
+.hero::before { content: ""; position: absolute; inset: -40px auto auto -80px; width: 320px; height: 220px;
+  border-radius: 55% 45% 60% 40% / 50% 60% 40% 50%;
+  background: radial-gradient(closest-side, rgba(232,96,76,.22), rgba(232,96,76,0)); z-index: -1; }
+.hero h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); }
+.hero .pitch { font-size: 1.2rem; color: var(--soft); margin: 16px 0 0; max-width: 34em; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.card { background: var(--card); border-radius: 20px; padding: 24px; box-shadow: var(--shadow);
+  display: flex; flex-direction: column; gap: 10px; border-top: 5px solid var(--c, var(--accent)); }
+.card h2 { font-size: 1.45rem; }
+.card h2 a { color: inherit; text-decoration: none; }
+.card p { margin: 0; color: var(--soft); flex: 1; }
+.card .meta { font-size: .85rem; color: var(--soft); letter-spacing: .02em; text-transform: uppercase; }
+.badge img { width: 168px; height: auto; display: block; }
+.soon { display: inline-block; font-size: .9rem; color: var(--soft); border: 1px dashed var(--line); border-radius: 999px; padding: 4px 12px; align-self: flex-start; }
+.more { font-size: .95rem; }
+
+.principles { margin: 56px 0 0; padding: 28px; border-radius: 20px; background: var(--card); box-shadow: var(--shadow);
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 16px; text-align: center; }
+.principles div strong { display: block; font-family: Georgia, serif; font-size: 1.3rem; }
+.principles div span { color: var(--soft); font-size: .95rem; }
+.storelink { margin-top: 24px; text-align: center; color: var(--soft); }
+
+/* Landingpage */
+.lp-hero { display: grid; grid-template-columns: 1.1fr .9fr; gap: 32px; align-items: center; padding: 16px 0 40px; }
+.lp-hero .kicker { color: var(--uhr); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; font-size: .85rem; }
+.lp-hero h1 { font-size: clamp(2rem, 4.5vw, 3rem); margin: 8px 0 12px; }
+.lp-hero .sub { color: var(--soft); font-size: 1.15rem; margin: 0 0 20px; }
+.lp-hero .art { background: var(--card); border-radius: 24px; box-shadow: var(--shadow); padding: 24px; }
+.lp-hero .art svg { width: 100%; height: auto; display: block; }
+.benefits { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 20px; margin: 24px 0 40px; }
+.benefit { background: var(--card); border-radius: 18px; padding: 22px; box-shadow: var(--shadow); }
+.benefit h3 { font-size: 1.15rem; margin-bottom: 8px; }
+.benefit p { margin: 0; color: var(--soft); }
+.section { margin: 40px 0; }
+.section h2 { font-size: 1.6rem; margin-bottom: 12px; }
+.section ul { margin: 0; padding-left: 1.2em; color: var(--soft); }
+.section li { margin: 6px 0; }
+.price { margin: 40px 0; padding: 24px; border-radius: 18px; background: var(--card); box-shadow: var(--shadow);
+  display: flex; flex-wrap: wrap; align-items: center; gap: 20px; }
+.price strong { font-family: Georgia, serif; font-size: 1.3rem; }
+.price p { margin: 4px 0 0; color: var(--soft); flex: 1 1 260px; }
+footer { text-align: center; color: var(--soft); font-size: .9rem; padding: 28px 16px 40px; }
+footer nav { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; margin-bottom: 10px; }
+footer a { color: var(--soft); }
+@media (max-width: 700px) {
+  .lp-hero { grid-template-columns: 1fr; }
+  .top nav { display: none; }
+}

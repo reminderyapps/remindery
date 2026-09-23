@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Website-Studie remindery.de – drei Richtungen</title>
+  <style>
+    :root { --bg: #F4F4F6; --card: #fff; --text: #1f1f24; --soft: #5c5c66; --line: #e2e2e8; }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #16161a; --card: #22222a; --text: #f2f2f5; --soft: #a7a7b3; --line: #33333d; } }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.55 system-ui, "Segoe UI", sans-serif; }
+    main { max-width: 1400px; margin: 0 auto; padding: 24px 16px 48px; }
+    h1 { margin: 0 0 6px; font-size: 1.6rem; }
+    .lead { color: var(--soft); margin: 0 0 20px; max-width: 70em; }
+    .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 18px; }
+    .dir { background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
+    .dir header { padding: 14px 16px 10px; }
+    .dir h2 { margin: 0 0 4px; font-size: 1.15rem; }
+    .dir p { margin: 0; color: var(--soft); font-size: .95rem; }
+    .dir .links { display: flex; gap: 10px; padding: 0 16px 12px; flex-wrap: wrap; }
+    .dir .links a { font-size: .9rem; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; color: var(--text); text-decoration: none; }
+    .frame { border-top: 1px solid var(--line); background: #fff; }
+    .frame iframe { width: 100%; height: 720px; border: 0; display: block; }
+    .claims { margin-top: 28px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+    .claims h2 { margin: 0 0 8px; font-size: 1.15rem; }
+    table { border-collapse: collapse; width: 100%; font-size: .95rem; }
+    td, th { text-align: left; padding: 8px 10px; border-top: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--soft); font-weight: 600; }
+    .hint { color: var(--soft); font-size: .9rem; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Website-Studie remindery.de – drei Richtungen</h1>
+    <p class="lead">Gleiche Texte (aus <code>docs/texte-2026-09.md</code>), drei Hüllen. Je Richtung die
+      Startseite und die Landingpage „Uhr lesen lernen“. Optik und Claim sind getrennt wählbar. Das
+      Zifferblatt ist ein Platzhalter-Motiv aus der Studie; das finale Hero kommt aus dem Store-Renderer der App.
+      Zum Prüfen auf Handybreite: Fenster schmal ziehen oder die Seite direkt öffnen.</p>
+
+    <div class="row">
+      <section class="dir">
+        <header>
+          <h2>A · Ruhig / Aquarell</h2>
+          <p>Weiterführung des heutigen Looks: warmes Papier, Serifen, weiche Karten, ein Aquarell-Fleck. Leise, elterlich. Claim K3 „Eine Sache. Richtig gut.“</p>
+        </header>
+        <div class="links"><a href="a/index.html" target="_blank">Startseite öffnen</a><a href="a/uhr.html" target="_blank">Uhr lesen lernen öffnen</a></div>
+        <div class="frame"><iframe src="a/index.html" title="Richtung A Startseite"></iframe></div>
+        <div class="frame"><iframe src="a/uhr.html" title="Richtung A Uhr"></iframe></div>
+      </section>
+
+      <section class="dir">
+        <header>
+          <h2>B · Klar / Schulheft</h2>
+          <p>Weiß mit feinen Heftlinien, kräftige Sans, je App eine Farbe, Karten mit Kante statt Schatten. Direkt, wie gutes Schulmaterial. Claim K2 „Lernen ohne Nebenwirkungen.“</p>
+        </header>
+        <div class="links"><a href="b/index.html" target="_blank">Startseite öffnen</a><a href="b/uhr.html" target="_blank">Uhr lesen lernen öffnen</a></div>
+        <div class="frame"><iframe src="b/index.html" title="Richtung B Startseite"></iframe></div>
+        <div class="frame"><iframe src="b/uhr.html" title="Richtung B Uhr"></iframe></div>
+      </section>
+
+      <section class="dir">
+        <header>
+          <h2>C · Bunt / Kinder-App</h2>
+          <p>Kräftige Flächen, runde Formen, farbige App-Kacheln, großer Verlauf im Hero. Fröhlich, laut, nah am Tablet-Erlebnis der Kinder. Claim K1 „Apps, die nichts von dir wollen.“</p>
+        </header>
+        <div class="links"><a href="c/index.html" target="_blank">Startseite öffnen</a><a href="c/uhr.html" target="_blank">Uhr lesen lernen öffnen</a></div>
+        <div class="frame"><iframe src="c/index.html" title="Richtung C Startseite"></iframe></div>
+        <div class="frame"><iframe src="c/uhr.html" title="Richtung C Uhr"></iframe></div>
+      </section>
+    </div>
+
+    <section class="claims">
+      <h2>Claim getrennt wählen</h2>
+      <table>
+        <tr><th>K1</th><td><strong>Apps, die nichts von dir wollen.</strong> Kein Konto, keine Werbung, kein Tracking, kein Abo. Drei Lern-Apps für die Schule und ein Geburtstagskalender, der niemandem etwas verrät.</td></tr>
+        <tr><th>K2</th><td><strong>Lernen ohne Nebenwirkungen.</strong> Lesen, Uhrzeit, Vokabeln: Lern-Apps für die Schulzeit, ohne Werbung, ohne Abo, ohne Ranglisten. Einmal kaufen, fertig. <em>(Empfehlung)</em></td></tr>
+        <tr><th>K3</th><td><strong>Eine Sache. Richtig gut.</strong> Vier Apps, jede für genau eine Aufgabe. Ohne Konto, ohne Werbung, ohne Tracking – und ohne Abo.</td></tr>
+      </table>
+      <p class="hint">Antwort reicht als „B mit K2“ oder „C, aber Claim K3, Kacheln weg“. Danach baue ich alle fünf Seiten um, erzeuge die Hero-Bilder aus den Store-Renderern und stelle die Kontaktadresse um.</p>
+    </section>
+  </main>
+</body>
+</html>
