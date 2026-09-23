@@ -1,0 +1,5 @@
+# GitHub Pages baut mit Jekyll. Interne Unterlagen nicht auf remindery.de ausliefern.
+exclude:
+  - docs
+  - README.md
+  - push.ps1
