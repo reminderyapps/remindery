@@ -1,6 +1,6 @@
 # Auftrag: Website remindery.de „tip top" (PO 23.09.2026)
 
-Stand: Entwurf, noch nicht begonnen. Zustand dieses Pakets lebt in dieser Datei
+Stand: W1+W2 fertig, wartet auf PO-Wahl (Richtung + Claim). Zustand dieses Pakets lebt in dieser Datei
 (Haken, Protokoll), nicht im Chatverlauf.
 
 ## Anlass
@@ -46,7 +46,7 @@ Hoster-Nennung (siehe Punkt 5). Styles in `styles.css` (eine Datei, CSS-Variable
 
 ## Pakete
 
-- [ ] **W1 Texte.** Je App aus `listing.md` einen Website-Text: Hero-Satz, 3 Nutzen,
+- [x] **W1 Texte.** (23.09., `docs/texte-2026-09.md`, drei Claim-Varianten K1–K3) Je App aus `listing.md` einen Website-Text: Hero-Satz, 3 Nutzen,
       Eltern-Absatz, Preis-Satz. Startseite: Dachmarke in drei Sätzen, Grundsätze
       (keine Werbung, kein Tracking, einmal kaufen), Link Entwicklerseite.
       Frequenzprüfung gegen die Store-Titel. Ergebnis `docs/texte-2026-09.md`.
@@ -61,7 +61,7 @@ Hoster-Nennung (siehe Punkt 5). Styles in `styles.css` (eine Datei, CSS-Variable
       nicht lügt (Foto flüchtig, kein Konto, EU-Server) und trotzdem ein Versprechen
       mit Haltung bleibt – Richtung „Lern-Apps, die Eltern nichts abverlangen"
       statt Feature-Aufzählung. Drei Claim-Varianten in W2 mitzeigen.
-- [ ] **W2 Studie.** Drei Richtungen (z. B. „ruhig/Aquarell", „klar/Schulheft",
+- [x] **W2 Studie.** (23.09., `docs/studie/index.html`; PO-Wahl offen) Drei Richtungen (z. B. „ruhig/Aquarell", „klar/Schulheft",
       „bunt/Kinder-App") als komplette HTML-Seiten für `index.html` und
       `uhr-lesen-lernen/index.html`, gleiche Texte aus W1, Komponenten-Set
       (Karte, Badge, Hero, Liste). Übersichtsseite `docs/studie/index.html` zum
@@ -84,6 +84,7 @@ Hoster-Nennung (siehe Punkt 5). Styles in `styles.css` (eine Datei, CSS-Variable
 | Datum | Paket | Ergebnis |
 |---|---|---|
 | 2026-09-23 | – | Auftrag angelegt; Badges Silben/Uhr live (75a611f) |
+| 2026-09-23 | W1+W2 | Texte und drei Richtungen gebaut (dd283a3), Übersicht im Browser geöffnet; Frequenzprüfung per Skill auf W4 verschoben; Uhr-Hero in der Studie ist ein SVG-Platzhalter mit Zahlen-Zifferblatt |
 
 ## Startprompt (frische Session, cwd `C:\dev\web\remindery-site`)
 
