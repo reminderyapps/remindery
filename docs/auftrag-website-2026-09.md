@@ -41,6 +41,9 @@ Hoster-Nennung (siehe Punkt 5). Styles in `styles.css` (eine Datei, CSS-Variable
 - Keine Cookies, keine Tracker, keine externen Fonts ohne Prüfung
   (Datenschutzerklärung der Website nennt „keine Cookies, keine Tracker").
 - Kein Play-Badge ohne öffentliche Store-Seite (Ox erst bei HTTP 200).
+- Bei jeder `styles.css`-Änderung den Link in allen Seiten mit Version versehen
+  (`styles.css?v=2026-09-24`): GitHub Pages cached 10 Minuten, sonst sehen Besucher
+  kurz neue Seiten mit altem CSS (passiert am 23.09. dem PO).
 - Abnahme über lokale HTML-Seite, kein Artifact. Kein Push ohne PO-„Go" auf die
   Studie; nach dem Go allein bauen.
 
