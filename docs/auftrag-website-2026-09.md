@@ -50,6 +50,17 @@ Hoster-Nennung (siehe Punkt 5). Styles in `styles.css` (eine Datei, CSS-Variable
       Eltern-Absatz, Preis-Satz. Startseite: Dachmarke in drei Sätzen, Grundsätze
       (keine Werbung, kein Tracking, einmal kaufen), Link Entwicklerseite.
       Frequenzprüfung gegen die Store-Titel. Ergebnis `docs/texte-2026-09.md`.
+      **Dachmarken-Claim neu (PO 23.09.):** Der heutige Text „Apps, die eine Sache
+      gut machen. Ohne Konto, ohne Werbung, ohne Cloud: Was du eingibst, bleibt auf
+      deinem Gerät. Drei Apps sind bisher daraus geworden." ist (a) sachlich
+      überholt – Ox verarbeitet Fotos auf unserem Server in Frankfurt, es sind vier
+      Apps – und (b) dem PO „nicht fancy" genug. Was für alle vier weiterhin wahr
+      ist: kein Konto, keine Werbung, kein Tracking, kein Abo-Zwang (einmal kaufen),
+      Kinder-Apps ohne Zeitdruck und Ranglisten, gebaut in Deutschland. Was nur
+      noch für drei gilt: komplett offline. Aufgabe: Claim so schreiben, dass Ox
+      nicht lügt (Foto flüchtig, kein Konto, EU-Server) und trotzdem ein Versprechen
+      mit Haltung bleibt – Richtung „Lern-Apps, die Eltern nichts abverlangen"
+      statt Feature-Aufzählung. Drei Claim-Varianten in W2 mitzeigen.
 - [ ] **W2 Studie.** Drei Richtungen (z. B. „ruhig/Aquarell", „klar/Schulheft",
       „bunt/Kinder-App") als komplette HTML-Seiten für `index.html` und
       `uhr-lesen-lernen/index.html`, gleiche Texte aus W1, Komponenten-Set
