@@ -290,7 +290,9 @@ article blockquote {
   background: var(--card); border-radius: 20px; padding: 24px; box-shadow: var(--shadow);
   display: flex; flex-wrap: wrap; gap: 16px 32px; align-items: center; border-left: 6px solid var(--c, var(--accent));
 }
-.card .txt { flex: 1 1 380px; display: flex; flex-direction: column; gap: 8px; }
+.card .icon { flex: 0 0 auto; line-height: 0; }
+.card .icon img { width: 96px; height: 96px; border-radius: 22px; box-shadow: 0 6px 18px rgba(43,38,34,.12); }
+.card .txt { flex: 1 1 320px; display: flex; flex-direction: column; gap: 8px; }
 .card .act { flex: 0 0 auto; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
 .card .meta { font-size: .85rem; color: var(--text-soft); letter-spacing: .02em; text-transform: uppercase; }
 .card h2 { font-size: 1.45rem; margin: 0; }
@@ -304,3 +306,5 @@ article blockquote {
 }
 .card .more { font-size: .95rem; }
 .storelink { margin: 40px 0 0; text-align: center; color: var(--text-soft); }
+
+@media (max-width: 700px) { .card .icon img { width: 72px; height: 72px; border-radius: 16px; } }
