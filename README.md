@@ -6,7 +6,7 @@ Ressourcen – keine Fonts, CDNs oder Tracker. Die Seite hält sich an dasselbe
 Privacy-Versprechen wie die Apps.
 
 Gehostet über GitHub Pages (Branch `main`, Root):
-<https://reminderyapps.github.io/remindery/>
+<https://remindery.de/>
 
 ## Aufbau: zwei Ebenen
 
