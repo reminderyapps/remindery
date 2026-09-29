@@ -102,6 +102,11 @@ main {
 
 .store-badge:hover { text-decoration: none; }
 
+/* Amazon-Badge ohne Rand im Bild: 235 px ergeben dieselbe sichtbare Höhe
+   (~69 px) wie das Play-Badge mit seinem eingebauten Rand. */
+.store-badge--amazon { margin-left: 8px; }
+.store-badge--amazon img { width: 235px; margin: 10px 0; }
+
 footer {
   text-align: center;
   padding: 28px 24px 40px;
