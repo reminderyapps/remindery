@@ -309,7 +309,10 @@ article blockquote {
   display: inline-block; font-size: .9rem; color: var(--text-soft); align-self: flex-start;
   border: 1px dashed var(--line); border-radius: 999px; padding: 4px 12px;
 }
-.card .more { font-size: .95rem; }
+.card .more { font-size: .95rem; align-self: flex-start; }
+/* In der Badge-Spalte untereinander: kein Seitenabstand, Rand wie beim Play-Badge (~7 px bei 168 px). */
+.card .store-badge--amazon { margin-left: 0; }
+.card .store-badge--amazon img { margin: 7px 0; }
 .storelink { margin: 40px 0 0; text-align: center; color: var(--text-soft); }
 
 @media (max-width: 700px) { .card .icon img { width: 72px; height: 72px; border-radius: 16px; } }
