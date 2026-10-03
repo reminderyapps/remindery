@@ -17,7 +17,7 @@
 
     <article>
       <h1>Datenschutzerklärung</h1>
-      <p class="updated">Stand: Oktober 2026</p>
+      <p class="updated">Stand: 4. Oktober 2026</p>
 
       <p>Diese Erklärung betrifft die <strong>App Ox – Vokabeltrainer für
       jedes Vokabelbuch</strong> und – soweit Sie diese Seite im Browser
@@ -54,16 +54,19 @@
       <strong>Frankfurt am Main</strong> übertragen (Amazon Web Services,
       Region eu-central-1). Dort liest ein KI-Modell die Wörter heraus:
       <strong>Claude von Anthropic, betrieben über Amazon Bedrock in der
-      EU</strong>. Für dieses Modell ist die Aufbewahrung von Eingaben auf
-      Kontoebene abgeschaltet. Anthropic selbst erhält dabei nichts: Das
+      EU</strong>. Je nach Auslastung beantwortet Amazon die Anfrage in einem
+      seiner Rechenzentren in der EU, nicht unbedingt in Frankfurt. Für
+      dieses Modell ist die Aufbewahrung von Eingaben auf Kontoebene
+      abgeschaltet. Anthropic selbst erhält dabei nichts: Das
       Modell läuft in den Rechenzentren von Amazon Web Services, nicht bei
       Anthropic.</p>
       <p>Das Foto wird dabei nur im Arbeitsspeicher verarbeitet und danach
       sofort verworfen – <strong>es wird nicht gespeichert</strong>.</p>
       <p>Das <strong>Ergebnis</strong> der Erkennung – die Liste der erkannten
-      Wörter mit Beispielsätzen, nicht aber die freie Bemerkung des Modells
-      zur Seite – bewahren wir dagegen <strong>90 Tage</strong> bei unserem Dienst
-      auf. Korrigieren Sie Wörter vor dem Speichern, kommen Ihre Korrekturen
+      Wörter mit Beispielsätzen, dazu die Art der Vorlage, die gedruckte
+      Lektion, die erkannte Sprache und die Rechenmenge, nicht aber die freie
+      Bemerkung des Modells zur Seite – bewahren wir dagegen <strong>90 Tage</strong>
+      zusammen mit der Installations-Kennung bei unserem Dienst auf. Korrigieren Sie Wörter vor dem Speichern, kommen Ihre Korrekturen
       hinzu. Wir brauchen beides, um zu messen, wie zuverlässig die Erkennung
       arbeitet, und um sie zu verbessern. Nach 90 Tagen löscht sich der Eintrag
       von selbst.</p>
@@ -87,6 +90,20 @@
       App speichert die Kennung auf dem Gerät; das ist für den Dienst
       unbedingt erforderlich und bedarf deshalb keiner Einwilligung
       (§&nbsp;25 Abs.&nbsp;2 Nr.&nbsp;2 TDDDG).</p>
+      <p>Unter der Kennung führt unser Dienst drei Arten von Einträgen:</p>
+      <ul>
+        <li><strong>Tageszähler</strong> für Fotos und Sprachclips; sie löschen
+        sich nach zwei Tagen von selbst.</li>
+        <li>je übernommener Seite eine <strong>Buchung</strong> mit der Zahl
+        der übernommenen Wörter; sie löscht sich nach 90 Tagen von selbst.</li>
+        <li>ein kleines <strong>Konto</strong>: ob die freie erste Seite schon
+        genutzt ist, das Wortguthaben und – bei einem Abo – bis wann es gilt und
+        welcher Kaufbeleg dazu gehört. Das Konto entsteht mit der ersten
+        übernommenen Seite. Für ein Konto ohne Kauf gibt es derzeit
+        <strong>keine feste Löschfrist</strong>; es enthält außer der
+        zufälligen Kennung nichts, was auf Sie hinweist. Mit Kauf gilt die
+        Frist für Kaufeinträge weiter unten.</li>
+      </ul>
 
       <h3>Was bei der Aussprache passiert</h3>
       <p>Die Sprachclips erzeugt unser Dienst über <strong>Amazon Polly</strong>
@@ -119,15 +136,20 @@
       und die Bestellnummer; beides kann allein Google einer Person
       zuordnen.</p>
       <p>Bei unserem Dienst entsteht zu jedem Kauf ein Eintrag, der aus dem
-      <strong>Kaufbeleg von Google</strong>, der zufälligen
-      Installations-Kennung und dem verbleibenden Guthaben besteht. Wir
-      brauchen ihn aus zwei Gründen: um bei Google zu prüfen, ob ein Kauf echt
-      ist, und damit ein gekauftes Guthaben nach einer Neuinstallation über
-      „Käufe wiederherstellen" zurückgeholt werden kann. Für diese Prüfung
-      senden wir den Kaufbeleg an die Google Play Developer API (Google LLC,
-      USA). Ein laufendes Abo
-      fragen wir höchstens alle sechs Stunden bei Google nach, um zu sehen, ob
-      es noch gilt. Diese Einträge enthalten <strong>keinen Namen und keine
+      <strong>Kaufbeleg von Google</strong>, der Bestellnummer, dem Kaufdatum,
+      der zufälligen Installations-Kennung und dem gekauften und verbrauchten
+      Guthaben besteht; erstattete oder verfallene Käufe werden dort vermerkt.
+      Wir brauchen ihn aus drei Gründen: um bei Google zu prüfen, ob ein Kauf
+      echt ist, damit ein gekauftes Guthaben nach einer Neuinstallation über
+      „Käufe wiederherstellen" zurückgeholt werden kann, und um die
+      Gültigkeitsfrist des Guthabens und Erstattungen zu verrechnen (siehe
+      <a href="nutzungsbedingungen.html">Nutzungsbedingungen</a>). Für die
+      Prüfung senden wir den Kaufbeleg an die Google Play Developer API
+      (Google LLC, USA); von dort erfahren wir auch, welche Käufe Google
+      erstattet hat. Ein laufendes Abo fragen wir höchstens alle sechs
+      Stunden bei Google nach, um zu sehen, ob es noch gilt – rund um den
+      Verlängerungstermin häufiger, damit der Zugang nicht unterbrochen wird.
+      Diese Einträge enthalten <strong>keinen Namen und keine
       Zahlungsdaten</strong>.</p>
       <p>Ein Kaufeintrag bleibt, solange das Wortpaket Guthaben hat oder das
       Abo läuft, und danach bis zum Ende der regelmäßigen Verjährungsfrist von
@@ -148,7 +170,11 @@
       <h3>Was unser Dienst protokolliert</h3>
       <p>Bei jedem Zugriff auf unseren Dienst entsteht eine Protokollzeile mit
       Zeitstempel, Art des Vorgangs, Status, Dauer und den <strong>ersten acht
-      Zeichen</strong> der Installations-Kennung. Wörter, Bildinhalte und
+      Zeichen</strong> der Installations-Kennung. Je nach Vorgang kommen
+      Kennzahlen dazu: beim Foto die Rechenmenge des Modells und die Zahl
+      aussortierter Zeilen, bei Kauf, Abo, Erstattung und Verfall die Art des
+      Kaufs, der Abo-Zustand laut Google, das Ablaufdatum des Abos bzw. die
+      Zahl verfallener Wörter. Wörter, Bildinhalte, Kaufbelege und
       IP-Adressen stehen dort nicht. Diese Protokolle löschen sich nach
       <strong>14 Tagen</strong>; Rechtsgrundlage ist unser berechtigtes
       Interesse an einem sicheren und funktionierenden Betrieb
@@ -160,8 +186,8 @@
       ein Google-Backup und verlässt das Gerät auch auf diesem Weg nicht. Die
       Kehrseite: Bei einem Gerätewechsel beginnt der Lernstand von vorn.
       Gekauftes Guthaben holen Sie über <strong>„Käufe wiederherstellen"</strong>
-      im Eltern-Bereich zurück; dafür muss dasselbe Google-Konto angemeldet
-      sein.</p>
+      unter „Mehr → Ox-Premium Funktionen" zurück; dafür muss dasselbe
+      Google-Konto angemeldet sein.</p>
 
       <h3>Der App-Store</h3>
       <p>Wenn Sie die App über einen App-Store geladen haben, erhebt dessen
@@ -211,7 +237,11 @@
       Korrekturen dazu – dient unserem berechtigten Interesse an einer
       verlässlichen Erkennung (Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;f DSGVO) und
       wird nach 90 Tagen automatisch gelöscht; die Betriebsprotokolle nach
-      14 Tagen. Die
+      14 Tagen. Tageszähler (zwei Tage), Buchungen (90 Tage) und das Konto zur
+      Installations-Kennung dienen der Erfüllung des Nutzungsvertrags und dem
+      Schutz vor Missbrauch (Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;b und
+      lit.&nbsp;f DSGVO); für ein Konto ohne Kauf gibt es derzeit keine feste
+      Löschfrist. Die
       Kaufeinträge sind für die Erfüllung des Kaufvertrags und den Schutz vor
       missbräuchlichen Belegen erforderlich (Art.&nbsp;6 Abs.&nbsp;1
       lit.&nbsp;b und lit.&nbsp;f DSGVO) und werden bis drei Jahre nach dem
@@ -227,8 +257,8 @@
       <p>Auf eine Einwilligung stützen wir keine Verarbeitung; deshalb kommt es
       auch nicht auf das Alter der Nutzerin oder des Nutzers an
       (Art.&nbsp;8 DSGVO). Den Nutzungsvertrag über die App schließen bei
-      Kindern die Eltern, die die App installieren und einen Kauf im
-      Eltern-Bereich freigeben. Bei der Abwägung unserer berechtigten
+      Kindern die Eltern, die die App installieren und einen Kauf über
+      Google Play freigeben. Bei der Abwägung unserer berechtigten
       Interessen berücksichtigen wir, dass die Nutzer überwiegend Kinder sind,
       und halten die Datenmenge deshalb so klein wie möglich: kein Konto, kein
       Name, kein gespeichertes Foto.</p>
@@ -242,11 +272,13 @@
       genügt.</p>
 
       <h3>Kinder als Nutzer</h3>
-      <p>Ox richtet sich an Schülerinnen und Schüler ab Klasse 5. Die App
+      <p>Ox richtet sich an Schülerinnen und Schüler und ihre Eltern. Die App
       fragt keine personenbezogenen Daten ab, verlangt kein Konto und enthält
       weder Werbung noch Analyse-Dienste. Käufe
-      können nur über das Google-Play-Konto des Geräts ausgelöst werden; der
-      Weg dorthin liegt bewusst im Eltern-Bereich. Wir empfehlen, das
+      können nur über das Google-Play-Konto des Geräts ausgelöst werden; bei
+      Kinderkonten steuert Google Play die Freigabe durch die Eltern; einen
+      eigenen Eltern-Riegel vor dem Kauf hat Ox nicht. Wir empfehlen,
+      den Kaufschutz in den Google-Play-Einstellungen zu prüfen und das
       Fotografieren von Arbeitsblättern mit Namen gemeinsam mit einem
       Erwachsenen zu besprechen.</p>
 
@@ -299,7 +331,9 @@
       keiner Person zuordnen (Art.&nbsp;11 DSGVO). Für das Korrektur-Log heißt
       das: Die Einträge tragen nur die zufällige Installations-Kennung, und wir
       können nicht feststellen, welche von Ihnen stammen; die Zeilen löschen
-      sich ohnehin nach 90 Tagen. Einen Kaufeintrag finden wir über die Bestellnummer aus Ihrer
+      sich ohnehin nach 90 Tagen. Dasselbe gilt für Tageszähler, Buchungen und
+      ein Konto ohne Kauf: Die Kennung zeigt die App nicht an, und ohne sie
+      finden wir keinen Eintrag. Einen Kaufeintrag finden wir über die Bestellnummer aus Ihrer
       Google-Play-Bestätigung. Bei den Server-Logs dieser Website ist GitHub
       der richtige Adressat, da wir selbst keinen Zugriff darauf haben. Zu
       Käufen, Zahlungsdaten und Kaufhistorie ist Google der richtige
