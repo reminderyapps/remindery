@@ -442,3 +442,7 @@ article blockquote {
   .founder img { width: 160px; height: 160px; }
   .top-nav { margin-left: 0; width: 100%; }
 }
+.vision h2 { margin-top: 10px; }
+.pillars .n, .flow .n { font-family: Georgia, ui-serif, serif; color: var(--text-soft); }
+.pillars .ai-card { border-top-color: var(--accent); }
+.more-apps { margin-top: 28px !important; }
