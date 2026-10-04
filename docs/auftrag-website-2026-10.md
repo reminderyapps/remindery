@@ -18,8 +18,8 @@ Zustand dieses Pakets lebt in dieser Datei (Haken, Protokoll), nicht im Chatverl
 
 ## Entscheidungen
 
-- [ ] **PO wählt Richtung A/B/C** (ggf. mit Änderungen) – offen
-- [ ] PO: Studio-Kapitel in C im Dunkelmodus creme (invertiert) – ok? – offen
+- [x] **PO wählt Richtung A „Studio-Kopf“** (04.10.2026; Empfehlung war C, PO findet A am besten)
+- [x] Frage Dunkelmodus-Inversion entfällt (betraf nur C)
 - [x] Schriften: Systemschriften oder selbst gehostet, kein Google-Fonts-Einbinden
       (LG München 2022, Seite lädt nichts von Dritten)
 - [x] Sprachschalter auf jeder Seite = echter Schalter: führt zur selben Seite in der
@@ -42,4 +42,4 @@ Zustand dieses Pakets lebt in dieser Datei (Haken, Protokoll), nicht im Chatverl
 
 ## Protokoll
 
-- 04.10.2026: Auftrag angelegt, wartet auf PO-Wahl A/B/C.
+- 04.10.2026: Auftrag angelegt; PO wählt A. Bereit für W1–W5.
