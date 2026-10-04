@@ -23,7 +23,8 @@ Gehostet über GitHub Pages (Branch `main`, Root):
     geburtstage/       index.html, datenschutz.html, datenschutz-en.html
     silben-lesen/      index.html, datenschutz.html
     uhr-lesen-lernen/  index.html, datenschutz.html
-    ox/                index.html, datenschutz.html
+    ori/               index.html, privacy/, terms/, icon.png
+    ox/                nur noch Weiterleitungen nach ori/ (alte Adressen, NICHT LÖSCHEN)
 
 Eine neue App bekommt einen neuen Ordner – **keine Dateien mehr im Root**.
 Jede App-Datenschutzerklärung enthält den Website-Teil noch einmal
