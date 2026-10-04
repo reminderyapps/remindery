@@ -327,11 +327,18 @@ article blockquote {
 .home-link:hover { text-decoration: none; color: var(--accent); }
 .home-link img { width: 40px; height: 40px; }
 .home-link .brand { font-size: 1.25rem; }
-.top-nav { margin-left: auto; display: flex; gap: 20px; font-size: .95rem; }
-.top-nav .pill {
-  border: 1.5px solid var(--accent); border-radius: 999px; padding: 6px 14px; font-weight: 600;
+/* Kopfzeile: Menüpunkte gleichrangig, Sprachumschalter abgesetzt rechts. */
+.top-nav { margin-left: auto; display: flex; align-items: center; gap: 8px 24px; font-size: 1rem; }
+.top-nav > a { color: var(--text); font-weight: 500; padding: 10px 0; border-bottom: 2px solid transparent; }
+.top-nav > a:hover { color: var(--accent); text-decoration: none; }
+.top-nav > a[aria-current="page"] { border-bottom-color: var(--accent); }
+.top-nav .lang {
+  display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 2px; font-size: .8rem;
+  font-weight: 600; letter-spacing: .04em;
 }
-.top-nav .pill:hover { background: var(--accent); color: #fff; text-decoration: none; }
+.top-nav .lang a { color: var(--text-soft); padding: 6px 10px; border-radius: 999px; min-width: 32px; text-align: center; }
+.top-nav .lang a:hover { color: var(--text); text-decoration: none; }
+.top-nav .lang a[aria-current="true"] { background: var(--text); color: var(--bg); }
 
 .eyebrow {
   display: inline-block; font-size: .8rem; font-weight: 600; letter-spacing: .08em;
