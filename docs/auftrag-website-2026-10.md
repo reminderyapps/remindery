@@ -36,7 +36,7 @@ Zustand dieses Pakets lebt in dieser Datei (Haken, Protokoll), nicht im Chatverl
       (Inhalt aus den deutschen Seiten, keine neuen Behauptungen)
 - [x] W4 Kopfzeile auf ALLEN Seiten einheitlich: Apps · Über uns/About · Schalter DE|EN mit
       Gegenstück-Zuordnung; `<link rel="alternate" hreflang>` je Seitenpaar + `x-default`
-- [ ] W5 Prüfung: Crawl (alle internen Links 200, Skript im Stil von migrate/crawl),
+- [x] W5 Prüfung: Crawl (alle internen Links 200, Skript im Stil von migrate/crawl),
       360 px ohne Querscrollen, hell/dunkel; dann PO-Blick, dann `push.ps1`, live prüfen
 - [x] W6 `docs/study/` bleibt (Jekyll-`exclude: docs`), nichts davon live
 
@@ -50,3 +50,10 @@ Zustand dieses Pakets lebt in dieser Datei (Haken, Protokoll), nicht im Chatverl
   `tool/viewport.py` (Edge headless, 88 Ansichten OK) – dabei vorbestehendes Querscrollen bei
   360 px behoben (lange Wörter in Rechtstexten, Hero-Wolken). Abnahme-Seite
   `docs/abnahme-website-2026-10.html` (Port 8795). Wartet auf PO-Blick, dann push + Live-Crawl.
+- 04.10.2026: PO-Blick mit Textrunde auf Über uns: Grundsätze allgemein statt Ox-bezogen
+  (Nutzer im Mittelpunkt · Apps der nächsten Generation · Das letzte Wort hat ein Mensch ·
+  Privat ab Werk); Kinder-Versprechen nur für Kinder-Apps, weil Einkaufsliste/Wald Werbung
+  planen. Kennzahl „30 Tage bis Play Store (Ox)" ersetzt durch „14 Tage im Schnitt Idee →
+  Einreichung" (Geburtstage 05.→06.07., Silben 01.→21.08., Uhr 14.08.→06.09., Ox 03.→~14.09.).
+  PO „push": gepusht (b9b9c6e), Pages gebaut, Live-Crawl OK (22 Seiten + 16 Weiterleitungen),
+  viewport.py live OK (88 Ansichten), docs/ und tool/ live 404. **Auftrag abgeschlossen.**
