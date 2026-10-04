@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Abnahme Website 10/2026</title>
+  <style>
+    :root { --bg: #FAF7F2; --card: #fff; --text: #2B2622; --soft: #6E6258; --line: #EAE2D8; --acc: #B5442F; --ok: #3d7a3a; }
+    @media (prefers-color-scheme: dark) { :root { --bg: #211A15; --card: #2C231C; --text: #F4EDE4; --soft: #B3A697; --line: #3B3129; --acc: #F2907C; --ok: #8fcf8a; } }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.55 system-ui, "Segoe UI", sans-serif; }
+    main { max-width: 900px; margin: 0 auto; padding: 32px 16px 64px; }
+    h1 { font-family: Georgia, serif; margin: 0 0 4px; }
+    h2 { font-family: Georgia, serif; margin: 36px 0 10px; font-size: 1.3rem; }
+    p.soft { color: var(--soft); margin: 0; }
+    a { color: var(--acc); }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 16px 20px; }
+    table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+    th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--soft); font-weight: 600; font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; }
+    td.fb { color: var(--soft); font-size: .88rem; }
+    ul.check { padding-left: 1.2em; margin: 0; }
+    ul.check li { margin: 6px 0; }
+    .ok { color: var(--ok); font-weight: 600; }
+    code { font-size: .88em; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Abnahme: Startseite neu + echter Sprachschalter</h1>
+  <p class="soft">Auftrag <code>docs/auftrag-website-2026-10.md</code> · Stand 04.10.2026 · lokal auf Port 8795, noch nicht gepusht</p>
+
+  <h2>Bitte ansehen</h2>
+  <div class="card">
+    <ul class="check">
+      <li><a href="/">Startseite DE</a> und <a href="/en/">Startseite EN</a>: Richtung A „Studio-Kopf“. Inhalte und Badges unverändert, Studio-Abschnitt gestaltet statt eingequetscht</li>
+      <li>Auf jeder Seite <b>DE | EN</b> anklicken: Der Schalter bleibt auf derselben Seite, nur in der anderen Sprache</li>
+      <li>Englische Startseite: Der Hinweis, dass die Lern-Apps nur auf Deutsch sind, steht im Hero. Passt der Ton?</li>
+      <li>Handy-Breite (F12 → Gerätesymbol, 360 px) und Dunkelmodus: Beides ist automatisch geprüft, hier nur der Augen-Eindruck</li>
+    </ul>
+  </div>
+
+  <h2>Alle Seiten und ihr Gegenstück</h2>
+  <div class="card">
+    <table>
+      <tr><th>Deutsch</th><th>Englisch</th><th>Schalter EN führt zu</th></tr>
+      <tr><td><a href="/">/</a></td><td><a href="/en/">/en/</a> <b>neu</b></td><td class="fb">Paar</td></tr>
+      <tr><td><a href="/about/">/about/</a></td><td><a href="/en/about/">/en/about/</a></td><td class="fb">Paar</td></tr>
+      <tr><td><a href="/ox/">/ox/</a></td><td><a href="/en/ox/">/en/ox/</a> <b>neu</b></td><td class="fb">Paar</td></tr>
+      <tr><td><a href="/syllables/">/syllables/</a></td><td><a href="/en/syllables/">/en/syllables/</a> <b>neu</b></td><td class="fb">Paar</td></tr>
+      <tr><td><a href="/clock/">/clock/</a></td><td><a href="/en/clock/">/en/clock/</a> <b>neu</b></td><td class="fb">Paar</td></tr>
+      <tr><td><a href="/birthdays/">/birthdays/</a></td><td><a href="/en/birthdays/">/en/birthdays/</a> <b>neu</b></td><td class="fb">Paar</td></tr>
+      <tr><td><a href="/privacy/">/privacy/</a></td><td><a href="/en/privacy/">/en/privacy/</a></td><td class="fb">Paar</td></tr>
+      <tr><td><a href="/legal-notice/">/legal-notice/</a></td><td><a href="/en/legal-notice/">/en/legal-notice/</a></td><td class="fb">Paar</td></tr>
+      <tr><td><a href="/birthdays/privacy/">/birthdays/privacy/</a></td><td><a href="/en/birthdays/privacy/">/en/birthdays/privacy/</a></td><td class="fb">Paar</td></tr>
+      <tr><td><a href="/ox/privacy/">/ox/privacy/</a></td><td>–</td><td class="fb">/en/ox/</td></tr>
+      <tr><td><a href="/ox/terms/">/ox/terms/</a></td><td>–</td><td class="fb">/en/ox/</td></tr>
+      <tr><td><a href="/syllables/privacy/">/syllables/privacy/</a></td><td>–</td><td class="fb">/en/syllables/</td></tr>
+      <tr><td><a href="/clock/privacy/">/clock/privacy/</a></td><td>–</td><td class="fb">/en/clock/</td></tr>
+    </table>
+  </div>
+
+  <h2>Automatisch geprüft</h2>
+  <div class="card">
+    <ul class="check">
+      <li><span class="ok">OK</span> <code>python tool/crawl.py</code>: 50 Adressen (22 Seiten, 16 alte Weiterleitungen, Bilder), alle 200. Sprungziele, hreflang in beide Richtungen, genau eine Kopfzeile je Seite</li>
+      <li><span class="ok">OK</span> <code>python tool/viewport.py</code>: 88 Ansichten (22 Seiten × 360/1280 px × hell/dunkel), kein Querscrollen, Dunkelmodus greift</li>
+      <li>Dabei gefunden und behoben, beides schon vorher vorhanden: lange Wörter in den Rechtstexten (bis 606 px auf dem Impressum) und die Farbwolken hinter den Heros</li>
+    </ul>
+  </div>
+
+  <h2>Bewusst so entschieden, bitte widersprechen, falls nicht recht</h2>
+  <div class="card">
+    <ul class="check">
+      <li>Englische Seiten zeigen die <b>deutschen Store-Badges</b>. Die Apps sind deutsch; ein englisches Badge neben einem deutschen Store-Eintrag wäre schief</li>
+      <li>Linkfarbe überall etwas dunkler (<code>--accent-text</code> wie in der Studie), wegen Lesbarkeit und Kontrast. Die Akzentfarbe bei Flächen und Icons bleibt</li>
+      <li>Auf Rechtstextseiten entfällt die doppelte Wortmarke; die Kopfzeile trägt sie jetzt</li>
+      <li>Unterseiten behalten ihren schlichten Fuß, nur die Startseite hat den großen. Ein einheitlicher Fuß wäre ein eigenes kleines Paket</li>
+    </ul>
+  </div>
+</main>
+</body>
+</html>

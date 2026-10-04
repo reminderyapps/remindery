@@ -28,18 +28,25 @@ Zustand dieses Pakets lebt in dieser Datei (Haken, Protokoll), nicht im Chatverl
 
 ## Pakete
 
-- [ ] W1 Gewählte Richtung als neue Startseite `/` (Inhalte, Badges unverändert, Meta
+- [x] W1 Gewählte Richtung als neue Startseite `/` (Inhalte, Badges unverändert, Meta
       `google-site-verification` behalten), Stile in `styles.css` überführen
-- [ ] W2 Englische Startseite `/en/` im selben Design; ehrlicher Satz: Apps derzeit für
+- [x] W2 Englische Startseite `/en/` im selben Design; ehrlicher Satz: Apps derzeit für
       deutschsprachige Familien
-- [ ] W3 Englische Kurzseiten `/en/ox/`, `/en/syllables/`, `/en/clock/`, `/en/birthdays/`
+- [x] W3 Englische Kurzseiten `/en/ox/`, `/en/syllables/`, `/en/clock/`, `/en/birthdays/`
       (Inhalt aus den deutschen Seiten, keine neuen Behauptungen)
-- [ ] W4 Kopfzeile auf ALLEN Seiten einheitlich: Apps · Über uns/About · Schalter DE|EN mit
+- [x] W4 Kopfzeile auf ALLEN Seiten einheitlich: Apps · Über uns/About · Schalter DE|EN mit
       Gegenstück-Zuordnung; `<link rel="alternate" hreflang>` je Seitenpaar + `x-default`
 - [ ] W5 Prüfung: Crawl (alle internen Links 200, Skript im Stil von migrate/crawl),
       360 px ohne Querscrollen, hell/dunkel; dann PO-Blick, dann `push.ps1`, live prüfen
-- [ ] W6 `docs/study/` bleibt (Jekyll-`exclude: docs`), nichts davon live
+- [x] W6 `docs/study/` bleibt (Jekyll-`exclude: docs`), nichts davon live
 
 ## Protokoll
 
 - 04.10.2026: Auftrag angelegt; PO wählt A. Bereit für W1–W5.
+- 04.10.2026: W1–W4 gebaut. Kopfzeile + hreflang setzt `tool/header.py` (idempotent, Zuordnung
+  DE↔EN dort in `PAIRS`), Startseiten-Stile unter `body.home` in `styles.css` (About belegt
+  .studio/.stats/.founder/.btn). Linkfarbe global `--accent-text`. `tool/` per Jekyll-exclude
+  nicht live. W5: `tool/crawl.py` (lokal OK, 22 Seiten + 16 Weiterleitungen) und
+  `tool/viewport.py` (Edge headless, 88 Ansichten OK) – dabei vorbestehendes Querscrollen bei
+  360 px behoben (lange Wörter in Rechtstexten, Hero-Wolken). Abnahme-Seite
+  `docs/abnahme-website-2026-10.html` (Port 8795). Wartet auf PO-Blick, dann push + Live-Crawl.

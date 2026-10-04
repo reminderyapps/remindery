@@ -3,3 +3,4 @@ exclude:
   - docs
   - README.md
   - push.ps1
+  - tool
