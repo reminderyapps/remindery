@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Einkaufsliste beitreten</title>
+  <meta name="description" content="Einladung zu einer geteilten Einkaufsliste: App öffnen, der Code ist schon eingetragen.">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    .join { max-width: 520px; margin: 0 auto; text-align: center; }
+    .join img.icon { border-radius: 22%; margin-top: 8px; }
+    .join h1 { margin: 16px 0 8px; }
+    .join .lead { color: var(--text-soft); margin: 0 0 24px; }
+    .code {
+      display: inline-block; font: 700 2rem/1 var(--sans); letter-spacing: .12em;
+      background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+      padding: 16px 24px; margin: 0 0 28px; box-shadow: var(--shadow-soft);
+    }
+    .actions { display: flex; flex-direction: column; gap: 12px; align-items: stretch; margin: 0 auto; max-width: 340px; }
+    .actions a {
+      display: block; border-radius: 999px; padding: 14px 24px; font-weight: 700; text-align: center;
+      min-height: 48px; box-sizing: border-box;
+    }
+    .actions a:hover { text-decoration: none; }
+    .primary { background: var(--accent); color: #fff; }
+    .secondary { background: var(--card); color: var(--text); border: 1px solid var(--line); }
+    .hint { color: var(--text-soft); font-size: .95rem; margin-top: 28px; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<!--
+  Quelle: apps/remindery-einkaufsliste/docs/website/shopping/join/ (App-Repo), nach web/remindery-site kopiert.
+  E104: Ziel des Teilen-Links https://remindery.de/shopping/join/#XUQ-828. Mit installierter App und
+  verifiziertem App-Link (/.well-known/assetlinks.json) kommt Android gar nicht hierher; sonst:
+  "In der App öffnen" (intent:// mit Rückfall auf Play) oder Play mit Referrer code=… - dann steht der
+  Code beim ersten Start schon in der Beitreten-Maske. Der Code bleibt im Fragment und erreicht nie
+  einen Server.
+-->
+<body>
+  <header class="site-head">
+    <div class="head-in">
+      <a class="site-brand" href="/"><img src="/favicon.svg" width="34" height="34" alt=""><span>Remindery Apps</span></a>
+    </div>
+  </header>
+  <main>
+    <article class="join">
+      <img class="icon" src="/shopping/icon.png" width="96" height="96" alt="">
+      <h1 data-t="titel">Einkaufsliste beitreten</h1>
+      <p class="lead" data-t="lead">Jemand teilt eine Einkaufsliste mit dir. Öffne sie in der App – der Code ist schon eingetragen.</p>
+
+      <div id="mit-code" hidden>
+        <div class="code" id="code" aria-label="Code"></div>
+        <div class="actions">
+          <a class="primary" id="oeffnen" href="#" data-t="oeffnen">In der App öffnen</a>
+          <a class="secondary" id="play" href="https://play.google.com/store/apps/details?id=app.remindery.shopping" data-t="play">App bei Google Play laden</a>
+        </div>
+        <p class="hint" data-t="hinweis">Noch keine App? Nach der Installation aus Google Play öffnet sie sich mit dem Code. Sonst in der App „Liste beitreten“ wählen und den Code eingeben.</p>
+      </div>
+
+      <div id="ohne-code" hidden>
+        <p data-t="ohne">Im Link fehlt der Code. Öffne den Link aus der Nachricht bitte noch einmal ganz – oder gib den Code in der App unter „Liste beitreten“ ein.</p>
+        <div class="actions">
+          <a class="secondary" href="https://play.google.com/store/apps/details?id=app.remindery.shopping" data-t="play">App bei Google Play laden</a>
+        </div>
+      </div>
+    </article>
+  </main>
+  <footer>
+    <nav>
+      <a href="/shopping/" data-t="app">Die App</a>
+      <a href="/shopping/privacy/" data-t="datenschutz">Datenschutz</a>
+      <a href="/legal-notice/" data-t="impressum">Impressum</a>
+    </nav>
+    &copy; 2026 Remindery Apps
+  </footer>
+  <script>
+    (function () {
+      var PAKET = 'app.remindery.shopping';
+      var EN = {
+        titel: 'Join a shopping list',
+        lead: 'Someone is sharing a shopping list with you. Open it in the app – the code is already filled in.',
+        oeffnen: 'Open in the app',
+        play: 'Get the app on Google Play',
+        hinweis: 'No app yet? After installing it from Google Play, it opens with the code. Otherwise choose “Join a list” in the app and enter the code.',
+        ohne: 'The code is missing from the link. Please open the link from the message again in full – or enter the code in the app under “Join a list”.',
+        app: 'The app',
+        datenschutz: 'Privacy',
+        impressum: 'Legal notice'
+      };
+      var sprache = (navigator.language || 'de').toLowerCase();
+      if (sprache.indexOf('de') !== 0) {
+        document.documentElement.lang = 'en';
+        document.title = EN.titel;
+        Array.prototype.forEach.call(document.querySelectorAll('[data-t]'), function (el) {
+          var t = EN[el.getAttribute('data-t')];
+          if (t) el.textContent = t;
+        });
+      }
+
+      // Wie die App (codeNormalisieren): Großbuchstaben, ohne Leerzeichen/Bindestriche, genau 6 Zeichen.
+      var roh = '';
+      try { roh = decodeURIComponent((location.hash || '').replace(/^#/, '')); } catch (e) { roh = ''; }
+      roh = roh || new URLSearchParams(location.search).get('c') || '';
+      var code = roh.toUpperCase().replace(/[\s-]/g, '');
+      if (!/^[0-9A-Z]{6}$/.test(code)) {
+        document.getElementById('ohne-code').hidden = false;
+        return;
+      }
+      var anzeige = code.slice(0, 3) + '-' + code.slice(3);
+      document.getElementById('code').textContent = anzeige;
+      document.getElementById('mit-code').hidden = false;
+
+      var play = 'https://play.google.com/store/apps/details?id=' + PAKET +
+                 '&referrer=' + encodeURIComponent('code=' + code + '&utm_source=teilen-link');
+      document.getElementById('play').href = play;
+
+      var oeffnen = document.getElementById('oeffnen');
+      if (/android/i.test(navigator.userAgent)) {
+        // Chrome & Co.: App mit Code öffnen, ohne App direkt zu Play (mit Referrer).
+        oeffnen.href = 'intent://join/' + anzeige + '#Intent;scheme=remindery-shopping;package=' + PAKET +
+                       ';S.browser_fallback_url=' + encodeURIComponent(play) + ';end';
+      } else {
+        // Kein Android (PC, iPhone): die App gibt es nur für Android.
+        oeffnen.hidden = true;
+      }
+    })();
+  </script>
+</body>
+</html>

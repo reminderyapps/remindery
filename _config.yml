@@ -4,3 +4,6 @@ exclude:
   - README.md
   - push.ps1
   - tool
+# Android-App-Links (Einkaufsliste, E104): Jekyll lässt Punkt-Ordner sonst weg.
+include:
+  - .well-known
