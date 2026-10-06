@@ -7,6 +7,7 @@
   <meta name="description" content="So lassen Sie Ihre Daten aus der App Einkaufsliste Familie & Teilen (Remindery Apps) löschen: Schritte, Datenarten und Fristen.">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="stylesheet" href="/styles.css">
+  <style>.fristen{list-style:none;padding-left:0}.fristen li{margin:0 0 14px;padding:12px 14px;border-left:3px solid currentColor;border-radius:4px;background:rgba(127,127,127,.08)}</style>
 </head>
 <!--
   Löschseite für Google Play (Datensicherheit → „URL zum Löschen von Daten“, 06.10.2026).
@@ -49,20 +50,25 @@
       <p>Schreiben Sie an <a href="mailto:kontakt@remindery.de?subject=Daten%20l%C3%B6schen%20%E2%80%93%20Einkaufsliste">kontakt@remindery.de</a>
       mit dem Betreff „Daten löschen – Einkaufsliste“. Damit wir Ihre Daten finden, nennen Sie bitte den
       Namen der geteilten Liste und Ihren Anzeigenamen bzw. ungefähr Datum und Uhrzeit Ihrer Nachricht.
-      Wir löschen innerhalb eines Monats und bestätigen es Ihnen.</p>
+      Wir löschen unverzüglich, spätestens innerhalb eines Monats, und bestätigen es Ihnen.</p>
 
       <h2>Welche Daten wie lange gespeichert werden</h2>
-      <table>
-        <thead><tr><th>Daten</th><th>Gelöscht</th></tr></thead>
-        <tbody>
-          <tr><td>Geteilte Liste (Name, Artikel, Mengen, Notizen, Zeitstempel)</td><td>wenn das letzte Mitglied sie verlässt, spätestens 180 Tage nach dem letzten Kontakt eines Mitglieds</td></tr>
-          <tr><td>Ihre Mitgliedschaft (Anzeigename, zufällige Geräte-Kennung)</td><td>sofort beim Verlassen, sonst 180 Tage nach dem letzten Kontakt Ihres Geräts</td></tr>
-          <tr><td>Beitrittscode</td><td>nach 24 Stunden oder sobald ein neuer Code erzeugt wird</td></tr>
-          <tr><td>Gekürzte, verschlüsselte IP-Adresse (Missbrauchsschutz)</td><td>nach 2 Stunden</td></tr>
-          <tr><td>Nachrichten „Wunsch oder Fehler melden“ (inkl. freiwilliger E-Mail-Adresse)</td><td>nach 12 Monaten, auf Wunsch sofort</td></tr>
-          <tr><td>Meldungen anderer Mitglieder</td><td>nach 90 Tagen, bei früherer Bearbeitung früher</td></tr>
-        </tbody>
-      </table>
+      <ul class="fristen">
+        <li><strong>Geteilte Liste</strong> (Name, Artikel, Mengen, Notizen, Zeitstempel)<br>
+          → gelöscht, wenn das letzte Mitglied sie verlässt, spätestens 180 Tage nach dem letzten Kontakt eines Mitglieds</li>
+        <li><strong>Ihre Mitgliedschaft</strong> (Anzeigename, zufällige Geräte-Kennung)<br>
+          → sofort beim Verlassen, sonst 180 Tage nach dem letzten Kontakt Ihres Geräts</li>
+        <li><strong>Beitrittscode</strong><br>
+          → nach 24 Stunden oder sobald ein neuer Code erzeugt wird</li>
+        <li><strong>Sperrliste</strong> (nur wenn ein Mitglied aus einer Liste entfernt wurde: Hashwerte seiner Geräte-Kennung)<br>
+          → zusammen mit der Liste</li>
+        <li><strong>IP-Adresse</strong> (nur als Hash eines gekürzten Adress-Präfixes, zum Schutz vor Missbrauch)<br>
+          → nach 2 Stunden automatisch</li>
+        <li><strong>Nachrichten „Wunsch oder Fehler melden“</strong> (inkl. freiwilliger E-Mail-Adresse)<br>
+          → nach 12 Monaten, auf Wunsch früher</li>
+        <li><strong>Meldungen</strong> über Mitglieder geteilter Listen<br>
+          → nach 90 Tagen, bei früherer Bearbeitung früher</li>
+      </ul>
       <p>Zusätzlich liegen Daten in Sicherungskopien der Datenbank höchstens <strong>35 Tage</strong> länger,
       danach sind sie auch dort gelöscht.</p>
 
