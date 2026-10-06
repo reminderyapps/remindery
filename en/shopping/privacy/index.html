@@ -39,7 +39,7 @@
 
     <article>
       <h1>Privacy Policy</h1>
-      <p class="updated">Last updated: October 2026</p>
+      <p class="updated">Last updated: 7 October 2026</p>
 
       <p>This policy has two parts: the first covers the operation of
       <strong>the website</strong>
@@ -151,7 +151,7 @@
         against guessing join codes.</li>
         <li><strong>Recipients:</strong> only the other members of the same
         shared list see its content, display names, and the "currently
-        shopping" status. No one else.</li>
+        shopping" status. No one else – except us after a report (see "Reporting, Removal and Block List").</li>
         <li><strong>Purpose and legal basis:</strong> providing the "share
         list" feature you requested (Art.&nbsp;6(1)(b) GDPR); abuse
         prevention, e.g. the rate limit against guessing codes
@@ -173,6 +173,18 @@
         plaintext passwords), minimal server permissions; server logs
         (CloudWatch, 14 days) never contain list content, join codes, or
         credentials – only route, status, and error type.</li>
+      </ul>
+
+      <h3>Reporting, Removal and Block List</h3>
+      <p>The <a href="/en/shopping/terms/">Terms of Use</a> apply to shared lists. For this we process the following data.</p>
+      <ul>
+        <li><strong>Report of a member:</strong> If you report a member of a shared list in the app, we store the list ID, the member ID of the reported member, your own member ID, the display name of the reported member, the time, and – only if you write one – a free text of at most 500 characters. We receive no contact details from you; the reported member is not notified.</li>
+        <li><strong>Purpose and legal basis:</strong> Protecting members and moderating shared lists (Art.&nbsp;6(1)(f) GDPR); where we must handle reports under the Digital Services Act, also Art.&nbsp;6(1)(c) GDPR in conjunction with Art.&nbsp;16 DSA.</li>
+        <li><strong>Provider access:</strong> We do not, as a rule, look at the content of a shared list. Only after a report do we review the reported member's entries in that list. We are told about new reports by an email that contains only a number, no content.</li>
+        <li><strong>Retention of the report:</strong> 90 days, or earlier once it has been handled (at most 35 days longer in the database's backup copies).</li>
+        <li><strong>Creator flag:</strong> The server remembers which member shared the list (member ID) so that only that member can remove other members. The flag is deleted with the list.</li>
+        <li><strong>Block list:</strong> If a member is removed from a list, we store with that list the hashes of the removed device's device identifier and device key, the time, and whether the creator or we removed them. The purpose is that this device cannot rejoin the list (Art.&nbsp;6(1)(f) GDPR). The block list lives with the list and is deleted with it (at the latest 180 days after any member's last contact). The removed device keeps its local copy.</li>
+        <li><strong>Statistics:</strong> Without any personal reference, we count how many members were removed and how many reports were received – only as a number.</li>
       </ul>
 
       <h3>Feedback ("Report a wish or a bug")</h3>
@@ -263,7 +275,7 @@
       <p><strong>Right to object under Art.&nbsp;21 GDPR:</strong> Where we
       process data on the basis of our legitimate interests (Art.&nbsp;6(1)(f)
       GDPR) – this concerns the server logs generated when you visit our
-      website, abuse prevention when sharing lists, and the handling of your
+      website, abuse prevention when sharing lists, the handling of reports, the block list, and the handling of your
       feedback – you have the right to object to that processing at any
       time on grounds relating to your particular situation. We will then no
       longer process the data unless we can demonstrate compelling
@@ -272,7 +284,7 @@
       <p><strong>For lists you never share</strong>, we hold no data about
       which we could provide information, or which we could rectify, erase,
       or transfer – these rights come to nothing there in practice, because
-      we simply have nothing stored. <strong>For shared lists, feedback
+      we simply have nothing stored. <strong>For shared lists, reports, feedback
       messages, and server logs</strong>, you can exercise your rights
       without restriction; the quickest way is kontakt@remindery.de.
       Please note for the website's server logs that we have no access to
@@ -289,6 +301,7 @@
   <footer>
     <nav>
       <a href="/shopping/">Shopping List</a>
+      <a href="/en/shopping/terms/">Terms of Use</a>
       <a href="/en/legal-notice/">Legal notice</a>
       <a href="/">All Apps</a>
     </nav>
