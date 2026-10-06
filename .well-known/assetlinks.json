@@ -1,10 +1,13 @@
 [
   {
-    "relation": ["delegate_permission/common.handle_all_urls"],
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
     "target": {
       "namespace": "android_app",
       "package_name": "app.remindery.shopping",
       "sha256_cert_fingerprints": [
+        "A0:F8:C9:0E:ED:AA:7C:93:8B:63:96:6A:18:E6:30:2A:E9:97:38:9A:9D:07:D2:DB:5F:5E:A3:8B:4B:75:E4:78",
         "9B:59:C8:7D:04:C7:34:83:72:A6:09:2F:37:60:54:8B:35:D9:72:DF:6D:A7:60:A6:93:14:E4:44:A6:97:1B:D3"
       ]
     }
