@@ -24,9 +24,13 @@ def pages():
 
 PROBE = """(() => {
   const vw = document.documentElement.clientWidth;
+  // Inhalt eines gewollten Wisch-Karussells (overflow-x auto/scroll) ragt absichtlich hinaus.
+  const inScroller = e => { for (let p = e.parentElement; p && p !== document.body; p = p.parentElement)
+    if (/auto|scroll/.test(getComputedStyle(p).overflowX)) return true; return false; };
   const wide = [...document.querySelectorAll('body *')].filter(e => {
     const r = e.getBoundingClientRect();
-    return r.width > 0 && (r.right > vw + 1 || r.left < -1) && getComputedStyle(e).position !== 'fixed';
+    return r.width > 0 && (r.right > vw + 1 || r.left < -1) && getComputedStyle(e).position !== 'fixed'
+      && !inScroller(e);
   }).slice(0, 3).map(e => e.tagName.toLowerCase() + (e.className ? '.' + String(e.className).split(' ')[0] : ''));
   // Text, der ueber seinen Kasten hinauslaeuft (lange Adressen, Woerter)
   const over = [...document.querySelectorAll('body *')].filter(e =>

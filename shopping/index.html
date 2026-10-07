@@ -3,8 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
   <title>Einkaufsliste gemeinsam teilen – die gemeinsame Einkaufsliste ohne Konto</title>
   <meta name="description" content="Einkaufsliste gemeinsam teilen: eine gemeinsame Einkaufsliste ohne Konto und ohne Anmeldung. Sortiert automatisch nach Abteilungen, funktioniert offline, teilen per Code.">
+  <link rel="canonical" href="https://remindery.de/shopping/">
   <link rel="alternate" hreflang="de" href="https://remindery.de/shopping/">
   <link rel="alternate" hreflang="en" href="https://remindery.de/en/shopping/">
   <link rel="alternate" hreflang="x-default" href="https://remindery.de/shopping/">
@@ -12,11 +14,12 @@
   <link rel="stylesheet" href="/styles.css">
 </head>
 <!--
-  Quelle: apps/remindery-einkaufsliste/docs/website/ (App-Repo), nach web/remindery-site
-  kopiert. Store-Badge erst nach der Veröffentlichung bei Google Play einsetzen
-  (Badge nur auf einen echten Eintrag verlinken), bis dahin "Bald bei Google Play".
+  Ursprung: apps/remindery-einkaufsliste/docs/website/ (App-Repo); seit 07.10.2026
+  als Produktseite hier weiterentwickelt. Store-Badge erst nach der Veröffentlichung
+  bei Google Play einsetzen (Badge nur auf einen echten Eintrag verlinken), bis dahin
+  .soon-pill "Bald bei Google Play". Screens: echte App-Screens hell/dunkel.
 -->
-<body>
+<body class="home product">
   <header class="site-head">
     <div class="head-in">
       <a class="site-brand" href="/"><img src="/favicon.svg" width="34" height="34" alt=""><span>Remindery Apps</span></a>
@@ -28,72 +31,108 @@
     </div>
   </header>
   <main>
-    <header class="page-header">
-      <span class="brand">Einkaufsliste</span>
-    </header>
+    <section class="p-hero wrap">
+      <div>
+        <p class="spot-tag"><span class="live-dot" aria-hidden="true"></span>Neu · Einkaufsliste gemeinsam teilen</p>
+        <h1>Die gemeinsame Einkaufsliste. <em>Ohne Konto.</em></h1>
+        <p class="pitch">Einer schreibt zu Hause „Milch“ auf, der andere steht im Laden und sieht es sofort.
+          Der Zettel am Kühlschrank – nur auf zwei Handys gleichzeitig. Für Familien, Paare, WGs und Freunde.</p>
+        <div class="ctas">
+          <span class="soon-pill">Bald bei Google&nbsp;Play</span>
+          <a class="pill-btn ghost" href="#so-gehts">So geht’s <span aria-hidden="true">↓</span></a>
+        </div>
+        <ul class="trust" aria-label="Auf einen Blick">
+          <li>Kostenlos</li><li>Kein Konto</li><li>Offline nutzbar</li><li>Server in Frankfurt (EU)</li>
+        </ul>
+      </div>
+      <div class="hero-visual">
+        <span class="phone p1"><picture><source srcset="/shopping/screen-gemeinsam-dark.webp" media="(prefers-color-scheme: dark)"><img src="/shopping/screen-gemeinsam-light.webp" width="480" height="1067" alt="Gemeinsame Liste, nach Abteilungen sortiert: Obst &amp; Gemüse, Brot &amp; Gebäck, Milch &amp; Käse"></picture></span>
+        <span class="phone p2"><picture><source srcset="/shopping/screen-teilen-dark.webp" media="(prefers-color-scheme: dark)"><img src="/shopping/screen-teilen-light.webp" width="480" height="1067" alt="Liste teilen: Beitrittscode und die Liste der Mitglieder"></picture></span>
+        <img class="mascot" src="/shopping/figur.webp" width="402" height="490" alt="">
+      </div>
+    </section>
 
-    <article>
-      <h1>Die gemeinsame Einkaufsliste – ohne Konto</h1>
-      <p class="updated">Für Familien, Paare, WGs und Freunde</p>
-
-      <p><img src="/shopping/icon.png" width="192" height="192" alt="App-Icon Einkaufsliste: eine gelbe Milchtüte" style="border-radius:22%"></p>
-
-      <p>Einer schreibt zu Hause „Milch" auf, der andere steht im Laden und
-      sieht es sofort. Einkaufsliste gemeinsam teilen ist der Zettel am
-      Kühlschrank – nur auf zwei Handys gleichzeitig. Ohne Konto, ohne
-      Anmeldung, kostenlos.</p>
-
-      <h2>Was die App kann</h2>
-      <ul>
-        <li><strong>Schnell eintragen:</strong> „2 l Milch", „500 g Hack" oder ein
-        ganzes Rezept auf einmal – die App erkennt Menge und Einheit und
-        räumt jeden Artikel in die passende Abteilung.</li>
-        <li><strong>Sortiert wie dein Laden:</strong> Obst &amp; Gemüse, Brot &amp;
-        Gebäck, Milch &amp; Käse und neun weitere Abteilungen. Die Reihenfolge
-        stellst du einmal je Laden ein – dann läufst du ohne Zickzack durch.</li>
-        <li><strong>Gemeinsam einkaufen:</strong> Liste per Code teilen. Keine
-        E-Mail, kein Passwort, in unter einer Minute beigetreten. Jede
-        Änderung erscheint auf allen Geräten.</li>
-        <li><strong>Funktioniert ohne Netz:</strong> auch im Supermarkt-Keller.
-        Sobald wieder Empfang da ist, gleicht die Liste von selbst ab.</li>
-        <li><strong>Beim Einkaufen:</strong> Der Bildschirm bleibt an, Abgehaktes
-        rutscht nach unten, nichts lässt sich versehentlich wegwischen.</li>
-        <li>„Oft gekauft" und der Verlauf merken sich, was regelmäßig auf die Liste kommt.</li>
-        <li>Widget für den Startbildschirm, Spracheingabe, Zutaten aus anderen Apps
-        (z. B. einem Rezept) per Teilen übernehmen.</li>
-        <li>Schrift und Zeilenhöhe einstellbar, heller und dunkler Modus.</li>
+    <section class="p-section wrap" id="so-gehts" aria-labelledby="reel-h">
+      <p class="eyebrow">So geht’s</p>
+      <h2 id="reel-h">Eintragen, teilen, einkaufen.</h2>
+      <ul class="reel">
+        <li><span class="phone"><picture><source srcset="/shopping/screen-gemeinsam-dark.webp" media="(prefers-color-scheme: dark)"><img src="/shopping/screen-gemeinsam-light.webp" width="480" height="1067" alt="" loading="lazy"></picture></span>
+          <b>Eine Liste für alle</b><span>Jede Änderung erscheint auf allen Geräten.</span></li>
+        <li><span class="phone"><picture><source srcset="/shopping/screen-teilen-dark.webp" media="(prefers-color-scheme: dark)"><img src="/shopping/screen-teilen-light.webp" width="480" height="1067" alt="" loading="lazy"></picture></span>
+          <b>Teilen per Code</b><span>Keine E-Mail, kein Passwort, in unter einer Minute beigetreten.</span></li>
+        <li><span class="phone"><picture><source srcset="/shopping/screen-sortiert-dark.webp" media="(prefers-color-scheme: dark)"><img src="/shopping/screen-sortiert-light.webp" width="480" height="1067" alt="" loading="lazy"></picture></span>
+          <b>Sortiert wie dein Laden</b><span>Reihenfolge einmal je Laden einstellen – ohne Zickzack durch den Markt.</span></li>
+        <li><span class="phone"><picture><source srcset="/shopping/screen-diktat-dark.webp" media="(prefers-color-scheme: dark)"><img src="/shopping/screen-diktat-light.webp" width="480" height="1067" alt="" loading="lazy"></picture></span>
+          <b>Einfach diktieren</b><span>„2 l Milch, 10 Eier, Butter“ – Menge und Einheit erkennt die App.</span></li>
+        <li><span class="phone"><picture><source srcset="/shopping/screen-rezept-dark.webp" media="(prefers-color-scheme: dark)"><img src="/shopping/screen-rezept-light.webp" width="480" height="1067" alt="" loading="lazy"></picture></span>
+          <b>Rezept rein, Zutaten drauf</b><span>Zutaten aus einer Rezept-App per Teilen übernehmen.</span></li>
       </ul>
+    </section>
 
-      <h2>Ohne Schnickschnack</h2>
-      <ul>
-        <li>Auf deiner Liste steht nur, was ihr selbst eintragt – keine
-        Produktvorschläge von Händlern.</li>
-        <li>Kein Konto. Geteilte Listen laufen über unseren eigenen Server in
-        Frankfurt (EU), alles andere bleibt auf deinem Gerät.</li>
-        <li>Spracheingabe läuft über die Spracherkennung des Geräts – die App
-        selbst schickt keine Aufnahme irgendwohin.</li>
-        <li>Feedback direkt in der App, mit Anzeige, welche Geräte-Infos
-        mitgehen – nichts geht heimlich mit.</li>
+    <section class="p-section wrap" aria-labelledby="feat-h">
+      <p class="eyebrow">Was die App kann</p>
+      <h2 id="feat-h">Gebaut für den Moment im Laden.</h2>
+      <ul class="feat">
+        <li><span class="ic" aria-hidden="true">✍️</span><h3>Schnell eintragen</h3>
+          <p>„2 l Milch“, „500 g Hack“ oder ein ganzes Rezept auf einmal – jeder Artikel landet in der passenden Abteilung.</p></li>
+        <li><span class="ic" aria-hidden="true">🧭</span><h3>Sortiert wie dein Laden</h3>
+          <p>Obst &amp; Gemüse, Brot &amp; Gebäck, Milch &amp; Käse und neun weitere Abteilungen, in deiner Reihenfolge.</p></li>
+        <li><span class="ic" aria-hidden="true">👥</span><h3>Gemeinsam einkaufen</h3>
+          <p>Liste per Code teilen. Jede Änderung erscheint auf allen Geräten.</p></li>
+        <li><span class="ic" aria-hidden="true">📶</span><h3>Funktioniert ohne Netz</h3>
+          <p>Auch im Supermarkt-Keller. Sobald wieder Empfang da ist, gleicht die Liste von selbst ab.</p></li>
+        <li><span class="ic" aria-hidden="true">🛒</span><h3>Beim Einkaufen</h3>
+          <p>Der Bildschirm bleibt an, Abgehaktes rutscht nach unten, nichts lässt sich versehentlich wegwischen.</p></li>
+        <li><span class="ic" aria-hidden="true">🔁</span><h3>Merkt sich, was ihr braucht</h3>
+          <p>„Oft gekauft“ und der Verlauf kennen, was regelmäßig auf die Liste kommt.</p></li>
       </ul>
+      <p class="also">Außerdem: Widget für den Startbildschirm, Spracheingabe, Schrift und Zeilenhöhe einstellbar, heller und dunkler Modus.</p>
+    </section>
 
-      <h2>Kostenlos, kein Abo</h2>
-      <p>Die App ist kostenlos. Die ersten 5 Tage ganz ohne Werbung, danach ein
-      kleiner Banner am unteren Rand – nie in deiner Liste, keine
-      Vollbild-Werbung, keine Videos. Wer ihn nicht möchte, kauft einmalig
-      „Ohne Werbung" für 1,49&nbsp;€ – gilt für dein Google-Konto, kein Abo.</p>
+    <section class="p-section wrap duo">
+      <div class="panel" aria-labelledby="clean-h">
+        <p class="eyebrow">Ohne Schnickschnack</p>
+        <h2 id="clean-h">Deine Liste gehört dir.</h2>
+        <ul>
+          <li>Auf deiner Liste steht nur, was ihr selbst eintragt – keine Produktvorschläge von Händlern.</li>
+          <li>Kein Konto. Geteilte Listen laufen über unseren eigenen Server in Frankfurt (EU), alles andere bleibt auf deinem Gerät.</li>
+          <li>Spracheingabe läuft über die Spracherkennung des Geräts – die App selbst schickt keine Aufnahme irgendwohin.</li>
+          <li>Feedback direkt in der App, mit Anzeige, welche Geräte-Infos mitgehen – nichts geht heimlich mit.</li>
+        </ul>
+      </div>
+      <div class="panel" aria-labelledby="price-h">
+        <p class="eyebrow">Preis</p>
+        <h2 id="price-h">Kostenlos. Kein Abo.</h2>
+        <div class="price"><b>0&nbsp;€</b><span>für alles, was die App kann</span></div>
+        <p>Die ersten 5 Tage ganz ohne Werbung, danach ein kleiner Banner am unteren Rand – nie in deiner Liste,
+          keine Vollbild-Werbung, keine Videos.</p>
+        <p>Wer ihn nicht möchte, kauft einmalig „Ohne Werbung“ für <strong>1,49&nbsp;€</strong> – gilt für dein Google-Konto, kein Abo.</p>
+      </div>
+    </section>
 
-      <p class="store-badge"><span class="soon">Bald bei Google Play</span></p>
-
-    </article>
+    <section class="finale wrap" aria-labelledby="fin-h">
+      <div class="spot">
+        <div class="spot-copy">
+          <p class="spot-tag"><span class="live-dot" aria-hidden="true"></span>Gerade bei Google&nbsp;Play eingereicht</p>
+          <h2 id="fin-h">Nie wieder „Hast du an die Milch gedacht?“</h2>
+          <p class="spot-lead">Die App ist in der Prüfung bei Google&nbsp;Play. Sobald sie freigegeben ist, steht hier der Link zum Store.</p>
+          <div class="ctas"><span class="soon-pill">Bald bei Google&nbsp;Play</span></div>
+        </div>
+        <img class="mascot" src="/shopping/figur.webp" width="402" height="490" alt="Maskottchen der App: eine gelbe Milchtüte mit Gesicht" loading="lazy">
+      </div>
+    </section>
   </main>
-  <footer>
-    <nav>
-      <a href="/shopping/privacy/">Datenschutz</a>
-      <a href="/shopping/terms/">Nutzungsregeln</a>
-      <a href="/legal-notice/">Impressum</a>
-      <a href="/">Alle Apps</a>
-    </nav>
-    &copy; 2026 Remindery Apps
+
+  <footer class="site-foot">
+    <div class="wrap foot-base">
+      <nav aria-label="Rechtliches und mehr">
+        <a href="/shopping/privacy/">Datenschutz</a>
+        <a href="/shopping/terms/">Nutzungsregeln</a>
+        <a href="/legal-notice/">Impressum</a>
+        <a href="/">Alle Apps</a>
+      </nav>
+      <p>&copy; 2026 Remindery Apps</p>
+    </div>
   </footer>
 </body>
 </html>

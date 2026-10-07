@@ -3,8 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
   <title>Shopping List – the shared grocery list without an account</title>
   <meta name="description" content="A shared shopping list without an account or sign-up. Sorts items by aisle automatically, works offline, share with a code.">
+  <link rel="canonical" href="https://remindery.de/en/shopping/">
   <link rel="alternate" hreflang="de" href="https://remindery.de/shopping/">
   <link rel="alternate" hreflang="en" href="https://remindery.de/en/shopping/">
   <link rel="alternate" hreflang="x-default" href="https://remindery.de/shopping/">
@@ -12,10 +14,12 @@
   <link rel="stylesheet" href="/styles.css">
 </head>
 <!--
-  Source: apps/remindery-einkaufsliste/docs/website/ (app repo), copied to web/remindery-site.
-  Store badge only after the Google Play release; until then "Coming soon".
+  Origin: apps/remindery-einkaufsliste/docs/website/ (app repo); since 2026-10-07
+  developed further here as a product page. Store badge only after the Google Play
+  release (badge only links a real listing); until then .soon-pill "Coming soon".
+  The app UI in the screens is German (release is DACH only).
 -->
-<body>
+<body class="home product">
   <header class="site-head">
     <div class="head-in">
       <a class="site-brand" href="/en/"><img src="/favicon.svg" width="34" height="34" alt=""><span>Remindery Apps</span></a>
@@ -27,68 +31,108 @@
     </div>
   </header>
   <main>
-    <header class="page-header">
-      <span class="brand">Shopping List</span>
-    </header>
+    <section class="p-hero wrap">
+      <div>
+        <p class="spot-tag"><span class="live-dot" aria-hidden="true"></span>New · Shopping List</p>
+        <h1>The shared shopping list. <em>No account.</em></h1>
+        <p class="pitch">One of you adds “milk” at home, the other sees it instantly in the store.
+          The list on the fridge – on two phones at once. For families, couples, flatmates and friends.</p>
+        <div class="ctas">
+          <span class="soon-pill">Coming soon to Google&nbsp;Play</span>
+          <a class="pill-btn ghost" href="#how">How it works <span aria-hidden="true">↓</span></a>
+        </div>
+        <ul class="trust" aria-label="At a glance">
+          <li>Free</li><li>No account</li><li>Works offline</li><li>Server in Frankfurt (EU)</li>
+        </ul>
+      </div>
+      <div class="hero-visual">
+        <span class="phone p1"><picture><source srcset="/shopping/screen-gemeinsam-dark.webp" media="(prefers-color-scheme: dark)"><img src="/shopping/screen-gemeinsam-light.webp" width="480" height="1067" alt="Shared list grouped by aisle: fruit &amp; vegetables, bakery, dairy"></picture></span>
+        <span class="phone p2"><picture><source srcset="/shopping/screen-teilen-dark.webp" media="(prefers-color-scheme: dark)"><img src="/shopping/screen-teilen-light.webp" width="480" height="1067" alt="Sharing a list: join code and list of members"></picture></span>
+        <img class="mascot" src="/shopping/figur.webp" width="402" height="490" alt="">
+      </div>
+    </section>
 
-    <article>
-      <h1>The shared shopping list – no account</h1>
-      <p class="updated">For families, couples, flatmates and friends</p>
-
-      <p><img src="/shopping/icon.png" width="192" height="192" alt="Shopping List app icon: a yellow milk carton" style="border-radius:22%"></p>
-
-      <p>One of you adds “milk” at home, the other sees it instantly in the
-      store. It's the list on the fridge – on two phones at once. No account,
-      no sign-up, free.</p>
-
-      <h2>What it does</h2>
-      <ul>
-        <li><strong>Quick to add:</strong> “2 l milk”, “500 g mince” or a whole
-        recipe at once – the app recognises amount and unit.</li>
-        <li><strong>Grouped by aisle:</strong> fruit &amp; vegetables, bakery,
-        dairy and nine more. Set the aisle order once per store and walk
-        through without zigzagging. (Automatic aisle sorting currently
-        recognises German item names.)</li>
-        <li><strong>Shop together:</strong> share a list with a code. No e-mail,
-        no password, joined in under a minute. Every change shows up on every device.</li>
-        <li><strong>Works offline:</strong> even in the basement aisle. As soon as
-        you have signal again, the list syncs by itself.</li>
-        <li><strong>While shopping:</strong> the screen stays on, checked items move
-        down, nothing gets swiped away by accident.</li>
-        <li>“Bought often” and the history remember what goes on the list regularly.</li>
-        <li>Home screen widget, voice input, take ingredients from other apps
-        (e.g. a recipe) via share.</li>
-        <li>Adjustable text size and row height, light and dark mode.</li>
+    <section class="p-section wrap" id="how" aria-labelledby="reel-h">
+      <p class="eyebrow">How it works</p>
+      <h2 id="reel-h">Add, share, shop.</h2>
+      <ul class="reel">
+        <li><span class="phone"><picture><source srcset="/shopping/screen-gemeinsam-dark.webp" media="(prefers-color-scheme: dark)"><img src="/shopping/screen-gemeinsam-light.webp" width="480" height="1067" alt="" loading="lazy"></picture></span>
+          <b>One list for everyone</b><span>Every change shows up on every device.</span></li>
+        <li><span class="phone"><picture><source srcset="/shopping/screen-teilen-dark.webp" media="(prefers-color-scheme: dark)"><img src="/shopping/screen-teilen-light.webp" width="480" height="1067" alt="" loading="lazy"></picture></span>
+          <b>Share with a code</b><span>No e-mail, no password, joined in under a minute.</span></li>
+        <li><span class="phone"><picture><source srcset="/shopping/screen-sortiert-dark.webp" media="(prefers-color-scheme: dark)"><img src="/shopping/screen-sortiert-light.webp" width="480" height="1067" alt="" loading="lazy"></picture></span>
+          <b>Sorted like your store</b><span>Set the aisle order once per store – no more zigzagging.</span></li>
+        <li><span class="phone"><picture><source srcset="/shopping/screen-diktat-dark.webp" media="(prefers-color-scheme: dark)"><img src="/shopping/screen-diktat-light.webp" width="480" height="1067" alt="" loading="lazy"></picture></span>
+          <b>Just say it</b><span>“2 l milk, 10 eggs, butter” – the app recognises amount and unit.</span></li>
+        <li><span class="phone"><picture><source srcset="/shopping/screen-rezept-dark.webp" media="(prefers-color-scheme: dark)"><img src="/shopping/screen-rezept-light.webp" width="480" height="1067" alt="" loading="lazy"></picture></span>
+          <b>Recipe in, ingredients on</b><span>Take ingredients from a recipe app via share.</span></li>
       </ul>
+    </section>
 
-      <h2>No fuss</h2>
-      <ul>
-        <li>Your list only holds what you add yourselves – no product suggestions from retailers.</li>
-        <li>No account. Shared lists run through our own server in Frankfurt
-        (EU); everything else stays on your device.</li>
-        <li>Voice input uses your device's speech recognition – the app itself
-        doesn't send any recording anywhere.</li>
-        <li>Feedback right in the app, showing which device info is included – nothing goes along secretly.</li>
+    <section class="p-section wrap" aria-labelledby="feat-h">
+      <p class="eyebrow">What it does</p>
+      <h2 id="feat-h">Built for the moment in the store.</h2>
+      <ul class="feat">
+        <li><span class="ic" aria-hidden="true">✍️</span><h3>Quick to add</h3>
+          <p>“2 l milk”, “500 g mince” or a whole recipe at once – the app recognises amount and unit.</p></li>
+        <li><span class="ic" aria-hidden="true">🧭</span><h3>Grouped by aisle</h3>
+          <p>Fruit &amp; vegetables, bakery, dairy and nine more, in your order. (Automatic sorting currently recognises German item names.)</p></li>
+        <li><span class="ic" aria-hidden="true">👥</span><h3>Shop together</h3>
+          <p>Share a list with a code. Every change shows up on every device.</p></li>
+        <li><span class="ic" aria-hidden="true">📶</span><h3>Works offline</h3>
+          <p>Even in the basement aisle. As soon as you have signal again, the list syncs by itself.</p></li>
+        <li><span class="ic" aria-hidden="true">🛒</span><h3>While shopping</h3>
+          <p>The screen stays on, checked items move down, nothing gets swiped away by accident.</p></li>
+        <li><span class="ic" aria-hidden="true">🔁</span><h3>Remembers what you need</h3>
+          <p>“Bought often” and the history know what goes on the list regularly.</p></li>
       </ul>
+      <p class="also">Plus: home screen widget, voice input, adjustable text size and row height, light and dark mode.</p>
+    </section>
 
-      <h2>Free, no subscription</h2>
-      <p>The app is free. The first 5 days have no ads at all, after that a
-      small banner at the bottom – never inside your list, no full-screen ads,
-      no videos. If you'd rather not see it, buy “No ads” once for €1.49 – it
-      applies to your Google account, no subscription.</p>
+    <section class="p-section wrap duo">
+      <div class="panel" aria-labelledby="clean-h">
+        <p class="eyebrow">No fuss</p>
+        <h2 id="clean-h">Your list is yours.</h2>
+        <ul>
+          <li>Your list only holds what you add yourselves – no product suggestions from retailers.</li>
+          <li>No account. Shared lists run through our own server in Frankfurt (EU); everything else stays on your device.</li>
+          <li>Voice input uses your device’s speech recognition – the app itself doesn’t send any recording anywhere.</li>
+          <li>Feedback right in the app, showing which device info is included – nothing goes along secretly.</li>
+        </ul>
+      </div>
+      <div class="panel" aria-labelledby="price-h">
+        <p class="eyebrow">Price</p>
+        <h2 id="price-h">Free. No subscription.</h2>
+        <div class="price"><b>€0</b><span>for everything the app does</span></div>
+        <p>The first 5 days have no ads at all, after that a small banner at the bottom – never inside your list,
+          no full-screen ads, no videos.</p>
+        <p>If you’d rather not see it, buy “No ads” once for <strong>€1.49</strong> – it applies to your Google account, no subscription.</p>
+      </div>
+    </section>
 
-      <p class="store-badge"><span class="soon">Coming soon to Google Play</span></p>
-
-    </article>
+    <section class="finale wrap" aria-labelledby="fin-h">
+      <div class="spot">
+        <div class="spot-copy">
+          <p class="spot-tag"><span class="live-dot" aria-hidden="true"></span>Just submitted to Google&nbsp;Play</p>
+          <h2 id="fin-h">Never again “Did you remember the milk?”</h2>
+          <p class="spot-lead">The app is in review at Google&nbsp;Play. As soon as it is approved, the store link appears here.</p>
+          <div class="ctas"><span class="soon-pill">Coming soon to Google&nbsp;Play</span></div>
+        </div>
+        <img class="mascot" src="/shopping/figur.webp" width="402" height="490" alt="The app’s mascot: a yellow milk carton with a face" loading="lazy">
+      </div>
+    </section>
   </main>
-  <footer>
-    <nav>
-      <a href="/en/shopping/privacy/">Privacy Policy</a>
-      <a href="/en/shopping/terms/">Terms of Use</a>
-      <a href="/en/legal-notice/">Legal notice</a>
-      <a href="/en/">All apps</a>
-    </nav>
-    &copy; 2026 Remindery Apps
+
+  <footer class="site-foot">
+    <div class="wrap foot-base">
+      <nav aria-label="Legal and more">
+        <a href="/en/shopping/privacy/">Privacy Policy</a>
+        <a href="/en/shopping/terms/">Terms of Use</a>
+        <a href="/en/legal-notice/">Legal notice</a>
+        <a href="/en/">All apps</a>
+      </nav>
+      <p>&copy; 2026 Remindery Apps</p>
+    </div>
   </footer>
 </body>
 </html>
