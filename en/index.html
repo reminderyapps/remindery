@@ -46,13 +46,13 @@
       </nav>
     </section>
 
-    <!-- Launch stage of the newest app. Store badge only after Google Play
-         approval (badge only links a real listing), then replace .soon-pill
-         and move the app into the grid below as a card. -->
+    <!-- Launch stage of the newest app (live on Google Play since 2026-10-08).
+         The app is also a card in the grid; the stage goes once the next app
+         needs it. -->
     <section class="spotlight wrap" id="shopping" aria-labelledby="shop-h">
       <div class="spot">
         <div class="spot-copy">
-          <p class="spot-tag"><span class="live-dot" aria-hidden="true"></span>New · just submitted to Google&nbsp;Play</p>
+          <p class="spot-tag"><span class="live-dot" aria-hidden="true"></span>New · now on Google&nbsp;Play</p>
           <h2 id="shop-h"><a href="/en/shopping/">The shared shopping list</a></h2>
           <p class="spot-lead">One of you adds “milk” at home, the other sees it instantly in the store.
             The list on the fridge – on two phones at once.</p>
@@ -63,7 +63,7 @@
           </ul>
           <div class="ctas">
             <a class="pill-btn" href="/en/shopping/">See the app <span aria-hidden="true">→</span></a>
-            <span class="soon-pill">Coming soon to Google&nbsp;Play</span>
+            <a class="badge play" href="https://play.google.com/store/apps/details?id=app.remindery.shopping"><img src="/google-play-badge-de.png" width="646" height="250" alt="Shopping List on Google Play"></a>
           </div>
         </div>
         <div class="spot-visual" aria-hidden="true">
@@ -81,10 +81,28 @@
           <p class="eyebrow">Our apps</p>
           <h2 id="apps-h">One job per app.</h2>
         </div>
-        <p>All four are live on Google&nbsp;Play; Silben Lesen and Uhr lesen lernen are also in the Amazon&nbsp;Appstore.</p>
+        <p>All five are live on Google&nbsp;Play; Silben Lesen and Uhr lesen lernen are also in the Amazon&nbsp;Appstore.</p>
       </div>
 
       <div class="grid">
+        <article class="app" id="shopping-list" style="--c: var(--shop)">
+          <div class="app-top">
+            <a class="app-icon" href="/en/shopping/"><img src="/shopping/icon.png" width="192" height="192" alt="App icon Shopping List"></a>
+            <div>
+              <p class="meta">For the family · groceries</p>
+              <h3><a href="/en/shopping/">Shopping List</a></h3>
+            </div>
+          </div>
+          <p class="desc">The shared shopping list without an account: share with a code, every change instantly on
+            every phone, sorted by your store – and it works offline too.</p>
+          <div class="app-foot">
+            <a class="more" href="/en/shopping/">More about the app <span aria-hidden="true">→</span></a>
+            <div class="badges">
+              <a class="badge play" href="https://play.google.com/store/apps/details?id=app.remindery.shopping"><img src="/google-play-badge-de.png" width="646" height="250" alt="Shopping List on Google Play"></a>
+            </div>
+          </div>
+        </article>
+
         <article class="app" id="ubo" style="--c: var(--ox)">
           <div class="app-top">
             <a class="app-icon" href="/en/ubo/"><img src="/ubo/icon.png" width="192" height="192" alt="App icon Ubo – Vokabeltrainer"></a>
@@ -183,7 +201,7 @@
           </figure>
         </div>
         <dl class="facts" aria-label="Remindery Apps in numbers">
-          <div><dt>4</dt><dd>apps live on Google&nbsp;Play</dd></div>
+          <div><dt>5</dt><dd>apps live on Google&nbsp;Play</dd></div>
           <div><dt>14</dt><dd>days on average from idea to store submission</dd></div>
           <div><dt>1,200+</dt><dd>commits since July 2026</dd></div>
           <div><dt>~4,000</dt><dd>automated tests, written by agents</dd></div>
