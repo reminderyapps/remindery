@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Studie · Method-Seite & Startseite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ---------- Studien-Rahmen (nicht Teil des Designs) ---------- */
+.po { font: 13px/1.45 system-ui, sans-serif; color: #5b5048; background: #fff6d6; border: 1px dashed #d9b84a;
+  border-radius: 8px; padding: 8px 12px; margin: 0 auto 18px; max-width: 1080px; }
+.po b { color: #3a2f27; }
+.switch { position: sticky; top: 0; z-index: 50; display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+  justify-content: center; padding: 10px 16px; background: rgba(30,30,30,.92); backdrop-filter: blur(8px);
+  font: 14px system-ui, sans-serif; color: #eee; }
+.switch button { font: inherit; border: 1px solid #555; background: #2a2a2a; color: #eee; border-radius: 999px;
+  padding: 6px 14px; cursor: pointer; }
+.switch button[aria-pressed="true"] { background: #fff; color: #111; border-color: #fff; }
+.switch span { opacity: .7; margin-right: 6px; }
+.screen-tag { font: 600 11px/1 system-ui, sans-serif; letter-spacing: .08em; text-transform: uppercase;
+  color: #8a7d72; text-align: center; padding: 28px 0 10px; }
+
+/* ---------- Tokens je Richtung ---------- */
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--f-body); transition: background .3s; }
+body[data-dir="a"] {
+  --bg: #0B0F14; --bg2: #11171F; --card: #141B24; --fg: #E6EDF3; --soft: #8B98A5; --line: #223040;
+  --accent: #FF6B55; --ok: #3DDC97; --gate: #FFC857; --r: 10px;
+  --f-head: "Inter", system-ui, sans-serif; --f-body: "Inter", system-ui, sans-serif; --f-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+body[data-dir="b"] {
+  --bg: #FAF7F2; --bg2: #F3ECE3; --card: #FFFFFF; --fg: #2B2622; --soft: #6E6258; --line: #E3D9CC;
+  --accent: #B5442F; --ok: #4E7D3A; --gate: #B5442F; --r: 4px;
+  --f-head: "Fraunces", Georgia, serif; --f-body: system-ui, -apple-system, "Segoe UI", sans-serif; --f-mono: ui-monospace, "Cascadia Mono", monospace;
+}
+body[data-dir="c"] {
+  --bg: #FFFDF8; --bg2: #FFF1E0; --card: #FFFFFF; --fg: #1D1A2F; --soft: #5F5A73; --line: #1D1A2F;
+  --accent: #E8604C; --ok: #2E9A63; --gate: #7A5AF8; --r: 22px;
+  --ox: #6B8E23; --silben: #3F7DBF; --uhr: #E8604C; --geb: #C2647A; --raetsel: #2E9A63;
+  --f-head: "Bricolage Grotesque", system-ui, sans-serif; --f-body: "Inter", system-ui, sans-serif; --f-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* ---------- Gemeinsames Gerüst ---------- */
+* { box-sizing: border-box; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+section.s { padding: 56px 0 72px; border-bottom: 1px solid var(--line); }
+h1, h2, h3 { font-family: var(--f-head); margin: 0; letter-spacing: -.02em; }
+h1 { font-size: clamp(36px, 7vw, 76px); line-height: 1.02; }
+h2 { font-size: clamp(28px, 4.5vw, 46px); line-height: 1.08; }
+h3 { font-size: 20px; line-height: 1.25; }
+p { line-height: 1.6; }
+.lead { font-size: clamp(17px, 2.2vw, 21px); color: var(--soft); max-width: 640px; }
+.eyebrow { font: 600 12px/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; }
+.btns { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 22px; font: 600 15px var(--f-body);
+  border-radius: var(--r); text-decoration: none; cursor: pointer; border: 1.5px solid transparent;
+  transition: transform .15s cubic-bezier(.23,1,.32,1); }
+.btn:active { transform: scale(.97); }
+.btn.pri { background: var(--accent); color: #fff; }
+.btn.sec { border-color: var(--line); color: var(--fg); background: transparent; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 44px; }
+.stat { padding: 18px; border-radius: var(--r); background: var(--card); border: 1px solid var(--line); }
+.stat b { display: block; font: 600 clamp(28px, 4vw, 40px)/1 var(--f-head); letter-spacing: -.02em; }
+.stat span { display: block; margin-top: 8px; font-size: 13px; color: var(--soft); line-height: 1.35; }
+.apps { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-top: 36px; }
+.app { padding: 16px; border-radius: var(--r); background: var(--card); border: 1px solid var(--line); }
+.app i { display: block; width: 40px; height: 40px; border-radius: 10px; margin-bottom: 12px; font-style: normal;
+  display: grid; place-items: center; color: #fff; font-weight: 700; }
+.app small { color: var(--soft); display: block; margin-top: 4px; }
+
+/* Pipeline */
+.pipe { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 44px; position: relative; }
+.node { padding: 16px 14px; border-radius: var(--r); background: var(--card); border: 1px solid var(--line);
+  transition: border-color .3s, box-shadow .3s, transform .3s cubic-bezier(.23,1,.32,1), background .3s; min-height: 150px; }
+.node .n { font: 600 12px var(--f-mono); color: var(--soft); }
+.node h3 { margin: 8px 0 6px; font-size: 17px; }
+.node p { margin: 0; font-size: 13px; color: var(--soft); line-height: 1.45; }
+.node .who { display: inline-block; margin-top: 10px; font: 600 11px var(--f-mono); padding: 3px 8px; border-radius: 999px;
+  background: var(--bg2); color: var(--soft); }
+.node.gate .who { background: var(--gate); color: #111; }
+.node.on { border-color: var(--accent); transform: translateY(-4px); }
+.node.gate.on { border-color: var(--gate); }
+.claim { margin-top: 40px; font: 600 clamp(22px, 3.4vw, 34px)/1.2 var(--f-head); }
+.claim em { font-style: normal; color: var(--accent); }
+
+/* Nacht-Replay */
+.night { display: grid; grid-template-columns: 1fr 1.25fr; gap: 28px; margin-top: 36px; align-items: start; }
+.clock { font: 600 clamp(48px, 8vw, 84px)/1 var(--f-mono); letter-spacing: -.03em; }
+.counters { display: flex; gap: 22px; margin: 14px 0 22px; flex-wrap: wrap; }
+.counters div { font-size: 13px; color: var(--soft); }
+.counters b { display: block; font: 600 26px var(--f-head); color: var(--fg); }
+.hist { display: flex; align-items: flex-end; gap: 6px; height: 120px; border-bottom: 1px solid var(--line); }
+.hist div { flex: 1; background: var(--accent); border-radius: 3px 3px 0 0; height: 0; transition: height .5s cubic-bezier(.23,1,.32,1); opacity: .85; }
+.hist-l { display: flex; gap: 6px; font: 11px var(--f-mono); color: var(--soft); margin-top: 6px; }
+.hist-l span { flex: 1; text-align: center; }
+.log { font: 13px/1.5 var(--f-mono); background: var(--bg2); border: 1px solid var(--line); border-radius: var(--r);
+  padding: 14px; height: 360px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; }
+.log div { opacity: 0; transform: translateY(6px); animation: in .35s cubic-bezier(.23,1,.32,1) forwards; padding: 2px 0; }
+.log time { color: var(--accent); margin-right: 10px; }
+.log .k { color: var(--gate); }
+@keyframes in { to { opacity: 1; transform: none; } }
+.morning { margin-top: 18px; padding: 14px 16px; border-radius: var(--r); border: 1.5px solid var(--gate); font-size: 15px; }
+
+/* Karten-Reise */
+.journey { margin-top: 40px; display: grid; gap: 0; border-left: 2px solid var(--line); padding-left: 22px; }
+.journey div { position: relative; padding: 10px 0; }
+.journey div::before { content: ""; position: absolute; left: -29px; top: 15px; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); }
+.journey div.stop::before { background: var(--gate); box-shadow: 0 0 0 5px color-mix(in srgb, var(--gate) 30%, transparent); }
+.journey time { font: 600 13px var(--f-mono); color: var(--soft); margin-right: 10px; }
+
+/* Leitplanken & Lessons */
+.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 36px; }
+.card { padding: 22px; border-radius: var(--r); background: var(--card); border: 1px solid var(--line); }
+.card p { margin: 8px 0 0; font-size: 15px; color: var(--soft); }
+.lesson .when { font: 600 12px var(--f-mono); color: var(--accent); }
+.lesson .fix { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line); font-size: 14px; }
+.lesson .fix b { color: var(--ok); }
+
+/* Stufenleiter */
+.ladder { margin-top: 36px; overflow-x: auto; }
+.ladder table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 14px; }
+.ladder th, .ladder td { padding: 12px 10px; border-bottom: 1px solid var(--line); text-align: center; }
+.ladder th:first-child, .ladder td:first-child { text-align: left; font-weight: 600; }
+.ladder th { font: 600 12px var(--f-mono); color: var(--soft); text-transform: uppercase; letter-spacing: .06em; }
+.dot { display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); }
+.dot.h { background: var(--gate); }
+
+/* Komponenten */
+.comp { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin-top: 28px; }
+.chip { font: 600 12px var(--f-mono); padding: 5px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--soft); }
+.chip.g { background: var(--gate); color: #111; border-color: transparent; }
+
+/* ---------- A: Control Room ---------- */
+body[data-dir="a"] section.s { background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 48px 48px; background-position: -1px -1px; background-color: var(--bg); }
+body[data-dir="a"] h1, body[data-dir="a"] h2 { font-weight: 600; letter-spacing: -.035em; }
+body[data-dir="a"] h1 .hl { color: var(--accent); text-shadow: 0 0 40px rgba(255,107,85,.45); }
+body[data-dir="a"] .node.on { box-shadow: 0 0 0 1px var(--accent), 0 0 32px rgba(255,107,85,.25); }
+body[data-dir="a"] .node.gate.on { box-shadow: 0 0 0 1px var(--gate), 0 0 32px rgba(255,200,87,.3); }
+body[data-dir="a"] .log { background: #070A0E; box-shadow: inset 0 0 0 1px #1a2531; }
+body[data-dir="a"] .log div::before { content: "› "; color: var(--ok); }
+body[data-dir="a"] .stat b { font-family: var(--f-mono); color: var(--ok); }
+body[data-dir="a"] .hist div { background: linear-gradient(to top, var(--accent), #ffb199); }
+body[data-dir="a"] .btn.pri { box-shadow: 0 0 24px rgba(255,107,85,.35); }
+body[data-dir="a"] .app i { border-radius: 8px; }
+body[data-dir="a"] .status { display: inline-flex; gap: 8px; align-items: center; font: 12px var(--f-mono); color: var(--ok);
+  border: 1px solid #1f3b30; background: #0d1d17; padding: 6px 10px; border-radius: 999px; margin-bottom: 22px; }
+body[data-dir="a"] .status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); animation: pulse 1.6s infinite; }
+@keyframes pulse { 50% { opacity: .3; } }
+body:not([data-dir="a"]) .status { display: none; }
+
+/* ---------- B: Editorial ---------- */
+body[data-dir="b"] h1, body[data-dir="b"] h2 { font-weight: 400; letter-spacing: -.025em; }
+body[data-dir="b"] h1 { font-size: clamp(40px, 7.5vw, 88px); }
+body[data-dir="b"] h1 .hl { font-style: italic; color: var(--accent); }
+body[data-dir="b"] .eyebrow { color: var(--soft); font-family: var(--f-body); letter-spacing: .16em; }
+body[data-dir="b"] .stat, body[data-dir="b"] .app, body[data-dir="b"] .card, body[data-dir="b"] .node { background: transparent; border: 0; border-top: 1px solid var(--fg); border-radius: 0; padding-left: 0; }
+body[data-dir="b"] .stat b { font-weight: 400; font-size: clamp(36px, 5vw, 54px); }
+body[data-dir="b"] .node.on { transform: none; border-top: 3px solid var(--accent); }
+body[data-dir="b"] .node.gate.on { border-top-color: var(--gate); }
+body[data-dir="b"] .node.gate .who { background: transparent; color: var(--accent); padding: 0; font-style: italic; font-family: var(--f-head); font-size: 14px; }
+body[data-dir="b"] .node .who { background: transparent; padding: 0; }
+body[data-dir="b"] .claim { font-weight: 400; font-style: italic; font-size: clamp(28px, 4.5vw, 52px); border-left: 3px solid var(--accent); padding-left: 22px; }
+body[data-dir="b"] .claim em { font-style: normal; }
+body[data-dir="b"] .log { background: transparent; border: 0; border-left: 1px solid var(--line); border-radius: 0; font-family: var(--f-body); font-size: 15px; }
+body[data-dir="b"] .clock { font-family: var(--f-head); font-weight: 400; }
+body[data-dir="b"] .hist div { background: var(--fg); opacity: .8; border-radius: 0; }
+body[data-dir="b"] .btn { border-radius: 2px; }
+body[data-dir="b"] .btn.pri { background: var(--fg); }
+body[data-dir="b"] .app i { border-radius: 50%; }
+body[data-dir="b"] .lesson .when { font-family: var(--f-head); font-style: italic; font-size: 15px; font-weight: 400; }
+body[data-dir="b"] .morning { border: 0; border-top: 1px solid var(--fg); border-bottom: 1px solid var(--fg); border-radius: 0; font-family: var(--f-head); font-size: 19px; }
+
+/* ---------- C: Studio Pop ---------- */
+body[data-dir="c"] h1, body[data-dir="c"] h2 { font-weight: 800; letter-spacing: -.04em; }
+body[data-dir="c"] h1 .hl { background: linear-gradient(100deg, var(--uhr), var(--geb) 40%, var(--gate) 70%, var(--silben)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+body[data-dir="c"] .hero { position: relative; overflow: hidden; }
+body[data-dir="c"] .hero::before, body[data-dir="c"] .hero::after { content: ""; position: absolute; border-radius: 50%; filter: blur(60px); opacity: .45; z-index: -1; }
+body[data-dir="c"] .hero::before { width: 380px; height: 380px; background: var(--silben); right: -80px; top: -60px; }
+body[data-dir="c"] .hero::after { width: 300px; height: 300px; background: var(--uhr); right: 220px; top: 160px; }
+body[data-dir="c"] section.s { border-bottom: 0; }
+body[data-dir="c"] .stat, body[data-dir="c"] .app, body[data-dir="c"] .card, body[data-dir="c"] .node, body[data-dir="c"] .log { border: 2px solid var(--line); box-shadow: 4px 4px 0 var(--line); }
+body[data-dir="c"] .btn { border: 2px solid var(--line); box-shadow: 4px 4px 0 var(--line); border-radius: 14px; }
+body[data-dir="c"] .btn:hover { transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--line); }
+body[data-dir="c"] .btn:active { transform: translate(3px,3px); box-shadow: 1px 1px 0 var(--line); }
+body[data-dir="c"] .btn.pri { background: var(--accent); }
+body[data-dir="c"] .btn.sec { background: #fff; }
+body[data-dir="c"] .stat:nth-child(1) { background: #E3EEFA; } body[data-dir="c"] .stat:nth-child(2) { background: #FDE6E1; }
+body[data-dir="c"] .stat:nth-child(3) { background: #E2F4EA; } body[data-dir="c"] .stat:nth-child(4) { background: #EEE8FE; }
+body[data-dir="c"] .node:nth-child(1) { --c: var(--silben); } body[data-dir="c"] .node:nth-child(2) { --c: var(--gate); }
+body[data-dir="c"] .node:nth-child(3) { --c: var(--uhr); } body[data-dir="c"] .node:nth-child(4) { --c: var(--geb); }
+body[data-dir="c"] .node:nth-child(5) { --c: var(--gate); } body[data-dir="c"] .node:nth-child(6) { --c: var(--raetsel); }
+body[data-dir="c"] .node .n { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--c); color: #fff; }
+body[data-dir="c"] .node.on { background: color-mix(in srgb, var(--c) 14%, #fff); transform: translate(-2px,-4px) rotate(-1deg); box-shadow: 6px 8px 0 var(--line); }
+body[data-dir="c"] .node.gate .who { background: var(--gate); color: #fff; }
+body[data-dir="c"] .chip.g, body[data-dir="c"] .morning { --gate: #7A5AF8; }
+body[data-dir="c"] .chip.g { color: #fff; }
+body[data-dir="c"] .claim em { background: var(--gate); color: #fff; padding: 0 .2em; border-radius: 8px; }
+body[data-dir="c"] .hist div { border-radius: 8px 8px 0 0; }
+body[data-dir="c"] .hist div:nth-child(odd) { background: var(--silben); }
+body[data-dir="c"] .log { background: #1D1A2F; color: #EDEBFA; }
+body[data-dir="c"] .log time { color: #FFB4A6; }
+body[data-dir="c"] .morning { border: 2px solid var(--line); background: #EEE8FE; box-shadow: 4px 4px 0 var(--line); }
+
+@media (max-width: 860px) {
+  .pipe { grid-template-columns: repeat(2, 1fr); }
+  .night { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .log div { opacity: 1; transform: none; }
+}
+</style>
+</head>
+<body data-dir="a">
+
+<nav class="switch" aria-label="Richtung wählen">
+  <span>Richtung:</span>
+  <button data-d="a" aria-pressed="true">A · Control Room</button>
+  <button data-d="b" aria-pressed="false">B · Editorial</button>
+  <button data-d="c" aria-pressed="false">C · Studio Pop</button>
+  <span style="margin-left:8px">Tasten 1 / 2 / 3</span>
+</nav>
+
+<div class="screen-tag">Screen 1 · Neue Startseite (Studio statt Eltern)</div>
+<div class="po wrap"><b>Für dich:</b> Inhalt ist Englisch-zuerst, Deutsch folgt nach der Wahl. Zahlen sind Platzhalter vom Stand 04.10. und werden vor dem Go nachgezählt (Einkaufsliste ist seitdem live → 5 Apps). Die App-Unterseiten für Eltern bleiben unverändert.</div>
+<section class="s hero">
+  <div class="wrap">
+    <div class="status">pipeline running · 3 agents active</div>
+    <div class="eyebrow">AI-first app studio · near Hamburg</div>
+    <h1>One founder.<br>A team of agents.<br><span class="hl">Apps in weeks.</span></h1>
+    <p class="lead">Remindery builds focused everyday apps – mostly for kids learning to read, tell time and nail their vocab. Agents research, build, test, illustrate and voice. A human makes every call that matters.</p>
+    <div class="btns"><a class="btn pri" href="#method">See how it works →</a><a class="btn sec" href="#apps">Our apps</a></div>
+    <div class="stats">
+      <div class="stat"><b>5</b><span>apps live on Google Play</span></div>
+      <div class="stat"><b>14 days</b><span>average from idea to store submission</span></div>
+      <div class="stat"><b>~4,000</b><span>automated tests, written and run by agents</span></div>
+      <div class="stat"><b>6,500+</b><span>AI-voiced audio clips in production</span></div>
+    </div>
+    <div class="apps" id="apps">
+      <div class="app"><i style="background:#3F7DBF">S</i><b>Silben Lesen</b><small>Learning to read</small></div>
+      <div class="app"><i style="background:#E8604C">U</i><b>Uhr lesen lernen</b><small>Telling time</small></div>
+      <div class="app"><i style="background:#6B8E23">U</i><b>Ubo</b><small>AI vocab trainer</small></div>
+      <div class="app"><i style="background:#2E9A63">R</i><b>Rätselheft</b><small>Puzzles · coming soon</small></div>
+      <div class="app"><i style="background:#C2647A">E</i><b>Einkaufsliste</b><small>Family shopping list</small></div>
+    </div>
+  </div>
+</section>
+
+<div class="screen-tag" id="method">Screen 2 · /method – Hero mit Pipeline</div>
+<section class="s">
+  <div class="wrap">
+    <div class="eyebrow">The Remindery Method</div>
+    <h2>Most studios bolt AI onto an old process.<br>We rebuilt the process around it.</h2>
+    <p class="lead">Every step is an agent with a clear role, a versioned skill and a definition of done. Agents run on their own. The founder is on the loop – and in the loop at exactly two gates.</p>
+    <div class="pipe" id="pipe">
+      <div class="node"><div class="n">01</div><h3>Discovery</h3><p>Store data, reviews, search demand. Weak ideas die by numbers.</p><span class="who">agents</span></div>
+      <div class="node gate"><div class="n">02</div><h3>Concept</h3><p>A concept agent pitches, a critic agent tears it apart.</p><span class="who">human decides</span></div>
+      <div class="node"><div class="n">03</div><h3>Build</h3><p>Parallel work packages, often overnight, with hard stop rules.</p><span class="who">agents</span></div>
+      <div class="node"><div class="n">04</div><h3>Create</h3><p>Stories, local-GPU illustrations, neural voice-over.</p><span class="who">agents</span></div>
+      <div class="node gate"><div class="n">05</div><h3>QA</h3><p>Thousands of tests per build. Every story, image and voice reviewed.</p><span class="who">human sign-off</span></div>
+      <div class="node"><div class="n">06</div><h3>Ship</h3><p>Listings and screenshots from one source of truth.</p><span class="who">waits for Go</span></div>
+    </div>
+    <p class="claim">AI does the work. <em>Humans own the calls.</em></p>
+  </div>
+</section>
+
+<div class="screen-tag">Screen 3 · /method – Eine echte Nacht (Replay aus dem Git-Log)</div>
+<div class="po wrap"><b>Echt:</b> Rätselblock, 07.10. 23:34 → 08.10. 06:07, 121 Commits, Stundenverteilung und Zeilen aus dem Repo (gekürzt, übersetzt). Läuft ab, sobald der Abschnitt sichtbar ist.</div>
+<section class="s">
+  <div class="wrap">
+    <div class="eyebrow">One real night · Oct 7–8, 2026</div>
+    <h2>An app built overnight. Unattended.</h2>
+    <div class="night">
+      <div>
+        <div class="clock" id="clock">23:34</div>
+        <div class="counters">
+          <div><b id="cc">0</b>commits</div>
+          <div><b>30</b>puzzle types</div>
+          <div><b>759</b>voice clips</div>
+          <div><b>0</b>human inputs</div>
+        </div>
+        <div class="hist" id="hist"></div>
+        <div class="hist-l"><span>23</span><span>00</span><span>01</span><span>02</span><span>03</span><span>04</span><span>05</span><span>06</span></div>
+        <div class="morning" id="morning" style="opacity:.25">☀ 07:00 – one review page waiting for the founder. Nothing shipped without a yes.</div>
+      </div>
+      <div class="log" id="log" aria-live="off"></div>
+    </div>
+    <div class="btns"><button class="btn sec" id="replay">↻ Replay the night</button></div>
+  </div>
+</section>
+
+<div class="screen-tag">Screen 4 · /method – Leitplanken + echte Kartenreise</div>
+<section class="s">
+  <div class="wrap">
+    <div class="eyebrow">Guardrails</div>
+    <h2>Agents are fast.<br>The guardrails are the method.</h2>
+    <div class="grid3">
+      <div class="card"><h3>Nothing ships by itself</h3><p>Runs prepare everything, then stop at a column called “Go live?” with the exact steps written out. Release is a human decision. Every time.</p></div>
+      <div class="card"><h3>Three runs, zero collisions</h3><p>Up to three agents work in parallel. Each run claims the repos and devices it touches – a second run on the same repo waits in line.</p></div>
+      <div class="card"><h3>Watchers on the shipping state</h3><p>Tests that guard what goes to the store: production switches, page sizes, server version. A bundle that fails a watcher never gets built.</p></div>
+      <div class="card"><h3>Sign-off that can't get lost</h3><p>Human judgment is the bottleneck, so every review click is saved the moment it happens.</p></div>
+      <div class="card"><h3>State lives in files</h3><p>Every unattended job has a brief with work packages and checkboxes. If a run dies, the next one picks up where it stopped.</p></div>
+      <div class="card"><h3>A card is a change, not a release</h3><p>Changes collect on main. Builds, version numbers and store uploads happen only on a release button.</p></div>
+    </div>
+    <h3 style="margin-top:48px">A real card, Oct 9</h3>
+    <div class="journey">
+      <div><time>17:32</time>Card created: “Puzzle book – first internal test on Google Play”</div>
+      <div><time>17:40</time>Queued – another run is working in the same repo</div>
+      <div><time>17:41</time>Run starts, claims 3 repos</div>
+      <div><time>18:06</time>Test build ready, checked, store steps written down</div>
+      <div class="stop"><time>18:06</time><b>Run stops at the live gate.</b> Waiting for the founder's Go.</div>
+    </div>
+  </div>
+</section>
+
+<div class="screen-tag">Screen 5 · /method – Was schiefging und zur Regel wurde</div>
+<div class="po wrap"><b>Entscheidung offen:</b> Wie offen zeigen wir Fehler? Meine Empfehlung: genau so – das ist der Abschnitt, der Senior-Leser überzeugt.</div>
+<section class="s">
+  <div class="wrap">
+    <div class="eyebrow">Broken, then fixed</div>
+    <h2>Every rule here<br>was paid for once.</h2>
+    <div class="grid3">
+      <div class="card lesson"><div class="when">Aug 27 &amp; Sep 3</div><h3>Two bundles shipped with a dev switch on</h3><div class="fix"><b>Now:</b> the default is always production, one build script, a guard test.</div></div>
+      <div class="card lesson"><div class="when">Aug 11</div><h3>173 human reviews lost in one crash</h3><div class="fix"><b>Now:</b> review tools persist every click, and we prove it before each session.</div></div>
+      <div class="card lesson"><div class="when">Aug 23</div><h3>A session ended and killed a 90-minute GPU run</h3><div class="fix"><b>Now:</b> long jobs run detached, idempotent and resumable, with a log to poll.</div></div>
+      <div class="card lesson"><div class="when">Oct 3</div><h3>Google Play rejected a build over memory pages</h3><div class="fix"><b>Now:</b> an automated check runs before every bundle with native code.</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="screen-tag">Screen 6 · /method – Wie autonom ist jeder Schritt?</div>
+<div class="po wrap"><b>Entscheidung offen:</b> Die Stufenleiter ist gedanklich aus deinem vertraulichen Papier abgeleitet – hier in eigenen Worten, nur auf Remindery angewendet. Drin lassen oder streichen?</div>
+<section class="s">
+  <div class="wrap">
+    <div class="eyebrow">Autonomy, step by step</div>
+    <h2>Not everything should run alone.</h2>
+    <p class="lead">Each step is promoted only when the agent's output has matched human judgment on the same inputs, again and again. Some steps are meant to stay at “AI drafts, human decides”.</p>
+    <div class="ladder"><table>
+      <tr><th>Step</th><th>Human does it</th><th>AI assists</th><th>AI drafts, human decides</th><th>AI runs, human on the loop</th></tr>
+      <tr><td>Discovery</td><td></td><td></td><td><span class="dot h"></span></td><td></td></tr>
+      <tr><td>Concept</td><td></td><td></td><td><span class="dot h"></span></td><td></td></tr>
+      <tr><td>Build</td><td></td><td></td><td></td><td><span class="dot"></span></td></tr>
+      <tr><td>Create</td><td></td><td></td><td><span class="dot h"></span></td><td></td></tr>
+      <tr><td>QA – tests</td><td></td><td></td><td></td><td><span class="dot"></span></td></tr>
+      <tr><td>QA – taste</td><td><span class="dot h"></span></td><td></td><td></td><td></td></tr>
+      <tr><td>Ship</td><td></td><td></td><td><span class="dot h"></span></td><td></td></tr>
+    </table></div>
+  </div>
+</section>
+
+<div class="screen-tag">Komponenten-Set</div>
+<section class="s">
+  <div class="wrap">
+    <div class="comp">
+      <a class="btn pri" href="#">Primary action →</a>
+      <a class="btn sec" href="#">Secondary</a>
+      <span class="chip">agents</span><span class="chip g">human decides</span>
+      <div class="stat" style="min-width:160px"><b>121</b><span>commits in one night</span></div>
+    </div>
+  </div>
+</section>
+
+<script>
+const dirs = ['a','b','c'];
+function setDir(d) {
+  document.body.dataset.dir = d;
+  document.querySelectorAll('.switch button').forEach(b => b.setAttribute('aria-pressed', b.dataset.d === d));
+  try { localStorage.setItem('studie-dir', d); } catch (e) {}
+}
+document.querySelectorAll('.switch button').forEach(b => b.onclick = () => setDir(b.dataset.d));
+addEventListener('keydown', e => { const i = '123'.indexOf(e.key); if (i >= 0) setDir(dirs[i]); });
+try { const s = localStorage.getItem('studie-dir'); if (s) setDir(s); } catch (e) {}
+
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Pipeline: läuft durch, verweilt an den zwei menschlichen Toren
+const nodes = [...document.querySelectorAll('#pipe .node')];
+let pi = 0;
+(function step() {
+  nodes.forEach((n, i) => n.classList.toggle('on', i === pi));
+  const wait = nodes[pi].classList.contains('gate') ? 2200 : 900;
+  pi = (pi + 1) % nodes.length;
+  if (!still) setTimeout(step, wait);
+})();
+
+// Nacht-Replay: echte Zeiten und Commits (gekürzt, übersetzt)
+const NIGHT = [
+  ['23:34','Scaffold: flavors, build switches, storage, guard tests'],
+  ['23:42','Illustration pipeline: prompts written, GPU run detached'],
+  ['23:56','Theme + component set: paper look, type, icons'],
+  ['00:04','Every voice clip scripted, checker added'],
+  ['00:10','Editor agent reviews all 27 clip scripts'],
+  ['00:19','Motif library + vector catalogue'],
+  ['00:32','First puzzle end to end: maze'],
+  ['00:43','Parents\' area, purchase flow, review prompt'],
+  ['00:51','Amazon Appstore gateway + store guard'],
+  ['01:05','Puzzle agents fan out: 6 types in parallel'],
+  ['01:11','Sudoku, number wall, symbol maths – each with solver + tests'],
+  ['01:30','Detective puzzle: permutation solver'],
+  ['01:40','Audio complete: 759 neural voice clips, guard armed'],
+  ['01:45','Odd one out: uniqueness across all features'],
+  ['02:25','Shadow match: mask variants, uniqueness by overlap'],
+  ['02:47','Picture puzzles share one building block'],
+  ['04:33','<span class="k">Critic agent as a sceptical parent: 1 blocker, 7 important</span>'],
+  ['04:37','Fix: rating sheet made child-proof'],
+  ['04:47','Fix: no repeated outlier within one book'],
+  ['04:56','Fix: “show solution” across all 30 real types'],
+  ['05:43','Illustration catalogue wired in, goldens renewed'],
+  ['06:07','<span class="k">Review page generated. Run complete.</span>'],
+];
+const HOURS = [6,18,45,19,1,23,3,6], TOTAL = 121, HMAX = 45;
+const log = document.getElementById('log'), clock = document.getElementById('clock'),
+      cc = document.getElementById('cc'), hist = document.getElementById('hist'), morning = document.getElementById('morning');
+hist.innerHTML = HOURS.map(() => '<div></div>').join('');
+const bars = [...hist.children];
+let timer = null;
+function play() {
+  clearTimeout(timer); log.innerHTML = ''; bars.forEach(b => b.style.height = 0); morning.style.opacity = .25;
+  let i = 0;
+  (function tick() {
+    const [t, msg] = NIGHT[i];
+    const row = document.createElement('div'); row.innerHTML = `<time>${t}</time>${msg}`; log.appendChild(row);
+    while (log.children.length > 14) log.firstChild.remove();
+    clock.textContent = t;
+    const h = +t.slice(0,2), hi = h === 23 ? 0 : h + 1;
+    let done = 0; HOURS.forEach((n, k) => { if (k < hi) { bars[k].style.height = (n / HMAX * 100) + '%'; done += n; } });
+    bars[hi].style.height = (HOURS[hi] / HMAX * 100) + '%';
+    cc.textContent = i === NIGHT.length - 1 ? TOTAL : Math.round(done + HOURS[hi] * .6);
+    i++;
+    if (i < NIGHT.length) timer = setTimeout(tick, still ? 0 : 650);
+    else morning.style.opacity = 1;
+  })();
+}
+document.getElementById('replay').onclick = play;
+let seen = false;
+new IntersectionObserver(es => { if (es[0].isIntersecting && !seen) { seen = true; play(); } }, { threshold: .35 }).observe(log);
+</script>
+</body>
+</html>
