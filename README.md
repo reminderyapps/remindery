@@ -26,6 +26,10 @@ Gehostet über GitHub Pages (Branch `main`, Root):
     ubo/               index.html, privacy/, terms/, icon.png
     ox/                nur noch Weiterleitungen nach ubo/ (alte Adressen, NICHT LÖSCHEN)
 
+    arena-0xzhva/      privates Familien-Experiment (Monster-Arena), bewusst NICHT verlinkt,
+                       nicht in der Sitemap, noindex. Kommt aus dem Repo monster-arena
+                       (tool/veroeffentlichen.ps1) – dort ändern, nicht hier.
+
 Eine neue App bekommt einen neuen Ordner – **keine Dateien mehr im Root**.
 Jede App-Datenschutzerklärung enthält den Website-Teil noch einmal
 vollständig, weil Google Play eine Seite verlangt, die für sich allein steht.
