@@ -38,6 +38,10 @@
     <span><b>Strich</b><button data-w="54">dünn</button><button data-w="62">mittel</button><button data-w="70">kräftig</button></span>
   </div>
 
+  <h2>F2 + weitere Sterne – wie im typischen KI-Muster</h2>
+  <p class="sub">Basis F2. Ein oder zwei kleinere Sterne schräg darunter bzw. daneben.</p>
+  <div class="grid" id="gh"></div>
+
   <h2>A34 fein – Stern höher, linke Spitze auf Strichmitte</h2>
   <p class="sub">F1 rechnet die Höhe aus: die Sternachse liegt genau auf der Mitte des oberen Linienendes. F2–F4 heben den Stern von Hand an.</p>
   <div class="grid" id="gf"></div>
@@ -106,13 +110,25 @@ function build(v) {
     holes.push({ x: tx, y: ty, rx: tr + STROKE / 2 + 8, ry: tr * 1.1 + STROKE / 2 + 8 });
     stars += ' ' + star(tx, ty, tr, tr * 1.1);
   }
+  (v.extra || []).forEach(([ex, ey, er]) => {
+    holes.push({ x: ex, y: ey, rx: er + STROKE / 2 + 10, ry: er * 1.4 + STROKE / 2 + 10 });
+    stars += ' ' + star(ex, ey, er, er * 1.4);
+  });
   const line = cut(pts, holes);
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><rect width="1024" height="1024" rx="220" fill="${COLOR}"/>`
        + `<path d="${line}" fill="none" stroke="${CREAM}" stroke-width="${STROKE}" stroke-linecap="round" stroke-linejoin="round"/>`
        + `<path d="${stars}" fill="${CREAM}"/></svg>`;
 }
 
-const A = [], B = [], F = [];
+const A = [], B = [], F = [], H = [];
+const F2 = { s: 108, ry: 1.5, inset: 0, gap: 24, lift: 12 };
+[['H1', [[892, 478, 46]], 'ein kleiner Stern schräg rechts darunter'],
+ ['H2', [[880, 500, 54]], 'ein Stern, etwas größer und tiefer'],
+ ['H3', [[888, 470, 44], [846, 590, 26]], 'zwei: klein + winzig, Treppe nach unten'],
+ ['H4', [[896, 488, 48], [940, 372, 24]], 'zwei: klein darunter + winzig rechts daneben'],
+ ['H5', [[872, 512, 40], [932, 420, 28]], 'zwei kleine im Dreieck mit dem großen'],
+ ['H6', [[902, 462, 36], [860, 560, 30]], 'zwei ähnlich kleine, schräg versetzt']].forEach(([code, extra, note]) =>
+  H.push(Object.assign({ code, extra, note: 'F2 · ' + note }, F2)));
 [['F1', 0, true, 'automatisch auf Strichmitte'], ['F2', 12, false, '12 höher'], ['F3', 20, false, '20 höher'], ['F4', 28, false, '28 höher']].forEach(([code, lift, align, note]) =>
   F.push({ code, s: 108, ry: 1.5, inset: 0, gap: 24, lift, align, note: 'A34 · ' + note }));
 [[0, 12, 'auf der Ecke'], [14, 12, 'etwas nach innen'], [0, 24, 'mehr Luft']].forEach(([inset, gap, row], ri) =>
@@ -129,11 +145,12 @@ function render() {
         <span class="small"><img src="${url}" width="32" height="32" alt=""><img src="${url}" width="16" height="16" alt=""></span></div>
       <small>${v.note}</small></div>`;
   };
+  document.getElementById('gh').innerHTML = H.map(cell).join('');
   document.getElementById('gf').innerHTML = F.map(cell).join('');
   document.getElementById('ga').innerHTML = A.map(cell).join('');
   document.getElementById('gb').innerHTML = B.map(cell).join('');
   document.querySelectorAll('.cell').forEach(el => el.onclick = () => {
-    PICK = el.dataset.code; const v = F.concat(A, B).find(x => x.code === PICK);
+    PICK = el.dataset.code; const v = H.concat(F, A, B).find(x => x.code === PICK);
     document.getElementById('out').textContent = `${PICK} · Farbe ${COLOR} · Strich ${STROKE}\n` + JSON.stringify(v) + '\n\n' + build(v);
     render();
   });
