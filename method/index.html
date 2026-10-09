@@ -10,34 +10,47 @@
   <link rel="alternate" hreflang="en" href="https://remindery.de/en/method/">
   <link rel="alternate" hreflang="x-default" href="https://remindery.de/en/method/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <meta name="theme-color" content="#0B0F14">
+  <meta name="theme-color" content="#FAF7F2">
   <link rel="stylesheet" href="/method/method.css">
 </head>
 <body>
-  <header class="m-head">
-    <div class="wrap">
-      <a class="m-brand" href="/"><img src="/favicon.svg" alt=""><span>Remindery Apps</span></a>
-      <nav class="m-nav" aria-label="Hauptnavigation">
-        <a class="hide-s" href="/#apps">Apps</a>
+  <header class="site-head">
+    <div class="head-in">
+      <a class="site-brand" href="/"><img src="/favicon.svg" width="34" height="34" alt=""><span>Remindery Apps</span></a>
+      <nav class="site-nav" aria-label="Hauptnavigation">
+        <a href="/#apps">Apps</a>
         <a href="/method/" aria-current="page">Methode</a>
-        <a class="hide-s" href="/about/">Über uns</a>
-        <span class="lang" role="group" aria-label="Sprache"><a href="/method/" hreflang="de" aria-current="true">DE</a><a href="/en/method/" hreflang="en" lang="en">EN</a></span>
+        <a href="/about/">Über uns</a>
+        <span class="lang" role="group" aria-label="Sprache"><a href="/method/" hreflang="de" lang="de" title="Deutsch" aria-current="true">DE</a><a href="/en/method/" hreflang="en" lang="en" title="English">EN</a></span>
       </nav>
     </div>
   </header>
 
   <main>
-    <section class="s">
+    <section class="hero-light">
+      <div class="wrap">
+        <div class="eyebrow">Die Remindery-Methode</div>
+        <h1>Apps in Tagen,<br><em>nicht Monaten.</em></h1>
+        <p class="lead">Ein Gründer und ein Team aus KI-Agents bringen eine App in wenigen Tagen vom ersten Commit bis in den Store. Wie das funktioniert, zeigen wir hier – ehrlich, mit echten Daten.</p>
+        <div class="btns"><a class="btn pri" href="#night">Eine echte Nacht ansehen ↓</a><a class="btn" href="#agents">Das Agent-Team</a></div>
+      </div>
+    </section>
+
+    <section class="dive" id="dive" aria-hidden="true">
+      <div class="stage">
+        <canvas></canvas>
+        <div class="say"><div class="say-a">Wie das geht?<br>Schauen wir in den Maschinenraum.</div><div class="say-b"></div></div>
+      </div>
+    </section>
+
+    <section class="s" id="tempo">
       <div class="wrap">
         <div class="status">Pipeline live · 32 Agent-Runs in den ersten 3 Tagen des Boards</div>
-        <div class="eyebrow">Die Remindery-Methode · Agentic App Development</div>
-        <h1>Apps in Tagen,<br><span class="hl">nicht Monaten.</span></h1>
-        <p class="lead">Ein Gründer und ein Team aus KI-Agents bringen eine App in wenigen Tagen vom ersten Commit bis zur Einreichung im Store. Agents recherchieren, konzipieren, bauen, testen, illustrieren und vertonen. Ein Mensch trifft jede Entscheidung, die zählt.</p>
-        <div class="btns"><a class="btn pri" href="#night">Eine echte Nacht ansehen →</a><a class="btn" href="#agents">Das Agent-Team</a></div>
-
+        <div class="eyebrow">Tempo</div>
+        <h2>Jede App macht<br>die nächste schneller.</h2>
         <div class="speed" id="speed" aria-label="Bautage je App"></div>
         <div class="legend"><span><i style="background:linear-gradient(90deg,#FF6B55,#ffb199)"></i>aktive Bautage</span><span><i style="border:1px dashed #445566"></i>Kalendertage vom ersten Commit bis zur Einreichung</span></div>
-        <p class="note">Jede App macht die nächste schneller. Die Prüfzeit der Stores ist nicht eingerechnet – die liegt bei den Stores.</p>
+        <p class="note">Die Prüfzeit der Stores ist nicht eingerechnet – die liegt bei den Stores.</p>
 
         <div class="stats">
           <div class="stat"><b>5</b><span>Apps live – Google Play und Amazon Appstore</span></div>
@@ -231,6 +244,7 @@
 
   <script type="application/json" id="m-data">
   {
+    "dive": ["> ssh maschinenraum", "verbunden · Pipeline live"],
     "days": "Tage",
     "speed": [
       ["Silben Lesen", "Aug. 2026", 9, 22, ""],

@@ -10,34 +10,47 @@
   <link rel="alternate" hreflang="en" href="https://remindery.de/en/method/">
   <link rel="alternate" hreflang="x-default" href="https://remindery.de/en/method/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <meta name="theme-color" content="#0B0F14">
+  <meta name="theme-color" content="#FAF7F2">
   <link rel="stylesheet" href="/method/method.css">
 </head>
 <body>
-  <header class="m-head">
-    <div class="wrap">
-      <a class="m-brand" href="/en/"><img src="/favicon.svg" alt=""><span>Remindery Apps</span></a>
-      <nav class="m-nav" aria-label="Main navigation">
-        <a class="hide-s" href="/en/#apps">Apps</a>
+  <header class="site-head">
+    <div class="head-in">
+      <a class="site-brand" href="/en/"><img src="/favicon.svg" width="34" height="34" alt=""><span>Remindery Apps</span></a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="/en/#apps">Apps</a>
         <a href="/en/method/" aria-current="page">Method</a>
-        <a class="hide-s" href="/en/about/">About</a>
-        <span class="lang" role="group" aria-label="Language"><a href="/method/" hreflang="de" lang="de">DE</a><a href="/en/method/" hreflang="en" aria-current="true">EN</a></span>
+        <a href="/en/about/">About</a>
+        <span class="lang" role="group" aria-label="Language"><a href="/method/" hreflang="de" lang="de" title="Deutsch">DE</a><a href="/en/method/" hreflang="en" lang="en" title="English" aria-current="true">EN</a></span>
       </nav>
     </div>
   </header>
 
   <main>
-    <section class="s">
+    <section class="hero-light">
+      <div class="wrap">
+        <div class="eyebrow">The Remindery Method</div>
+        <h1>Apps in days,<br><em>not months.</em></h1>
+        <p class="lead">One founder and a team of AI agents take an app from first commit to the store in days. Here's how it works – honestly, with real data.</p>
+        <div class="btns"><a class="btn pri" href="#night">Watch a real night ↓</a><a class="btn" href="#agents">Meet the agents</a></div>
+      </div>
+    </section>
+
+    <section class="dive" id="dive" aria-hidden="true">
+      <div class="stage">
+        <canvas></canvas>
+        <div class="say"><div class="say-a">How does that work?<br>Let's look inside the engine room.</div><div class="say-b"></div></div>
+      </div>
+    </section>
+
+    <section class="s" id="tempo">
       <div class="wrap">
         <div class="status">pipeline live · 32 agent runs in the board's first 3 days</div>
-        <div class="eyebrow">The Remindery Method · agentic app development</div>
-        <h1>Apps in days,<br><span class="hl">not months.</span></h1>
-        <p class="lead">One founder and a team of AI agents take an app from first commit to store submission in days. Agents research, design, build, test, illustrate and voice. A human owns every call that matters.</p>
-        <div class="btns"><a class="btn pri" href="#night">Watch a real night →</a><a class="btn" href="#agents">Meet the agents</a></div>
-
+        <div class="eyebrow">Speed</div>
+        <h2>Every app makes<br>the next one faster.</h2>
         <div class="speed" id="speed" aria-label="Build days per app"></div>
         <div class="legend"><span><i style="background:linear-gradient(90deg,#FF6B55,#ffb199)"></i>active build days</span><span><i style="border:1px dashed #445566"></i>calendar days, first commit to store submission</span></div>
-        <p class="note">Every app makes the next one faster. Store review time is not included – that part belongs to the stores.</p>
+        <p class="note">Store review time is not included – that part belongs to the stores.</p>
 
         <div class="stats">
           <div class="stat"><b>5</b><span>apps live – Google Play and Amazon Appstore</span></div>
@@ -231,6 +244,7 @@
 
   <script type="application/json" id="m-data">
   {
+    "dive": ["> ssh engine-room", "connected · pipeline live"],
     "days": "days",
     "speed": [
       ["Silben Lesen", "Aug 2026", 9, 22, ""],
