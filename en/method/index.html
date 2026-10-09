@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Remindery Method – agentic app development, human on the loop</title>
+  <meta name="description" content="How Remindery ships apps in days: a multi-agent pipeline with an orchestrator, critic and QA agents, unattended overnight runs, hard guardrails and a human who owns every call.">
+  <link rel="canonical" href="https://remindery.de/en/method/">
+  <link rel="alternate" hreflang="de" href="https://remindery.de/method/">
+  <link rel="alternate" hreflang="en" href="https://remindery.de/en/method/">
+  <link rel="alternate" hreflang="x-default" href="https://remindery.de/en/method/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="theme-color" content="#0B0F14">
+  <link rel="stylesheet" href="/method/method.css">
+</head>
+<body>
+  <header class="m-head">
+    <div class="wrap">
+      <a class="m-brand" href="/en/"><img src="/favicon.svg" alt=""><span>Remindery Apps</span></a>
+      <nav class="m-nav" aria-label="Main navigation">
+        <a class="hide-s" href="/en/#apps">Apps</a>
+        <a href="/en/method/" aria-current="page">Method</a>
+        <a class="hide-s" href="/en/about/">About</a>
+        <span class="lang" role="group" aria-label="Language"><a href="/method/" hreflang="de" lang="de">DE</a><a href="/en/method/" hreflang="en" aria-current="true">EN</a></span>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="s">
+      <div class="wrap">
+        <div class="status">pipeline live · 32 agent runs in the board's first 3 days</div>
+        <div class="eyebrow">The Remindery Method · agentic app development</div>
+        <h1>Apps in days,<br><span class="hl">not months.</span></h1>
+        <p class="lead">One founder and a team of AI agents take an app from first commit to store submission in days. Agents research, design, build, test, illustrate and voice. A human owns every call that matters.</p>
+        <div class="btns"><a class="btn pri" href="#night">Watch a real night →</a><a class="btn" href="#agents">Meet the agents</a></div>
+
+        <div class="speed" id="speed" aria-label="Build days per app"></div>
+        <div class="legend"><span><i style="background:linear-gradient(90deg,#FF6B55,#ffb199)"></i>active build days</span><span><i style="border:1px dashed #445566"></i>calendar days, first commit to store submission</span></div>
+        <p class="note">Every app makes the next one faster. Store review time is not included – that part belongs to the stores.</p>
+
+        <div class="stats">
+          <div class="stat"><b>5</b><span>apps live – Google Play and Amazon Appstore</span></div>
+          <div class="stat"><b>2,600+</b><span>commits since July 2026</span></div>
+          <div class="stat"><b>4,300+</b><span>automated tests, written and run by agents</span></div>
+          <div class="stat"><b>7,500+</b><span>AI-voiced audio clips in our apps</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="s" id="process">
+      <div class="wrap">
+        <div class="eyebrow">The process</div>
+        <h2>Most studios bolt AI onto an old process.<br>We rebuilt the process around it.</h2>
+        <p class="lead">Six phases. Every step is an agent with a clear role, a versioned skill and a definition of done. Agents run on their own – the founder is on the loop, and in the loop at exactly three points: the concept, the sign-off and the Go.</p>
+        <div class="pipe" id="pipe">
+          <div class="node"><div class="n">01</div><h3>Discovery</h3><p>Research agents crunch store data, reviews and search demand. A critic and an advocate argue every idea – weak ones die by numbers.</p><span class="who">agents</span></div>
+          <div class="node gate"><div class="n">02</div><h3>Concept</h3><p>Two or three concept agents pitch in parallel strands. A critic tears the merged spec apart before a line of code exists.</p><span class="who">founder decides</span></div>
+          <div class="node"><div class="n">03</div><h3>Build</h3><p>An orchestrator cuts the work into packages and runs builder agents in parallel – often overnight, with a written brief and hard stop rules.</p><span class="who">agents</span></div>
+          <div class="node"><div class="n">04</div><h3>Create</h3><p>Stories and scripts by Claude, checked by an editor agent. Illustrations from a local GPU pipeline, voice-over from Amazon Polly.</p><span class="who">agents</span></div>
+          <div class="node gate"><div class="n">05</div><h3>QA</h3><p>A QA agent checks the build against the spec, not just the tests. Every story, image and voice goes through human sign-off.</p><span class="who">human sign-off</span></div>
+          <div class="node gate"><div class="n">06</div><h3>Ship</h3><p>Listings, copy and screenshots from one source of truth. Everything is prepared – then it waits.</p><span class="who">waits for Go</span></div>
+        </div>
+        <p class="claim">AI does the work. <em>Humans own the calls.</em></p>
+      </div>
+    </section>
+
+    <section class="s" id="agents">
+      <div class="wrap">
+        <div class="eyebrow">The team</div>
+        <h2>Meet the agents.</h2>
+        <p class="lead">Each role is a model, a versioned skill and a definition of done. Opus where quality hinges on judgment, Sonnet where the work is well specified.</p>
+        <div class="agents">
+          <div class="agent"><div class="top"><span class="role">Orchestrator</span><span class="chip">Claude Opus</span></div><h3>Runs the night shift</h3><p>Cuts the work into independent packages, assigns builders, keeps the brief file with checkboxes, merges the results.</p><div class="proof">owns the run, never the decision</div></div>
+          <div class="agent" style="--c:#7AA2F7"><div class="top"><span class="role">Concept</span><span class="chip">Claude Opus</span></div><h3>Pitches in parallel strands</h3><p>Two or three agents work independently – learning design, market and app store, tech – before their ideas meet.</p><div class="proof">independent strands, merged spec</div></div>
+          <div class="agent" style="--c:#FF6B55"><div class="top"><span class="role">Critic</span><span class="chip">Claude Opus</span></div><h3>Tears it apart</h3><p>Reviews the merged spec before building and the product after – sometimes in the role of a sceptical parent.</p><div class="proof">first outing: 6 real blockers before a line of code</div></div>
+          <div class="agent" style="--c:#3DDC97"><div class="top"><span class="role">Advocate</span><span class="chip">Claude Opus</span></div><h3>Makes the case for it</h3><p>Builds the strongest honest case for an idea: best case with numbers, and what would have to be true. Critic and advocate see the same facts.</p><div class="proof">so the critic doesn't kill everything</div></div>
+          <div class="agent" style="--c:#BB9AF7"><div class="top"><span class="role">Builders</span><span class="chip">Claude Sonnet</span></div><h3>Ship work packages</h3><p>Parallel packages, each with its own tests, committing as they go. Dependent packages run in sequence.</p><div class="proof">121 commits in one night</div></div>
+          <div class="agent" style="--c:#FFC857"><div class="top"><span class="role">QA</span><span class="chip">Claude Sonnet</span></div><h3>Checks against the spec</h3><p>Doesn't just run tests – compares the build with what was promised and reports blockers.</p><div class="proof">found 2 blockers that 368 green tests missed</div></div>
+          <div class="agent" style="--c:#7DCFFF"><div class="top"><span class="role">Editor</span><span class="chip">Claude</span></div><h3>Reads every line</h3><p>Stories and voice scripts pass an editor agent before production. Sentence lengths are measured, not guessed.</p><div class="proof">text first, images and voice after</div></div>
+          <div class="agent" style="--c:#F7768E"><div class="top"><span class="role">Store</span><span class="chip">Claude</span></div><h3>Writes the listing</h3><p>Positioning, copy and screenshots from one store core. A sceptical-buyer agent scores every headline.</p><div class="proof">one source of truth for Google Play and Amazon</div></div>
+          <div class="agent" style="--c:#9ECE6A"><div class="top"><span class="role">Ops</span><span class="chip">Claude</span></div><h3>Answers and watches</h3><p>Replies to the founder's comments on any board card within a minute. A triage agent sorts store reviews and feedback every morning.</p><div class="proof">feedback triage in rollout</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="s" id="board">
+      <div class="wrap">
+        <div class="eyebrow">Control plane</div>
+        <h2>One board.<br>Every agent run starts here.</h2>
+        <p class="lead">A self-built board is the cockpit. The founder prioritises by drag and drop; a card that is ready turns into an agent run with one click. Every move is logged.</p>
+        <div class="board-grid">
+          <div class="feat">
+            <div><b>▶ Run</b><span>A ready card carries its own prompt and working directory. One click starts an agent on it.</span></div>
+            <div><b>Three in parallel, zero collisions</b><span>Each run claims the repos and devices it touches. A second run on the same repo queues – no overtaking.</span></div>
+            <div><b>Stops at “Go live?”</b><span>No run deploys a server, uploads to a store or publishes this website. It writes down the exact steps and waits.</span></div>
+            <div><b>🌙 End of day</b><span>One button waits for running jobs, runs a backup agent, pushes everything – then shuts the machine down.</span></div>
+          </div>
+          <div class="journey">
+            <h3>A real card · Oct 9, 2026</h3>
+            <div><time>17:32</time>Card created: puzzle book, first internal test on Google Play</div>
+            <div><time>17:40</time>Queued – another run is working in the same repo</div>
+            <div><time>17:41</time>Run starts and claims 3 repos</div>
+            <div><time>18:06</time>Test build ready and checked, store steps written down</div>
+            <div class="stop"><time>18:06</time><b>Run stops at the live gate.</b> Waiting for the founder's Go.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="s" id="night">
+      <div class="wrap">
+        <div class="eyebrow">One real night · Oct 7–8, 2026</div>
+        <h2>A puzzle app, built overnight.</h2>
+        <p class="lead">Replayed from the git log of our puzzle book app. Shortened and translated, times are real.</p>
+        <div class="night">
+          <div>
+            <div class="clock" id="clock">23:34</div>
+            <div class="counters">
+              <div><b id="cc">0</b>commits</div>
+              <div><b>30</b>puzzle types</div>
+              <div><b>759</b>voice clips</div>
+              <div><b>214</b>illustrations, local GPU</div>
+            </div>
+            <div class="hist" id="hist"></div>
+            <div class="hist-l"><span>23</span><span>00</span><span>01</span><span>02</span><span>03</span><span>04</span><span>05</span><span>06</span></div>
+            <div class="morning" id="morning">☀ Morning: one review page waiting for the founder. Nothing shipped without a yes.</div>
+          </div>
+          <div class="log" id="log" aria-live="off"></div>
+        </div>
+        <div class="btns"><button class="btn" id="replay" type="button">↻ Replay the night</button></div>
+      </div>
+    </section>
+
+    <section class="s" id="autonomy">
+      <div class="wrap">
+        <div class="eyebrow">Automation level</div>
+        <h2>Not everything should run alone.</h2>
+        <p class="lead">A step moves up only when the agent's output has matched human judgment on the same inputs, again and again. Some steps are meant to stay at “AI drafts, human decides” – judgment is not what gets automated, it's what the automation is for.</p>
+        <div class="ladder"><table>
+          <tr><th>Step</th><th>Human does it</th><th>AI assists</th><th>AI drafts,<br>human decides</th><th>AI runs,<br>human on the loop</th><th>Why</th></tr>
+          <tr><td>Discovery</td><td></td><td></td><td><span class="dot h"></span></td><td></td><td class="why">Kill or pursue is a founder call</td></tr>
+          <tr><td>Concept</td><td></td><td></td><td><span class="dot h"></span></td><td></td><td class="why">Agents pitch and criticise, the founder picks</td></tr>
+          <tr><td>Build</td><td></td><td></td><td></td><td><span class="dot"></span></td><td class="why">Specs, tests and guards make it safe to run alone</td></tr>
+          <tr><td>Create</td><td></td><td></td><td><span class="dot h"></span></td><td></td><td class="why">Every story, image and voice is signed off</td></tr>
+          <tr><td>QA – tests</td><td></td><td></td><td></td><td><span class="dot"></span></td><td class="why">Thousands of tests and a spec check per build</td></tr>
+          <tr><td>QA – taste</td><td><span class="dot h"></span></td><td></td><td></td><td></td><td class="why">“Good enough for a child” stays human</td></tr>
+          <tr><td>Ship</td><td></td><td></td><td><span class="dot h"></span></td><td></td><td class="why">Prepared by agents, released on a Go</td></tr>
+        </table></div>
+      </div>
+    </section>
+
+    <section class="s" id="guardrails">
+      <div class="wrap">
+        <div class="eyebrow">Guardrails</div>
+        <h2>Agents are fast.<br>The guardrails are the method.</h2>
+        <div class="grid3">
+          <div class="card"><h3>Nothing ships by itself</h3><p>Runs prepare everything and stop at “Go live?” with the exact steps written out. Release is a human decision, every time.</p></div>
+          <div class="card"><h3>A card is a change, not a release</h3><p>Changes collect on main. Builds, version numbers and store uploads only happen on a release button.</p></div>
+          <div class="card"><h3>Watchers on the shipping state</h3><p>Tests that guard what goes to the store: production switches, memory page sizes, server version. Fail one and the bundle is never built.</p></div>
+          <div class="card"><h3>Sign-off that can't get lost</h3><p>Human judgment is the bottleneck, so every review click is saved the moment it happens.</p></div>
+          <div class="card"><h3>State lives in files</h3><p>Every unattended job has a brief with packages and checkboxes. If a run dies, the next one picks up where it stopped.</p></div>
+          <div class="card"><h3>Context is engineered</h3><p>Maps, rules and lessons live in versioned files every agent reads – not in someone's head, not in a chat history.</p></div>
+        </div>
+
+        <h2 style="margin-top:72px">Every rule here<br>was paid for once.</h2>
+        <div class="grid3">
+          <div class="card lesson"><div class="when">Aug 27 &amp; Sep 3</div><h3>Two bundles shipped with a dev switch on</h3><div class="fix"><b>Now:</b> the default is always production, one build script, a guard test.</div></div>
+          <div class="card lesson"><div class="when">Aug 11</div><h3>173 human review verdicts lost in one crash</h3><div class="fix"><b>Now:</b> review tools persist every click, and that is proven before each session.</div></div>
+          <div class="card lesson"><div class="when">Aug 23</div><h3>A session ended and killed a 90-minute GPU run</h3><div class="fix"><b>Now:</b> long jobs run detached, idempotent and resumable, with a log to poll.</div></div>
+          <div class="card lesson"><div class="when">Oct 3</div><h3>Google Play rejected a build over memory pages</h3><div class="fix"><b>Now:</b> an automated check runs before every bundle with native code.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="s" id="buzzwords">
+      <div class="wrap">
+        <div class="eyebrow">In buzzwords</div>
+        <h2>Yes, it's agentic AI.<br>Here's what that means here.</h2>
+        <div class="buzz">
+          <div><b>Agentic workflows</b><span>Agents plan, use tools, write code, run tests and commit – not chat, work.</span></div>
+          <div><b>Multi-agent orchestration</b><span>An orchestrator splits a release into packages and runs builders in parallel.</span></div>
+          <div><b>Human on the loop</b><span>Agents run alone; the founder sets direction and steps in at three gates.</span></div>
+          <div><b>LLM as critic</b><span>A dedicated critic – and an advocate – review specs and products before anyone else does.</span></div>
+          <div><b>Spec-driven development</b><span>Every build starts from a written spec; QA checks against it.</span></div>
+          <div><b>Context engineering</b><span>Versioned maps, skills and lessons every agent loads at start.</span></div>
+          <div><b>Guardrails</b><span>Live gate, resource locks, watchers – enforced by code, not by hope.</span></div>
+          <div><b>Unattended runs</b><span>Overnight work with a brief, hard stop rules and a morning review page.</span></div>
+          <div><b>Single source of truth</b><span>One store core feeds every listing, one log feeds the board.</span></div>
+          <div><b>GenAI content pipeline</b><span>Text, images and voice produced by models, curated by a human.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="s" id="stack">
+      <div class="wrap">
+        <div class="eyebrow">Toolbox</div>
+        <h2>What runs the studio.</h2>
+        <div class="stack">
+          <div><h3>Build</h3><ul><li>Claude Code</li><li>Claude Opus</li><li>Claude Sonnet</li><li>Versioned skills</li><li>Flutter</li><li>GitHub</li></ul></div>
+          <div><h3>Inside the apps</h3><ul><li>Claude on Amazon Bedrock</li><li>AWS Lambda</li><li>Amazon DynamoDB</li><li>On-device speech recognition</li></ul></div>
+          <div><h3>Create</h3><ul><li>Local NVIDIA RTX</li><li>Open image models</li><li>Amazon Polly</li></ul></div>
+          <div><h3>Operate</h3><ul><li>Self-built agent board</li><li>Sign-off tools</li><li>Watchers</li><li>Control tower</li></ul></div>
+          <div><h3>Ship</h3><ul><li>Google Play</li><li>Amazon Appstore</li></ul></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="s" id="founder">
+      <div class="wrap">
+        <div class="eyebrow">Founder</div>
+        <div class="founder">
+          <img src="/about/patrick.jpg" width="160" height="160" alt="Patrick Steinborn">
+          <div>
+            <h2>Patrick Steinborn</h2>
+            <p>Product leader with more than 20 years in consumer internet, most of them at VP level – growth, monetisation, pricing and AI transformation for products with millions of users. He founded Remindery in 2026 to prove a simple thesis: with the right pipeline, one person can ship what used to take a whole team. He builds every day, with Claude Code as his main tool.</p>
+            <div class="btns"><a class="btn pri" href="mailto:hello@remindery.de">hello@remindery.de</a><a class="btn" href="https://www.linkedin.com/in/patricksteinborn-a74b551a1" rel="noopener">LinkedIn</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="m-foot">
+    <div class="wrap">
+      <nav><a href="/en/">All apps</a><a href="/en/about/">About</a><a href="/en/legal-notice/">Legal notice</a><a href="/en/privacy/">Privacy</a></nav>
+      &copy; 2026 Remindery Apps
+    </div>
+  </footer>
+
+  <script type="application/json" id="m-data">
+  {
+    "days": "days",
+    "speed": [
+      ["Silben Lesen", "Aug 2026", 9, 22, ""],
+      ["Uhr lesen lernen", "Aug – Sep", 7, 38, ""],
+      ["Ubo", "Sep", 10, 11, "first app with an AI backend"],
+      ["Einkaufsliste", "Sep – Oct", 5, 11, ""],
+      ["Rätselheft", "Oct", 3, 3, ""]
+    ],
+    "night": [
+      ["23:34", "Scaffold: flavors, build switches, storage, guard tests"],
+      ["23:42", "Illustration pipeline: prompts written, GPU run detached"],
+      ["23:56", "Theme and component set: paper look, type, icons"],
+      ["00:04", "Every voice clip scripted, checker added"],
+      ["00:10", "Editor agent reviews all clip scripts"],
+      ["00:32", "First puzzle end to end: maze"],
+      ["00:36", "Orchestrator fans out: three puzzle agents in parallel", "k"],
+      ["00:43", "Parents' area, purchase flow, review prompt"],
+      ["00:51", "Amazon Appstore gateway and store guard"],
+      
+      ["01:11", "Sudoku, number wall, symbol maths – each with solver and tests"],
+      ["01:30", "Detective puzzle: permutation solver"],
+      ["01:40", "Audio complete: 759 neural voice clips, guard armed"],
+      ["02:04", "Orchestrator hits its usage limit – builders keep going", "w"],
+      ["02:25", "Shadow match: mask variants, uniqueness by overlap"],
+      ["04:23", "Limit reset – orchestrator back, QA and critic running", "k"],
+      ["04:33", "Critic as a sceptical parent: 5,400 pages generated, no wrong solution, 1 blocker", "k"],
+      ["04:37", "QA: 150 of 150 generators green, 1 blocker"],
+      ["04:47", "Fix: no repeated outlier within one book"],
+      ["04:56", "Fix: “show solution” across all 30 puzzle types"],
+      ["05:43", "214 illustrations wired in, goldens renewed"],
+      ["06:07", "Review page generated. Run complete.", "k"]
+    ]
+  }
+  </script>
+  <script src="/method/method.js" defer></script>
+</body>
+</html>
