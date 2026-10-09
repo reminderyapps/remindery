@@ -11,9 +11,9 @@ dann http://127.0.0.1:8790/method/
 - [x] `/method/` (DE) und `/en/method/` (EN), gemeinsames `method/method.css` + `method.js`, Systemschriften (keine Google Fonts)
 - [x] Nav-Link „Methode/Method“ auf Start- und About-Seiten, Sitemap
 - [x] Wording: „ergänzen ihren Prozess um KI“ statt „schrauben“ (PO 10.10.)
-- [ ] About-Seite an /method angleichen: „Apps in Wochen statt Jahren“ und „14 Tage im Schnitt“ sind überholt (Bautage siehe unten), Zahlen 4 → 5 Apps usw.
+- [x] (10.10.) About-Seite an /method angleichen: „Apps in Wochen statt Jahren“ und „14 Tage im Schnitt“ sind überholt (Bautage siehe unten), Zahlen 4 → 5 Apps usw.
 - [ ] Startseite in Richtung A als Studio-Auftritt (Studie Screen 1); App-Unterseiten für Eltern bleiben
-- [ ] Vor Go-live: Zahlen nachzählen, `main` in `relaunch` mergen (Release-Änderungen seit 09.10.), dann Go des PO
+- [x] 10.10.2026 live: /method + About (Go des PO), Pages-Build grün, Seiten live geprüft. Startseite folgt als nächstes Paket, danach erneut Go.
 
 ## Zahlen (gezählt 10.10.2026, Skript-Logik unten)
 
