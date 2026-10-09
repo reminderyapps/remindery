@@ -80,7 +80,7 @@
     const r = devicePixelRatio || 1;
     SW = stage.clientWidth; SH = stage.clientHeight;
     cv.width = SW * r; cv.height = SH * r; ctx.setTransform(r, 0, 0, r, 0, 0);
-    const padX = Math.max(24, SW * .08), spanX = SW - 2 * padX, top = SH * .12, spanY = SH * .76;
+    const padX = Math.max(24, SW * .08), spanX = SW - 2 * padX, top = SH * .34, spanY = SH * .6;
     nodes = []; edges = [];
     LAYERS.forEach((n, li) => {
       for (let k = 0; k < n; k++) nodes.push({
@@ -97,11 +97,11 @@
   function progress() {
     const r = dive.getBoundingClientRect();
     p = clamp(-r.top / (r.height - innerHeight), 0, 1);
-    const t = ease(clamp((p - .1) / .5, 0, 1));
+    const t = ease(clamp((p - .02) / .45, 0, 1));
     stage.style.background = rgba(mix(FROM, TO, t), 1);
     sayA.style.color = rgba(mix(TXT_FROM, TXT_TO, t), 1);
-    sayA.style.opacity = 1 - clamp((p - .55) / .2, 0, .7);
-    const typed = clamp((p - .5) / .35, 0, 1);
+    sayA.style.opacity = 1 - clamp((p - .6) / .2, 0, .6);
+    const typed = clamp((p - .38) / .32, 0, 1);
     const full = lines[0] + '\n' + lines[1], n = Math.round(full.length * typed);
     sayB.innerHTML = full.slice(0, n).replace('\n', '<br>') + (typed > 0 ? '<span class="cur">&nbsp;</span>' : '');
     document.body.classList.toggle('deep', r.top < -(r.height - innerHeight) * .6);
@@ -110,13 +110,13 @@
   function draw(now) {
     const t = progress(), time = now / 1000;
     ctx.clearRect(0, 0, SW, SH);
-    const k = ease(clamp((p - .22) / .4, 0, 1));          // Rauschen → Struktur
-    const linkA = ease(clamp((p - .5) / .25, 0, 1));      // Verbindungen
+    const k = ease(clamp((p - .12) / .38, 0, 1));          // Rauschen → Struktur
+    const linkA = ease(clamp((p - .4) / .22, 0, 1));      // Verbindungen
     const fade = 1 - clamp((p - .9) / .1, 0, .5);
     const dot = mix(DOT_FROM, DOT_TO, t);
     // Rest-Rauschen, das beim Entrauschen verschwindet
     dust.forEach(d => {
-      const a = (.10 + .25 * t) * (1 - k) * clamp(p / .1, 0, 1);
+      const a = (.14 + .25 * t) * (1 - k);
       if (a <= .01) return;
       ctx.fillStyle = rgba(dot, a);
       ctx.fillRect(d.x + Math.sin(time + d.ph) * 3, d.y + Math.cos(time * .8 + d.ph) * 3, 1.6, 1.6);
