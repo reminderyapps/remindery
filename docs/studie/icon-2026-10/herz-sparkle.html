@@ -38,6 +38,10 @@
     <span><b>Strich</b><button data-w="54">dünn</button><button data-w="62">mittel</button><button data-w="70">kräftig</button></span>
   </div>
 
+  <h2>A34 fein – Stern höher, linke Spitze auf Strichmitte</h2>
+  <p class="sub">F1 rechnet die Höhe aus: die Sternachse liegt genau auf der Mitte des oberen Linienendes. F2–F4 heben den Stern von Hand an.</p>
+  <div class="grid" id="gf"></div>
+
   <h2>Reihe A · nach 01 – ein Stern an der Bogenecke</h2>
   <p class="sub">Spalten: Stern kleiner → größer. Zeilen: Stern direkt auf der Ecke / etwas nach innen gerückt / Abstand zur Linie größer.</p>
   <div class="grid" id="ga"></div>
@@ -84,9 +88,17 @@ function star(x, y, rx, ry, a = .2, b = .32) {
 // v: { s: Sterngröße, ry: Höhe/Breite, inset: Stern nach innen, gap: Luft, two: zweiter Stern }
 function build(v) {
   const cx = 497, cy = 560, s = 292;                    // Herz wie in der Vorlage: x .20–.77, oben .285, Spitze .82
-  const sx = cx + s * 1.0 - v.inset, sy = cy - s * 0.86 + v.inset * .6;
+  const sx = cx + s * 1.0 - v.inset;
+  let sy = cy - s * 0.86 + v.inset * .6 - (v.lift || 0);
   const rx = v.s, ry = v.s * v.ry;
   const m = STROKE / 2 + v.gap;
+  const pts = sample(heartPath(cx, cy, s));
+  if (v.align) for (let k = 0; k < 4; k++) {
+    // letztes Linienstück vor dem Stern (von der Kerbe kommend) – seine Höhe wird die Sternachse
+    const out = p => ((p[0] - sx) / (rx + m)) ** 2 + ((p[1] - sy) / (ry + m)) ** 2 > 1;
+    let end = null; for (const p of pts) { if (!out(p)) break; end = p; }
+    if (end) sy = end[1];
+  }
   const holes = [{ x: sx, y: sy, rx: rx + m, ry: ry + m }];
   let stars = star(sx, sy, rx, ry);
   if (v.two) {
@@ -94,13 +106,15 @@ function build(v) {
     holes.push({ x: tx, y: ty, rx: tr + STROKE / 2 + 8, ry: tr * 1.1 + STROKE / 2 + 8 });
     stars += ' ' + star(tx, ty, tr, tr * 1.1);
   }
-  const line = cut(sample(heartPath(cx, cy, s)), holes);
+  const line = cut(pts, holes);
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><rect width="1024" height="1024" rx="220" fill="${COLOR}"/>`
        + `<path d="${line}" fill="none" stroke="${CREAM}" stroke-width="${STROKE}" stroke-linecap="round" stroke-linejoin="round"/>`
        + `<path d="${stars}" fill="${CREAM}"/></svg>`;
 }
 
-const A = [], B = [];
+const A = [], B = [], F = [];
+[['F1', 0, true, 'automatisch auf Strichmitte'], ['F2', 12, false, '12 höher'], ['F3', 20, false, '20 höher'], ['F4', 28, false, '28 höher']].forEach(([code, lift, align, note]) =>
+  F.push({ code, s: 108, ry: 1.5, inset: 0, gap: 24, lift, align, note: 'A34 · ' + note }));
 [[0, 12, 'auf der Ecke'], [14, 12, 'etwas nach innen'], [0, 24, 'mehr Luft']].forEach(([inset, gap, row], ri) =>
   [84, 92, 100, 108].forEach((sz, ci) => A.push({ code: `A${ri + 1}${ci + 1}`, s: sz, ry: 1.5, inset, gap, note: `${row}, Stern ${sz}` })));
 [[0, 12], [14, 14]].forEach(([inset, gap], ri) =>
@@ -115,10 +129,11 @@ function render() {
         <span class="small"><img src="${url}" width="32" height="32" alt=""><img src="${url}" width="16" height="16" alt=""></span></div>
       <small>${v.note}</small></div>`;
   };
+  document.getElementById('gf').innerHTML = F.map(cell).join('');
   document.getElementById('ga').innerHTML = A.map(cell).join('');
   document.getElementById('gb').innerHTML = B.map(cell).join('');
   document.querySelectorAll('.cell').forEach(el => el.onclick = () => {
-    PICK = el.dataset.code; const v = A.concat(B).find(x => x.code === PICK);
+    PICK = el.dataset.code; const v = F.concat(A, B).find(x => x.code === PICK);
     document.getElementById('out').textContent = `${PICK} · Farbe ${COLOR} · Strich ${STROKE}\n` + JSON.stringify(v) + '\n\n' + build(v);
     render();
   });
