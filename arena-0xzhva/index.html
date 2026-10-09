@@ -432,6 +432,42 @@ const FIGUREN = {
     spezial: { name: "Schattenschrei", reichweite: 4, schaden: 4, text: "Schattenschrei aus 4 Feldern: 4 Schaden." },
     faehigkeit: "<b>Blutsauger:</b> Jeder Treffer mit dem Schattenbiss heilt sie um 1 Leben.",
   },
+  // ---- Große Kaufmonster (150 €): je zwei bekannte Fähigkeiten zusammen, etwas stärkere Werte ----
+  lavadrache: {
+    name: "Lavadrache", element: "Feuer", farbe: "var(--feuer)", emoji: "🐉", bild: "bilder/lavadrache.jpg", preis: 150,
+    leben: 12, schritte: 3, angriff: 4, reichweite: 2, angriffName: "Feueratem",
+    fliegt: true, durchBusch: true,
+    spezial: { name: "Drachenfeuer", reichweite: 4, schaden: 5, text: "Drachenfeuer aus 4 Feldern: 5 Schaden." },
+    faehigkeit: "<b>Drachenflügel:</b> Fliegt über Seen und Felsen, und sein Feueratem brennt durch Büsche.",
+  },
+  frostmammut: {
+    name: "Frostmammut", element: "Eis", farbe: "var(--eis)", emoji: "🦣", bild: "bilder/frostmammut.jpg", preis: 150,
+    leben: 16, schritte: 2, angriff: 4, reichweite: 1, angriffName: "Eisstoßzahn",
+    friert: true, stoss: true,
+    spezial: { name: "Lawinenstampfer", reichweite: 3, schaden: 4, frost: true, text: "Stampft eine Lawine los, 3 Felder weit: 4 Schaden und einfrieren." },
+    faehigkeit: "<b>Eisstoßzahn:</b> Trifft er, friert der Gegner ein und wird 1 Feld weggeschleudert.",
+  },
+  kristallgolem: {
+    name: "Kristallgolem", element: "Stein", farbe: "var(--stein)", emoji: "💎", bild: "bilder/kristallgolem.jpg", preis: 150,
+    leben: 15, schritte: 2, angriff: 3, reichweite: 2, angriffName: "Kristallsplitter",
+    panzer: 1, durchBusch: true,
+    spezial: { name: "Kristallregen", reichweite: 4, schaden: 4, text: "Kristallregen aus 4 Feldern: 4 Schaden." },
+    faehigkeit: "<b>Kristallpanzer:</b> Jeder Treffer gegen ihn macht 1 Schaden weniger, und seine Splitter fliegen durch Büsche.",
+  },
+  sichelmantis: {
+    name: "Sichelmantis", element: "Dschungel", farbe: "var(--dschungel)", emoji: "🦗", bild: "bilder/sichelmantis.jpg", preis: 150,
+    leben: 11, schritte: 4, angriff: 3, reichweite: 1, angriffName: "Sichelhieb",
+    gift: 2, anlauf: 1,
+    spezial: { name: "Sichelsturm", reichweite: 3, schaden: 4, gift: 2, text: "Sichelsturm aus 3 Feldern: 4 Schaden und 2 Runden Gift." },
+    faehigkeit: "<b>Giftsichel:</b> Ihr Hieb vergiftet 2 Runden lang. Ist sie gelaufen, macht er 1 Schaden mehr.",
+  },
+  nachtmahr: {
+    name: "Nachtmahr", element: "Schatten", farbe: "var(--schatten)", emoji: "🐴", bild: "bilder/nachtmahr.jpg", preis: 150,
+    leben: 11, schritte: 4, angriff: 3, reichweite: 2, angriffName: "Albtraumtritt",
+    spuk: true, saugt: 1,
+    spezial: { name: "Albtraum", reichweite: 4, schaden: 4, heil: 2, text: "Albtraum aus 4 Feldern: 4 Schaden, heilt sich um 2." },
+    faehigkeit: "<b>Geisterpferd:</b> Schwer zu treffen (Angriffe gehen bei 1–2 daneben), und jeder Treffer heilt es um 1.",
+  },
 };
 const MAX = { leben: 16, schritte: 4, angriff: 4, reichweite: 2 };
 // Welten: bei der Auswahl tippt man zuerst eine Welt an, dann kommen ihre Monster heraus
