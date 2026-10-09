@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1200">
+<title>OG-Bild Remindery</title>
+<!-- Vorlage fürs Vorschaubild (LinkedIn & Co., 1200×627). Rendern:
+     msedge --headless=new --window-size=1200,627 --screenshot=og/remindery.png http://127.0.0.1:8790/docs/og/og-bild.html
+     ?lang=de für die deutsche Fassung. -->
+<style>
+  html, body { margin: 0; width: 1200px; height: 627px; overflow: hidden; }
+  body { position: relative; background: #0B0F14; font-family: system-ui, "Segoe UI", sans-serif; }
+  canvas { position: absolute; inset: 0; }
+  .txt { position: absolute; left: 64px; top: 58px; width: 560px; color: #2B2622; }
+  .brand { display: flex; align-items: center; gap: 14px; font: 700 26px Georgia, serif; }
+  .brand img { width: 48px; height: 48px; }
+  .eyebrow { margin-top: 64px; font: 600 15px/1 system-ui, sans-serif; letter-spacing: .12em; text-transform: uppercase; color: #B5442F; }
+  h1 { margin: 18px 0 0; font: 400 74px/1.04 Georgia, serif; letter-spacing: -.015em; }
+  h1 em { color: #E8604C; }
+  .sub { margin-top: 24px; font-size: 22px; line-height: 1.4; color: #6E6258; max-width: 470px; }
+  .url { position: absolute; left: 64px; bottom: 44px; font: 600 18px Georgia, serif; color: #6E6258; }
+  .term { position: absolute; right: 56px; bottom: 44px; text-align: right; font: 600 19px/1.6 Consolas, "Cascadia Mono", monospace; color: #E6EDF3; }
+  .term .p { color: #8B98A5; }
+  .term .cur { display: inline-block; width: 11px; height: 20px; background: #FF6B55; vertical-align: -3px; margin-left: 4px; }
+  .claim { position: absolute; right: 56px; top: 52px; text-align: right; font: 600 22px/1.35 system-ui, sans-serif; color: #E6EDF3; letter-spacing: -.01em; }
+  .claim em { font-style: normal; color: #FFC857; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1200" height="627"></canvas>
+<div class="txt">
+  <div class="brand"><img src="/favicon.svg" alt=""><span>Remindery Apps</span></div>
+  <div class="eyebrow" id="eb">AI-first app studio</div>
+  <h1 id="h">Apps in days,<br><em>not months.</em></h1>
+  <div class="sub" id="sub">One founder and a team of AI agents – from first commit to the store in days.</div>
+</div>
+<div class="url">remindery.de</div>
+<div class="claim" id="cl">AI does the work.<br><em>Humans own the calls.</em></div>
+<div class="term"><span class="p">&gt; pipeline.status()</span><br><span id="st">9 agents online · 3 gates · live</span><span class="cur"></span></div>
+<script>
+  if (new URLSearchParams(location.search).get('lang') === 'de') {
+    document.documentElement.lang = 'de';
+    document.getElementById('eb').textContent = 'KI-first App-Studio';
+    document.getElementById('h').innerHTML = 'Apps in Tagen,<br><em>nicht Monaten.</em>';
+    document.getElementById('sub').textContent = 'Ein Gründer und ein Team aus KI-Agents – vom ersten Commit in Tagen bis in den Store.';
+    document.getElementById('st').textContent = '9 Agents online · 3 Gates · live';
+  }
+  // fester Zufall, damit das Bild bei jedem Rendern gleich aussieht
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const c = document.getElementById('c'), x = c.getContext('2d'), W = 1200, H = 627;
+  // Papier → Maschinenraum, von links nach rechts
+  const g = x.createLinearGradient(0, 0, W, 0);
+  g.addColorStop(0, '#FAF7F2'); g.addColorStop(.46, '#FAF7F2'); g.addColorStop(.62, '#5d5550'); g.addColorStop(.74, '#0B0F14'); g.addColorStop(1, '#0B0F14');
+  x.fillStyle = g; x.fillRect(0, 0, W, H);
+  const blob = x.createRadialGradient(150, 120, 0, 150, 120, 360);
+  blob.addColorStop(0, 'rgba(232,96,76,.20)'); blob.addColorStop(1, 'rgba(232,96,76,0)');
+  x.fillStyle = blob; x.fillRect(0, 0, 640, 627);
+  // Rauschen, das nach rechts zur Struktur wird
+  for (let i = 0; i < 900; i++) {
+    const px = 560 + rnd() * 300, py = rnd() * H, d = (px - 560) / 300;
+    x.fillStyle = `rgba(${Math.round(110 + 120 * d)},${Math.round(98 + 140 * d)},${Math.round(88 + 155 * d)},${.18 + .2 * d})`;
+    x.fillRect(px, py, 1.8, 1.8);
+  }
+  // neuronales Netz: 6 Schichten = 6 Phasen, gold = Gates
+  const L = [3, 5, 6, 6, 5, 3], x0 = 790, x1 = 1140, y0 = 150, y1 = 500, nodes = [];
+  L.forEach((n, li) => { for (let k = 0; k < n; k++) nodes.push({ li, x: x0 + (x1 - x0) * li / 5, y: y0 + (y1 - y0) * (k + 1) / (n + 1), gate: li === 1 || li === 4 || li === 5 }); });
+  const edges = [];
+  nodes.forEach((a, i) => nodes.forEach((b, j) => { if (b.li === a.li + 1 && rnd() < .6) edges.push([a, b]); }));
+  x.lineWidth = 1; x.strokeStyle = 'rgba(120,160,200,.22)';
+  edges.forEach(([a, b]) => { x.beginPath(); x.moveTo(a.x, a.y); x.lineTo(b.x, b.y); x.stroke(); });
+  // Impulse auf einigen Verbindungen
+  for (let i = 0; i < 9; i++) {
+    const [a, b] = edges[(rnd() * edges.length) | 0], s = .2 + rnd() * .6;
+    const px = a.x + (b.x - a.x) * s, py = a.y + (b.y - a.y) * s, r = x.createRadialGradient(px, py, 0, px, py, 12);
+    r.addColorStop(0, 'rgba(255,200,140,.95)'); r.addColorStop(1, 'rgba(255,107,85,0)');
+    x.fillStyle = r; x.beginPath(); x.arc(px, py, 12, 0, 6.28); x.fill();
+  }
+  nodes.forEach(n => {
+    const col = n.gate ? '255,200,87' : '230,237,243';
+    const halo = x.createRadialGradient(n.x, n.y, 0, n.x, n.y, 16);
+    halo.addColorStop(0, `rgba(${col},.35)`); halo.addColorStop(1, `rgba(${col},0)`);
+    x.fillStyle = halo; x.beginPath(); x.arc(n.x, n.y, 16, 0, 6.28); x.fill();
+    x.fillStyle = `rgba(${col},.95)`; x.beginPath(); x.arc(n.x, n.y, 4.5, 0, 6.28); x.fill();
+    x.strokeStyle = `rgba(${col},.35)`; x.beginPath(); x.arc(n.x, n.y, 9, 0, 6.28); x.stroke();
+  });
+</script>
+</body>
+</html>
