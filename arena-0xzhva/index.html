@@ -76,6 +76,18 @@
   .weltkarte .anzahl { font-size: .85rem; color: var(--leise); }
   .modus { display: flex; gap: 10px; justify-content: center; margin: 4px 0 14px; flex-wrap: wrap; }
 .modus[hidden], .modus:empty { display: none; }
+#kartenwahl { margin: 0 0 14px; }
+#kartenwahl[hidden] { display: none; }
+.kartenwahl-titel { font: 700 1rem Cinzel, Georgia, serif; color: var(--gold); margin-bottom: 8px; }
+.kartenwahl-titel small { font: 500 .8rem system-ui, sans-serif; color: var(--leise); }
+.kartenwahl-reihe { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.kartenwahl-reihe button { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; padding: 8px 8px 7px;
+  font: 700 .78rem system-ui, sans-serif; color: var(--text); background: var(--panel); border: 2px solid var(--linie); border-radius: 12px; }
+.kartenwahl-reihe button.an { border-color: var(--gold); box-shadow: 0 0 14px rgba(224,182,76,.35); }
+.mini-karte { display: grid; grid-template-columns: repeat(8, 7px); gap: 1px; width: 63px; height: 63px; }
+.mini-karte i { border-radius: 1px; }
+.mini-karte.zufall { display: flex; align-items: center; justify-content: center; font-size: 34px; background: var(--panel2); border-radius: 6px; }
+h1 #karteName { font-size: .9rem; color: var(--leise); text-shadow: none; }
 .modus button small { font: 600 .75rem system-ui, sans-serif; opacity: .8; }
   .modus button { font: 700 1rem Cinzel, Georgia, serif; padding: 10px 18px; border-radius: 999px; cursor: pointer;
     color: var(--text); background: var(--panel); border: 2px solid var(--linie); }
@@ -312,6 +324,7 @@
       <button id="modusOnline" onclick="setzeModus('online')">🌍 Online</button>
     </div>
     <div class="modus" id="stufe"></div>
+    <div id="kartenwahl"></div>
     <h2 id="auswahlTitel">Spieler 1 – wähle eine Welt</h2>
     <p class="unter" id="auswahlUnter"></p>
     <div class="geldbeutel" id="geldbeutel"></div>
@@ -320,7 +333,7 @@
 
   <section id="spiel">
     <div class="kopf">
-      <h1>⚔ Monster-Arena</h1>
+      <h1>⚔ Monster-Arena <small id="karteName"></small></h1>
       <div id="zuganzeige"></div>
     </div>
     <div class="buehne">
@@ -479,17 +492,71 @@ const WELTEN = {
   Schatten:  { name: "Schattenwelt",  bild: "bilder/portal.jpg", text: "Nebel, Portale und Geister." },
 };
 
-// Spielfeld der Grenzlande: hier treffen die Welten aufeinander (punktsymmetrisch = fair für beide)
-const KARTE = [
-  "..F..B..",
-  ".B..LL..",
-  "P.F.S.E.",
-  "..BQS.E.",
-  ".E.SQB..",
-  ".E.S.F.P",
-  "..LL..B.",
-  "..B..F..",
-];
+// Kampf-Karten: alle punktsymmetrisch (Feld r,c entspricht 7-r,7-c) = fair für beide. Startfelder 7,0 und 0,7 sowie
+// die Blitzkugel-Felder 2,1 und 5,6 sind immer Moosboden, höchstens zwei Portale. Der Test prüft das.
+const KARTEN = {
+  grenzlande: { name: "Grenzlande", icon: "⚔️", text: "Hier treffen alle Welten aufeinander.", feld: [
+    "..F..B..",
+    ".B..LL..",
+    "P.F.S.E.",
+    "..BQS.E.",
+    ".E.SQB..",
+    ".E.S.F.P",
+    "..LL..B.",
+    "..B..F..",
+  ] },
+  vulkankrater: { name: "Vulkankrater", icon: "🌋", text: "Überall Lavaspalten – gut für Feuer-Monster.", feld: [
+    "...L.F..",
+    ".L...L..",
+    "..LQ.L..",
+    "F..LL..B",
+    "B..LL..F",
+    "..L.QL..",
+    "..L...L.",
+    "..F.L...",
+  ] },
+  gletscher: { name: "Gletscher", icon: "🏔️", text: "Glattes Eis und kalte Seen – gut für Eis-Monster.", feld: [
+    "..E..S..",
+    ".EE.ES..",
+    "..SE..E.",
+    ".E..QE.B",
+    "B.EQ..E.",
+    ".E..ES..",
+    "..SE.EE.",
+    "..S..E..",
+  ] },
+  felsenschlucht: { name: "Felsenschlucht", icon: "🪨", text: "Enge Wege zwischen Felsen – gut für Stein-Monster.", feld: [
+    "..F.F...",
+    ".F..F.F.",
+    "...F..B.",
+    "F.F..Q.F",
+    "F.Q..F.F",
+    ".B..F...",
+    ".F.F..F.",
+    "...F.F..",
+  ] },
+  dornendschungel: { name: "Dornendschungel", icon: "🌿", text: "Büsche überall – perfekt zum Verstecken.", feld: [
+    "..B.B...",
+    ".BB..B.B",
+    "B..B.Q..",
+    ".B..BB..",
+    "..BB..B.",
+    "..Q.B..B",
+    "B.B..BB.",
+    "...B.B..",
+  ] },
+  schattenreich: { name: "Schattenreich", icon: "👻", text: "Portale und dunkle Seen – gut für Schatten-Monster.", feld: [
+    "....S...",
+    ".P..S.B.",
+    "..B...F.",
+    "S..Q..L.",
+    ".L..Q..S",
+    ".F...B..",
+    ".B.S..P.",
+    "...S....",
+  ] },
+};
+let KARTE = KARTEN.grenzlande.feld;
 const GELAENDE = {
   ".": { name: "Moosboden", info: "Normaler Boden." },
   B: { name: "Dornendickicht", bild: "busch", form: "rund", klasse: "busch",
@@ -512,10 +579,42 @@ const HEIMAT = {
   Dschungel: "Im Dornendickicht heilst du +1 pro Zug.",
   Schatten: "Der Portalsprung kostet dich keinen Schritt.",
 };
-const PORTALE = [];
-KARTE.forEach((zeile, r) => [...zeile].forEach((t, c) => t === "P" && PORTALE.push([r, c])));
+let PORTALE = [];
 // Blitzkugeln: liegen auf dem Feld, wer darauf stehen bleibt, lädt seinen Spezialangriff
 let kugeln = [[2, 1], [5, 6]];
+let karteId = "grenzlande";
+function setzeKarte(id) {
+  karteId = KARTEN[id] ? id : "grenzlande";
+  KARTE = KARTEN[karteId].feld;
+  PORTALE = [];
+  KARTE.forEach((zeile, r) => [...zeile].forEach((t, c) => t === "P" && PORTALE.push([r, c])));
+  kugeln = [[2, 1], [5, 6]];
+}
+// Kartenwahl auf der Startseite (gespeichert); „zufall“ lost erst beim Kampfstart aus
+const KARTE_KEY = "monster-arena-karte";
+let karteWahl = "zufall";
+try { const k = localStorage.getItem(KARTE_KEY); if (k === "zufall" || KARTEN[k]) karteWahl = k; } catch (e) { /* ohne Speicher weiter */ }
+function waehleKarte(k) {
+  if (wahl.length) return;
+  karteWahl = k;
+  try { localStorage.setItem(KARTE_KEY, k); } catch (e) { /* ohne Speicher weiter */ }
+  ton("klick");
+  zeigeKartenwahl();
+}
+const geloesteKarte = () => karteWahl !== "zufall" ? karteWahl : Object.keys(KARTEN)[Math.floor(Math.random() * Object.keys(KARTEN).length)];
+const FELDFARBE = { ".": "#3b4a2f", B: "#2f7a2a", S: "#2a5c8f", L: "#e0601f", E: "#bfe6f5", F: "#8a7a63", P: "#8a46c8", Q: "#3fd6c1" };
+function miniKarte(feld) {
+  return `<span class="mini-karte">${feld.join("").split("").map(t => `<i style="background:${FELDFARBE[t]}"></i>`).join("")}</span>`;
+}
+function zeigeKartenwahl() {
+  const el = document.getElementById("kartenwahl");
+  el.innerHTML = `<div class="kartenwahl-titel">🗺️ Wo wird gekämpft?${online ? " <small>(online sucht der Wartende die Karte aus)</small>" : ""}</div>` +
+    `<div class="kartenwahl-reihe">` +
+    `<button class="${karteWahl === "zufall" ? "an" : ""}" onclick="waehleKarte('zufall')"><span class="mini-karte zufall">🎲</span>Zufall</button>` +
+    Object.entries(KARTEN).map(([k, m]) =>
+      `<button class="${karteWahl === k ? "an" : ""}" onclick="waehleKarte('${k}')" title="${m.text}">${miniKarte(m.feld)}${m.icon} ${m.name}</button>`).join("") +
+    `</div>`;
+}
 let zuege = 0;
 const START = [[7, 0], [0, 7]];
 const SPIELERFARBE = ["var(--p0)", "var(--p1)"];
@@ -794,12 +893,14 @@ function empfange(d) {
   if (d.typ === "wahl" && !spieler.length) {
     const ihre = { id: d.id, kugel: !!d.kugel, leben: !!d.leben };
     if (!FIGUREN[ihre.id]) return;
-    let start;
-    if (ich === 0) {
+    let start, karte;
+    if (ich === 0) {                                   // der Wartende bestimmt Zufall und Karte
       start = (Math.random() * 4294967296) >>> 0;
-      verbindung.send({ typ: "wahl", ...meineWahl(), start });
-    } else start = d.start >>> 0;
+      karte = geloesteKarte();
+      verbindung.send({ typ: "wahl", ...meineWahl(), start, karte });
+    } else { start = d.start >>> 0; karte = d.karte; }
     zufallStand = start;
+    setzeKarte(karte);
     const mein = meineWahl();
     const plaetze = ich === 0 ? [mein, ihre] : [ihre, mein];
     wahl.length = 0;
@@ -905,6 +1006,8 @@ function zeigeAuswahl() {
   const sp = wahl.length;                    // wer gerade wählt
   document.getElementById("modus").hidden = sp > 0;
   document.getElementById("stufe").hidden = sp > 0;
+  document.getElementById("kartenwahl").hidden = sp > 0;
+  zeigeKartenwahl();
   offeneWelt = heimwelt[sp];
   document.getElementById("auswahlTitel").textContent = `Spieler ${sp + 1} – ` +
     (offeneWelt ? `wähle dein Monster aus der ${WELTEN[offeneWelt].name}` : "wähle deine Welt");
@@ -1008,6 +1111,7 @@ function waehle(id) {
 
 // ---------- Spiel ----------
 function starte() {
+  if (!online) setzeKarte(geloesteKarte());           // online schon vom Gastgeber gesetzt
   spieler = wahl.map((id, i) => {
     const max = FIGUREN[id].leben + (computer && i === 1 ? STUFEN[stufe].leben : 0);
     return { id, fig: FIGUREN[id], r: START[i][0], c: START[i][1], leben: max, max, gift: 0, frost: false };
@@ -1020,6 +1124,8 @@ function starte() {
   legende();
   ambiente();
   log(`Der Kampf beginnt: ${spieler[0].fig.name} gegen ${spieler[1].fig.name}!`);
+  log(`🗺️ Kampf-Karte: ${KARTEN[karteId].icon} ${KARTEN[karteId].name} – ${KARTEN[karteId].text}`);
+  document.getElementById("karteName").textContent = `${KARTEN[karteId].icon} ${KARTEN[karteId].name}`;
   zeichne();
   sperre = true;
   cutin(spieler.map(p => ({ id: p.id, sit: "kampf" })), "Kampf!", null, 2800).then(() => { sperre = false; zugStart(); });
