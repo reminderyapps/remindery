@@ -108,6 +108,35 @@
       <use href="#heart" fill="#FAF7F2" stroke="#2B2622" stroke-width="7.3" stroke-linejoin="round"/>
     </g>
   </symbol>
+
+  <!-- C1: Herz deutlich größer, Pfeil etwas nach links -->
+  <symbol id="c1" viewBox="0 0 1024 1024">
+    <use href="#tile" fill="#E8604C" stroke="#2B2622" stroke-width="17"/>
+    <polyline points="205,330 390,512 205,694" fill="none" stroke="#2B2622" stroke-width="112" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="205,330 390,512 205,694" fill="none" stroke="#FAF7F2" stroke-width="78" stroke-linecap="round" stroke-linejoin="round"/>
+    <g transform="translate(690 540) scale(2.9) translate(-512 -144)">
+      <use href="#heart" fill="#FAF7F2" stroke="#2B2622" stroke-width="5.6" stroke-linejoin="round"/>
+    </g>
+  </symbol>
+
+  <!-- C2: Herz ist der Star, Pfeil klein davor -->
+  <symbol id="c2" viewBox="0 0 1024 1024">
+    <use href="#tile" fill="#E8604C" stroke="#2B2622" stroke-width="17"/>
+    <polyline points="170,390 300,512 170,634" fill="none" stroke="#2B2622" stroke-width="96" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="170,390 300,512 170,634" fill="none" stroke="#FAF7F2" stroke-width="64" stroke-linecap="round" stroke-linejoin="round"/>
+    <g transform="translate(680 522) scale(3.45) translate(-512 -144)">
+      <use href="#heart" fill="#FAF7F2" stroke="#2B2622" stroke-width="4.8" stroke-linejoin="round"/>
+    </g>
+  </symbol>
+
+  <!-- C3: wie C1, aber flach ohne dunkle Kontur – moderner -->
+  <symbol id="c3" viewBox="0 0 1024 1024">
+    <use href="#tile" fill="#E8604C"/>
+    <polyline points="205,330 390,512 205,694" fill="none" stroke="#FAF7F2" stroke-width="88" stroke-linecap="round" stroke-linejoin="round"/>
+    <g transform="translate(690 540) scale(2.95) translate(-512 -144)">
+      <use href="#heart" fill="#FAF7F2"/>
+    </g>
+  </symbol>
 </svg>
 
 <div class="wrap">
@@ -119,10 +148,10 @@
 <script>
   const D = [
     ['i0', 'Heute', 'Korallkachel mit dem Herz aus der Geburtstags-Kerze. Zum Vergleich.'],
-    ['a1', 'A1 · Herz aus Netz', 'Das Herz besteht aus Knoten und Kanten, innen laufen die Verbindungen zu einem goldenen Kern (Mensch entscheidet). Erkennbar als Remindery, eindeutig KI.', true],
-    ['a2', 'A2 · Netz im Herz', 'Das bekannte Herz bleibt, darin arbeitet ein kleines Netz mit goldenem Kern. Am nächsten am Heute – die Änderung ist leiser.'],
-    ['b', 'B · Agent-Netz', 'Abstraktes Netz auf dunkler Kachel, Korall als Rand, drei goldene Gates, ein Impuls unterwegs. Klar Tech – aber ohne Herz und austauschbar.'],
-    ['c', 'C · Prompt mit Herz', 'Eine Eingabeaufforderung, deren Cursor das Herz ist: Agents arbeiten, das Herz entscheidet. Witzig, wirkt nach Entwickler-Tool.'],
+    ['c', 'C · Prompt mit Herz (erste Fassung)', 'Zum Vergleich: Herz zu klein.'],
+    ['c1', 'C1 · Herz groß', 'Herz rund ein Drittel größer, der Pfeil rückt nach links. Ausgewogen zwischen Prompt und Herz.', true],
+    ['c2', 'C2 · Herz als Star', 'Das Herz füllt die Kachel fast wie heute, der Pfeil ist nur noch ein kleiner Prompt davor. Am nächsten am heutigen Zeichen.'],
+    ['c3', 'C3 · Flach', 'Wie C1, aber ohne dunkle Konturen. Moderner und ruhiger, wirkt weniger nach Kinder-App.'],
   ];
   const use = (id, s) => `<svg width="${s}" height="${s}"><use href="#${id}"/></svg>`;
   document.getElementById('dirs').innerHTML = D.map(([id, name, txt, rec]) => `
