@@ -67,6 +67,8 @@
   const darkScheme = matchMedia('(prefers-color-scheme: dark)').matches;
   const FROM = darkScheme ? [33, 26, 21] : [250, 247, 242], TO = [11, 15, 20];
   const TXT_FROM = darkScheme ? [244, 237, 228] : [43, 38, 34], TXT_TO = [230, 237, 243];
+  const hero = document.querySelector('.hero-light');
+  const SOFT_FROM = darkScheme ? [179, 166, 151] : [110, 98, 88], LINE_FROM = darkScheme ? [59, 49, 41] : [234, 226, 216];
   const DOT_FROM = darkScheme ? [179, 166, 151] : [110, 98, 88], DOT_TO = [230, 237, 243];
   const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
   const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
@@ -96,9 +98,16 @@
   }
   function progress() {
     const r = dive.getBoundingClientRect();
-    p = clamp(-r.top / (r.height - innerHeight), 0, 1);
-    const t = ease(clamp((p - .02) / .45, 0, 1));
-    stage.style.background = rgba(mix(FROM, TO, t), 1);
+    const start = innerHeight * .65;  // beginnt schon, während die Bühne hereinscrollt
+    p = clamp((start - r.top) / (r.height - innerHeight + start), 0, 1);
+    const t = ease(clamp(p / .5, 0, 1));
+    const bg = rgba(mix(FROM, TO, t), 1);
+    stage.style.background = bg;
+    // der helle Kopfbereich dunkelt mit ab, damit keine Kante entsteht
+    hero.style.background = bg;
+    hero.style.setProperty('--p-text', rgba(mix(TXT_FROM, TXT_TO, t), 1));
+    hero.style.setProperty('--p-soft', rgba(mix(SOFT_FROM, [139, 152, 165], t), 1));
+    hero.style.setProperty('--p-line', rgba(mix(LINE_FROM, [34, 48, 64], t), 1));
     sayA.style.color = rgba(mix(TXT_FROM, TXT_TO, t), 1);
     sayA.style.opacity = 1 - clamp((p - .6) / .2, 0, .6);
     const typed = clamp((p - .38) / .32, 0, 1);
