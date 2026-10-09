@@ -157,6 +157,9 @@ function render() {
   document.querySelectorAll('[data-c]').forEach(b => b.setAttribute('aria-pressed', b.dataset.c === COLOR));
   document.querySelectorAll('[data-w]').forEach(b => b.setAttribute('aria-pressed', +b.dataset.w === STROKE));
 }
+const EXP = new URLSearchParams(location.search).get('export');
+if (EXP) { const v = H.concat(F, A, B).find(x => x.code === EXP); const pre = document.createElement('pre'); pre.id = 'export';
+  pre.textContent = build(v); document.body.appendChild(pre); }
 document.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { COLOR = b.dataset.c; render(); });
 document.querySelectorAll('[data-w]').forEach(b => b.onclick = () => { STROKE = +b.dataset.w; render(); });
 render();

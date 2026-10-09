@@ -1,0 +1,28 @@
+<!-- Zeichen von Remindery Apps.
+
+     Idee: Alle App-Icons der Familie sitzen in einer cremefarbenen Kachel.
+     Der Herausgeber ist die Kachel selbst – deshalb ist sie hier umgedreht
+     (Korall statt Creme) und trägt als Inhalt das Herz, das im Icon von
+     Remindery: Geburtstage die Kerzenflamme bildet. Verwandtschaft ohne
+     Cupcake: keine einzelne App vertritt den Herausgeber.
+
+     Gleiche Sprache wie icon.svg: viewBox 1024, Ecke rx 200, Creme #FAF7F2,
+     Korall #E8604C, Tinte #2B2622, Strich 17, runde Enden. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <rect x="8.5" y="8.5" width="1007" height="1007" rx="195"
+        fill="#E8604C" stroke="#2B2622" stroke-width="17"/>
+  <!-- Das Herz ist im Maßstab von icon.svg gezeichnet (Spanne x 446–578,
+       y 76–212) und wird hier auf Kachelgröße gebracht. Die Strichstärke
+       ist vorgeteilt, damit sie nach der Skalierung wieder passt. -->
+  <g transform="translate(512 512) scale(4.12) translate(-512 -144)">
+    <path d="M 512 212
+             C 498 202 446 166 446 118
+             C 446 92 466 76 488 76
+             C 499 76 508 83 512 92
+             C 516 83 525 76 536 76
+             C 558 76 578 92 578 118
+             C 578 166 526 202 512 212 Z"
+          fill="#FAF7F2" stroke="#2B2622" stroke-width="7.3"
+          stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
