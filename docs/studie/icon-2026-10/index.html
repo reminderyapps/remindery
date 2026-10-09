@@ -137,6 +137,25 @@
       <use href="#heart" fill="#FAF7F2"/>
     </g>
   </symbol>
+
+  <!-- D1: <3 – das Herz der Chat- und Code-Sprache -->
+  <symbol id="d1" viewBox="0 0 1024 1024">
+    <use href="#tile" fill="#E8604C"/>
+    <g fill="none" stroke="#FAF7F2" stroke-width="92" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="440,322 238,512 440,702"/>
+      <path d="M560 330 C 700 300 790 350 780 420 C 772 480 700 505 630 510 C 710 515 795 545 790 610 C 784 690 690 730 560 694"/>
+    </g>
+  </symbol>
+
+  <!-- D2: großes flaches Herz, der Prompt >_ ist herausgestanzt -->
+  <symbol id="d2" viewBox="0 0 1024 1024">
+    <use href="#tile" fill="#E8604C"/>
+    <g transform="translate(512 530) scale(3.6) translate(-512 -144)">
+      <use href="#heart" fill="#FAF7F2"/>
+    </g>
+    <polyline points="380,400 492,500 380,600" fill="none" stroke="#E8604C" stroke-width="64" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="560" y1="600" x2="660" y2="600" stroke="#E8604C" stroke-width="64" stroke-linecap="round"/>
+  </symbol>
 </svg>
 
 <div class="wrap">
@@ -148,10 +167,11 @@
 <script>
   const D = [
     ['i0', 'Heute', 'Korallkachel mit dem Herz aus der Geburtstags-Kerze. Zum Vergleich.'],
-    ['c', 'C · Prompt mit Herz (erste Fassung)', 'Zum Vergleich: Herz zu klein.'],
-    ['c1', 'C1 · Herz groß', 'Herz rund ein Drittel größer, der Pfeil rückt nach links. Ausgewogen zwischen Prompt und Herz.', true],
-    ['c2', 'C2 · Herz als Star', 'Das Herz füllt die Kachel fast wie heute, der Pfeil ist nur noch ein kleiner Prompt davor. Am nächsten am heutigen Zeichen.'],
-    ['c3', 'C3 · Flach', 'Wie C1, aber ohne dunkle Konturen. Moderner und ruhiger, wirkt weniger nach Kinder-App.'],
+    ['c1', 'C1 · Prompt + großes Herz', 'Herz rund ein Drittel größer, der Pfeil rückt nach links. Noch mit der dunklen Kontur von heute.'],
+    ['c2', 'C2 · Herz als Star', 'Das Herz füllt die Kachel fast wie heute, der Pfeil ist nur ein kleiner Prompt davor.'],
+    ['c3', 'C3 · Prompt + Herz, flach', 'Wie C1, aber ohne dunkle Konturen. Moderner, weniger Kinder-App.'],
+    ['d1', 'D1 · <3', 'Das älteste Herz der Computersprache, als eigenes Zeichen gesetzt. Code und Herz in einem, ganz ohne Bildchen. Nerdig, warm, unverwechselbar.', true],
+    ['d2', 'D2 · Prompt im Herz', 'Ein großes flaches Herz, aus dem der Prompt >_ herausgestanzt ist. Eine einzige Form, liest sich auch in 16 px.'],
   ];
   const use = (id, s) => `<svg width="${s}" height="${s}"><use href="#${id}"/></svg>`;
   document.getElementById('dirs').innerHTML = D.map(([id, name, txt, rec]) => `
