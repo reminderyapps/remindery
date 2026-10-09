@@ -98,8 +98,9 @@
   }
   function progress() {
     const r = dive.getBoundingClientRect();
-    const start = innerHeight * .65;  // beginnt schon, während die Bühne hereinscrollt
-    p = clamp((start - r.top) / (r.height - innerHeight + start), 0, 1);
+    // beginnt schon, während die Bühne hereinscrollt – aber ganz oben auf der Seite immer bei 0 %
+    const top = r.top + scrollY, startY = Math.max(0, top - innerHeight * .65), endY = top + r.height - innerHeight;
+    p = clamp((scrollY - startY) / Math.max(1, endY - startY), 0, 1);
     const t = ease(clamp(p / .5, 0, 1));
     const bg = rgba(mix(FROM, TO, t), 1);
     stage.style.background = bg;
