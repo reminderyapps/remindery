@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>LinkedIn-Bilder Remindery</title>
+<!-- Vorlage für die LinkedIn-Unternehmensseite. Rendern (headless Edge):
+     ?logo  → 400×400  (--window-size=400,400)
+     ?cover → 1128×191 (--window-size=1128,191) -->
+<style>
+  html, body { margin: 0; overflow: hidden; }
+  .logo { width: 400px; height: 400px; background: #FAF7F2; display: grid; place-items: center; }
+  .logo img { width: 300px; height: 300px; }
+  .cover { position: relative; width: 1128px; height: 191px; }
+  .cover canvas { position: absolute; inset: 0; }
+  .cover .t { position: absolute; left: 300px; top: 50px; font: 400 40px/1.05 Georgia, serif; color: #2B2622; letter-spacing: -.01em; }
+  .cover .t em { color: #E8604C; }
+  .cover .c { position: absolute; right: 40px; top: 58px; text-align: right; font: 600 19px/1.4 system-ui, "Segoe UI", sans-serif; color: #E6EDF3; }
+  .cover .c em { font-style: normal; color: #FFC857; }
+</style>
+</head>
+<body>
+<div class="logo" id="logo" hidden><img src="/favicon.svg" alt=""></div>
+<div class="cover" id="cover" hidden>
+  <canvas id="cv" width="1128" height="191"></canvas>
+  <div class="t">Apps in days,<br><em>not months.</em></div>
+  <div class="c">AI does the work.<br><em>Humans own the calls.</em></div>
+</div>
+<script>
+  const q = location.search;
+  if (q.includes('logo')) document.getElementById('logo').hidden = false;
+  else {
+    document.getElementById('cover').hidden = false;
+    let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const x = document.getElementById('cv').getContext('2d'), W = 1128, H = 191;
+    // links bleibt Platz fürs Profilbild der Seite (LinkedIn legt das Logo unten links darüber)
+    const g = x.createLinearGradient(0, 0, W, 0);
+    g.addColorStop(0, '#FAF7F2'); g.addColorStop(.52, '#FAF7F2'); g.addColorStop(.66, '#5d5550'); g.addColorStop(.76, '#0B0F14'); g.addColorStop(1, '#0B0F14');
+    x.fillStyle = g; x.fillRect(0, 0, W, H);
+    for (let i = 0; i < 380; i++) {
+      const px = 600 + rnd() * 220, py = rnd() * H, d = (px - 600) / 220;
+      x.fillStyle = `rgba(${Math.round(110 + 120 * d)},${Math.round(98 + 140 * d)},${Math.round(88 + 155 * d)},${.18 + .2 * d})`;
+      x.fillRect(px, py, 1.6, 1.6);
+    }
+    const L = [3, 4, 5, 5, 4, 3], x0 = 700, x1 = 860, y0 = 20, y1 = 171, nodes = [];
+    L.forEach((n, li) => { for (let k = 0; k < n; k++) nodes.push({ li, x: x0 + (x1 - x0) * li / 5, y: y0 + (y1 - y0) * (k + 1) / (n + 1), gate: li === 1 || li === 4 || li === 5 }); });
+    x.strokeStyle = 'rgba(120,160,200,.24)'; x.lineWidth = 1;
+    nodes.forEach(a => nodes.forEach(b => { if (b.li === a.li + 1 && rnd() < .6) { x.beginPath(); x.moveTo(a.x, a.y); x.lineTo(b.x, b.y); x.stroke(); } }));
+    nodes.forEach(n => {
+      const col = n.gate ? '255,200,87' : '230,237,243';
+      x.fillStyle = `rgba(${col},.95)`; x.beginPath(); x.arc(n.x, n.y, 3.2, 0, 6.28); x.fill();
+      x.strokeStyle = `rgba(${col},.35)`; x.beginPath(); x.arc(n.x, n.y, 6.5, 0, 6.28); x.stroke();
+    });
+  }
+</script>
+</body>
+</html>
