@@ -38,6 +38,14 @@
     <span><b>Strich</b><button data-w="54">dünn</button><button data-w="62">mittel</button><button data-w="70">kräftig</button></span>
   </div>
 
+  <h2>Das alte Remindery-Herz als Linie + Stern</h2>
+  <p class="sub">Exakt die Herzform des bisherigen Zeichens – runde Bögen, volle Seiten –, nur offen und mit Sparkle an der Bogenecke.</p>
+  <div class="grid" id="go"></div>
+
+  <h2>F2 runder – Bögen voller, Seiten bauchiger, Spitze weicher</h2>
+  <p class="sub">R0 ist das heutige Zeichen. Nach rechts wird das Herz runder; der Stern bleibt an derselben Stelle zum Bogen.</p>
+  <div class="grid" id="gr"></div>
+
   <h2>F2 + weitere Sterne – wie im typischen KI-Muster</h2>
   <p class="sub">Basis F2. Ein oder zwei kleinere Sterne schräg darunter bzw. daneben.</p>
   <div class="grid" id="gh"></div>
@@ -63,11 +71,23 @@ let COLOR = '#E8604C', STROKE = 62, PICK = null;
 const CREAM = '#FAF7F2';
 
 // Herz: Einheitsmaße, Breite 2 (x −1…1), Bogenoberkante ≈ −0.92, Spitze 0.95. Start/Ende in der Kerbe.
-function heartPath(cx, cy, s) {
+function heartPath(cx, cy, s, t = 0) {
+  // t = Rundung: 0 = F2 (heute), 1 = volle Bögen, bauchige Seiten, weichere Spitze
+  const L = (a, b) => a + (b - a) * t;
+  const K = [[0.12, -0.80, 0.10, -0.84], [0.33, -0.93, 0.30, -0.98], [0.55, -0.92, 0.52, -0.97],
+             [0.84, -0.90, 0.84, -0.96], [1.01, -0.67, 1.05, -0.72], [1.00, -0.42, 1.04, -0.40],
+             [0.98, -0.06, 1.03, 0.04], [0.56, 0.40, 0.64, 0.50]].map(([x0, y0, x1, y1]) => [L(x0, x1), L(y0, y1)]);
   const P = (x, y) => `${(cx + x * s).toFixed(1)} ${(cy + y * s).toFixed(1)}`;
-  return `M ${P(0, -0.55)} C ${P(0.12, -0.80)} ${P(0.33, -0.93)} ${P(0.55, -0.92)} C ${P(0.84, -0.90)} ${P(1.01, -0.67)} ${P(1.0, -0.42)}`
-       + ` C ${P(0.98, -0.06)} ${P(0.56, 0.40)} ${P(0, 0.95)} C ${P(-0.56, 0.40)} ${P(-0.98, -0.06)} ${P(-1.0, -0.42)}`
-       + ` C ${P(-1.01, -0.67)} ${P(-0.84, -0.90)} ${P(-0.55, -0.92)} C ${P(-0.33, -0.93)} ${P(-0.12, -0.80)} ${P(0, -0.55)}`;
+  const [a, b, c, d, e, g, h, i] = K, m = ([x, y]) => [-x, y];
+  return `M ${P(0, -0.55)} C ${P(...a)} ${P(...b)} ${P(...c)} C ${P(...d)} ${P(...e)} ${P(...g)}`
+       + ` C ${P(...h)} ${P(...i)} ${P(0, 0.95)} C ${P(...m(i))} ${P(...m(h))} ${P(...m(g))}`
+       + ` C ${P(...m(e))} ${P(...m(d))} ${P(...m(c))} C ${P(...m(b))} ${P(...m(a))} ${P(0, -0.55)}`;
+}
+// Das alte Remindery-Herz (favicon bis 10.10.2026), Start an der Spitze; k = Maßstab, top = Oberkante
+function oldHeart(cx, top, k) {
+  const d = 'M 512 212 C 498 202 446 166 446 118 C 446 92 466 76 488 76 C 499 76 508 83 512 92 C 516 83 525 76 536 76 C 558 76 578 92 578 118 C 578 166 526 202 512 212';
+  let i = 0;
+  return d.replace(/-?\d+(\.\d+)?/g, n => (i++ % 2 === 0 ? cx + (n - 512) * k : top + (n - 76) * k).toFixed(1));
 }
 function sample(d, n = 520) {
   const p = document.getElementById('pp'); p.setAttribute('d', d);
@@ -91,12 +111,13 @@ function star(x, y, rx, ry, a = .2, b = .32) {
 }
 // v: { s: Sterngröße, ry: Höhe/Breite, inset: Stern nach innen, gap: Luft, two: zweiter Stern }
 function build(v) {
-  const cx = 497, cy = 560, s = 292;                    // Herz wie in der Vorlage: x .20–.77, oben .285, Spitze .82
-  const sx = cx + s * 1.0 - v.inset;
-  let sy = cy - s * 0.86 + v.inset * .6 - (v.lift || 0);
+  if (v.old) return buildOld(v);
+  const t = v.round || 0, cx = 497, cy = 560, s = 292 / (1 + 0.045 * t);                    // Herz wie in der Vorlage: x .20–.77, oben .285, Spitze .82
+  const sx = cx + s * (1.0 + 0.04 * t) - v.inset;
+  let sy = cy - s * 0.86 + v.inset * .6 - (v.lift || 0) - 0.05 * s * t;
   const rx = v.s, ry = v.s * v.ry;
   const m = STROKE / 2 + v.gap;
-  const pts = sample(heartPath(cx, cy, s));
+  const pts = sample(heartPath(cx, cy, s, t));
   if (v.align) for (let k = 0; k < 4; k++) {
     // letztes Linienstück vor dem Stern (von der Kerbe kommend) – seine Höhe wird die Sternachse
     const out = p => ((p[0] - sx) / (rx + m)) ** 2 + ((p[1] - sy) / (ry + m)) ** 2 > 1;
@@ -120,7 +141,22 @@ function build(v) {
        + `<path d="${stars}" fill="${CREAM}"/></svg>`;
 }
 
-const A = [], B = [], F = [], H = [];
+// Altes Herz als Linie: Stern an der Ecke des rechten Bogens (rechte Kante × Oberkante)
+function buildOld(v) {
+  const k = v.k, cx = 497, top = v.top, rx = v.s, ry = v.s * 1.5, m = STROKE / 2 + v.gap;
+  const sx = cx + 66 * k - (v.inset || 0), sy = top + (v.dy || 0);
+  const line = cut(sample(oldHeart(cx, top, k)), [{ x: sx, y: sy, rx: rx + m, ry: ry + m }]);
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><rect width="1024" height="1024" rx="220" fill="${COLOR}`
+       + `"/><path d="${line}" fill="none" stroke="${CREAM}" stroke-width="${STROKE}" stroke-linecap="round" stroke-linejoin="round"/>`
+       + `<path d="${star(sx, sy, rx, ry)}" fill="${CREAM}"/></svg>`;
+}
+const A = [], B = [], F = [], H = [], RR = [], OO = [];
+[['K1', 4.15, 290, 108, 24, 0, 6, 'altes Herz, Stern wie F2'],
+ ['K2', 4.15, 290, 96, 22, 0, 6, 'Stern etwas kleiner'],
+ ['K3', 4.15, 290, 120, 26, 0, 4, 'Stern etwas größer'],
+ ['K4', 4.35, 276, 108, 24, 0, 6, 'Herz etwas größer'],
+ ['K5', 4.15, 290, 108, 24, 14, 14, 'Stern etwas tiefer/innen']].forEach(([code, k, top, sz, gap, inset, dy, note]) =>
+  OO.push({ code, old: true, k, top, s: sz, gap, inset, dy, note }));
 const F2 = { s: 108, ry: 1.5, inset: 0, gap: 24, lift: 12 };
 [['H1', [[892, 478, 46]], 'ein kleiner Stern schräg rechts darunter'],
  ['H2', [[880, 500, 54]], 'ein Stern, etwas größer und tiefer'],
@@ -129,6 +165,8 @@ const F2 = { s: 108, ry: 1.5, inset: 0, gap: 24, lift: 12 };
  ['H5', [[872, 512, 40], [932, 420, 28]], 'zwei kleine im Dreieck mit dem großen'],
  ['H6', [[902, 462, 36], [860, 560, 30]], 'zwei ähnlich kleine, schräg versetzt']].forEach(([code, extra, note]) =>
   H.push(Object.assign({ code, extra, note: 'F2 · ' + note }, F2)));
+[[0, 'R0 = F2 heute'], [.35, 'etwas runder'], [.7, 'runder'], [1, 'deutlich runder'], [1.3, 'sehr rund']].forEach(([round, note], i) =>
+  RR.push(Object.assign({ code: 'R' + i, round, note: 'F2 · ' + note }, F2)));
 [['F1', 0, true, 'automatisch auf Strichmitte'], ['F2', 12, false, '12 höher'], ['F3', 20, false, '20 höher'], ['F4', 28, false, '28 höher']].forEach(([code, lift, align, note]) =>
   F.push({ code, s: 108, ry: 1.5, inset: 0, gap: 24, lift, align, note: 'A34 · ' + note }));
 [[0, 12, 'auf der Ecke'], [14, 12, 'etwas nach innen'], [0, 24, 'mehr Luft']].forEach(([inset, gap, row], ri) =>
@@ -145,12 +183,14 @@ function render() {
         <span class="small"><img src="${url}" width="32" height="32" alt=""><img src="${url}" width="16" height="16" alt=""></span></div>
       <small>${v.note}</small></div>`;
   };
+  document.getElementById('go').innerHTML = OO.map(cell).join('');
+  document.getElementById('gr').innerHTML = RR.map(cell).join('');
   document.getElementById('gh').innerHTML = H.map(cell).join('');
   document.getElementById('gf').innerHTML = F.map(cell).join('');
   document.getElementById('ga').innerHTML = A.map(cell).join('');
   document.getElementById('gb').innerHTML = B.map(cell).join('');
   document.querySelectorAll('.cell').forEach(el => el.onclick = () => {
-    PICK = el.dataset.code; const v = H.concat(F, A, B).find(x => x.code === PICK);
+    PICK = el.dataset.code; const v = OO.concat(RR, H, F, A, B).find(x => x.code === PICK);
     document.getElementById('out').textContent = `${PICK} · Farbe ${COLOR} · Strich ${STROKE}\n` + JSON.stringify(v) + '\n\n' + build(v);
     render();
   });
@@ -158,7 +198,7 @@ function render() {
   document.querySelectorAll('[data-w]').forEach(b => b.setAttribute('aria-pressed', +b.dataset.w === STROKE));
 }
 const EXP = new URLSearchParams(location.search).get('export');
-if (EXP) { const v = H.concat(F, A, B).find(x => x.code === EXP); const pre = document.createElement('pre'); pre.id = 'export';
+if (EXP) { const v = OO.concat(RR, H, F, A, B).find(x => x.code === EXP); const pre = document.createElement('pre'); pre.id = 'export';
   pre.textContent = build(v); document.body.appendChild(pre); }
 document.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { COLOR = b.dataset.c; render(); });
 document.querySelectorAll('[data-w]').forEach(b => b.onclick = () => { STROKE = +b.dataset.w; render(); });
