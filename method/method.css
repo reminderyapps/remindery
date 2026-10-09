@@ -71,8 +71,8 @@ body.deep .site-nav .lang a[aria-current="true"] { background: var(--fg); color:
 .dive canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .dive .say { position: relative; padding: 0 16px; max-width: 900px; }
 .dive .say-a { font: 400 clamp(1.9rem, 5vw, 3.4rem)/1.15 var(--serif); color: var(--p-text); }
-.dive .say-b { margin-top: 26px; font: 600 clamp(16px, 2.4vw, 22px)/1.6 var(--mono); color: var(--ok); min-height: 3.4em; text-shadow: 0 0 18px rgba(61, 220, 151, .45); }
-.dive .say-b .cur { display: inline-block; width: .6em; background: var(--ok); animation: pulse 1s steps(1) infinite; }
+.dive .say-b { margin-top: 26px; font: 600 clamp(16px, 2.4vw, 22px)/1.6 var(--mono); color: var(--fg); min-height: 3.4em; }
+.dive .say-b .cur { display: inline-block; width: .6em; background: var(--accent); animation: pulse 1s steps(1) infinite; }
 
 /* Abschnitte */
 .s { padding: 72px 0 80px; border-bottom: 1px solid var(--line); position: relative; background-color: var(--bg); color: var(--fg);

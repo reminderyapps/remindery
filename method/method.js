@@ -57,7 +57,9 @@
   document.getElementById('replay').onclick = play;
   onView(log, play, .35);
 
-  // Abtauchen: hell (Website) → Maschinenraum (dunkel), gesteuert vom Scrollen, Code-Regen dazwischen
+  { // eigener Block: Namen wie nodes/H gibt es oben schon
+  // Abtauchen: hell (Website) → Maschinenraum (dunkel), gesteuert vom Scrollen.
+  // Bild: Denoising – verstreutes Rauschen ordnet sich zu einem neuronalen Netz (6 Schichten = 6 Phasen), Impulse laufen durch.
   const dive = document.getElementById('dive');
   if (!dive) return;
   const stage = dive.querySelector('.stage'), cv = dive.querySelector('canvas'), ctx = cv.getContext('2d');
@@ -65,54 +67,105 @@
   const darkScheme = matchMedia('(prefers-color-scheme: dark)').matches;
   const FROM = darkScheme ? [33, 26, 21] : [250, 247, 242], TO = [11, 15, 20];
   const TXT_FROM = darkScheme ? [244, 237, 228] : [43, 38, 34], TXT_TO = [230, 237, 243];
+  const DOT_FROM = darkScheme ? [179, 166, 151] : [110, 98, 88], DOT_TO = [230, 237, 243];
   const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
-  const rgb = c => `rgb(${c[0]},${c[1]},${c[2]})`;
+  const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const ease = t => t * t * (3 - 2 * t);
   const lines = D.dive;  // [Prompt, Antwort]
-  const GLYPHS = '01アイウエオカキクケコサシスセソ{}[]<>/=+*#$;:✓abcdef0123456789'.split('');
-  let p = 0, cols = [], fs = 16, running = false;
+  const LAYERS = [3, 5, 6, 6, 5, 3];
+  let p = 0, SW = 0, SH = 0, nodes = [], edges = [], pulses = [], dust = [], running = false;
 
-  function size() {
+  function build() {
     const r = devicePixelRatio || 1;
-    cv.width = stage.clientWidth * r; cv.height = stage.clientHeight * r; ctx.setTransform(r, 0, 0, r, 0, 0);
-    cols = Array.from({ length: Math.ceil(stage.clientWidth / fs) }, () => Math.random() * -60);
+    SW = stage.clientWidth; SH = stage.clientHeight;
+    cv.width = SW * r; cv.height = SH * r; ctx.setTransform(r, 0, 0, r, 0, 0);
+    const padX = Math.max(24, SW * .08), spanX = SW - 2 * padX, top = SH * .12, spanY = SH * .76;
+    nodes = []; edges = [];
+    LAYERS.forEach((n, li) => {
+      for (let k = 0; k < n; k++) nodes.push({
+        layer: li, tx: padX + spanX * li / (LAYERS.length - 1), ty: top + spanY * (k + 1) / (n + 1),
+        nx: Math.random() * SW, ny: Math.random() * SH, ph: Math.random() * 6.28, gate: li === 1 || li === 4 || li === 5
+      });
+    });
+    nodes.forEach((a, i) => nodes.forEach((b, j) => {
+      if (b.layer === a.layer + 1 && Math.random() < .55) edges.push([i, j]);
+    }));
+    dust = Array.from({ length: Math.round(SW * SH / 9000) }, () => ({ x: Math.random() * SW, y: Math.random() * SH, ph: Math.random() * 6.28 }));
+    pulses = [];
   }
   function progress() {
     const r = dive.getBoundingClientRect();
     p = clamp(-r.top / (r.height - innerHeight), 0, 1);
-    const t = ease(clamp((p - .12) / .55, 0, 1));
-    const bg = mix(FROM, TO, t);
-    stage.style.background = rgb(bg);
-    sayA.style.color = rgb(mix(TXT_FROM, TXT_TO, t));
-    sayA.style.opacity = 1 - clamp((p - .55) / .2, 0, .65);
-    const typed = clamp((p - .45) / .4, 0, 1);
+    const t = ease(clamp((p - .1) / .5, 0, 1));
+    stage.style.background = rgba(mix(FROM, TO, t), 1);
+    sayA.style.color = rgba(mix(TXT_FROM, TXT_TO, t), 1);
+    sayA.style.opacity = 1 - clamp((p - .55) / .2, 0, .7);
+    const typed = clamp((p - .5) / .35, 0, 1);
     const full = lines[0] + '\n' + lines[1], n = Math.round(full.length * typed);
     sayB.innerHTML = full.slice(0, n).replace('\n', '<br>') + (typed > 0 ? '<span class="cur">&nbsp;</span>' : '');
     document.body.classList.toggle('deep', r.top < -(r.height - innerHeight) * .6);
-    if (still) ctx.clearRect(0, 0, cv.width, cv.height);
-    return bg;
+    return t;
   }
-  function frame() {
-    if (!running) return;
-    const bg = progress();
-    const rain = clamp((p - .08) / .3, 0, 1) * (1 - clamp((p - .88) / .12, 0, .7));
-    ctx.fillStyle = `rgba(${bg[0]},${bg[1]},${bg[2]},.16)`;
-    ctx.fillRect(0, 0, stage.clientWidth, stage.clientHeight);
-    ctx.font = `600 ${fs - 2}px ui-monospace, Consolas, monospace`;
-    cols.forEach((y, i) => {
-      const ch = GLYPHS[(Math.random() * GLYPHS.length) | 0];
-      ctx.fillStyle = Math.random() < .08 ? `rgba(255,107,85,${rain})` : `rgba(61,220,151,${rain * .85})`;
-      ctx.fillText(ch, i * fs, y * fs);
-      cols[i] = y * fs > stage.clientHeight && Math.random() > .975 ? 0 : y + .5 + p * .5;
+  function draw(now) {
+    const t = progress(), time = now / 1000;
+    ctx.clearRect(0, 0, SW, SH);
+    const k = ease(clamp((p - .22) / .4, 0, 1));          // Rauschen → Struktur
+    const linkA = ease(clamp((p - .5) / .25, 0, 1));      // Verbindungen
+    const fade = 1 - clamp((p - .9) / .1, 0, .5);
+    const dot = mix(DOT_FROM, DOT_TO, t);
+    // Rest-Rauschen, das beim Entrauschen verschwindet
+    dust.forEach(d => {
+      const a = (.10 + .25 * t) * (1 - k) * clamp(p / .1, 0, 1);
+      if (a <= .01) return;
+      ctx.fillStyle = rgba(dot, a);
+      ctx.fillRect(d.x + Math.sin(time + d.ph) * 3, d.y + Math.cos(time * .8 + d.ph) * 3, 1.6, 1.6);
     });
-    requestAnimationFrame(frame);
+    const pos = nodes.map(nd => {
+      const j = (1 - k) * 14;
+      return [nd.nx + (nd.tx - nd.nx) * k + Math.sin(time * 1.3 + nd.ph) * j,
+              nd.ny + (nd.ty - nd.ny) * k + Math.cos(time * 1.1 + nd.ph) * j];
+    });
+    if (linkA > 0) {
+      ctx.lineWidth = 1;
+      edges.forEach(([i, j]) => {
+        ctx.strokeStyle = rgba([120, 160, 200], .16 * linkA * fade);
+        ctx.beginPath(); ctx.moveTo(pos[i][0], pos[i][1]); ctx.lineTo(pos[j][0], pos[j][1]); ctx.stroke();
+      });
+      if (!still && Math.random() < .25 * linkA && edges.length) {
+        const start = edges.filter(e => nodes[e[0]].layer === 0);
+        pulses.push({ e: start[(Math.random() * start.length) | 0], s: 0 });
+      }
+    }
+    pulses = pulses.filter(pl => {
+      pl.s += .028;
+      if (pl.s >= 1) {
+        const next = edges.filter(e => e[0] === pl.e[1]);
+        if (!next.length) return false;
+        pl.e = next[(Math.random() * next.length) | 0]; pl.s = 0;
+      }
+      const [a, b] = [pos[pl.e[0]], pos[pl.e[1]]];
+      const x = a[0] + (b[0] - a[0]) * pl.s, y = a[1] + (b[1] - a[1]) * pl.s;
+      const g = ctx.createRadialGradient(x, y, 0, x, y, 9);
+      g.addColorStop(0, rgba([255, 200, 140], .9 * linkA * fade)); g.addColorStop(1, rgba([255, 107, 85], 0));
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, 9, 0, 6.28); ctx.fill();
+      return true;
+    });
+    nodes.forEach((nd, i) => {
+      const [x, y] = pos[i], glow = .35 + .65 * k;
+      const c = nd.gate && k > .6 ? mix(dot, [255, 200, 87], (k - .6) / .4) : dot;
+      ctx.fillStyle = rgba(c, (.25 + .6 * t) * glow * fade);
+      ctx.beginPath(); ctx.arc(x, y, 2 + 2.5 * k, 0, 6.28); ctx.fill();
+      if (k > .5) { ctx.strokeStyle = rgba(c, .25 * (k - .5) * 2 * fade); ctx.beginPath(); ctx.arc(x, y, 7 + 3 * k, 0, 6.28); ctx.stroke(); }
+    });
+    if (running && !still) requestAnimationFrame(draw);
   }
-  size(); progress();
-  addEventListener('resize', size);
-  addEventListener('scroll', () => { if (still || !running) progress(); }, { passive: true });
+  build(); draw(0);
+  addEventListener('resize', () => { build(); draw(performance.now()); });
+  addEventListener('scroll', () => { if (still || !running) draw(performance.now()); }, { passive: true });
   if (!still) new IntersectionObserver(es => {
     running = es[0].isIntersecting;
-    if (running) requestAnimationFrame(frame);
+    if (running) requestAnimationFrame(draw);
   }).observe(dive);
+  }
 })();
