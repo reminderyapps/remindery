@@ -156,6 +156,50 @@
     <polyline points="380,400 492,500 380,600" fill="none" stroke="#E8604C" stroke-width="64" stroke-linecap="round" stroke-linejoin="round"/>
     <line x1="560" y1="600" x2="660" y2="600" stroke="#E8604C" stroke-width="64" stroke-linecap="round"/>
   </symbol>
+
+  <!-- Sparkle: Vierzack mit eingezogenen Seiten, Radius 100 um den Ursprung -->
+  <path id="spark" d="M0,-100 C 9,-24 24,-9 100,0 C 24,9 9,24 0,100 C -9,24 -24,9 -100,0 C -24,-9 -9,-24 0,-100 Z"/>
+
+  <!-- E1: heutiges Zeichen + Sparkles in Creme, mit Kontur wie das Herz -->
+  <symbol id="e1" viewBox="0 0 1024 1024">
+    <use href="#i0"/>
+    <g fill="#FAF7F2" stroke="#2B2622" stroke-width="7" stroke-linejoin="round">
+      <use href="#spark" transform="translate(808 196) scale(1.45)"/>
+      <use href="#spark" transform="translate(905 352) scale(.62)"/>
+    </g>
+  </symbol>
+
+  <!-- E2: wie E1, Sparkles in Gold -->
+  <symbol id="e2" viewBox="0 0 1024 1024">
+    <use href="#i0"/>
+    <g fill="#FFC857" stroke="#2B2622" stroke-width="7" stroke-linejoin="round">
+      <use href="#spark" transform="translate(808 196) scale(1.45)"/>
+      <use href="#spark" transform="translate(905 352) scale(.62)"/>
+    </g>
+  </symbol>
+
+  <!-- E3: flach, ohne Konturen, Herz + Sparkles in Creme -->
+  <symbol id="e3" viewBox="0 0 1024 1024">
+    <use href="#tile" fill="#E8604C"/>
+    <g transform="translate(490 548) scale(3.75) translate(-512 -144)"><use href="#heart" fill="#FAF7F2"/></g>
+    <g fill="#FAF7F2">
+      <use href="#spark" transform="translate(800 214) scale(1.4)"/>
+      <use href="#spark" transform="translate(898 368) scale(.6)"/>
+    </g>
+  </symbol>
+
+  <!-- E4: Herz etwas kleiner, klassisches ✨-Trio daneben -->
+  <symbol id="e4" viewBox="0 0 1024 1024">
+    <use href="#tile" fill="#E8604C" stroke="#2B2622" stroke-width="17"/>
+    <g transform="translate(450 575) scale(3.5) translate(-512 -144)">
+      <use href="#heart" fill="#FAF7F2" stroke="#2B2622" stroke-width="8.6" stroke-linejoin="round"/>
+    </g>
+    <g fill="#FFC857" stroke="#2B2622" stroke-width="7" stroke-linejoin="round">
+      <use href="#spark" transform="translate(790 230) scale(1.55)"/>
+      <use href="#spark" transform="translate(640 140) scale(.7)"/>
+      <use href="#spark" transform="translate(895 420) scale(.5)"/>
+    </g>
+  </symbol>
 </svg>
 
 <div class="wrap">
@@ -167,6 +211,10 @@
 <script>
   const D = [
     ['i0', 'Heute', 'Korallkachel mit dem Herz aus der Geburtstags-Kerze. Zum Vergleich.'],
+    ['e1', 'E1 · Herz + Sparkles, creme', 'Das heutige Zeichen unverändert, oben rechts ein großer und ein kleiner Sparkle im selben Stil wie das Herz.'],
+    ['e2', 'E2 · Herz + Sparkles, gold', 'Wie E1, die Sparkles in Gold – das Gold der Gates auf der Methode-Seite. Fällt mehr auf.', true],
+    ['e3', 'E3 · Herz + Sparkles, flach', 'Ohne dunkle Konturen, Herz etwas größer. Moderner, ruhiger.'],
+    ['e4', 'E4 · Herz + ✨-Trio', 'Herz etwas kleiner, daneben drei goldene Sparkles wie im Emoji. Am deutlichsten „KI“.'],
     ['c1', 'C1 · Prompt + großes Herz', 'Herz rund ein Drittel größer, der Pfeil rückt nach links. Noch mit der dunklen Kontur von heute.'],
     ['c2', 'C2 · Herz als Star', 'Das Herz füllt die Kachel fast wie heute, der Pfeil ist nur ein kleiner Prompt davor.'],
     ['c3', 'C3 · Prompt + Herz, flach', 'Wie C1, aber ohne dunkle Konturen. Moderner, weniger Kinder-App.'],
