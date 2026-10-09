@@ -14,7 +14,7 @@
   --head-bg: rgba(250, 247, 242, .86);
   --shadow: 0 10px 40px rgba(43, 38, 34, 0.08);
   --shadow-soft: 0 1px 2px rgba(43, 38, 34, .05), 0 12px 32px rgba(43, 38, 34, .07);
-  --ox: #6B8E23; --silben: #3F7DBF; --uhr: #E8604C; --geb: #C2647A;
+  --ox: #6B8E23; --silben: #3F7DBF; --uhr: #E8604C; --geb: #C2647A; --raetsel: #2E9A63;
   --serif: Georgia, "Times New Roman", ui-serif, serif;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --gutter: clamp(16px, 4vw, 32px);
@@ -126,6 +126,24 @@ main {
    (~69 px) wie das Play-Badge mit seinem eingebauten Rand. */
 .store-badge--amazon { margin-left: 8px; }
 .store-badge--amazon img { width: 235px; margin: 10px 0; }
+
+/* Noch kein Store-Eintrag: Hinweis statt Badge (das Badge darf nur einen
+   echten Eintrag verlinken). Auf Produktseiten und in den App-Karten. */
+.soon-note {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px;
+  background: var(--tint); color: var(--text); font-weight: 650; box-shadow: inset 0 0 0 1.5px var(--line);
+}
+.store-soon { margin-top: 16px; }
+
+/* Produktseite mit Store-Bildern (Rätselheft): Bild neben dem Text,
+   auf schmalen Screens darüber. */
+.feature { display: flex; gap: 24px; align-items: flex-start; margin-top: 2em; }
+.feature > img { flex: 0 0 auto; width: 170px; height: auto; border-radius: 14px; box-shadow: 0 6px 18px rgba(43, 38, 34, .14); }
+.feature h2 { margin-top: 0; }
+@media (max-width: 560px) {
+  .feature { flex-direction: column; align-items: stretch; gap: 14px; }
+  .feature > img { width: 56%; max-width: 230px; align-self: center; }
+}
 
 footer {
   text-align: center;

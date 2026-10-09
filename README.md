@@ -20,11 +20,19 @@ Gehostet über GitHub Pages (Branch `main`, Root):
 
 **App-Ebene** – ein Unterordner je App, gleicher Zuschnitt:
 
-    geburtstage/       index.html, datenschutz.html, datenschutz-en.html
-    silben-lesen/      index.html, datenschutz.html
-    uhr-lesen-lernen/  index.html, datenschutz.html
+Seit Oktober 2026 englische Verzeichnis-Pfade (PO-Regel: technische Bezeichner
+englisch), Deutsch an der Wurzel, Englisch unter `en/`. Zuordnung alt → neu:
+`C:\privat\hq\operations\domain-und-mail.md`, Abschnitt „Website-Pfade“.
+
+    birthdays/         index.html, privacy/        (Remindery: Geburtstage)
+    syllables/         index.html, privacy/        (Silben Lesen)
+    clock/             index.html, privacy/        (Uhr lesen lernen)
+    shopping/          index.html, privacy/, terms/, delete/
+    puzzles/           index.html, privacy/        (Kinder Rätselheft 1. & 2. Klasse)
     ubo/               index.html, privacy/, terms/, icon.png
-    ox/                nur noch Weiterleitungen nach ubo/ (alte Adressen, NICHT LÖSCHEN)
+    en/<app>/          englische Fassung der Produktseite
+    geburtstage/, silben-lesen/, uhr-lesen-lernen/, ox/, raetselheft/
+                       nur noch Weiterleitungen (alte Adressen, NICHT LÖSCHEN)
 
     arena-0xzhva/      privates Familien-Experiment (Monster-Arena), bewusst NICHT verlinkt,
                        nicht in der Sitemap, noindex. Kommt aus dem Repo monster-arena
