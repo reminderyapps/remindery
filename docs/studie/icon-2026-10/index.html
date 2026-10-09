@@ -200,6 +200,36 @@
       <use href="#spark" transform="translate(895 420) scale(.5)"/>
     </g>
   </symbol>
+
+  <!-- F: heutiges Zeichen, Sparkles klein INNERHALB des Herzens -->
+  <symbol id="f1" viewBox="0 0 1024 1024">
+    <use href="#i0"/>
+    <use href="#spark" fill="#E8604C" transform="translate(512 470) scale(1.25)"/>
+  </symbol>
+  <symbol id="f2" viewBox="0 0 1024 1024">
+    <use href="#i0"/>
+    <g fill="#E8604C">
+      <use href="#spark" transform="translate(545 490) scale(1.1)"/>
+      <use href="#spark" transform="translate(405 375) scale(.5)"/>
+      <use href="#spark" transform="translate(655 365) scale(.38)"/>
+    </g>
+  </symbol>
+  <symbol id="f3" viewBox="0 0 1024 1024">
+    <use href="#i0"/>
+    <g fill="#FFC857" stroke="#2B2622" stroke-width="9" stroke-linejoin="round">
+      <use href="#spark" transform="translate(545 490) scale(1.1)"/>
+      <use href="#spark" transform="translate(405 375) scale(.5)"/>
+      <use href="#spark" transform="translate(655 365) scale(.38)"/>
+    </g>
+  </symbol>
+  <symbol id="f4" viewBox="0 0 1024 1024">
+    <use href="#i0"/>
+    <g fill="#2B2622">
+      <use href="#spark" transform="translate(545 490) scale(1.1)"/>
+      <use href="#spark" transform="translate(405 375) scale(.5)"/>
+      <use href="#spark" transform="translate(655 365) scale(.38)"/>
+    </g>
+  </symbol>
 </svg>
 
 <div class="wrap">
@@ -211,8 +241,12 @@
 <script>
   const D = [
     ['i0', 'Heute', 'Korallkachel mit dem Herz aus der Geburtstags-Kerze. Zum Vergleich.'],
+    ['f1', 'F1 · ein Sparkle im Herz', 'Das heutige Zeichen, mittig im Herz ein einzelner Sparkle in Koralle. Am ruhigsten, hält auch in 16 px.'],
+    ['f2', 'F2 · ✨-Trio im Herz, Koralle', 'Ein großer und zwei kleine Sparkles im Herz, in der Farbe der Kachel – wirkt wie ausgestanzt. Klar „KI“, bleibt aber Remindery.', true],
+    ['f3', 'F3 · ✨-Trio im Herz, Gold', 'Wie F2, Sparkles in Gold mit dunkler Kontur – im Stil des Herzens, Gold wie die Gates auf der Methode-Seite.'],
+    ['f4', 'F4 · ✨-Trio im Herz, dunkel', 'Wie F2, Sparkles in der dunklen Konturfarbe. Am kontrastreichsten.'],
     ['e1', 'E1 · Herz + Sparkles, creme', 'Das heutige Zeichen unverändert, oben rechts ein großer und ein kleiner Sparkle im selben Stil wie das Herz.'],
-    ['e2', 'E2 · Herz + Sparkles, gold', 'Wie E1, die Sparkles in Gold – das Gold der Gates auf der Methode-Seite. Fällt mehr auf.', true],
+    ['e2', 'E2 · Herz + Sparkles, gold', 'Wie E1, die Sparkles in Gold – das Gold der Gates auf der Methode-Seite. Fällt mehr auf.'],
     ['e3', 'E3 · Herz + Sparkles, flach', 'Ohne dunkle Konturen, Herz etwas größer. Moderner, ruhiger.'],
     ['e4', 'E4 · Herz + ✨-Trio', 'Herz etwas kleiner, daneben drei goldene Sparkles wie im Emoji. Am deutlichsten „KI“.'],
     ['c1', 'C1 · Prompt + großes Herz', 'Herz rund ein Drittel größer, der Pfeil rückt nach links. Noch mit der dunklen Kontur von heute.'],
