@@ -12,7 +12,8 @@ dann http://127.0.0.1:8790/method/
 - [x] Nav-Link „Methode/Method“ auf Start- und About-Seiten, Sitemap
 - [x] Wording: „ergänzen ihren Prozess um KI“ statt „schrauben“ (PO 10.10.)
 - [x] (10.10.) About-Seite an /method angleichen: „Apps in Wochen statt Jahren“ und „14 Tage im Schnitt“ sind überholt (Bautage siehe unten), Zahlen 4 → 5 Apps usw.
-- [ ] Startseite in Richtung A als Studio-Auftritt (Studie Screen 1); App-Unterseiten für Eltern bleiben
+- [x] Startseite bleibt hell (PO 10.10.: „nicht so dunkel“). Stattdessen /method mit hellem Einstieg und Übergang (Denoising → neuronales Netz) in den dunklen Teil – live 10.10.
+- [x] Vorschaubild og/remindery-en.png + -de.png (Vorlage docs/og/og-bild.html), OG-Tags auf Start/Methode/About; Nav „Apps“ → Seitenanfang – live 10.10.
 - [x] 10.10.2026 live: /method + About (Go des PO), Pages-Build grün, Seiten live geprüft. Startseite folgt als nächstes Paket, danach erneut Go.
 
 ## Zahlen (gezählt 10.10.2026, Skript-Logik unten)
