@@ -162,8 +162,8 @@ T = {
  desc="How one human runs a company of AI agents: five functions with a mandate, ten agents, three human gates and autonomy earned by evidence – with five apps in the stores as proof.",
  eyebrow="One-Human Company",
  kicker="AI transformation with earned autonomy – run human above the loop.",
- h1="A company run by agents.<br><em>Steered by one human.</em>",
- lead="AI agents do the work, one human makes the calls – and the agents only get the freedom they have earned. Five apps in the stores are the proof.",
+ h1="A company run by AI agents,<br><em>steered by one human.</em>",
+ lead="AI agents take over the classic business functions – product, tech, marketing, finance and legal. The human makes every call that matters. Agents only gain more autonomy once they have earned it (earned autonomy). Five apps in the stores show the efficiency gain of every iteration.",
  b1="Read the principles ↓", b2="Watch a real night",
  th_eb="The thesis",
  th_h2="Most companies add AI to their org chart.<br>We drew the org chart for AI.",
@@ -222,8 +222,8 @@ T = {
  desc="Wie ein Mensch ein Unternehmen mit KI-Agenten führt: fünf Abteilungen mit klarem Auftrag, zehn Agenten, drei menschliche Freigaben und Autonomie nur mit Beleg – fünf Apps in den Stores als Beweis.",
  eyebrow="One-Human Company",
  kicker="KI-Transformation mit Earned Autonomy – nach dem Prinzip Human above the Loop.",
- h1="Ein Unternehmen, betrieben von KI-Agenten.<br><em>Gesteuert von einem Menschen.</em>",
- lead="KI-Agenten erledigen die Arbeit, ein Mensch trifft die Entscheidungen – und Freiheit bekommen die Agenten nur, wenn sie sie sich verdient haben. Fünf Apps in den Stores sind der Beweis.",
+ h1="Ein Unternehmen, betrieben von KI-Agenten,<br><em>gesteuert von einem Menschen.</em>",
+ lead="KI-Agenten übernehmen die klassischen Unternehmensbereiche Product, Tech, Marketing, Finance und Legal. Der Mensch trifft alle wichtigen Entscheidungen. Mehr Autonomie erhalten die Agenten nur, wenn sie sie sich verdient haben (Earned-Autonomy-Prinzip). Fünf Apps in den Stores belegen den Effizienzgewinn jeder Iteration.",
  b1="Die Prinzipien lesen ↓", b2="Eine echte Nacht ansehen",
  th_eb="Die These",
  th_h2="Die meisten Firmen ergänzen sich um KI.<br>Wir haben uns um sie herum erfunden.",
@@ -425,7 +425,6 @@ for lang, path in (("en", ROOT / "en/method/index.html"), ("de", ROOT / "method/
         <div class="eyebrow">{t["eyebrow"]}</div>
         <h1>{t["h1"]}</h1>
         <p class="lead">{t["lead"]}</p>
-        <div class="hero-tags"><span class="bz">Earned Autonomy</span><span class="bz">Human above the Loop</span></div>
         <div class="btns"><a class="btn pri" href="#principles">{t["b1"]}</a><a class="btn" href="#night">{t["b2"]}</a></div>
       </div>
     </section>'''
