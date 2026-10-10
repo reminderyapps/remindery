@@ -224,7 +224,7 @@ T = {
  lead="Product, Tech, Marketing, Finanzen, Recht: Jeder Bereich hat einen klaren Auftrag, einen festen Rhythmus und einen Wissensspeicher – die Arbeit erledigen KI-Agenten. Ein Mensch trifft jede Entscheidung, auf die es ankommt. Fünf Apps in den Stores sind der Beweis. Der eigentliche Kern ist das Betriebsmodell dahinter.",
  b1="Die Prinzipien lesen ↓", b2="Eine echte Nacht ansehen",
  th_eb="Die These",
- th_h2="Die meisten Unternehmen bauen KI in ihr Organigramm ein.<br>Wir haben das Organigramm für KI neu gezeichnet.",
+ th_h2="Die meisten Firmen ergänzen sich um KI.<br>Wir haben uns um sie herum erfunden.",
  th_lead="Wenn Arbeit fast nichts mehr kostet, sind nicht mehr Hände knapp, sondern Urteilskraft, Gedächtnis und Vertrauen. Darum haben wir das Unternehmen um genau diese drei Dinge herum gebaut – alles andere erledigen KI-Agenten.",
  shifts=[("Köpfe","Funktionen","Eine Abteilung ist keine Gruppe von Menschen mehr, sondern ein Auftrag, ein Rhythmus und eine Akte."),
          ("Machen","Entscheiden","Der Mensch macht nicht die Arbeit. Er trifft die Entscheidungen – und nur die."),
