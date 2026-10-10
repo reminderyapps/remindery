@@ -661,3 +661,30 @@ article blockquote {
 /* Einheitliche Seitenköpfe auf allen Seiten (10.10.2026): Startseite ist die Vorlage */
 .eyebrow { font-size: .78rem; font-weight: 650; letter-spacing: .09em; color: var(--accent-text); }
 .studio-hero h1 { font-size: clamp(2.3rem, 5.4vw, 3.9rem); letter-spacing: -.015em; line-height: 1.2; font-weight: 700; }
+
+/* Einheitliche Seiten (Breite, Start, Fußzeile, Schriften) – 10.10.2026, Vorlage Startseite */
+.site-foot .wrap { max-width: 1120px; margin: 0 auto; padding-inline: var(--gutter); }
+main.studio { max-width: 1120px; padding: 72px var(--gutter) 64px; }
+.studio-hero { padding-top: 0; }
+.studio-hero h1 { margin-top: 16px; }
+.studio-hero .pitch { font-size: clamp(1.08rem, 1.6vw, 1.25rem); margin-top: 20px; }
+.studio h2, .block h2, .founder h2, .cta h2 { font-family: var(--serif); font-weight: 700; font-size: clamp(1.7rem, 3.4vw, 2.4rem); line-height: 1.2; }
+.studio h3 { font-family: var(--serif); font-weight: 700; }
+.site-foot { text-align: left; padding: 0; border-top: 1px solid var(--line); background: var(--tint); color: var(--text-soft); font-size: .93rem; }
+.site-foot nav { display: block; margin: 0; }
+.site-foot .foot-in { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 32px; padding-block: 48px 28px; }
+.site-foot .foot-in h2 { font-family: var(--sans); font-size: .78rem; font-weight: 650; letter-spacing: .09em; text-transform: uppercase; color: var(--text); margin: 0 0 8px; }
+.site-foot .foot-in ul { list-style: none; margin: 0; padding: 0; }
+.site-foot .foot-in li a { display: inline-flex; align-items: center; min-height: 44px; color: var(--text-soft); }
+.site-foot .foot-in li a:hover { color: var(--text); }
+.site-foot .foot-brand p { margin: 12px 0 0; max-width: 22em; }
+.site-foot .foot-base { border-top: 1px solid var(--line); padding-block: 18px 32px; font-size: .82rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+.site-foot .foot-base p { margin: 0; }
+@media (max-width: 760px) { .site-foot .foot-in { grid-template-columns: 1fr 1fr; } .site-foot .foot-brand { grid-column: 1 / -1; } }
+
+
+/* Gleiche Starthöhe: Text oben statt vertikal zentriert, gleiche Zeilenhöhe der kleinen Zeile */
+.home .home-hero { align-items: start; }
+.eyebrow, .home .eyebrow { line-height: 1.65; }
+.studio-hero .eyebrow { display: block; }
+@media (max-width: 860px) { main.studio { padding-top: 40px; } }

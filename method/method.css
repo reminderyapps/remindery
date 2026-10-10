@@ -466,3 +466,32 @@ html[lang="de"] .shelf .tx span::before { content: "lädt › "; }
 .hero-light .eyebrow { font: 650 .78rem/1 var(--sans); letter-spacing: .09em; text-transform: uppercase; color: var(--p-accent-text); }
 .hero-light h1 { font-family: var(--serif); font-weight: 700; font-size: clamp(2.3rem, 5.4vw, 3.9rem); letter-spacing: -.015em; line-height: 1.2; margin-top: 16px; }
 .hero-light h1 em { font-style: italic; }
+
+/* Einheitliche Seiten (Breite, Start, Fußzeile, Schriften) – 10.10.2026, Vorlage Startseite */
+.wrap { padding-inline: clamp(16px, 4vw, 32px); }
+body { line-height: 1.65; }
+.s h2 { font-family: var(--serif); font-weight: 700; font-size: clamp(1.7rem, 3.4vw, 2.4rem); line-height: 1.2; letter-spacing: -.012em; }
+.s h3 { font-family: var(--serif); font-weight: 700; letter-spacing: -.005em; }
+.s .eyebrow { font: 650 .78rem/1 var(--sans); letter-spacing: .09em; text-transform: uppercase; color: var(--accent); }
+.lead { font-size: clamp(1.08rem, 1.6vw, 1.25rem); }
+.btn { border-radius: 999px; font-weight: 700; padding: 12px 26px; }
+.claim, .claim-s { font-family: var(--serif); font-weight: 700; letter-spacing: -.012em; }
+.site-foot { background: var(--p-tint); border-top: 1px solid var(--p-line); color: var(--p-soft); font-size: .93rem; line-height: 1.65; }
+.site-foot a { color: var(--p-soft); text-decoration: none; }
+.site-foot nav { display: block; margin: 0; }
+.site-foot .foot-in { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 32px; padding-block: 48px 28px; }
+.site-foot .foot-in h2 { font: 650 .78rem/1.4 var(--sans); letter-spacing: .09em; text-transform: uppercase; color: var(--p-text); margin: 0 0 8px; }
+.site-foot .foot-in ul { list-style: none; margin: 0; padding: 0; }
+.site-foot .foot-in li a { display: inline-flex; align-items: center; min-height: 44px; }
+.site-foot .foot-in li a:hover { color: var(--p-text); }
+.site-foot .site-brand { color: var(--p-text); }
+.site-foot .foot-brand p { margin: 12px 0 0; max-width: 22em; }
+.site-foot .foot-base { border-top: 1px solid var(--p-line); padding-block: 18px 32px; font-size: .82rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+.site-foot .foot-base p { margin: 0; }
+@media (max-width: 760px) { .site-foot .foot-in { grid-template-columns: 1fr 1fr; } .site-foot .foot-brand { grid-column: 1 / -1; } }
+
+
+/* Gleiche Starthöhe wie Start und Über uns */
+.hero-light .eyebrow { line-height: 1.65; display: block; }
+.hero-light .eyebrow { margin-bottom: 0; }
+@media (max-width: 860px) { .hero-light { padding-top: 40px; } }
