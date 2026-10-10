@@ -31,6 +31,6 @@ Nacht-Replay: Rätselblock-Git-Log 07.10. 23:34 → 08.10. 06:07, 121 Commits; S
 
 ## Entscheidungen
 
-- Fehler-Abschnitt („Jede Regel wurde einmal bezahlt“) bleibt drin.
+- Fehler-Abschnitt („Jede Regel wurde einmal bezahlt“) am 10.10. entfernt (PO: wirkt nicht wie Lernen, eher schwach).
 - Stufenleiter nur in eigenen Worten, auf Remindery angewendet (Ursprung: vertrauliches Papier, keine Formulierungen übernehmen).
 - Arbeitgeber des PO wird nirgends genannt.
