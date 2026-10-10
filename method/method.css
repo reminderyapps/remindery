@@ -416,3 +416,12 @@ html[lang="de"] .shelf .tx span::before { content: "lädt › "; }
   .ro { grid-template-columns: 1fr; gap: 2px; }
   .ro .ar { display: none; }
 }
+
+/* Tempo: Komplexitäts-Marker */
+.speed .row { grid-template-columns: minmax(150px, 330px) 1fr; padding: 4px 0; }
+.speed .row + .row { border-top: 1px dashed rgba(139, 152, 165, .14); padding-top: 12px; }
+@media (max-width: 620px) { .speed .row { grid-template-columns: 1fr; gap: 6px; } }
+.speed .drv { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.speed .drv .d { font: 500 10.5px/1 var(--mono); padding: 4px 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--soft); white-space: nowrap; }
+.speed .drv .d.n { border-color: color-mix(in srgb, var(--gate) 70%, transparent); color: var(--gate); background: color-mix(in srgb, var(--gate) 10%, transparent); }
+.legend .lg-neu i { width: 14px; height: 10px; border-radius: 999px; border: 1px solid var(--gate); background: color-mix(in srgb, var(--gate) 10%, transparent); }

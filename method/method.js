@@ -19,8 +19,11 @@
   // Tempo-Kurve: Bautage (aktiv) vor Kalendertagen
   const speed = document.getElementById('speed');
   const max = Math.max(...D.speed.map(a => a[2]));
-  speed.innerHTML = D.speed.map(([name, when, act, cal, note]) =>
-    `<div class="row"><div class="name">${name}<small>${when}${note ? ' · ' + note : ''}</small></div>
+  const seen = new Set();
+  speed.innerHTML = D.speed.map(([name, when, act, cal, note, drv = []]) =>
+    `<div class="row"><div class="name">${name}<small>${when}${note ? ' · ' + note : ''}</small>
+     <div class="drv">${drv.map(k => { const n = !seen.has(k); seen.add(k);
+       return `<span class="d${n ? ' n' : ''}"${n ? ` title="${D.drv._neu}"` : ''}>${D.drv[k]}</span>`; }).join('')}</div></div>
      <div class="track"><div class="act" data-w="${act / max * 85}"></div>
      <div class="val" style="left:calc(${act / max * 85}% + 10px)">${act} ${D.days}</div></div></div>`).join('');
   onView(speed, () => {

@@ -21,7 +21,7 @@
   <link rel="alternate" hreflang="x-default" href="https://remindery.de/en/method/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=k1">
   <meta name="theme-color" content="#FAF7F2">
-  <link rel="stylesheet" href="/method/method.css?v=m5">
+  <link rel="stylesheet" href="/method/method.css?v=m6">
 </head>
 <body>
   <header class="site-head">
@@ -105,7 +105,7 @@
         <div class="eyebrow">Tempo</div>
         <h2>Jede App macht<br>die nächste schneller.</h2>
         <div class="speed" id="speed" aria-label="Bautage je App"></div>
-        <div class="legend"><span><i style="background:linear-gradient(90deg,#FF6B55,#ffb199)"></i>aktive Bautage</span></div>
+        <div class="legend"><span><i style="background:linear-gradient(90deg,#FF6B55,#ffb199)"></i>aktive Bautage</span><span class="lg-neu"><i></i>neu in dieser App</span></div>
         <p class="note">Bautage = Tage mit Commits, vom ersten Commit bis zur Einreichung im Store. Die Prüfzeit der Stores ist nicht eingerechnet – die liegt bei den Stores.</p>
 
         <div class="stats">
@@ -285,13 +285,14 @@
   {
     "dive": ["> company.status()", "5 Funktionen · 10 Agents · 3 Gates · live"],
     "days": "Tage",
+    "drv": {"ui": "nur App, lokal", "voice": "Sprachclips", "img": "KI-Illustrationen", "buy": "In-App-Kauf", "cloud": "eigenes Backend", "ai": "KI im Backend", "asr": "Spracherkennung", "lang": "5 Sprachen", "sync": "Sync & Teilen", "ads": "Werbung", "gen": "30 Rätsel-Generatoren", "amz": "Play + Amazon ab Tag 1", "_neu": "neu"},
     "speed": [
-      ["Geburtstage", "Juli 2026", 4, 27, "Proof of Concept"],
-      ["Silben Lesen", "Aug. 2026", 9, 22, ""],
-      ["Uhr lesen lernen", "Aug. – Sep.", 7, 38, ""],
-      ["Ubo", "Sep.", 10, 11, "erste App mit KI-Backend"],
-      ["Einkaufsliste", "Sep. – Okt.", 5, 11, ""],
-      ["Rätselheft", "Okt.", 3, 3, "30 Rätselarten, 759 Sprachclips"]
+      ["Geburtstage", "Juli 2026", 4, 27, "Proof of Concept", ["ui"]],
+      ["Silben Lesen", "Aug. 2026", 9, 22, "", ["voice", "img"]],
+      ["Uhr lesen lernen", "Aug. – Sep.", 7, 38, "", ["voice", "buy"]],
+      ["Ubo – KI-Vokabeltrainer", "Sep.", 10, 11, "", ["cloud", "ai", "asr", "lang", "voice", "buy"]],
+      ["Einkaufsliste", "Sep. – Okt.", 5, 11, "", ["cloud", "sync", "ads", "buy"]],
+      ["Rätselheft", "Okt.", 3, 3, "", ["gen", "voice", "img", "buy", "amz"]]
     ],
     "night": [
       ["23:34", "Gerüst: Flavors, Build-Schalter, Speicher, Wächter-Tests"],
@@ -318,6 +319,6 @@
     ]
   }
   </script>
-  <script src="/method/method.js?v=m5" defer></script>
+  <script src="/method/method.js?v=m6" defer></script>
 </body>
 </html>
