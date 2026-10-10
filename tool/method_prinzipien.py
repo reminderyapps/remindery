@@ -225,7 +225,7 @@ T = {
  b1="Die Prinzipien lesen ↓", b2="Eine echte Nacht ansehen",
  th_eb="Die These",
  th_h2="Die meisten Firmen ergänzen sich um KI.<br>Wir haben uns um sie herum erfunden.",
- th_lead="Wenn Arbeit fast nichts mehr kostet, sind nicht mehr Hände knapp, sondern Urteilskraft, Gedächtnis und Vertrauen. Darum haben wir das Unternehmen um genau diese drei Dinge herum gebaut – alles andere erledigen KI-Agenten.",
+ th_lead="Wenn Umsetzungskosten marginal werden, sind nicht mehr die Ressourcen knapp, sondern Urteilskraft, Gedächtnis und Vertrauen. Darum haben wir das Unternehmen um genau diese drei Dinge herum gebaut – alles andere erledigen KI-Agenten.",
  shifts=[("Köpfe","Funktionen","Eine Abteilung ist keine Gruppe von Menschen mehr, sondern ein Auftrag, ein Rhythmus und eine Akte."),
          ("Machen","Entscheiden","Der Mensch macht nicht die Arbeit. Er trifft die Entscheidungen – und nur die."),
          ("Vertrauen","Beleg","Autonomie wird nicht verliehen, sondern verdient – gemessen am Urteil des Menschen."),
