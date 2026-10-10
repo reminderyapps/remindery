@@ -240,7 +240,7 @@ footer.m-foot nav { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 10
 .shifts { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 48px; }
 .shift { padding: 22px 20px; border-radius: var(--r); background: var(--card); border: 1px solid var(--line); }
 .shift .ft { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; font: 600 13px var(--mono); letter-spacing: .04em; text-transform: uppercase; }
-.shift s { color: var(--soft); text-decoration-color: var(--accent); text-decoration-thickness: 2px; }
+.shift s { font-size: 15px; color: color-mix(in srgb, var(--soft) 70%, var(--fg)); text-decoration-color: color-mix(in srgb, var(--accent) 75%, transparent); text-decoration-thickness: 1.5px; }
 .shift .ar { color: var(--accent); }
 .shift b { color: var(--fg); font-size: 22px; letter-spacing: -.02em; text-transform: none; font-family: var(--sans); }
 .shift p { margin: 14px 0 0; font-size: 15px; color: var(--soft); line-height: 1.5; }
