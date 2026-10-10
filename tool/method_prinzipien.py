@@ -158,10 +158,10 @@ ORG = {
 
 T = {
 "en": dict(
- title="The Remindery Method – a one-human company, human above the loop",
+ title="One-Human Company – AI transformation with earned autonomy | Remindery",
  desc="How one human runs a company of AI agents: five functions with a mandate, ten agents, three human gates and autonomy earned by evidence – with five apps in the stores as proof.",
- eyebrow="The Remindery Method · One-Human Company",
- kicker="AI transformation with earned autonomy: a one-human company, run human above the loop.",
+ eyebrow="One-Human Company",
+ kicker="AI transformation with earned autonomy – run human above the loop.",
  h1="A company run by agents.<br><em>Steered by one human.</em>",
  lead="Product, engineering, marketing, finance, legal: every function has a mandate, a rhythm and a memory – and AI agents do the work. One human owns every call that matters. Five apps in the stores are the proof. The operating model behind them is the point.",
  b1="Read the principles ↓", b2="Watch a real night",
@@ -218,10 +218,10 @@ T = {
  buzz=[("Agentic organisation","Functions with a mandate, staffed by agents, steered by a human."),("Earned autonomy","Agents move up only when their judgment matches the human's.")],
 ),
 "de": dict(
- title="Die Remindery-Methode – eine One-Human Company, Human above the Loop",
+ title="One-Human Company – KI-Transformation mit Earned Autonomy | Remindery",
  desc="Wie ein Mensch ein Unternehmen mit KI-Agenten führt: fünf Abteilungen mit klarem Auftrag, zehn Agenten, drei menschliche Freigaben und Autonomie nur mit Beleg – fünf Apps in den Stores als Beweis.",
- eyebrow="Die Remindery-Methode · One-Human Company",
- kicker="KI-Transformation mit Earned Autonomy: eine One-Human Company nach dem Prinzip Human above the Loop.",
+ eyebrow="One-Human Company",
+ kicker="KI-Transformation mit Earned Autonomy – nach dem Prinzip Human above the Loop.",
  h1="Ein Unternehmen, betrieben von KI-Agenten.<br><em>Gesteuert von einem Menschen.</em>",
  lead="Product, Tech, Marketing, Finanzen, Recht: Jeder Bereich hat einen klaren Auftrag, einen festen Rhythmus und einen Wissensspeicher – die Arbeit erledigen KI-Agenten. Ein Mensch trifft jede Entscheidung, auf die es ankommt. Fünf Apps in den Stores sind der Beweis. Der eigentliche Kern ist das Betriebsmodell dahinter.",
  b1="Die Prinzipien lesen ↓", b2="Eine echte Nacht ansehen",
