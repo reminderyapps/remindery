@@ -657,3 +657,7 @@ article blockquote {
 .product .site-foot .foot-base a { color: var(--text-soft); }
 .product .site-foot .foot-base nav { display: flex; flex-wrap: wrap; gap: 4px 20px; }
 .product .site-foot .foot-base nav a { display: inline-flex; align-items: center; min-height: 44px; }
+
+/* Einheitliche Seitenköpfe auf allen Seiten (10.10.2026): Startseite ist die Vorlage */
+.eyebrow { font-size: .78rem; font-weight: 650; letter-spacing: .09em; color: var(--accent-text); }
+.studio-hero h1 { font-size: clamp(2.3rem, 5.4vw, 3.9rem); letter-spacing: -.015em; line-height: 1.2; font-weight: 700; }

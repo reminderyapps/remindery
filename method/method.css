@@ -461,3 +461,8 @@ html[lang="de"] .shelf .tx span::before { content: "lädt › "; }
 .hero-light .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
 .hero-light .bz { margin-top: 0; border-color: var(--p-line); color: var(--p-soft); background: var(--p-tint); }
 .hero-light .bz::before { color: var(--p-accent); }
+
+/* Einheitliche Seitenköpfe auf allen Seiten (10.10.2026): wie Startseite und Über uns */
+.hero-light .eyebrow { font: 650 .78rem/1 var(--sans); letter-spacing: .09em; text-transform: uppercase; color: var(--p-accent-text); }
+.hero-light h1 { font-family: var(--serif); font-weight: 700; font-size: clamp(2.3rem, 5.4vw, 3.9rem); letter-spacing: -.015em; line-height: 1.2; margin-top: 16px; }
+.hero-light h1 em { font-style: italic; }
