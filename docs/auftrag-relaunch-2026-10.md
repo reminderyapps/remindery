@@ -15,6 +15,9 @@ dann http://127.0.0.1:8790/method/
 - [x] Startseite bleibt hell (PO 10.10.: „nicht so dunkel“). Stattdessen /method mit hellem Einstieg und Übergang (Denoising → neuronales Netz) in den dunklen Teil – live 10.10.
 - [x] Vorschaubild og/remindery-en.png + -de.png (Vorlage docs/og/og-bild.html), OG-Tags auf Start/Methode/About; Nav „Apps“ → Seitenanfang – live 10.10.
 - [x] 10.10.2026 live: /method + About (Go des PO), Pages-Build grün, Seiten live geprüft. Startseite folgt als nächstes Paket, danach erneut Go.
+- [ ] (10.10.) /method als Betriebsmodell: neuer Kopf („A company run by agents. Steered by one human.“),
+  These, sechs Prinzipien, Organigramm mit Reifegrad, Übersetzung; „Meet the agents“ geht im Organigramm auf.
+  Quelle: `C:\privat\hq\ventures\remindery\organisation.md`. Auf Zweig `relaunch`, wartet auf PO-Abnahme der Vorschau.
 
 ## Zahlen (gezählt 10.10.2026, Skript-Logik unten)
 
