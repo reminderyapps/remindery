@@ -200,3 +200,89 @@
     open(org.querySelector('.tile[data-open]'));
   });
 })();
+
+/* Gedächtnis: ein Lauf lädt, arbeitet, schreibt zurück, geht */
+(function () {
+  var v = document.querySelector('.memviz');
+  if (!v) return;
+  var S = JSON.parse(v.querySelector('.mv-data').textContent);
+  var $ = function (s) { return v.querySelector(s); };
+  var shelf = function (k) { return $('.shelf[data-s="' + k + '"]'); };
+  var wb = function (k) { return $('.wb[data-s="' + k + '"]'); };
+  var ctx = $('.ctx'), bus = $('.bus'), who = $('.ctx-agent .who'), runEl = $('.ctx-run'), log = $('.ctx-log');
+  var files = $('.lv-fi'), checks = [].slice.call(v.querySelectorAll('.lv-br i')), grid = $('.lv-ch');
+  var COLS = window.matchMedia('(max-width: 560px)').matches ? 24 : 32, ROWS = 6, cells = [];
+  for (var i = 0; i < COLS * ROWS; i++) {
+    var c = document.createElement('i');
+    var filled = i < COLS * ROWS - 26;
+    if (filled) { var r = Math.random(); c.className = r < .35 ? 'd1' : r < .7 ? 'd2' : r < .88 ? 'd3' : ''; }
+    grid.appendChild(c); cells.push(c);
+  }
+  var next = COLS * ROWS - 26, run = S.start, ri = 0, step = 0, timer = null, running = false;
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function say(t) {
+    var d = document.createElement('div'); d.textContent = t; log.appendChild(d);
+    while (log.children.length > 3) log.removeChild(log.firstChild);
+  }
+  function act(keys) { v.querySelectorAll('.shelf').forEach(function (s) { s.classList.toggle('act', keys.indexOf(s.dataset.s) >= 0); }); }
+  function load(k) { act([k]); bus.className = 'bus in'; wb(k).classList.add('on'); }
+
+  var STEPS = [
+    [1300, function () {
+      ctx.classList.remove('gone', 'work'); ctx.classList.add('sit');
+      var a = S.agents[ri % S.agents.length]; ri++; run++;
+      who.textContent = a[0] + ' · ' + a[1]; runEl.textContent = S.run + ' #' + run;
+      checks.forEach(function (c) { c.classList.remove('on'); });
+      cells.forEach(function (c) { c.classList.remove('pick', 'new'); });
+      act([]); bus.className = 'bus'; say(S.steps[0]);
+    }],
+    [1300, function () { load('hb'); say(S.steps[1]); }],
+    [1300, function () { load('fi'); say(S.steps[2]); }],
+    [1300, function () { load('br'); say(S.steps[3]); }],
+    [1500, function () {
+      load('ch'); say(S.steps[4]);
+      for (var n = 0; n < 3; n++) { var c = cells[(Math.random() * (next - 1)) | 0]; c.classList.add('pick'); }
+    }],
+    [1700, function () {
+      act(['br']); bus.className = 'bus'; ctx.classList.add('work'); say(S.steps[5]);
+      checks.forEach(function (c, i) { setTimeout(function () { c.classList.add('on'); }, 300 + i * 420); });
+    }],
+    [1900, function () {
+      ctx.classList.remove('work'); act(['fi', 'ch']); bus.className = 'bus out'; say(S.steps[6]);
+      var d = document.createElement('div'); d.className = 'new'; d.textContent = S.wrote.replace('{n}', run); files.appendChild(d);
+      while (files.children.length > 4) files.removeChild(files.firstChild);
+      if (next + 4 > cells.length) {
+        cells.forEach(function (c, i) { c.className = i < cells.length - 26 ? ['d1', 'd2', 'd3', ''][(Math.random() * 4) | 0] : ''; });
+        next = cells.length - 26;
+      }
+      for (var n = 0; n < 4; n++) (function (c, n) { setTimeout(function () { c.className = 'new'; }, n * 180); })(cells[next + n], n);
+      next += 4;
+    }],
+    [2200, function () {
+      act([]); bus.className = 'bus'; ctx.classList.remove('sit'); ctx.classList.add('gone');
+      v.querySelectorAll('.wb').forEach(function (w) { w.classList.remove('on'); });
+      who.textContent = S.empty; say(S.steps[7]);
+      setTimeout(function () { cells.forEach(function (c) { if (c.className === 'new') c.className = 'd3'; c.classList.remove('pick'); }); }, 900);
+    }]
+  ];
+
+  function tick() {
+    STEPS[step][1]();
+    var d = STEPS[step][0];
+    step = (step + 1) % STEPS.length;
+    timer = setTimeout(tick, d);
+  }
+  if (still) {
+    ctx.classList.add('sit'); who.textContent = S.agents[0][0] + ' · ' + S.agents[0][1]; runEl.textContent = S.run + ' #' + run;
+    v.querySelectorAll('.wb').forEach(function (w) { w.classList.add('on'); });
+    checks.forEach(function (c) { c.classList.add('on'); }); say(S.steps[7]);
+    return;
+  }
+  new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (e.isIntersecting && !running) { running = true; tick(); }
+      else if (!e.isIntersecting && running) { running = false; clearTimeout(timer); }
+    });
+  }, { threshold: .35 }).observe(v);
+})();
