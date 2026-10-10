@@ -179,3 +179,24 @@
   }).observe(dive);
   }
 })();
+
+/* Organigramm: aufklappbare Funktionen */
+(function () {
+  document.querySelectorAll('.orgc').forEach(function (org) {
+    function open(tile) {
+      org.querySelectorAll('.tile').forEach(function (t) { t.setAttribute('aria-expanded', t === tile ? 'true' : 'false'); });
+      org.querySelectorAll('.panel').forEach(function (p) { p.hidden = true; p.innerHTML = ''; });
+      if (!tile) return;
+      var panel = tile.closest('.org-row').nextElementSibling;
+      panel.innerHTML = tile.querySelector('.det').innerHTML;
+      panel.hidden = false;
+    }
+    function toggle(t) { open(t.getAttribute('aria-expanded') === 'true' ? null : t); }
+    org.addEventListener('click', function (e) { var t = e.target.closest('.tile'); if (t) toggle(t); });
+    org.addEventListener('keydown', function (e) {
+      var t = e.target.closest('.tile');
+      if (t && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); toggle(t); }
+    });
+    open(org.querySelector('.tile[data-open]'));
+  });
+})();
