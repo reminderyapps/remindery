@@ -456,3 +456,8 @@ html[lang="de"] .shelf .tx span::before { content: "lädt › "; }
 .hero-light .kicker { margin: 22px 0 0; max-width: 760px; font: 600 clamp(17px, 2.1vw, 22px)/1.35 var(--sans); letter-spacing: -.01em; color: var(--p-accent-text, #B5442F); }
 .hero-light .kicker + .lead { margin-top: 14px; }
 
+
+/* Hero aufgeräumt (10.10.2026) */
+.hero-light .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.hero-light .bz { margin-top: 0; border-color: var(--p-line); color: var(--p-soft); background: var(--p-tint); }
+.hero-light .bz::before { color: var(--p-accent); }

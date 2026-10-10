@@ -163,7 +163,7 @@ T = {
  eyebrow="One-Human Company",
  kicker="AI transformation with earned autonomy – run human above the loop.",
  h1="A company run by agents.<br><em>Steered by one human.</em>",
- lead="Product, engineering, marketing, finance, legal: every function has a mandate, a rhythm and a memory – and AI agents do the work. One human owns every call that matters. Five apps in the stores are the proof. The operating model behind them is the point.",
+ lead="AI agents do the work, one human makes the calls – and the agents only get the freedom they have earned. Five apps in the stores are the proof.",
  b1="Read the principles ↓", b2="Watch a real night",
  th_eb="The thesis",
  th_h2="Most companies add AI to their org chart.<br>We drew the org chart for AI.",
@@ -223,7 +223,7 @@ T = {
  eyebrow="One-Human Company",
  kicker="KI-Transformation mit Earned Autonomy – nach dem Prinzip Human above the Loop.",
  h1="Ein Unternehmen, betrieben von KI-Agenten.<br><em>Gesteuert von einem Menschen.</em>",
- lead="Product, Tech, Marketing, Finanzen, Recht: Jeder Bereich hat einen klaren Auftrag, einen festen Rhythmus und einen Wissensspeicher – die Arbeit erledigen KI-Agenten. Ein Mensch trifft jede Entscheidung, auf die es ankommt. Fünf Apps in den Stores sind der Beweis. Der eigentliche Kern ist das Betriebsmodell dahinter.",
+ lead="KI-Agenten erledigen die Arbeit, ein Mensch trifft die Entscheidungen – und Freiheit bekommen die Agenten nur, wenn sie sie sich verdient haben. Fünf Apps in den Stores sind der Beweis.",
  b1="Die Prinzipien lesen ↓", b2="Eine echte Nacht ansehen",
  th_eb="Die These",
  th_h2="Die meisten Firmen ergänzen sich um KI.<br>Wir haben uns um sie herum erfunden.",
@@ -424,8 +424,8 @@ for lang, path in (("en", ROOT / "en/method/index.html"), ("de", ROOT / "method/
       <div class="wrap">
         <div class="eyebrow">{t["eyebrow"]}</div>
         <h1>{t["h1"]}</h1>
-        <p class="kicker">{t["kicker"]}</p>
         <p class="lead">{t["lead"]}</p>
+        <div class="hero-tags"><span class="bz">Earned Autonomy</span><span class="bz">Human above the Loop</span></div>
         <div class="btns"><a class="btn pri" href="#principles">{t["b1"]}</a><a class="btn" href="#night">{t["b2"]}</a></div>
       </div>
     </section>'''
