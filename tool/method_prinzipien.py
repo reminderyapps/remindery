@@ -262,7 +262,7 @@ T = {
           rhythm="Rhythmus",agents="Agenten",skills="Skills",file="Akte",running="Läuft heute",next="Als Nächstes",none="nur Skripte, noch kein Agent"),
  org_note="Agenten sind die Mitarbeiter, nicht die Abteilungen. Eine Abteilung ist eine Akte – und ein Platz, den jeder passende Agent einnehmen kann.",
  ro_eb="Die Übersetzung",
- ro_h2="Alle Elemente der Organisation.<br>Anders besetzt.",
+ ro_h2="Dieselben Bausteine einer Organisation.<br>KI-transformiert.",
  ro_lead="Jede Rolle eines klassischen Unternehmens gibt es auch bei uns – sie sieht nur anders aus.",
  ro=[("Abteilung","Funktion","Auftrag, Rhythmus und Akte"),("Mitarbeiter","Agent","ein KI-Modell mit klarer Rolle und dem nötigen Wissen – für genau einen Auftrag"),
      ("Seniorität","Modellwahl","Opus, wo Urteil zählt, Sonnet, wo die Arbeit beschrieben ist"),("Gehalt","Token","das Budget, aus dem jeder Lauf bezahlt wird"),
@@ -278,6 +278,9 @@ T = {
 }
 
 e = html.escape
+
+PRIN_TAGS = ["Context Engineering", "Guardrails", "Human on the Loop", "Earned Autonomy", "LLM as Critic", "Continuous Improvement"]
+TH_TAG = "Agentic Organization"
 
 def meter(n, t):
     segs = "".join(f'<i class="{"on" if k <= n else ""}"></i>' for k in (1, 2, 3, 4))
@@ -348,7 +351,7 @@ def memviz(t):
 
 def blocks(lang, t):
     shifts = "".join(f'<div class="shift"><div class="ft"><s>{a}</s><span class="ar">→</span><b>{b}</b></div><p>{c}</p></div>' for a, b, c in t["shifts"])
-    prin = "".join(f'<div class="pr"><div class="pn">{i:02d}</div><h3>{h}</h3><p>{p}</p></div>' for i, (h, p) in enumerate(t["prin"], 1))
+    prin = "".join(f'<div class="pr"><div class="pn">{i:02d}</div><h3>{h}</h3><p>{p}</p><span class="bz">{PRIN_TAGS[i - 1]}</span></div>' for i, (h, p) in enumerate(t["prin"], 1))
     mem = memviz(t)
     legend = "".join(f'<span>{meter(n, t)}<em>{t["lv_d"][n]}</em></span>' for n in (1, 2, 3, 4))
     ro = "".join(f'<div class="ro"><span class="old">{a}</span><span class="ar">→</span><span class="new"><b>{b}</b>{c}</span></div>' for a, b, c in t["ro"])
@@ -358,6 +361,7 @@ def blocks(lang, t):
         <div class="eyebrow">{t["th_eb"]}</div>
         <h2>{t["th_h2"]}</h2>
         <p class="lead">{t["th_lead"]}</p>
+        <span class="bz">{TH_TAG}</span>
         <div class="shifts">{shifts}</div>
       </div>
     </section>
@@ -431,8 +435,6 @@ for lang, path in (("en", ROOT / "en/method/index.html"), ("de", ROOT / "method/
         s = s.replace(t["bio_old"], t["bio_new"])
     elif t["bio_new"] not in s:
         sys.exit(f"Bio nicht gefunden ({lang})")
-    if t["buzz"][0][0] not in s:
-        bz = "".join(f'\n          <div><b>{a}</b><span>{b}</span></div>' for a, b in t["buzz"])
-        s = sub(r'(<div class="buzz">)', lambda m: m.group(1) + bz, s)
+    # Buzzwords: seit 10.10.2026 als Etiketten an Prinzipien/Phasen, kein eigener Abschnitt mehr
     path.write_text(s, encoding="utf-8", newline="\n")
     print(lang, "ok", len(s), s.count('class="tile'))

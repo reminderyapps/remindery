@@ -21,7 +21,7 @@
   <link rel="alternate" hreflang="x-default" href="https://remindery.de/en/method/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=k1">
   <meta name="theme-color" content="#FAF7F2">
-  <link rel="stylesheet" href="/method/method.css?v=m10">
+  <link rel="stylesheet" href="/method/method.css?v=m11">
 </head>
 <body>
   <header class="site-head">
@@ -59,6 +59,7 @@
         <div class="eyebrow">The thesis</div>
         <h2>Most companies add AI to their org chart.<br>We drew the org chart for AI.</h2>
         <p class="lead">When work costs almost nothing to do, hands are no longer the scarce resource. Judgment, memory and trust are. So we organised around those three – and gave everything else to agents.</p>
+        <span class="bz">Agentic Organization</span>
         <div class="shifts"><div class="shift"><div class="ft"><s>Headcount</s><span class="ar">→</span><b>Functions</b></div><p>A department is no longer a group of people. It's a mandate, a rhythm and a file.</p></div><div class="shift"><div class="ft"><s>Doing</s><span class="ar">→</span><b>Deciding</b></div><p>The human doesn't do the work. The human owns the calls – and only those.</p></div><div class="shift"><div class="ft"><s>Trust</s><span class="ar">→</span><b>Evidence</b></div><p>Autonomy isn't granted. It's earned, measured against human judgment.</p></div><div class="shift"><div class="ft"><s>Caution</s><span class="ar">→</span><b>Courage</b></div><p>A company that only learns from its mistakes ends up afraid of everything. Ours has to put a bolder move on the table every month.</p></div></div>
       </div>
     </section>
@@ -67,7 +68,7 @@
       <div class="wrap">
         <div class="eyebrow">The principles</div>
         <h2>Six principles.<br>Everything else is implementation.</h2>
-        <div class="princ"><div class="pr"><div class="pn">01</div><h3>A function is a file, not a person.</h3><p>An agent's memory isn't a chat history – it's engineered. Every function keeps a file: mandate, rights, limits, open items, lessons. A run starts by reading it and ends by writing back. So any agent can take the chair – and nothing depends on who sat there yesterday.</p></div><div class="pr"><div class="pn">02</div><h3>Can is not may.</h3><p>Skills teach an agent how to do something. Whether it's allowed to is written in the mandate – and enforced by code, not by good intentions. An agent that knows how to upload to a store still can't.</p></div><div class="pr"><div class="pn">03</div><h3>Humans own the calls.</h3><p>Three gates stay human: what gets built, what's good enough, what goes live. Everything in between runs on its own – often overnight.</p></div><div class="pr"><div class="pn">04</div><h3>Autonomy is earned.</h3><p>A step moves up only when the agent's judgment has matched the human's on the same cases, again and again. Some steps never move: taste isn't what gets automated, it's what the automation is for.</p></div><div class="pr"><div class="pn">05</div><h3>Challenge comes from outside the line.</h3><p>A critic and an advocate review every function – and report to the human, not to the function they review. An agent supervising its own kind inherits its blind spots.</p></div><div class="pr"><div class="pn">06</div><h3>Learn in three directions.</h3><p>Every month: what to tighten, what to loosen, where to be bolder. All three need the human's yes. Otherwise a company only learns from its scars – and slowly stops daring anything.</p></div></div>
+        <div class="princ"><div class="pr"><div class="pn">01</div><h3>A function is a file, not a person.</h3><p>An agent's memory isn't a chat history – it's engineered. Every function keeps a file: mandate, rights, limits, open items, lessons. A run starts by reading it and ends by writing back. So any agent can take the chair – and nothing depends on who sat there yesterday.</p><span class="bz">Context Engineering</span></div><div class="pr"><div class="pn">02</div><h3>Can is not may.</h3><p>Skills teach an agent how to do something. Whether it's allowed to is written in the mandate – and enforced by code, not by good intentions. An agent that knows how to upload to a store still can't.</p><span class="bz">Guardrails</span></div><div class="pr"><div class="pn">03</div><h3>Humans own the calls.</h3><p>Three gates stay human: what gets built, what's good enough, what goes live. Everything in between runs on its own – often overnight.</p><span class="bz">Human on the Loop</span></div><div class="pr"><div class="pn">04</div><h3>Autonomy is earned.</h3><p>A step moves up only when the agent's judgment has matched the human's on the same cases, again and again. Some steps never move: taste isn't what gets automated, it's what the automation is for.</p><span class="bz">Earned Autonomy</span></div><div class="pr"><div class="pn">05</div><h3>Challenge comes from outside the line.</h3><p>A critic and an advocate review every function – and report to the human, not to the function they review. An agent supervising its own kind inherits its blind spots.</p><span class="bz">LLM as Critic</span></div><div class="pr"><div class="pn">06</div><h3>Learn in three directions.</h3><p>Every month: what to tighten, what to loosen, where to be bolder. All three need the human's yes. Otherwise a company only learns from its scars – and slowly stops daring anything.</p><span class="bz">Continuous Improvement</span></div></div>
         <div class="memory" id="memory">
           <h3>How memory works</h3>
           <p class="lead">Not one endless chat history, but four layers – each loaded exactly when it's needed. That's context engineering.</p>
@@ -125,12 +126,12 @@
         <h2>How work flows<br>through the company.</h2>
         <p class="lead">Six phases. Every step is an agent with a clear role, a versioned skill and a definition of done. Agents run on their own – the founder is on the loop, and in the loop at exactly three points: the concept, the sign-off and the Go.</p>
         <div class="pipe" id="pipe">
-          <div class="node"><div class="n">01</div><h3>Discovery</h3><p>Research agents crunch store data, reviews and search demand. A critic and an advocate argue every idea – weak ones die by numbers.</p><span class="who">agents</span></div>
-          <div class="node gate"><div class="n">02</div><h3>Concept</h3><p>Two or three concept agents pitch in parallel strands. A critic tears the merged spec apart before a line of code exists.</p><span class="who">founder decides</span></div>
-          <div class="node"><div class="n">03</div><h3>Build</h3><p>An orchestrator cuts the work into packages and runs builder agents in parallel – often overnight, with a written brief and hard stop rules.</p><span class="who">agents</span></div>
-          <div class="node"><div class="n">04</div><h3>Create</h3><p>Stories and scripts by Claude, checked by an editor agent. Illustrations from a local GPU pipeline, voice-over from Amazon Polly.</p><span class="who">agents</span></div>
-          <div class="node gate"><div class="n">05</div><h3>QA</h3><p>A QA agent checks the build against the spec, not just the tests. Every story, image and voice goes through human sign-off.</p><span class="who">human sign-off</span></div>
-          <div class="node gate"><div class="n">06</div><h3>Ship</h3><p>Listings, copy and screenshots from one source of truth. Everything is prepared – then it waits.</p><span class="who">waits for Go</span></div>
+          <div class="node"><div class="n">01</div><h3>Discovery</h3><p>Research agents crunch store data, reviews and search demand. A critic and an advocate argue every idea – weak ones die by numbers.</p><span class="bz ph">Agentic Workflows</span><span class="who">agents</span></div>
+          <div class="node gate"><div class="n">02</div><h3>Concept</h3><p>Two or three concept agents pitch in parallel strands. A critic tears the merged spec apart before a line of code exists.</p><span class="bz ph">Spec-driven Development</span><span class="who">founder decides</span></div>
+          <div class="node"><div class="n">03</div><h3>Build</h3><p>An orchestrator cuts the work into packages and runs builder agents in parallel – often overnight, with a written brief and hard stop rules.</p><span class="bz ph">Multi-Agent Orchestration · Unattended Runs</span><span class="who">agents</span></div>
+          <div class="node"><div class="n">04</div><h3>Create</h3><p>Stories and scripts by Claude, checked by an editor agent. Illustrations from a local GPU pipeline, voice-over from Amazon Polly.</p><span class="bz ph">GenAI Content Pipeline</span><span class="who">agents</span></div>
+          <div class="node gate"><div class="n">05</div><h3>QA</h3><p>A QA agent checks the build against the spec, not just the tests. Every story, image and voice goes through human sign-off.</p><span class="bz ph">Human Sign-off</span><span class="who">human sign-off</span></div>
+          <div class="node gate"><div class="n">06</div><h3>Ship</h3><p>Listings, copy and screenshots from one source of truth. Everything is prepared – then it waits.</p><span class="bz ph">Single Source of Truth</span><span class="who">waits for Go</span></div>
         </div>
         <p class="claim">AI does the work. <em>Humans own the calls.</em></p>
       </div>
@@ -217,27 +218,6 @@
       </div>
     </section>
 
-    <section class="s" id="buzzwords">
-      <div class="wrap">
-        <div class="eyebrow">In buzzwords</div>
-        <h2>Yes, it's agentic AI.<br>Here's what that means here.</h2>
-        <div class="buzz">
-          <div><b>Agentic organisation</b><span>Functions with a mandate, staffed by agents, steered by a human.</span></div>
-          <div><b>Earned autonomy</b><span>Agents move up only when their judgment matches the human's.</span></div>
-          <div><b>Agentic workflows</b><span>Agents plan, use tools, write code, run tests and commit – not chat, work.</span></div>
-          <div><b>Multi-agent orchestration</b><span>An orchestrator splits a release into packages and runs builders in parallel.</span></div>
-          <div><b>Human on the loop</b><span>Agents run alone; the founder sets direction and steps in at three gates.</span></div>
-          <div><b>LLM as critic</b><span>A dedicated critic – and an advocate – review specs and products before anyone else does.</span></div>
-          <div><b>Spec-driven development</b><span>Every build starts from a written spec; QA checks against it.</span></div>
-          <div><b>Context engineering</b><span>Versioned maps, skills and lessons every agent loads at start.</span></div>
-          <div><b>Guardrails</b><span>Live gate, resource locks, watchers – enforced by code, not by hope.</span></div>
-          <div><b>Unattended runs</b><span>Overnight work with a brief, hard stop rules and a morning review page.</span></div>
-          <div><b>Single source of truth</b><span>One store core feeds every listing, one log feeds the board.</span></div>
-          <div><b>GenAI content pipeline</b><span>Text, images and voice produced by models, curated by a human.</span></div>
-        </div>
-      </div>
-    </section>
-
     <section class="s" id="stack">
       <div class="wrap">
         <div class="eyebrow">Toolbox</div>
@@ -318,6 +298,6 @@
     ]
   }
   </script>
-  <script src="/method/method.js?v=m10" defer></script>
+  <script src="/method/method.js?v=m11" defer></script>
 </body>
 </html>
