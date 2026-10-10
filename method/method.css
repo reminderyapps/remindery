@@ -425,3 +425,23 @@ html[lang="de"] .shelf .tx span::before { content: "lädt › "; }
 .speed .drv .d { font: 500 10.5px/1 var(--mono); padding: 4px 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--soft); white-space: nowrap; }
 .speed .drv .d.n { border-color: color-mix(in srgb, var(--gate) 70%, transparent); color: var(--gate); background: color-mix(in srgb, var(--gate) 10%, transparent); }
 .legend .lg-neu i { width: 14px; height: 10px; border-radius: 999px; border: 1px solid var(--gate); background: color-mix(in srgb, var(--gate) 10%, transparent); }
+
+/* Tempo: Complexity */
+.cx { margin-top: 40px; padding: 26px 24px 20px; border-radius: var(--r); background: #0E141B; border: 1px solid var(--line); box-shadow: 0 20px 60px rgba(0, 0, 0, .35); }
+.cx-top { display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: center; }
+.cx-num { font: 700 clamp(64px, 11vw, 120px)/.9 var(--mono); letter-spacing: -.06em; color: var(--ok); text-shadow: 0 0 40px rgba(61, 220, 151, .25); }
+.cx-txt b { display: block; font-size: clamp(20px, 2.6vw, 28px); letter-spacing: -.02em; line-height: 1.15; }
+.cx-txt span { display: block; margin-top: 8px; color: var(--soft); font-size: 15px; max-width: 460px; }
+.cx-spark { display: block; width: 100%; max-width: 560px; height: auto; margin-top: 18px; overflow: visible; }
+.cx-spark polyline { fill: none; stroke: var(--ok); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+.cx-spark circle { fill: #0E141B; stroke: var(--ok); stroke-width: 2; }
+.cx-spark circle.end { fill: var(--ok); }
+.cx-spark text { fill: var(--soft); font: 10px var(--mono); text-anchor: middle; }
+.cx-foot { margin: 10px 0 0; font: 11px/1.5 var(--mono); color: var(--soft); }
+.sub-h { margin: 40px 0 0; font: 600 12px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--soft); }
+.sub-h + .speed { margin-top: 14px; }
+.speed .ic { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.speed .ic span { width: 24px; height: 24px; border-radius: 6px; display: grid; place-items: center; font-size: 13px; background: var(--card); border: 1px solid var(--line); }
+.legend.sym { gap: 8px 18px; }
+@media (max-width: 620px) { .cx-top { grid-template-columns: 1fr; gap: 8px; } }
+

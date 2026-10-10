@@ -19,13 +19,27 @@
   // Tempo-Kurve: Bautage (aktiv) vor Kalendertagen
   const speed = document.getElementById('speed');
   const max = Math.max(...D.speed.map(a => a[2]));
-  const seen = new Set();
-  speed.innerHTML = D.speed.map(([name, when, act, cal, note, drv = []]) =>
-    `<div class="row"><div class="name">${name}<small>${when}${note ? ' · ' + note : ''}</small>
-     <div class="drv">${drv.map(k => { const n = !seen.has(k); seen.add(k);
-       return `<span class="d${n ? ' n' : ''}"${n ? ` title="${D.drv._neu}"` : ''}>${D.drv[k]}</span>`; }).join('')}</div></div>
-     <div class="track"><div class="act" data-w="${act / max * 85}"></div>
-     <div class="val" style="left:calc(${act / max * 85}% + 10px)">${act} ${D.days}</div></div></div>`).join('');
+  const rows = D.speed.map(([name, when, act, cal, note, drv = []]) =>
+    ({ name, when, act, note, drv, rate: drv.reduce((s, k) => s + (D.w[k] || 0), 0) / act }));
+  const fmt = x => x.toLocaleString(document.documentElement.lang, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  const cx = document.getElementById('cx');
+  if (cx) {
+    const maxR = Math.max(...rows.map(r => r.rate)), n = rows.length;
+    const px = i => 24 + i * (452 / (n - 1)), py = r => 84 - r / maxR * 62;
+    cx.innerHTML = `<div class="cx-top"><div class="cx-num">${fmt(rows[n - 1].rate / rows[0].rate)}×</div>
+      <div class="cx-txt"><b>${D.cx.big}</b><span>${D.cx.sub}</span></div></div>
+      <svg class="cx-spark" viewBox="0 0 500 100" aria-hidden="true"><polyline points="${rows.map((r, i) => px(i) + ',' + py(r.rate)).join(' ')}"/>
+      ${rows.map((r, i) => `<circle cx="${px(i)}" cy="${py(r.rate)}" r="4.5" class="${i === n - 1 ? 'end' : ''}"/>
+      <text x="${px(i)}" y="${py(r.rate) - 11}">${r.name.split(/[ –]/)[0]}</text>`).join('')}</svg>
+      <p class="cx-foot">${D.cx.foot}</p>`;
+  }
+  speed.innerHTML = rows.slice().sort((a, b) => b.act - a.act).map(r =>
+    `<div class="row"><div class="name">${r.name}<small>${r.when}${r.note ? ' · ' + r.note : ''}</small>
+     <div class="ic">${r.drv.map(k => `<span title="${D.drv[k]}">${D.sym[k]}</span>`).join('')}</div></div>
+     <div class="track"><div class="act" data-w="${r.act / max * 85}"></div>
+     <div class="val" style="left:calc(${r.act / max * 85}% + 10px)">${r.act} ${D.days}</div></div></div>`).join('');
+  const leg = document.getElementById('sym-legend');
+  if (leg) leg.innerHTML = D.cols.map(k => `<span>${D.sym[k]} ${D.drv[k]}</span>`).join('');
   onView(speed, () => {
     speed.querySelectorAll('[data-w]').forEach(el => el.style.width = el.dataset.w + '%');
     speed.classList.add('go');

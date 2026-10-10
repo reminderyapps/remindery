@@ -21,7 +21,7 @@
   <link rel="alternate" hreflang="x-default" href="https://remindery.de/en/method/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=k1">
   <meta name="theme-color" content="#FAF7F2">
-  <link rel="stylesheet" href="/method/method.css?v=m6">
+  <link rel="stylesheet" href="/method/method.css?v=m10">
 </head>
 <body>
   <header class="site-head">
@@ -104,9 +104,11 @@
         <div class="status">pipeline live · 32 agent runs in the board's first 3 days</div>
         <div class="eyebrow">Speed</div>
         <h2>Every app makes<br>the next one faster.</h2>
-        <div class="speed" id="speed" aria-label="Build days per app"></div>
-        <div class="legend"><span><i style="background:linear-gradient(90deg,#FF6B55,#ffb199)"></i>active build days</span><span class="lg-neu"><i></i>new in this app</span></div>
-        <p class="note">Build days = days with commits, from the first commit to store submission. Store review time is not included – that part belongs to the stores.</p>
+        <div class="cx" id="cx"></div>
+        <div class="sub-h">Dev days per app</div>
+        <div class="speed" id="speed" aria-label="Dev days per app"></div>
+        <div class="legend sym" id="sym-legend"></div>
+        <p class="note">Dev days = days with commits, from the first commit to store submission. Store review time is not included.</p>
 
         <div class="stats">
           <div class="stat"><b>5</b><span>apps live – Google Play and Amazon Appstore</span></div>
@@ -285,14 +287,18 @@
   {
     "dive": ["> company.status()", "5 functions · 10 agents · 3 gates · live"],
     "days": "days",
-    "drv": {"ui": "app only, local", "voice": "voice clips", "img": "AI illustrations", "buy": "in-app purchase", "cloud": "own backend", "ai": "AI backend", "asr": "speech recognition", "lang": "5 languages", "sync": "sync & sharing", "ads": "ads", "gen": "30 puzzle generators", "amz": "Play + Amazon from day 1", "_neu": "new"},
+    "drv": {"fe": "Frontend", "be": "Backend", "iap": "In-app purchases", "ads": "In-app ads", "voice": "AI voice", "img": "AI illustrations", "ai": "AI features", "ml": "Multilingual"},
+    "cols": ["fe", "be", "iap", "ads", "voice", "img", "ai", "ml"],
+    "w": {"fe": 1, "be": 3, "iap": 2, "ads": 1, "voice": 2, "img": 2, "ai": 3, "ml": 1},
+    "sym": {"fe": "📱", "be": "☁️", "iap": "💶", "ads": "📣", "voice": "🔊", "img": "🎨", "ai": "✨", "ml": "🌐"},
+    "cx": {"big": "more complexity per dev day", "sub": "The puzzle book in October against the proof of concept in July – across six apps.", "foot": "Complexity points: backend and AI features 3 each · in-app purchases, AI voice, AI illustrations 2 each · frontend, ads, multilingual 1 each. Divided by dev days."},
     "speed": [
-      ["Birthdays", "Jul 2026", 4, 27, "proof of concept", ["ui"]],
-      ["Silben Lesen", "Aug 2026", 9, 22, "", ["voice", "img"]],
-      ["Uhr lesen lernen", "Aug – Sep", 7, 38, "", ["voice", "buy"]],
-      ["Ubo – AI vocabulary trainer", "Sep", 10, 11, "", ["cloud", "ai", "asr", "lang", "voice", "buy"]],
-      ["Einkaufsliste", "Sep – Oct", 5, 11, "", ["cloud", "sync", "ads", "buy"]],
-      ["Rätselheft", "Oct", 3, 3, "", ["gen", "voice", "img", "buy", "amz"]]
+      ["Birthdays", "Jul 2026", 4, 27, "proof of concept", ["fe", "ml"]],
+      ["Silben Lesen", "Aug 2026", 9, 22, "", ["fe", "iap", "voice", "img"]],
+      ["Uhr lesen lernen", "Aug – Sep", 7, 38, "", ["fe", "iap", "voice"]],
+      ["Ubo – AI vocabulary trainer", "Sep", 10, 11, "", ["fe", "be", "iap", "voice", "ai", "ml"]],
+      ["Einkaufsliste", "Sep – Oct", 5, 11, "", ["fe", "be", "iap", "ads", "ml"]],
+      ["Rätselheft", "Oct", 3, 3, "", ["fe", "iap", "voice", "img"]]
     ],
     "night": [
       ["23:34", "Scaffold: flavors, build switches, storage, guard tests"],
@@ -320,6 +326,6 @@
     ]
   }
   </script>
-  <script src="/method/method.js?v=m6" defer></script>
+  <script src="/method/method.js?v=m10" defer></script>
 </body>
 </html>

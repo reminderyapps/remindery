@@ -21,7 +21,7 @@
   <link rel="alternate" hreflang="x-default" href="https://remindery.de/en/method/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=k1">
   <meta name="theme-color" content="#FAF7F2">
-  <link rel="stylesheet" href="/method/method.css?v=m6">
+  <link rel="stylesheet" href="/method/method.css?v=m10">
 </head>
 <body>
   <header class="site-head">
@@ -104,9 +104,11 @@
         <div class="status">Pipeline live · 32 Agent-Runs in den ersten 3 Tagen des Boards</div>
         <div class="eyebrow">Tempo</div>
         <h2>Jede App macht<br>die nächste schneller.</h2>
-        <div class="speed" id="speed" aria-label="Bautage je App"></div>
-        <div class="legend"><span><i style="background:linear-gradient(90deg,#FF6B55,#ffb199)"></i>aktive Bautage</span><span class="lg-neu"><i></i>neu in dieser App</span></div>
-        <p class="note">Bautage = Tage mit Commits, vom ersten Commit bis zur Einreichung im Store. Die Prüfzeit der Stores ist nicht eingerechnet – die liegt bei den Stores.</p>
+        <div class="cx" id="cx"></div>
+        <div class="sub-h">Dev Days je App</div>
+        <div class="speed" id="speed" aria-label="Dev Days je App"></div>
+        <div class="legend sym" id="sym-legend"></div>
+        <p class="note">Dev Days = Tage mit Commits, vom ersten Commit bis zur Einreichung im Store. Die Prüfzeit der Stores ist nicht eingerechnet.</p>
 
         <div class="stats">
           <div class="stat"><b>5</b><span>Apps live – Google Play und Amazon Appstore</span></div>
@@ -285,14 +287,18 @@
   {
     "dive": ["> company.status()", "5 Funktionen · 10 Agents · 3 Gates · live"],
     "days": "Tage",
-    "drv": {"ui": "nur App, lokal", "voice": "Sprachclips", "img": "KI-Illustrationen", "buy": "In-App-Kauf", "cloud": "eigenes Backend", "ai": "KI im Backend", "asr": "Spracherkennung", "lang": "5 Sprachen", "sync": "Sync & Teilen", "ads": "Werbung", "gen": "30 Rätsel-Generatoren", "amz": "Play + Amazon ab Tag 1", "_neu": "neu"},
+    "drv": {"fe": "Frontend", "be": "Backend", "iap": "In-App Purchases", "ads": "In-App-Werbung", "voice": "KI-Sprache", "img": "KI-Illustrationen", "ai": "KI-Features", "ml": "Multilingual"},
+    "cols": ["fe", "be", "iap", "ads", "voice", "img", "ai", "ml"],
+    "w": {"fe": 1, "be": 3, "iap": 2, "ads": 1, "voice": 2, "img": 2, "ai": 3, "ml": 1},
+    "sym": {"fe": "📱", "be": "☁️", "iap": "💶", "ads": "📣", "voice": "🔊", "img": "🎨", "ai": "✨", "ml": "🌐"},
+    "cx": {"big": "mehr Complexity pro Dev Day", "sub": "Rätselheft im Oktober gegen den Proof of Concept im Juli – über sechs Apps hinweg.", "foot": "Complexity Points: Backend und KI-Features je 3 · In-App Purchases, KI-Sprache, KI-Illustrationen je 2 · Frontend, Werbung, Multilingual je 1. Geteilt durch die Dev Days."},
     "speed": [
-      ["Geburtstage", "Juli 2026", 4, 27, "Proof of Concept", ["ui"]],
-      ["Silben Lesen", "Aug. 2026", 9, 22, "", ["voice", "img"]],
-      ["Uhr lesen lernen", "Aug. – Sep.", 7, 38, "", ["voice", "buy"]],
-      ["Ubo – KI-Vokabeltrainer", "Sep.", 10, 11, "", ["cloud", "ai", "asr", "lang", "voice", "buy"]],
-      ["Einkaufsliste", "Sep. – Okt.", 5, 11, "", ["cloud", "sync", "ads", "buy"]],
-      ["Rätselheft", "Okt.", 3, 3, "", ["gen", "voice", "img", "buy", "amz"]]
+      ["Geburtstage", "Juli 2026", 4, 27, "Proof of Concept", ["fe", "ml"]],
+      ["Silben Lesen", "Aug. 2026", 9, 22, "", ["fe", "iap", "voice", "img"]],
+      ["Uhr lesen lernen", "Aug. – Sep.", 7, 38, "", ["fe", "iap", "voice"]],
+      ["Ubo – KI-Vokabeltrainer", "Sep.", 10, 11, "", ["fe", "be", "iap", "voice", "ai", "ml"]],
+      ["Einkaufsliste", "Sep. – Okt.", 5, 11, "", ["fe", "be", "iap", "ads", "ml"]],
+      ["Rätselheft", "Okt.", 3, 3, "", ["fe", "iap", "voice", "img"]]
     ],
     "night": [
       ["23:34", "Gerüst: Flavors, Build-Schalter, Speicher, Wächter-Tests"],
@@ -319,6 +325,6 @@
     ]
   }
   </script>
-  <script src="/method/method.js?v=m6" defer></script>
+  <script src="/method/method.js?v=m10" defer></script>
 </body>
 </html>
