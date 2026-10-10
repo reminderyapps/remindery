@@ -34,9 +34,10 @@ englisch), Deutsch an der Wurzel, Englisch unter `en/`. Zuordnung alt → neu:
     geburtstage/, silben-lesen/, uhr-lesen-lernen/, ox/, raetselheft/
                        nur noch Weiterleitungen (alte Adressen, NICHT LÖSCHEN)
 
-    arena-0xzhva/      privates Familien-Experiment (Monster-Arena), bewusst NICHT verlinkt,
+    arena/             privates Familien-Experiment (Monster-Arena), bewusst NICHT verlinkt,
                        nicht in der Sitemap, noindex. Kommt aus dem Repo monster-arena
                        (tool/veroeffentlichen.ps1) – dort ändern, nicht hier.
+    arena-0xzhva/      alte Adresse der Arena, leitet nur auf /arena/ weiter (noindex).
 
 Eine neue App bekommt einen neuen Ordner – **keine Dateien mehr im Root**.
 Jede App-Datenschutzerklärung enthält den Website-Teil noch einmal
