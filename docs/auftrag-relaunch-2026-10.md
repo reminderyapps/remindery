@@ -15,6 +15,7 @@ dann http://127.0.0.1:8790/method/
 - [x] Startseite bleibt hell (PO 10.10.: „nicht so dunkel“). Stattdessen /method mit hellem Einstieg und Übergang (Denoising → neuronales Netz) in den dunklen Teil – live 10.10.
 - [x] Vorschaubild og/remindery-en.png + -de.png (Vorlage docs/og/og-bild.html), OG-Tags auf Start/Methode/About; Nav „Apps“ → Seitenanfang – live 10.10.
 - [x] 10.10.2026 live: /method + About (Go des PO), Pages-Build grün, Seiten live geprüft. Startseite folgt als nächstes Paket, danach erneut Go.
+- [x] (10.10.) Tempo-Grafik nur noch Bautage (Kalender-Kästen raus), Geburtstage als PoC dazu – live.
 - [x] (10.10.) /method als Betriebsmodell: neuer Kopf („A company run by agents. Steered by one human.“),
   These, sechs Prinzipien, Organigramm mit Reifegrad, Übersetzung; „Meet the agents“ geht im Organigramm auf.
   Quelle: `C:\privat\hq\ventures\remindery\organisation.md`. Dazu Gedächtnis-Grafik (Lauf lädt, schreibt zurück, Kontext weg) und aufklappbares Organigramm. Live 10.10. (f8008a2), geprüft.
@@ -22,7 +23,7 @@ dann http://127.0.0.1:8790/method/
 ## Zahlen (gezählt 10.10.2026, Skript-Logik unten)
 
 Bautage = Tage mit Commits vom ersten Commit bis zur ersten Produktions-Einreichung (versionen.md je Repo):
-Silben 9 / 22 Kalendertage, Uhr 7 / 38 (Einreichdatum nur „~20.09.“ – PO prüft in der Console),
+Geburtstage (PoC) 4 / 27 (05.07. → Production 31.07.), Silben 9 / 22 Kalendertage, Uhr 7 / 38 (Einreichdatum nur „~20.09.“ – PO prüft in der Console),
 Ubo 10 / 11, Einkaufsliste 5 / 11, Rätselheft 3 / 3. Store-Prüfzeit nicht eingerechnet.
 Commits aller Repos (apps/*, remindery-site, hq, dedupliziert) 2.690; Tests (`test(`/`testWidgets(`) 4.391;
 mp3-Clips silben+uhr+raetselblock 7.527; Board-Läufe seit 07.10. 32.
