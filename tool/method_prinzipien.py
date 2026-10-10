@@ -233,7 +233,7 @@ T = {
  pr_eb="Die Prinzipien",
  pr_h2="Sechs Prinzipien.<br>Alles andere ist Umsetzung.",
  prin=[("Eine Funktion ist eine Akte, keine Person.","Das Gedächtnis eines Agenten ist kein Chatverlauf, sondern bewusst angelegt. Jede Funktion führt eine Akte: Auftrag, Rechte, Grenzen, offene Punkte, Lehren. Jeder Lauf liest sie zuerst und trägt am Ende ein, was sich geändert hat. So kann jeder Agent übernehmen – egal, wer gestern dran war."),
-       ("Können ist nicht Dürfen.","Skills bringen einem Agenten bei, wie etwas geht. Ob er es darf, steht in seinem Auftrag – und das setzt Code durch, nicht guter Wille. Ein Agent, der weiß, wie man eine App in den Store lädt, kommt trotzdem nicht dran."),
+       ("Können heißt nicht Dürfen.","Skills bringen einem Agenten bei, wie etwas geht. Ob er es darf, steht in seinem Auftrag – und das setzt Code durch, nicht guter Wille. Ein Agent, der weiß, wie man eine App in den Store lädt, kommt trotzdem nicht dran."),
        ("Entscheiden bleibt Menschensache.","An drei Stellen entscheidet immer ein Mensch: was gebaut wird, was gut genug ist und was live geht. Alles dazwischen läuft von allein – oft über Nacht."),
        ("Autonomie muss man sich verdienen.","Ein Arbeitsschritt bekommt erst mehr Freiheit, wenn das Urteil des Agenten bei denselben Fällen immer wieder mit dem des Menschen übereinstimmt. Manche Schritte bekommen sie nie: Geschmack automatisieren wir nicht – wir automatisieren, damit Zeit für ihn bleibt."),
        ("Kritik kommt von außen.","Ein Critic und ein Advocate prüfen jede Funktion – und berichten direkt an den Menschen, nicht an die Funktion, die sie prüfen. Denn wer seinesgleichen kontrolliert, hat dieselben blinden Flecken."),
