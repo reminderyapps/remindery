@@ -69,6 +69,8 @@
   }
   .kaufzeile { margin-top: 10px; font-size: .85rem; font-weight: 700; text-align: center; padding: 8px; border-radius: 10px; background: var(--panel2); }
   .kaufzeile.kann { background: linear-gradient(#f3d27a, var(--gold)); color: #2a1d00; box-shadow: 0 3px 0 var(--gold2); }
+  .sterne { margin: 2px 0 6px; font-size: .85rem; color: var(--gold); letter-spacing: 1px; }
+  .sterne small { color: var(--leise); letter-spacing: 0; }
   .kaufzeile.frage { background: linear-gradient(#9dff9d, #3fbf5a); color: #062a0e; box-shadow: 0 3px 0 #1e7a32; animation: glimm 1s infinite; }
   .weltkarte .portrait { height: 170px; }
   .weltkarte .portrait::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,.55)); }
@@ -481,6 +483,77 @@ const FIGUREN = {
     spezial: { name: "Albtraum", reichweite: 4, schaden: 4, heil: 2, text: "Albtraum aus 4 Feldern: 4 Schaden, heilt sich um 2." },
     faehigkeit: "<b>Geisterpferd:</b> Schwer zu treffen (Angriffe gehen bei 1–2 daneben), und jeder Treffer heilt es um 1.",
   },
+  // ---- Kaufmonster für 200 € (je zwei Fähigkeiten) und 300 € (je drei Fähigkeiten) ----
+  glutphoenix: {
+    name: "Glutphönix", element: "Feuer", farbe: "var(--feuer)", emoji: "🔥", bild: "bilder/glutphoenix.jpg", preis: 200,
+    leben: 11, schritte: 4, angriff: 3, reichweite: 2, angriffName: "Flammenkralle",
+    fliegt: true, saugt: 1,
+    spezial: { name: "Phönixfeuer", reichweite: 4, schaden: 4, heil: 2, text: "Phönixfeuer aus 4 Feldern: 4 Schaden, heilt sich um 2." },
+    faehigkeit: "<b>Feuervogel:</b> Fliegt über Seen und Felsen, und jeder Treffer heilt ihn um 1 Leben.",
+  },
+  vulkantitan: {
+    name: "Vulkantitan", element: "Feuer", farbe: "var(--feuer)", emoji: "🌋", bild: "bilder/vulkantitan.jpg", preis: 300,
+    leben: 16, schritte: 2, angriff: 4, reichweite: 1, angriffName: "Obsidianhorn",
+    panzer: 1, stoss: true, durchBusch: true,
+    spezial: { name: "Vulkanausbruch", reichweite: 3, schaden: 5, text: "Vulkanausbruch bis 3 Felder weit: 5 Schaden." },
+    faehigkeit: "<b>Lavapanzer:</b> Jeder Treffer gegen ihn macht 1 Schaden weniger. Sein Horn schleudert 1 Feld weg und brennt durch Büsche.",
+  },
+  frostwolf: {
+    name: "Frostwolf", element: "Eis", farbe: "var(--eis)", emoji: "🐺", bild: "bilder/frostwolf.jpg", preis: 200,
+    leben: 12, schritte: 4, angriff: 3, reichweite: 1, angriffName: "Frostbiss",
+    friert: true, anlauf: 1,
+    spezial: { name: "Frostgeheul", reichweite: 3, schaden: 4, frost: true, text: "Frostgeheul aus 3 Feldern: 4 Schaden und einfrieren." },
+    faehigkeit: "<b>Frostjagd:</b> Sein Biss friert ein. Ist er in diesem Zug gelaufen, macht er 1 Schaden mehr.",
+  },
+  eisdrache: {
+    name: "Eisdrache", element: "Eis", farbe: "var(--eis)", emoji: "🐲", bild: "bilder/eisdrache.jpg", preis: 300,
+    leben: 14, schritte: 3, angriff: 4, reichweite: 2, angriffName: "Frostatem",
+    fliegt: true, friert: true, panzer: 1,
+    spezial: { name: "Eissturm", reichweite: 4, schaden: 5, frost: true, text: "Eissturm aus 4 Feldern: 5 Schaden und einfrieren." },
+    faehigkeit: "<b>Eispanzer-Drache:</b> Fliegt über Seen und Felsen, sein Atem friert ein, und jeder Treffer gegen ihn macht 1 Schaden weniger.",
+  },
+  erdbohrer: {
+    name: "Erdbohrer", element: "Stein", farbe: "var(--stein)", emoji: "🪱", bild: "bilder/erdbohrer.jpg", preis: 200,
+    leben: 14, schritte: 3, angriff: 4, reichweite: 1, angriffName: "Bohrbiss",
+    panzer: 1, anlauf: 1,
+    spezial: { name: "Erdbohrung", reichweite: 3, schaden: 5, text: "Bricht aus 3 Feldern aus dem Boden: 5 Schaden." },
+    faehigkeit: "<b>Felsringe:</b> Jeder Treffer gegen ihn macht 1 Schaden weniger. Ist er gelaufen, macht sein Biss 1 Schaden mehr.",
+  },
+  stachelriese: {
+    name: "Stachelriese", element: "Stein", farbe: "var(--stein)", emoji: "🗿", bild: "bilder/stachelriese.jpg", preis: 300,
+    leben: 16, schritte: 2, angriff: 4, reichweite: 1, angriffName: "Stachelfaust",
+    panzer: 1, stoss: true, dornen: 1,
+    spezial: { name: "Stachelregen", reichweite: 3, schaden: 5, text: "Stachelregen bis 3 Felder weit: 5 Schaden." },
+    faehigkeit: "<b>Stachelfels:</b> Treffer gegen ihn machen 1 Schaden weniger, wer ihn trifft, verliert 1 Leben, und seine Faust schleudert 1 Feld weg.",
+  },
+  giftkroete: {
+    name: "Giftkröte", element: "Dschungel", farbe: "var(--dschungel)", emoji: "🐸", bild: "bilder/giftkroete.jpg", preis: 200,
+    leben: 13, schritte: 3, angriff: 2, reichweite: 2, angriffName: "Giftzunge",
+    gift: 2, dornen: 1,
+    spezial: { name: "Giftfontäne", reichweite: 4, schaden: 3, gift: 3, text: "Giftfontäne aus 4 Feldern: 3 Schaden und 3 Runden Gift." },
+    faehigkeit: "<b>Giftwarzen:</b> Ihre Zunge vergiftet 2 Runden lang, und wer sie trifft, verliert 1 Leben.",
+  },
+  dschungeltiger: {
+    name: "Dschungeltiger", element: "Dschungel", farbe: "var(--dschungel)", emoji: "🐯", bild: "bilder/dschungeltiger.jpg", preis: 300,
+    leben: 13, schritte: 4, angriff: 4, reichweite: 1, angriffName: "Säbelbiss",
+    gift: 2, anlauf: 1, durchBusch: true,
+    spezial: { name: "Dschungelsprung", reichweite: 3, schaden: 5, gift: 2, text: "Dschungelsprung aus 3 Feldern: 5 Schaden und 2 Runden Gift." },
+    faehigkeit: "<b>Säbelzahn:</b> Sein Biss vergiftet und trifft auch durch Büsche. Ist er gelaufen, macht er 1 Schaden mehr.",
+  },
+  schattenkatze: {
+    name: "Schattenkatze", element: "Schatten", farbe: "var(--schatten)", emoji: "🐈‍⬛", bild: "bilder/schattenkatze.jpg", preis: 200,
+    leben: 10, schritte: 4, angriff: 3, reichweite: 1, angriffName: "Schattenkralle",
+    spuk: true, anlauf: 1,
+    spezial: { name: "Schattensprung", reichweite: 4, schaden: 4, text: "Schattensprung aus 4 Feldern: 4 Schaden." },
+    faehigkeit: "<b>Lautlos:</b> Schwer zu treffen (Angriffe gehen bei 1–2 daneben). Ist sie gelaufen, macht ihre Kralle 1 Schaden mehr.",
+  },
+  geisterdrache: {
+    name: "Geisterdrache", element: "Schatten", farbe: "var(--schatten)", emoji: "💀", bild: "bilder/geisterdrache.jpg", preis: 300,
+    leben: 12, schritte: 3, angriff: 4, reichweite: 2, angriffName: "Geisterfeuer",
+    fliegt: true, spuk: true, saugt: 1,
+    spezial: { name: "Seelensturm", reichweite: 4, schaden: 5, heil: 2, text: "Seelensturm aus 4 Feldern: 5 Schaden, heilt sich um 2." },
+    faehigkeit: "<b>Geisterflügel:</b> Fliegt über Seen und Felsen, ist schwer zu treffen, und jeder Treffer heilt ihn um 1.",
+  },
 };
 const MAX = { leben: 16, schritte: 4, angriff: 4, reichweite: 2 };
 // Welten: bei der Auswahl tippt man zuerst eine Welt an, dann kommen ihre Monster heraus
@@ -630,6 +703,21 @@ const GEKAUFT_KEY = "monster-arena-gekauft";
 let gekauft = [[], []];      // je Spieler die Ids der gekauften Monster
 try { const g = JSON.parse(localStorage.getItem(GEKAUFT_KEY)); if (Array.isArray(g) && g.length === 2) gekauft = g.map(l => Array.isArray(l) ? l : []); } catch (e) { /* ohne Speicher weiter */ }
 function speichereGekauft() { try { localStorage.setItem(GEKAUFT_KEY, JSON.stringify(gekauft)); } catch (e) { /* ohne Speicher weiter */ } }
+// Aufleveln: Level 1–5 je Spieler und Monster, abwechselnd mit Geld und Pokalen bezahlt:
+// Level 2 = 50 €, Level 3 = 10 🏆, Level 4 = 150 €, Level 5 = 20 🏆.
+// Jedes Level +1 Leben, ab Level 3 +1 Angriff, auf Level 5 +1 Schritt.
+const LEVEL_KEY = "monster-arena-level", MAX_LEVEL = 5;
+const levelPreis = n => n % 2 === 0 ? { geld: 50 * (n - 1) } : { pokale: 5 * (n - 1) };
+const preisText = k => k.geld ? `${k.geld} €` : `${k.pokale} 🏆`;
+let level = [{}, {}];
+try { const l = JSON.parse(localStorage.getItem(LEVEL_KEY)); if (Array.isArray(l) && l.length === 2) level = l.map(o => o && typeof o === "object" ? o : {}); } catch (e) { /* ohne Speicher weiter */ }
+function speichereLevel() { try { localStorage.setItem(LEVEL_KEY, JSON.stringify(level)); } catch (e) { /* ohne Speicher weiter */ } }
+const gueltigesLevel = n => Math.min(MAX_LEVEL, Math.max(1, Math.floor(Number(n)) || 1));
+const levelVon = (sp, id) => gueltigesLevel(level[sp][id]);
+function mitLevel(id, n) {
+  const f = FIGUREN[id];
+  return { ...f, level: n, leben: f.leben + (n - 1), angriff: f.angriff + (n >= 3 ? 1 : 0), schritte: f.schritte + (n >= 5 ? 1 : 0) };
+}
 const besitzt = (i, id) => !FIGUREN[id].preis || gekauft[i].includes(id);
 // Gegen den Computer: Spieler 2 ist der Computer (Modus bleibt über „Nochmal spielen“ gespeichert)
 // Online: jedes Gerät ist ein Spieler; dessen Geld, Käufe, Welt und Pokale stehen immer auf Platz 0 (Spieler 1)
@@ -700,7 +788,8 @@ const GESCHENKE = [
   { icon: "💰", text: "20 €", geld: 20 },
 ];
 const geschenkNr = n => GESCHENKE[n % GESCHENKE.length];
-const leerPokal = () => ({ pokale: 0, abgeholt: 0, kugel: 0, leben: 0 });
+const leerPokal = () => ({ pokale: 0, abgeholt: 0, kugel: 0, leben: 0, ausgegeben: 0 });   // ausgegeben: fürs Aufleveln, der Pokal-Weg zählt weiter alle
+const freiePokale = sp => Math.max(0, pokal[sp].pokale - pokal[sp].ausgegeben);
 let pokal = [leerPokal(), leerPokal()];
 try { const p = JSON.parse(localStorage.getItem(POKAL_KEY)); if (Array.isArray(p) && p.length === 2) pokal = p.map(x => ({ ...leerPokal(), ...x })); } catch (e) { /* ohne Speicher weiter */ }
 function speicherePokale() { try { localStorage.setItem(POKAL_KEY, JSON.stringify(pokal)); } catch (e) { /* ohne Speicher weiter */ } }
@@ -888,10 +977,10 @@ function verbunden(c, gastgeber) {
   // Der Gast schickt zuerst seine Wahl, der Gastgeber antwortet mit seiner Wahl und dem Startwert für den Zufall
   if (!gastgeber) c.send({ typ: "wahl", ...meineWahl() });
 }
-const meineWahl = () => ({ id: wahl[0], kugel: pokal[0].kugel > 0, leben: pokal[0].leben > 0 });
+const meineWahl = () => ({ id: wahl[0], kugel: pokal[0].kugel > 0, leben: pokal[0].leben > 0, level: levelVon(0, wahl[0]) });
 function empfange(d) {
   if (d.typ === "wahl" && !spieler.length) {
-    const ihre = { id: d.id, kugel: !!d.kugel, leben: !!d.leben };
+    const ihre = { id: d.id, kugel: !!d.kugel, leben: !!d.leben, level: gueltigesLevel(d.level) };   // ältere Geräte schicken kein Level → 1
     if (!FIGUREN[ihre.id]) return;
     let start, karte;
     if (ich === 0) {                                   // der Wartende bestimmt Zufall und Karte
@@ -968,6 +1057,13 @@ for (const id of Object.keys(FIGUREN)) for (const sit of ["kampf", "volltreffer"
   img.src = szene(id, sit);
 }
 function szene(id, sit) { return `bilder/szenen/${id}_${sit}.jpg`; }
+// Porträt je Level: bilder/<id>_l<n>.jpg, fehlt es, bleibt das Grundbild
+for (const id of Object.keys(FIGUREN)) for (let n = 2; n <= MAX_LEVEL; n++) {
+  const img = new Image();
+  img.onload = () => { bildDa[id + "_l" + n] = true; if (spieler.length) zeichne(); else zeigeAuswahl(); };
+  img.src = `bilder/${id}_l${n}.jpg`;
+}
+const levelBild = (id, n) => n > 1 && bildDa[id + "_l" + n] ? `bilder/${id}_l${n}.jpg` : FIGUREN[id].bild;
 
 // Manga-Einblendung: tafeln = [{id, sit}], gibt ein Promise zurück (Tippen = weiter)
 function cutin(tafeln, ruf, el, dauer = 2200) {
@@ -988,7 +1084,7 @@ function cutin(tafeln, ruf, el, dauer = 2200) {
   });
 }
 
-function portraitStil(id) { return bildDa[id] ? `background-image:url(${FIGUREN[id].bild})` : ""; }
+function portraitStil(id, n = 1) { return bildDa[id] ? `background-image:url(${levelBild(id, n)})` : ""; }
 function ersatz(id) { return bildDa[id] ? "" : FIGUREN[id].emoji; }
 
 // ---------- Auswahl ----------
@@ -1025,16 +1121,22 @@ function zeigeAuswahl() {
     d.className = "figurkarte" + (vergeben ? " vergeben" : "") + (gesperrt ? " gesperrt" : "");
     d.dataset.vergeben = "Spieler " + (wahl.indexOf(id) + 1);
     d.style.setProperty("--el", f.farbe);
-    d.innerHTML = `<div class="portrait" style="${portraitStil(id)}"><span class="ersatz">${ersatz(id)}</span>
+    const lv = gesperrt ? 1 : levelVon(sp, id);
+    const w = mitLevel(id, lv);
+    d.innerHTML = `<div class="portrait" style="${portraitStil(id, lv)}"><span class="ersatz">${ersatz(id)}</span>
         <span class="element">${f.element}</span></div>${gesperrt ? `<span class="schloss">🔒 ${f.preis} €</span>` : ""}
       <div class="kartentext"><h3>${f.name}</h3>
-        <div class="wert"><span>❤️</span><span>Leben ${f.leben}</span>${pips(Math.round(f.leben / 2), MAX.leben / 2)}</div>
-        <div class="wert"><span>👣</span><span>Schritte ${f.schritte}</span>${pips(f.schritte, MAX.schritte)}</div>
-        <div class="wert"><span>⚔️</span><span>Angriff ${f.angriff}</span>${pips(f.angriff, MAX.angriff)}</div>
+        ${gesperrt ? "" : `<div class="sterne">${"⭐".repeat(lv)}${"☆".repeat(MAX_LEVEL - lv)} <small>Level ${lv}</small></div>`}
+        <div class="wert"><span>❤️</span><span>Leben ${w.leben}</span>${pips(Math.round(w.leben / 2), MAX.leben / 2)}</div>
+        <div class="wert"><span>👣</span><span>Schritte ${w.schritte}</span>${pips(w.schritte, MAX.schritte)}</div>
+        <div class="wert"><span>⚔️</span><span>Angriff ${w.angriff}</span>${pips(w.angriff, MAX.angriff)}</div>
         <div class="wert"><span>🎯</span><span>Reichweite ${f.reichweite}</span>${pips(f.reichweite, MAX.reichweite)}</div>
-        <div class="faehig">${f.faehigkeit}<br>⚡ <b>${f.spezial.name}:</b> ${f.spezial.text}<br>🏠 <b>Heimvorteil:</b> ${HEIMAT[f.element]}</div>${gesperrt ? kaufzeile(sp, f) : ""}</div>`;
+        <div class="faehig">${f.faehigkeit}<br>⚡ <b>${f.spezial.name}:</b> ${f.spezial.text}<br>🏠 <b>Heimvorteil:</b> ${HEIMAT[f.element]}</div>${gesperrt ? kaufzeile(sp, f) : levelzeile(sp, lv)}</div>`;
     if (gesperrt) d.onclick = () => kaufen(sp, id, d);
-    else if (!vergeben) d.onclick = () => waehle(id);
+    else {
+      d.onclick = () => waehle(id);
+      d.querySelector(".levelzeile").onclick = e => { e.stopPropagation(); levelKaufen(sp, id, d); };   // Level-Knopf wählt nicht aus
+    }
     k.appendChild(d);
   }
 }
@@ -1043,6 +1145,34 @@ function kaufzeile(sp, f) {
   const fehlt = f.preis - geld[sp];
   return fehlt > 0 ? `<div class="kaufzeile">🔒 Dir fehlen noch ${fehlt} €<br><small>Gewinne Kämpfe: +${SIEGPRAEMIE} € pro Sieg</small></div>`
                    : `<div class="kaufzeile kann">💰 Kaufen für ${f.preis} €</div>`;
+}
+function levelzeile(sp, lv) {
+  if (lv >= MAX_LEVEL) return `<div class="kaufzeile levelzeile">🏆 Höchstes Level erreicht!</div>`;
+  const k = levelPreis(lv + 1);
+  const fehlt = k.geld ? k.geld - geld[sp] : k.pokale - freiePokale(sp);
+  const fehltText = k.geld ? `${fehlt} €` : `${fehlt} 🏆 <small>(Pokale gibt's für Siege und Sechser)</small>`;
+  return fehlt > 0 ? `<div class="kaufzeile levelzeile">⬆️ Level ${lv + 1} für ${preisText(k)}<br><small>Dir fehlen noch ${fehltText}</small></div>`
+                   : `<div class="kaufzeile levelzeile kann">⬆️ Level ${lv + 1} für ${preisText(k)}</div>`;
+}
+// Aufleveln wie Kaufen in zwei Schritten: erstes Tippen fragt, zweites zahlt
+function levelKaufen(sp, id, karte) {
+  const lv = levelVon(sp, id), k = levelPreis(lv + 1);
+  if (lv >= MAX_LEVEL || (k.geld ? geld[sp] < k.geld : freiePokale(sp) < k.pokale)) { ton("daneben"); return; }
+  const zeile = karte.querySelector(".levelzeile");
+  if (!zeile.classList.contains("frage")) {
+    ton("klick");
+    zeile.className = "kaufzeile levelzeile frage";
+    zeile.innerHTML = `${FIGUREN[id].name} auf Level ${lv + 1} für ${preisText(k)}?<br>Nochmal tippen = Ja!`;
+    return;
+  }
+  if (k.geld) geld[sp] -= k.geld; else pokal[sp].ausgegeben += k.pokale;
+  level[sp][id] = lv + 1;
+  speichereGeld();
+  speicherePokale();
+  speichereLevel();
+  ton("sieg");
+  zeigeGeldbeutel();
+  zeigeAuswahl();
 }
 function kaufen(sp, id, karte) {
   const f = FIGUREN[id];
@@ -1113,8 +1243,10 @@ function waehle(id) {
 function starte() {
   if (!online) setzeKarte(geloesteKarte());           // online schon vom Gastgeber gesetzt
   spieler = wahl.map((id, i) => {
-    const max = FIGUREN[id].leben + (computer && i === 1 ? STUFEN[stufe].leben : 0);
-    return { id, fig: FIGUREN[id], r: START[i][0], c: START[i][1], leben: max, max, gift: 0, frost: false };
+    const lv = online ? onlineBoni[i].level : profil(i) >= 0 ? levelVon(profil(i), id) : levelVon(0, wahl[0]);
+    const fig = mitLevel(id, gueltigesLevel(lv));
+    const max = fig.leben + (computer && i === 1 ? STUFEN[stufe].leben : 0);
+    return { id, fig, r: START[i][0], c: START[i][1], leben: max, max, gift: 0, frost: false };
   });
   loeseBoniEin();
   document.getElementById("auswahl").style.display = "none";
@@ -1123,7 +1255,7 @@ function starte() {
   document.getElementById("spezialKnopf").onclick = () => meinZug("spezial");
   legende();
   ambiente();
-  log(`Der Kampf beginnt: ${spieler[0].fig.name} gegen ${spieler[1].fig.name}!`);
+  log(`Der Kampf beginnt: ${spieler.map(p => `${p.fig.name} (Level ${p.fig.level})`).join(" gegen ")}!`);
   log(`🗺️ Kampf-Karte: ${KARTEN[karteId].icon} ${KARTEN[karteId].name} – ${KARTEN[karteId].text}`);
   document.getElementById("karteName").textContent = `${KARTEN[karteId].icon} ${KARTEN[karteId].name}`;
   zeichne();
@@ -1139,6 +1271,8 @@ const abstand = (a, b) => Math.abs(a.r - b.r) + Math.abs(a.c - b.c);
 let entdeckt = -1;
 const imBusch = p => feldTyp(p.r, p.c) === "B";
 const nebenan = (a, b) => Math.max(Math.abs(a.r - b.r), Math.abs(a.c - b.c)) <= 1;   // auch schräg daneben
+// Angriffs-Abstand: schräg daneben zählt wie direkt daneben (1), sonst Felder geradeaus gezählt
+const kampfAbstand = (a, b) => nebenan(a, b) ? 1 : abstand(a, b);
 const versteckt = i => imBusch(spieler[i]) && !spieler[i].verraten && !nebenan(spieler[i], spieler[1 - i]) && entdeckt !== i;
 function verrate(a) {
   if (!imBusch(a) || a.verraten) return;
@@ -1194,11 +1328,11 @@ function wegstossen(a, z) {
 }
 
 function kannAngreifen() {
-  return !angegriffen && !versteckt(1 - dran) && abstand(spieler[dran], spieler[1 - dran]) <= reichweiteVon(spieler[dran]);
+  return !angegriffen && !versteckt(1 - dran) && kampfAbstand(spieler[dran], spieler[1 - dran]) <= reichweiteVon(spieler[dran]);
 }
 function kannSpezial() {
   const s = spieler[dran];
-  return !angegriffen && s.ladung && !versteckt(1 - dran) && abstand(s, spieler[1 - dran]) <= s.fig.spezial.reichweite;
+  return !angegriffen && s.ladung && !versteckt(1 - dran) && kampfAbstand(s, spieler[1 - dran]) <= s.fig.spezial.reichweite;
 }
 
 function aendereLeben(s, n, text) {
@@ -1318,7 +1452,7 @@ function angriff() {
       if (z.fig.panzer) schaden = Math.max(1, schaden - z.fig.panzer);
       z.leben = Math.max(0, z.leben - schaden);
       ton(wurf === 6 ? "volltreffer" : "treffer");
-      log(`🎲 ${wurf}: ${a.fig.angriffName} trifft${wurf === 6 ? " voll" : ""}! ${z.fig.name} verliert ${schaden} Leben${z.fig.panzer ? " (Steinhaut)" : ""}${a.fig.anlauf && bewegt ? " (Jagdsprung)" : ""}.`);
+      log(`🎲 ${wurf}: ${a.fig.angriffName} trifft${wurf === 6 ? " voll" : ""}! ${z.fig.name} verliert ${schaden} Leben${z.fig.panzer ? " (Panzer)" : ""}${a.fig.anlauf && bewegt ? " (Jagdsprung)" : ""}.`);
       if (z.leben > 0 && a.fig.gift) { z.gift = a.fig.gift; log(`☠️ ${z.fig.name} ist vergiftet.`); }
       if (z.leben > 0 && a.fig.friert) { z.frost = true; log(`❄️ ${z.fig.name} friert ein.`); }
       zahl(z, "-" + schaden, true);
@@ -1347,7 +1481,7 @@ async function spezialAngriff() {
   if (z.fig.panzer) schaden = Math.max(1, schaden - z.fig.panzer);
   z.leben = Math.max(0, z.leben - schaden);
   ton("volltreffer");
-  log(`⚡ ${sp.name} trifft! ${z.fig.name} verliert ${schaden} Leben${z.fig.panzer ? " (Steinhaut)" : ""}.`);
+  log(`⚡ ${sp.name} trifft! ${z.fig.name} verliert ${schaden} Leben${z.fig.panzer ? " (Panzer)" : ""}.`);
   zeichne();
   zahl(z, "-" + schaden, true);
   if (z.leben > 0 && sp.gift) { z.gift = sp.gift; log(`☠️ ${z.fig.name} ist für ${sp.gift} Runden vergiftet.`); }
@@ -1378,7 +1512,7 @@ function pruefeSieg() {
   const sieger = spieler[1 - tot];
   ton("sieg");
   const b = document.getElementById("siegBild");
-  b.setAttribute("style", bildDa[sieger.id + "_kampf"] ? `background-image:url(${szene(sieger.id, "kampf")})` : portraitStil(sieger.id));
+  b.setAttribute("style", bildDa[sieger.id + "_kampf"] ? `background-image:url(${szene(sieger.id, "kampf")})` : portraitStil(sieger.id, sieger.fig.level));
   b.textContent = ersatz(sieger.id);
   const gewinner = 1 - tot;
   const k = profil(gewinner);
@@ -1425,7 +1559,7 @@ function zeichne() {
       const fig = document.createElement("div");
       fig.className = `figur p${i}` + (i === dran && !sperre ? " aktiv" : "") + (i === wackelt ? " getroffen" : "") + (imBusch(p) ? " imBusch" : "");
       fig.id = "fig" + i;
-      fig.setAttribute("style", portraitStil(p.id));
+      fig.setAttribute("style", portraitStil(p.id, p.fig.level));
       fig.innerHTML = ersatz(p.id) + marken(p);
       f.appendChild(fig);
     });
@@ -1437,7 +1571,7 @@ function zeichne() {
     b.className = "spielerbox" + (i === dran ? " dran" : "");
     b.style.setProperty("--el", p.fig.farbe);
     const zust = [p.ladung ? "⚡ " + p.fig.spezial.name + " bereit" : "", p.gift ? "☠️ vergiftet" : "", p.frost ? "❄️ eingefroren" : ""].filter(Boolean).join(" · ");
-    b.innerHTML = `<div class="zeile"><div class="mini" style="${portraitStil(p.id)};box-shadow:0 0 0 3px ${SPIELERFARBE[i]}">${ersatz(p.id)}</div>
+    b.innerHTML = `<div class="zeile"><div class="mini" style="${portraitStil(p.id, p.fig.level)};box-shadow:0 0 0 3px ${SPIELERFARBE[i]}">${ersatz(p.id)}</div>
       <div style="flex:1"><div class="name">${p.fig.name}</div>
       <div class="status"><b style="color:${SPIELERFARBE[i]}">${nameVon(i)}</b>${computer && i === 1 ? "" : ` · 💰 ${geld[i]} €`} · ${p.fig.element} · ❤️ ${p.leben}/${p.max}${zust ? " · " + zust : ""}${computer && i === 1 ? ` · ${STUFEN[stufe].name}` : ""}</div>
       <div class="balken"><div style="width:${100 * p.leben / p.max}%"></div></div></div></div>`;
@@ -1503,7 +1637,7 @@ async function kiAngriff() {
 function kiZiel() {
   const s = spieler[1], g = versteckt(0) ? { ...spieler[0], ...spieler[0].zuletzt } : spieler[0];  // versteckt: dort suchen, wo er zuletzt war
   const wert = (r, c) => {
-    const p = { ...s, r, c }, t = feldTyp(r, c), d = abstand(p, g);
+    const p = { ...s, r, c }, t = feldTyp(r, c), d = kampfAbstand(p, g);
     const verletzt = s.leben < s.max;
     let w = angegriffen ? 0 : -d;                                 // vor dem Angriff: ran an den Gegner
     if (!angegriffen && d <= reichweiteVon(p)) w += 10;
@@ -1606,7 +1740,7 @@ function ton(art) {
 
 // Zum Testen (kein Knopf): index.html?neu startet ganz von vorne
 if (new URLSearchParams(location.search).has("neu")) {
-  try { [GELD_KEY, GEKAUFT_KEY, WELT_KEY, POKAL_KEY].forEach(k => localStorage.removeItem(k)); } catch (e) { /* ohne Speicher weiter */ }
+  try { [GELD_KEY, GEKAUFT_KEY, WELT_KEY, POKAL_KEY, LEVEL_KEY].forEach(k => localStorage.removeItem(k)); } catch (e) { /* ohne Speicher weiter */ }
   location.replace(location.pathname);
 }
 zeigeGeldbeutel();
