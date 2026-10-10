@@ -220,7 +220,7 @@ T = {
  title="Die Remindery-Methode – ein agentisches Unternehmen, Human on the Loop",
  desc="Wie ein Mensch ein Unternehmen aus KI-Agents führt: fünf Funktionen mit Mandat, zehn Agents, drei menschliche Gates und Autonomie nur mit Beleg – fünf Apps in den Stores als Beweis.",
  eyebrow="Die Remindery-Methode",
- h1="Ein Unternehmen, geführt von Agents.<br><em>Gesteuert von einem Menschen.</em>",
+ h1="Ein Unternehmen, betrieben von Agents.<br><em>Gesteuert von einem Menschen.</em>",
  lead="Produkt, Technik, Marketing, Finanzen, Recht: Jede Funktion hat ein Mandat, einen Takt und ein Gedächtnis – die Arbeit machen KI-Agents. Ein Mensch trifft jede Entscheidung, auf die es ankommt. Fünf Apps in den Stores sind der Beweis. Worum es eigentlich geht, ist das Betriebsmodell dahinter.",
  b1="Die Prinzipien lesen ↓", b2="Eine echte Nacht ansehen",
  th_eb="Die These",
