@@ -34,3 +34,12 @@ Seite, Inhalt deutsch. Alles läuft im Browser, keine externen Requests
   und Zahlenraum je Stufe. Design-Kritik (6,5 → 8,5/10) und QA mit echten PDFs.
   Live 25.10.2026. Nächste Messpunkte: 22.11. Impressions, 20.12. Klicks
   (Abbruch < 100 Klicks). Nächste Kandidaten: Uhr-Arbeitsblätter, Profi-Pyramiden-Seite.
+- 25.10. PO-Runde: Kostenlos-Hinweise, „Generator“ im Wording, Store-Badges, Plus-/Mal-Mauer
+  mit Icons, mehrere Blätter je PDF, Regler Gitter/Wörter, Breadcrumb, einheitliches
+  Hauptmenü und Fuß mit Lernmaterial auf allen Seiten.
+- 25.10. Umzug auf deutsche Pfade (Ausnahme in der Namensregel): `/lernmaterial/`,
+  `/lernmaterial/suchsel-generator/`, `/lernmaterial/zahlenmauer-generator/`; alte
+  `/worksheets/…`-Seiten leiten weiter, Assets bleiben unter `/worksheets/`.
+  Englisch: `/en/worksheets/`, `…/word-search-generator/`, `…/number-pyramid-generator/`,
+  Skripte zweisprachig (`STR = {de, en}` je Datei, Sprache aus `<html lang>`).
+  Offen: Search Console „Indexierung beantragen“ für die 6 Adressen (PO).
