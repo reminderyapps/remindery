@@ -1,0 +1,220 @@
+/* Lernmaterial (/worksheets/): Generator-Seiten und Übersicht.
+   Baut auf /styles.css auf (Farben, Kopf, Fuß); hier nur das Werkzeug-Layout. */
+
+:root {
+  --ws: #23784C;          /* Rätselblock-Grün, als Fläche mit weißer Schrift >= 4.5:1 */
+  --ws-ink: #FFFFFF;
+  --ws-soft: #E6F2EA;
+  --ws-text: #1F6B44;     /* Grün als Schrift auf --bg/--card */
+  --mark: #FFD66B;        /* Lösungs-Markierung (wie im PDF) */
+  --mark-ink: #2B2622;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ws: #5CC48C;
+    --ws-ink: #10261A;
+    --ws-soft: #1E3328;
+    --ws-text: #7FD6A5;
+    --mark: #8A6A12;
+    --mark-ink: #FFF6DA;
+  }
+}
+
+main.ws { max-width: 1120px; }
+
+.ws-intro { max-width: 46em; }
+.ws-intro .eyebrow-ws {
+  display: inline-block; font-size: .85rem; font-weight: 600; letter-spacing: .04em;
+  color: var(--ws-text); background: var(--ws-soft); border-radius: 999px; padding: 4px 12px;
+}
+.ws-intro .eyebrow-ws a { color: inherit; }
+.ws-intro h1 { font-size: clamp(1.9rem, 4.5vw, 2.7rem); margin: 14px 0 8px; }
+.ws-intro p { color: var(--text-soft); font-size: 1.08rem; margin: 0; }
+
+/* --- Werkzeug: Einstellungen links, Vorschau rechts --- */
+.tool {
+  display: grid; grid-template-columns: minmax(300px, 380px) minmax(0, 1fr); gap: 28px;
+  margin-top: 32px; align-items: start;
+}
+.tool > * { min-width: 0; }
+.panel {
+  background: var(--card); border-radius: 20px; box-shadow: var(--shadow-soft);
+  padding: 22px;
+}
+.panel + .panel { margin-top: 16px; }
+.controls { display: flex; flex-direction: column; gap: 22px; }
+.panel-title {
+  display: flex; align-items: center; gap: 10px; margin: 0 0 -4px;
+  font-family: var(--serif); font-size: 1.15rem; font-weight: 700; line-height: 1.3;
+}
+.panel-title .n {
+  display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%;
+  font-family: var(--sans); font-size: .8rem; font-weight: 700;
+  background: var(--ws-soft); color: var(--ws-text);
+}
+.field > label, .field > .label {
+  display: block; font-weight: 650; font-size: .95rem; margin-bottom: 8px;
+}
+.field .hint { font-size: .85rem; color: var(--text-soft); margin: 6px 0 0; }
+
+.tool input[type=text], .tool input[type=number], .tool textarea, .tool select {
+  width: 100%; box-sizing: border-box; font: inherit; color: var(--text);
+  background: var(--bg); border: 1.5px solid var(--line); border-radius: 12px;
+  padding: 10px 12px; transition: border-color .15s var(--ease);
+}
+.tool textarea { min-height: 176px; resize: vertical; line-height: 1.5; }
+.tool select {
+  appearance: none; -webkit-appearance: none; cursor: pointer; padding-right: 38px;
+  background-image: linear-gradient(45deg, transparent 50%, var(--text-soft) 50%), linear-gradient(135deg, var(--text-soft) 50%, transparent 50%);
+  background-position: calc(100% - 19px) 52%, calc(100% - 14px) 52%;
+  background-size: 5px 5px; background-repeat: no-repeat;
+}
+.tool input:focus, .tool textarea:focus, .tool select:focus {
+  outline: none; border-color: var(--ws); box-shadow: 0 0 0 3px var(--ws-soft);
+}
+
+/* Segmentierte Auswahl (Stufen, Größen, Schrift) */
+.seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.seg button, .seg label {
+  font: inherit; font-size: .9rem; cursor: pointer; color: var(--text);
+  background: var(--bg); border: 1.5px solid var(--line); border-radius: 999px;
+  padding: 6px 14px; min-height: 36px; display: inline-flex; align-items: center;
+  transition: background .15s var(--ease), border-color .15s var(--ease);
+}
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg button:hover, .seg label:hover { border-color: var(--ws); }
+.seg button[aria-pressed=true], .seg label:has(input:checked) {
+  background: var(--ws); border-color: var(--ws); color: var(--ws-ink);
+}
+.seg label:has(input:focus-visible) { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* Richtungen als 3×3-Kompass */
+.dirs-wrap { display: flex; gap: 20px; align-items: center; }
+.dirs {
+  display: grid; grid-template-columns: repeat(3, 44px); gap: 6px; padding: 8px;
+  background: var(--bg); border-radius: 18px;
+}
+.dirs label, .dirs .mid {
+  width: 44px; height: 44px; display: grid; place-items: center; border-radius: 12px;
+  font-size: 1.25rem; line-height: 1;
+}
+.dirs label {
+  cursor: pointer; background: var(--card); border: 1.5px solid var(--line); color: var(--text-soft);
+  transition: background .15s var(--ease), border-color .15s var(--ease), transform .1s var(--ease);
+}
+.dirs label:active { transform: scale(.94); }
+.dirs input { position: absolute; opacity: 0; pointer-events: none; }
+.dirs label:has(input:checked) { background: var(--ws); border-color: var(--ws); color: var(--ws-ink); }
+.dirs label:has(input:focus-visible) { outline: 3px solid var(--accent); outline-offset: 2px; }
+.dirs label:hover { border-color: var(--ws); color: var(--text); }
+.dirs svg { width: 20px; height: 20px; display: block; }
+.dirs .mid {
+  font-size: .7rem; font-weight: 700; letter-spacing: .06em; color: var(--text-soft);
+  border: 1.5px dashed var(--line);
+}
+.dirs-wrap .seg { flex-direction: column; align-items: stretch; }
+.dirs-wrap .seg button { justify-content: center; }
+
+.size-row { display: flex; gap: 10px; align-items: center; }
+.tool .size-row input { width: 64px; padding: 7px 6px; text-align: center; }
+.size-row span { color: var(--text-soft); }
+
+.checks { display: flex; flex-direction: column; gap: 10px; }
+.checks > .label { margin-bottom: 0; }
+.checks label { display: flex; gap: 10px; align-items: center; cursor: pointer; font-size: .95rem; }
+.checks input { width: 18px; height: 18px; accent-color: var(--ws); margin: 0; }
+
+/* Vorschau */
+.preview { position: sticky; top: 88px; }
+.preview-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.preview-bar .status { font-size: .9rem; color: var(--text-soft); }
+.preview-bar .status:not(.warn)::before {
+  content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--ws); margin-right: 8px; vertical-align: 1px;
+}
+/* Rätsel/Lösung: echter Umschalter, unterscheidet sich von den Auswahl-Chips */
+.toggle {
+  display: inline-flex; padding: 4px; gap: 2px; border-radius: 999px;
+  background: var(--card); box-shadow: var(--shadow-soft);
+}
+.toggle button {
+  font: inherit; font-size: .92rem; font-weight: 600; cursor: pointer; border: 0;
+  padding: 7px 18px; border-radius: 999px; background: transparent; color: var(--text-soft);
+  transition: background .15s var(--ease), color .15s var(--ease);
+}
+.toggle button:hover { color: var(--text); }
+.toggle button[aria-pressed=true] { background: var(--ws); color: var(--ws-ink); }
+.preview-bar .status.warn { color: var(--accent-text); font-weight: 600; }
+.sheet {
+  background: #fff; color: #2B2622; border-radius: 4px; aspect-ratio: 210 / 297;
+  box-shadow: 0 0 0 1px rgba(43,38,34,.06), 0 2px 4px rgba(43,38,34,.05), 0 24px 48px -12px rgba(43,38,34,.18);
+  overflow: hidden;
+}
+.sheet svg { display: block; width: 100%; height: 100%; }
+
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.b {
+  display: inline-flex; align-items: center; gap: 8px;
+  font: inherit; font-weight: 650; cursor: pointer; border-radius: 999px; padding: 11px 20px;
+  border: 1.5px solid var(--line); background: var(--card); color: var(--text);
+  transition: transform .12s var(--ease), background .15s var(--ease), border-color .15s var(--ease);
+}
+.b:hover { border-color: var(--ws); }
+.b:active { transform: scale(.97); }
+.b.primary { background: var(--ws); border-color: var(--ws); color: var(--ws-ink); }
+.b svg { width: 18px; height: 18px; flex: 0 0 auto; }
+.b.primary { box-shadow: 0 6px 16px -6px rgba(35,120,76,.55); }
+.b.primary:hover { filter: brightness(1.06); }
+.b[disabled] { opacity: .5; cursor: default; }
+.toast { font-size: .9rem; color: var(--ws-text); min-height: 1.4em; margin-top: 8px; }
+
+/* Textteil unter dem Werkzeug */
+.ws-text { margin-top: 48px; }
+.ws-text h2 { margin-top: 1.6em; }
+.ws-text h2:first-child { margin-top: 0; }
+.ws-text dt { font-weight: 650; margin-top: 1em; }
+.ws-text dd { margin: 4px 0 0; color: var(--text-soft); }
+.app-hint {
+  display: flex; gap: 18px; align-items: center; margin-top: 32px; padding: 18px 20px;
+  background: var(--ws-soft); border-radius: 16px;
+}
+.app-hint img { width: 56px; height: 56px; border-radius: 14px; flex: 0 0 auto; }
+.app-hint p { margin: 0; }
+
+/* Übersicht /worksheets/ */
+.cats { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 28px; }
+.cat { background: var(--card); border-radius: 20px; box-shadow: var(--shadow-soft); padding: 24px; }
+.cat h2 { margin: 0 0 4px; font-size: 1.35rem; }
+.cat > p { margin: 0 0 16px; color: var(--text-soft); }
+.cat a.item {
+  display: flex; gap: 18px; align-items: center; padding: 16px; border-radius: 16px;
+  border: 1.5px solid var(--line); color: var(--text); line-height: 1.45;
+  transition: border-color .15s var(--ease), background .15s var(--ease);
+}
+.cat a.item + a.item { margin-top: 10px; }
+.cat a.item:hover { border-color: var(--ws); background: var(--bg); text-decoration: none; }
+.cat a.item > svg { flex: 0 0 auto; width: 64px; height: 86px; }
+.cat a.item .paper { filter: drop-shadow(0 4px 8px rgba(43,38,34,.14)); }
+.cat a.item div { flex: 1; }
+.cat a.item b { display: block; font-size: 1.05rem; margin-bottom: 2px; }
+.cat a.item span { display: block; font-size: .9rem; color: var(--text-soft); }
+.cat a.item .go {
+  display: inline-block; margin-top: 8px; font-size: .88rem; font-weight: 650; color: var(--ws-text);
+}
+.cat a.item:hover .go { text-decoration: underline; }
+.cat .soon { font-size: .9rem; color: var(--text-soft); padding: 12px 0 0; }
+
+@media (max-width: 860px) {
+  .tool { grid-template-columns: minmax(0, 1fr); }
+  .preview { position: static; }
+}
+@media (max-width: 480px) {
+  .panel { padding: 18px 16px; border-radius: 18px; }
+  .cat { padding: 20px 16px; }
+  .actions .b { flex: 1 1 auto; justify-content: center; }
+  .actions .b.primary { flex-basis: 100%; }
+  .dirs-wrap { gap: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tool *, .cat a.item { transition: none !important; }
+}
