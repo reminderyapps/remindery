@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zahlenmauer-Generator: Arbeitsblätter kostenlos erstellen, mit Lösung | Remindery</title>
+  <meta name="description" content="Zahlenmauern als Arbeitsblatt kostenlos erstellen: sechs Stufen von Klasse 1 bis „verrückt“, Plus oder Mal, 2 bis 8 Mauern pro Blatt, jede eindeutig lösbar. PDF mit Lösungsblatt – ohne Anmeldung, ohne Werbung.">
+  <link rel="canonical" href="https://remindery.de/lernmaterial/zahlenmauer-generator/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=k1">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/worksheets/worksheets.css?v=20261025d">
+  <meta property="og:title" content="Zahlenmauer-Generator: Arbeitsblätter kostenlos erstellen, mit Lösung">
+  <meta property="og:description" content="Sechs Stufen, Plus oder Mal, 2 bis 8 Mauern pro Blatt, jede eindeutig lösbar. PDF mit Lösung, ohne Anmeldung, ohne Werbung.">
+  <meta property="og:url" content="https://remindery.de/lernmaterial/zahlenmauer-generator/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Zahlenmauer-Generator",
+    "alternateName": ["Rechenmauer-Generator", "Mathe-Pyramide"],
+    "url": "https://remindery.de/lernmaterial/zahlenmauer-generator/",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Browser",
+    "inLanguage": "de",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+    "publisher": { "@type": "Organization", "name": "Remindery Apps", "url": "https://remindery.de/" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Start", "item": "https://remindery.de/"}, {"@type": "ListItem", "position": 2, "name": "Lernmaterial", "item": "https://remindery.de/lernmaterial/"}, {"@type": "ListItem", "position": 3, "name": "Mathe", "item": "https://remindery.de/lernmaterial/#mathe"}, {"@type": "ListItem", "position": 4, "name": "Zahlenmauer-Generator", "item": "https://remindery.de/lernmaterial/zahlenmauer-generator/"}]}
+  </script>
+</head>
+<!--
+  Zahlenmauer-Generator. Konkurrenz: docs/worksheets-konkurrenz.md. Logik in
+  wall.js (Node-Selbsttest: node worksheets/math/number-wall/selftest.js).
+  Alles läuft im Browser, keine externen Requests.
+-->
+<body>
+  <header class="site-head">
+    <div class="head-in">
+      <a class="site-brand" href="/"><img src="/favicon.svg?v=k1" width="34" height="34" alt=""><span>Remindery Apps</span></a>
+      <nav class="site-nav" aria-label="Hauptnavigation">
+        <a href="/">Apps</a>
+        <a href="/lernmaterial/" aria-current="page">Lernmaterial</a>
+        <a href="/method/">Methode</a>
+        <a href="/about/">Über uns</a>
+        <span class="lang" role="group" aria-label="Sprache"><a href="/lernmaterial/zahlenmauer-generator/" hreflang="de" lang="de" title="Deutsch" aria-current="true">DE</a><a href="/en/" hreflang="en" lang="en" title="English">EN</a></span>
+      </nav>
+    </div>
+  </header>
+
+  <main class="ws">
+    <div class="ws-intro">
+      <nav class="crumbs" aria-label="Brotkrümelnavigation"><a href="/">Start</a><span class="sep" aria-hidden="true">›</span><a href="/lernmaterial/">Lernmaterial</a><span class="sep" aria-hidden="true">›</span><a href="/lernmaterial/#mathe">Mathe</a><span class="sep" aria-hidden="true">›</span><span aria-current="page">Zahlenmauer-Generator</span></nav>
+      <h1>Zahlenmauern kostenlos erstellen</h1>
+      <p>Der kostenlose Zahlenmauer-Generator: Zahlenmauern – auch Rechenmauer oder Mathe-Pyramide genannt – als
+      Arbeitsblatt erstellen: Stufe wählen, fertig ist das PDF mit Lösungsblatt.
+      Jede Mauer ist eindeutig lösbar.</p>
+      <ul class="perks" aria-label="Das Wichtigste">
+        <li class="free"><b>100&nbsp;% kostenlos</b></li>
+        <li>ohne Anmeldung</li>
+        <li>ohne Werbung</li>
+        <li>mit Lösungsblatt</li>
+      </ul>
+    </div>
+
+    <div class="tool">
+      <form class="controls" onsubmit="return false" aria-label="Einstellungen">
+        <div class="panel controls">
+          <h2 class="panel-title"><span class="n">1</span>Mauern wählen</h2>
+          <div class="field">
+            <span class="label" id="level-label">Stufe</span>
+            <div class="seg" role="radiogroup" aria-labelledby="level-label">
+              <label><input type="radio" name="level" value="starter">Anfänger</label>
+              <label><input type="radio" name="level" value="grade1">Klasse 1</label>
+              <label><input type="radio" name="level" value="grade2">Klasse 2</label>
+              <label><input type="radio" name="level" value="pro">Profi</label>
+              <label><input type="radio" name="level" value="master">Meister</label>
+              <label><input type="radio" name="level" value="crazy">Verrückt</label>
+            </div>
+            <p class="hint" id="level-hint"></p>
+          </div>
+          <div class="field">
+            <span class="label" id="op-label">Plus- oder Mal-Mauer</span>
+            <div class="seg op-seg" role="radiogroup" aria-labelledby="op-label">
+              <label><input type="radio" name="op" value="plus"><svg class="op-ic" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9"/><path d="M10 5.5v9M5.5 10h9"/></svg>Plus-Mauer</label>
+              <label><input type="radio" name="op" value="mul"><svg class="op-ic" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9"/><path d="M6.8 6.8l6.4 6.4M13.2 6.8l-6.4 6.4"/></svg>Mal-Mauer</label>
+            </div>
+          </div>
+          <div class="field">
+            <span class="label" id="count-label">Mauern pro Blatt</span>
+            <div class="seg" role="radiogroup" aria-labelledby="count-label">
+              <label><input type="radio" name="count" value="2">2</label>
+              <label><input type="radio" name="count" value="4">4</label>
+              <label><input type="radio" name="count" value="6">6</label>
+              <label><input type="radio" name="count" value="8">8</label>
+            </div>
+          </div>
+          <div class="field">
+            <span class="label" id="pages-label">Wie viele verschiedene Blätter?</span>
+            <div class="seg" role="radiogroup" aria-labelledby="pages-label">
+              <label><input type="radio" name="pages" value="1">1</label>
+              <label><input type="radio" name="pages" value="2">2</label>
+              <label><input type="radio" name="pages" value="3">3</label>
+              <label><input type="radio" name="pages" value="5">5</label>
+              <label><input type="radio" name="pages" value="10">10</label>
+            </div>
+            <p class="hint">Jedes Blatt hat neue Aufgaben. Die Lösungen kommen gesammelt ans Ende des PDFs.</p>
+          </div>
+        </div>
+
+        <div class="panel controls">
+          <h2 class="panel-title"><span class="n">2</span>Blatt anpassen</h2>
+          <div class="field">
+            <label for="title">Überschrift</label>
+            <input type="text" id="title" maxlength="48" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="base">Grundsteine (unterste Reihe)</label>
+            <select id="base">
+              <option value="0">wie Stufe</option>
+              <option value="3">3 Grundsteine</option>
+              <option value="4">4 Grundsteine</option>
+              <option value="5">5 Grundsteine</option>
+              <option value="6">6 Grundsteine</option>
+              <option value="7">7 Grundsteine</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="zr">Zahlenraum</label>
+            <select id="zr">
+              <option value="0">wie Stufe</option>
+              <option value="10">bis 10</option>
+              <option value="20">bis 20</option>
+              <option value="50">bis 50</option>
+              <option value="100">bis 100</option>
+              <option value="200">bis 200</option>
+              <option value="500">bis 500</option>
+              <option value="1000">bis 1000</option>
+              <option value="5000">bis 5000</option>
+              <option value="10000">bis 10.000</option>
+            </select>
+            <p class="hint">Ein Klick auf eine Stufe setzt beides zurück.</p>
+          </div>
+          <div class="field checks">
+            <span class="label">Auf dem Blatt</span>
+            <label><input type="checkbox" id="opt-solution"> Lösungsblatt als zweite Seite</label>
+            <label><input type="checkbox" id="opt-name"> Zeile für Name und Datum</label>
+          </div>
+        </div>
+      </form>
+
+      <section class="preview" aria-label="Vorschau">
+        <div class="preview-bar">
+          <div class="toggle" role="group" aria-label="Ansicht">
+            <button type="button" data-view="puzzle" aria-pressed="true">Rätsel</button>
+            <button type="button" data-view="solution" aria-pressed="false">Lösung</button>
+          </div>
+          <span class="status" id="status" role="status" aria-live="polite"></span>
+        </div>
+        <div class="sheet" id="sheet"></div>
+        <div class="actions">
+          <button type="button" class="b primary" id="pdf"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m-5-5 5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF kostenlos herunterladen</button>
+          <button type="button" class="b" id="shuffle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h3c5 0 5 10 10 10h3m-3-3 3 3-3 3M4 17h3c1.6 0 2.6-1 3.4-2.4M20 7h-3c-1.6 0-2.6 1-3.4 2.4M17 4l3 3-3 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Neu mischen</button>
+          <button type="button" class="b" id="share"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Link kopieren</button>
+        </div>
+        <p class="free-note">Kostenlos und unbegrenzt – ohne Anmeldung, ohne Werbung. Deine Eingaben bleiben in deinem Browser.</p>
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      </section>
+    </div>
+
+    <div class="app-hint">
+      <img class="app-icon" src="/puzzles/icon.png" width="64" height="64" alt="">
+      <div>
+        <p><strong>Mehr Rätsel für unterwegs:</strong> Das <a href="/puzzles/">Kinder Rätselheft</a> für Handy und Tablet: Suchsel, Zahlenmauern und 28 weitere Rätselarten für die 1. und 2. Klasse – jede Seite neu, ohne Werbung, offline.</p>
+        <div class="app-badges">
+          <a href="https://play.google.com/store/apps/details?id=de.remindery.puzzles.grade12"><img class="badge-play" src="/google-play-badge-de.png" width="646" height="250" alt="Jetzt bei Google Play"></a>
+          <a href="https://www.amazon.de/dp/B0HMLJT19P"><img class="badge-amazon" src="/amazon-appstore-badge-de.png" width="572" height="168" alt="Erhältlich im Amazon Appstore"></a>
+        </div>
+      </div>
+    </div>
+
+    <article class="ws-text">
+      <h2>So funktioniert der Zahlenmauer-Generator</h2>
+      <p>Wähle eine Stufe, die Rechenart und wie viele Mauern auf das Blatt sollen.
+      Die Vorschau zeigt genau das Blatt, das gedruckt wird. Gefallen dir die
+      Zahlen nicht, mischst du neu. Das PDF hat auf Wunsch eine zweite Seite mit
+      der Lösung; dort sind die gesuchten Zahlen gelb hinterlegt und schräg
+      gedruckt, die Vorgaben stehen normal. Jede Mauer trägt eine Nummer, damit
+      man im Unterricht leicht auf „Mauer 3“ verweisen kann. Vorgegebene Steine sind leicht getönt, damit Kinder
+      sofort sehen, wo sie schreiben dürfen – das funktioniert auch im
+      Schwarz-Weiß-Druck.</p>
+      <p>Jede Mauer prüft der Generator, bevor sie auf das Blatt kommt: Sie hat
+      genau eine Lösung, und alle Zahlen sind natürliche Zahlen im gewählten
+      Zahlenraum – keine Brüche, nichts Negatives.</p>
+
+      <h2>Welche Stufe für welche Klasse?</h2>
+      <dl>
+        <dt>Anfänger – Vorschule und Anfang Klasse 1</dt>
+        <dd>3 Grundsteine, Zahlen bis 10. Die unterste Reihe ist vorgegeben, nur
+        oben wird addiert. Große Steine zum Hineinschreiben.</dd>
+        <dt>Klasse 1</dt>
+        <dd>4 Grundsteine, Zahlen bis 20, die unterste Reihe ist vorgegeben.</dd>
+        <dt>Klasse 2</dt>
+        <dd>4 Grundsteine, Zahlen bis 100. Jetzt fehlen auch unten Zahlen: Kinder
+        rechnen rückwärts und üben dabei das Ergänzen.</dd>
+        <dt>Profi – Klasse 3</dt>
+        <dd>4 Grundsteine, Zahlen bis 1000, nur so viele Vorgaben wie nötig.</dd>
+        <dt>Meister – Klasse 4</dt>
+        <dd>5 Grundsteine, Zahlen bis 1000, nur 5 Vorgaben. Die Mauer lässt sich
+        immer Stein für Stein lösen, aber man muss den Anfang finden.</dd>
+        <dt>Verrückt – für Knobelfans</dt>
+        <dd>6 oder 7 Grundsteine, Zahlen bis 10.000, so wenige Vorgaben wie möglich.
+        Manche Mauern lassen sich nicht mehr Stein für Stein lösen – dann hilft
+        Probieren oder ein Platzhalter für die gesuchte Zahl.</dd>
+        <dt>Malmauern</dt>
+        <dd>Statt zu addieren wird multipliziert, mit Zahlen aus dem Einmaleins.
+        Malmauern haben 3 oder 4 Grundsteine; sie passen ab dem Ende der 2. Klasse.</dd>
+      </dl>
+
+      <h2>Häufige Fragen</h2>
+      <dl>
+        <dt>Was ist eine Zahlenmauer?</dt>
+        <dd>Eine Mauer aus Steinen, die nach oben schmaler wird. In jedem Stein
+        steht die Summe der zwei Steine direkt darunter. Einige Zahlen sind
+        vorgegeben, die übrigen rechnen die Kinder aus. Zahlenmauern üben das
+        Addieren und Subtrahieren – und das Denken in Zusammenhängen.</dd>
+        <dt>Mathe-Pyramide, Rechenmauer, Zahlenmauer – ist das dasselbe?</dt>
+        <dd>Ja. Je nach Schulbuch und Bundesland heißt dieselbe Aufgabe
+        Zahlenmauer, Rechenmauer, Mathe-Pyramide oder Zahlenpyramide. Wird
+        multipliziert statt addiert, spricht man von einer Malmauer.</dd>
+        <dt>Wie löst man eine Zahlenmauer, wenn unten Zahlen fehlen?</dt>
+        <dd>Rückwärts rechnen: Kennst du einen Stein und einen der zwei Steine
+        darunter, ist der fehlende Stein die Differenz. Steht oben 12 und links
+        darunter 5, gehört rechts daneben die 7, denn 5 + 7 = 12. Bei Malmauern
+        wird entsprechend geteilt. Am besten sucht man immer zuerst einen Stein,
+        bei dem schon zwei von drei Zahlen bekannt sind.</dd>
+        <dt>Hat jede Mauer wirklich nur eine Lösung?</dt>
+        <dd>Ja. Der Generator rechnet für jede Mauer nach, dass die Vorgaben genau
+        eine Lösung zulassen. Mauern, bei denen mehrere Lösungen möglich wären,
+        werden verworfen.</dd>
+        <dt>Kostet das etwas oder muss ich mich anmelden?</dt>
+        <dd>Nein. Der Generator ist kostenlos, ohne Anmeldung, ohne Werbung und ohne Tageslimit.</dd>
+        <dt>Kann ich das Blatt teilen?</dt>
+        <dd>Ja. „Link kopieren“ erzeugt eine Adresse, die genau diese Mauern wieder
+        öffnet – praktisch für Kolleginnen, Kollegen oder die Klassen-Pinnwand.
+        Es wird nichts an uns übertragen, alles entsteht in deinem Browser.</dd>
+      </dl>
+
+    </article>
+  </main>
+
+  <footer>
+    <nav>
+      <a href="/lernmaterial/">Lernmaterial</a>
+      <a href="/legal-notice/">Impressum</a>
+      <a href="/privacy/">Datenschutz</a>
+      <a href="/">Alle Apps</a>
+    </nav>
+    &copy; 2026 Remindery Apps
+  </footer>
+
+  <script src="/worksheets/vendor/jspdf.umd.min.js" defer></script>
+  <script src="/worksheets/sheet.js?v=20261025d" defer></script>
+  <script src="/worksheets/math/number-wall/wall.js?v=20261025d" defer></script>
+  <script src="/worksheets/math/number-wall/app.js?v=20261025d" defer></script>
+</body>
+</html>

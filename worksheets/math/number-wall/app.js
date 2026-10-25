@@ -1,4 +1,4 @@
-/* Zahlenmauer-Generator (/worksheets/math/number-wall/). Läuft komplett im
+/* Zahlenmauer-Generator (Seite /lernmaterial/zahlenmauer-generator/). Läuft komplett im
    Browser: Logik in wall.js (auch von selftest.js in Node geprüft), Vorschau
    als SVG, PDF über Sheet.toPDF. Der Zustand steht im Link (#...), damit ein
    geteilter Link genau diese Mauern wieder erzeugt. */

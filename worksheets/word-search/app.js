@@ -1,4 +1,4 @@
-/* Suchsel-Generator (/worksheets/word-search/). Läuft komplett im Browser:
+/* Suchsel-Generator (Seite /lernmaterial/suchsel-generator/). Läuft komplett im Browser:
    Wörter verstecken, Vorschau als SVG, PDF über Sheet.toPDF. Der Zustand steht
    im Link (#...), damit ein geteilter Link genau dieses Suchsel wieder erzeugt. */
 (function () {

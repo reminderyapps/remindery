@@ -64,7 +64,7 @@ window.Sheet = (function () {
     return y + 7;
   };
   Page.prototype.footer = function (text) {
-    this.text(W / 2, H - 10, text || "Kostenlos erstellt auf remindery.de/worksheets", {
+    this.text(W / 2, H - 10, text || "Kostenlos erstellt auf remindery.de/lernmaterial", {
       size: 8, align: "center", color: SOFT });
     return this;
   };
