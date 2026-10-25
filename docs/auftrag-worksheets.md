@@ -50,3 +50,8 @@ Seite, Inhalt deutsch. Alles läuft im Browser, keine externen Requests
   **Suchsel-Generator eingereicht, Eingangs-ID 9567** (Titel „Suchsel-Generator – Suchsel
   und Wortgitter kostenlos erstellen, mit Lösung als PDF“, Fach + ELIXIER: Schule ›
   Grundschule › Deutsch › Lesen). Offen: WirLernenOnline, 4teachers (Konto = PO), ZUM-Mail.
+- 25.10. WirLernenOnline: beide Generatoren als „Tool“ vorgeschlagen (laut PO; ohne
+  Eingangs-ID, Formular gibt keine aus), Lizenz „Sonstige Lizenzen“ mit Lizenzsatz in der
+  Kurzbeschreibung. 4teachers und ZUM vom PO zurückgestellt („die ersten beiden reichen erstmal“).
+  Nächster Blick: ob Bildungsserver (9566, 9567) und WLO freigeschaltet haben – mit den
+  Messpunkten 22.11. / 20.12.
