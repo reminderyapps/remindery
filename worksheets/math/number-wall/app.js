@@ -26,7 +26,8 @@
   var TITLES = { plus: "Zahlenmauern", mul: "Malmauern" };
 
   var DEFAULT = { level: "grade2", op: "plus", count: 4, base: 0, zr: 0,
-    title: TITLES.plus, solution: true, name: true, seed: 0 };
+    title: TITLES.plus, solution: true, name: true, pages: 1, seed: 0 };
+  var PAGES = [1, 2, 3, 5, 10];
 
   var state, sheet, view = "puzzle", timer;
   var $ = function (id) { return document.getElementById(id); };
@@ -42,12 +43,12 @@
       level: radio("level") || DEFAULT.level, op: radio("op") === "mul" ? "mul" : "plus",
       count: +radio("count") || DEFAULT.count, base: +$("base").value || 0, zr: +$("zr").value || 0,
       title: $("title").value, solution: $("opt-solution").checked, name: $("opt-name").checked,
-      seed: state.seed
+      pages: +radio("pages") || 1, seed: state.seed
     };
   }
 
   function writeForm(st) {
-    setRadio("level", st.level); setRadio("op", st.op); setRadio("count", st.count);
+    setRadio("level", st.level); setRadio("op", st.op); setRadio("count", st.count); setRadio("pages", st.pages || 1);
     $("base").value = String(st.base); $("zr").value = String(st.zr);
     $("title").value = st.title;
     $("opt-solution").checked = st.solution; $("opt-name").checked = st.name;
@@ -68,6 +69,7 @@
     if (st.zr) q.set("z", st.zr);
     q.set("t", st.title);
     q.set("o", (st.solution ? "" : "S") + (st.name ? "" : "N"));
+    if (st.pages > 1) q.set("p", st.pages);
     q.set("s", st.seed);
     return "#" + q.toString();
   }
@@ -83,6 +85,7 @@
         base: parseInt(q.get("b"), 10) || 0, zr: parseInt(q.get("z"), 10) || 0,
         title: q.has("t") ? q.get("t") : TITLES[op],
         solution: o.indexOf("S") < 0, name: o.indexOf("N") < 0,
+        pages: PAGES.indexOf(parseInt(q.get("p"), 10)) >= 0 ? parseInt(q.get("p"), 10) : 1,
         seed: parseInt(q.get("s"), 10) || S.newSeed()
       });
     } catch (e) { return null; }
@@ -147,11 +150,21 @@
       state = readForm(); state.seed = S.newSeed(); render();
     });
     $("pdf").addEventListener("click", function () {
-      var pages = [NW.drawPage(S, state, sheet, false)];
-      if (state.solution) pages.push(NW.drawPage(S, state, sheet, true));
+      // Mehrere Blätter: Blatt 1 = Vorschau, jedes weitere mit eigenem Seed.
+      // Erst alle Aufgaben, dann alle Lösungen (zum Ausdrucken getrennt).
       var title = state.title.trim() || TITLES[state.op];
+      var puzzles = [], solutions = [];
+      for (var i = 0; i < state.pages; i++) {
+        var st = Object.assign({}, state, { seed: (state.seed + i * 7919) >>> 0 });
+        if (state.pages > 1) st.title = title + " · Blatt " + (i + 1);
+        var sh = i ? NW.build(st, S.rng) : sheet;
+        puzzles.push(NW.drawPage(S, st, sh, false));
+        if (state.solution) solutions.push(NW.drawPage(S, st, sh, true));
+      }
+      var pages = puzzles.concat(solutions);
       S.toPDF(pages, slug(title) + ".pdf", NW.winAnsi(title));
-      toast(state.solution ? "PDF mit Lösungsblatt erstellt." : "PDF erstellt.");
+      toast((state.pages > 1 ? state.pages + " Blätter" : "PDF") +
+        (state.solution ? " mit Lösungen erstellt." : " erstellt."));
     });
     $("share").addEventListener("click", function () {
       var url = location.href.split("#")[0] + toHash(state);

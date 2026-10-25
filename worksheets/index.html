@@ -9,6 +9,9 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=k1">
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/worksheets/worksheets.css">
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Start", "item": "https://remindery.de/"}, {"@type": "ListItem", "position": 2, "name": "Lernmaterial", "item": "https://remindery.de/worksheets/"}]}
+  </script>
 </head>
 <!-- Übersicht Lernmaterial. Auftrag: docs/auftrag-worksheets.md -->
 <body>
@@ -26,7 +29,7 @@
 
   <main class="ws">
     <div class="ws-intro">
-      <span class="eyebrow-ws">Lernmaterial</span>
+      <nav class="crumbs" aria-label="Brotkrümelnavigation"><ol><li><a href="/">Start</a></li><li aria-current="page">Lernmaterial</li></ol></nav>
       <h1>Arbeitsblätter kostenlos erstellen</h1>
       <p>Unsere kostenlosen Arbeitsblatt-Generatoren erstellen Rätsel für die Grundschule, die du in Sekunden anpasst und als PDF
       druckst – jedes Blatt mit Lösung.
@@ -40,7 +43,7 @@
     </div>
 
     <div class="cats">
-      <section class="cat">
+      <section class="cat" id="mathe">
         <h2>Mathe</h2>
         <p>Rechnen üben mit Rätseln, die Kinder gern lösen.</p>
         <a class="item" href="/worksheets/math/number-wall/">
@@ -62,7 +65,7 @@
         </a>
       </section>
 
-      <section class="cat">
+      <section class="cat" id="deutsch">
         <h2>Deutsch</h2>
         <p>Genau lesen und Rechtschreibung üben, ganz nebenbei.</p>
         <a class="item" href="/worksheets/word-search/">

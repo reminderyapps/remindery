@@ -39,7 +39,7 @@
   var DEFAULT = {
     title: "Suchsel: Herbst", words: THEMES.herbst[1].split(", ").join("\n"),
     cols: 12, rows: 12, dirs: PRESETS.medium.slice(), letters: "upper", umlauts: "keep",
-    fill: "random", list: true, solution: true, name: true, lines: true, seed: 0
+    fill: "random", list: true, solution: true, name: true, lines: true, pages: 1, seed: 0
   };
 
   var state;
@@ -269,7 +269,8 @@
       umlauts: document.querySelector("input[name=umlauts]:checked").value,
       fill: document.querySelector("input[name=fill]:checked").value,
       list: $("opt-list").checked, solution: $("opt-solution").checked,
-      name: $("opt-name").checked, lines: $("opt-lines").checked, seed: state.seed
+      name: $("opt-name").checked, lines: $("opt-lines").checked,
+      pages: +((document.querySelector("input[name=pages]:checked") || {}).value) || 1, seed: state.seed
     };
   }
 
@@ -285,6 +286,8 @@
     });
     $("opt-list").checked = st.list; $("opt-solution").checked = st.solution;
     $("opt-name").checked = st.name; $("opt-lines").checked = st.lines;
+    var pg = document.querySelector("input[name=pages][value='" + (st.pages || 1) + "']");
+    if (pg) pg.checked = true;
   }
 
   function toHash(st) {
@@ -296,6 +299,7 @@
     q.set("o", [st.letters === "lower" ? "k" : "", st.umlauts === "expand" ? "u" : "",
       st.fill === "words" ? "f" : "", st.list ? "" : "L", st.solution ? "" : "S",
       st.name ? "" : "N", st.lines ? "" : "G"].join(""));
+    if (st.pages > 1) q.set("p", st.pages);
     q.set("s", st.seed);
     return "#" + q.toString();
   }
@@ -313,6 +317,7 @@
         letters: o.indexOf("k") >= 0 ? "lower" : "upper", umlauts: o.indexOf("u") >= 0 ? "expand" : "keep",
         fill: o.indexOf("f") >= 0 ? "words" : "random", list: o.indexOf("L") < 0,
         solution: o.indexOf("S") < 0, name: o.indexOf("N") < 0, lines: o.indexOf("G") < 0,
+        pages: [1, 2, 3, 5, 10].indexOf(parseInt(q.get("p"), 10)) >= 0 ? parseInt(q.get("p"), 10) : 1,
         seed: parseInt(q.get("s"), 10) || S.newSeed()
       };
     } catch (e) { return null; }
@@ -414,10 +419,19 @@
       state = readForm(); state.seed = S.newSeed(); render();
     });
     $("pdf").addEventListener("click", function () {
-      var pages = [drawPage(state, puzzle, false)];
-      if (state.solution) pages.push(drawPage(state, puzzle, true));
-      S.toPDF(pages, slug(state.title) + ".pdf", state.title.trim() || "Suchsel");
-      toast(state.solution ? "PDF mit Lösungsblatt erstellt." : "PDF erstellt.");
+      // Mehrere Blätter: Blatt 1 = Vorschau, jedes weitere neu gemischt.
+      // Erst alle Rätsel, dann alle Lösungen.
+      var title = state.title.trim() || "Suchsel", puzzles = [], solutions = [];
+      for (var i = 0; i < state.pages; i++) {
+        var st = Object.assign({}, state, { seed: (state.seed + i * 7919) >>> 0 });
+        if (state.pages > 1) st.title = title + " · Blatt " + (i + 1);
+        var pz = i ? build(st) : puzzle;
+        puzzles.push(drawPage(st, pz, false));
+        if (state.solution) solutions.push(drawPage(st, pz, true));
+      }
+      S.toPDF(puzzles.concat(solutions), slug(state.title) + ".pdf", title);
+      toast((state.pages > 1 ? state.pages + " Blätter" : "PDF") +
+        (state.solution ? " mit Lösungen erstellt." : " erstellt."));
     });
     $("share").addEventListener("click", function () {
       var url = location.href.split("#")[0] + toHash(state);
