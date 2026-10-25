@@ -233,6 +233,9 @@
     else render();
   }
 
+  // Für den Bau der fertigen Themen-Blätter (tool/worksheets/build_themes.mjs).
+  window.NumberWallApp = { fromHash: fromHash, toHash: toHash };
+
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();
 })();

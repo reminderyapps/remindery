@@ -260,3 +260,33 @@ main.ws { max-width: 1120px; }
 .balance { display: flex; align-items: center; gap: 10px; font-size: .85rem; color: var(--text-soft); }
 .balance span { flex: 0 0 auto; }
 .balance input[type=range] { flex: 1 1 auto; min-width: 0; accent-color: var(--ws); height: 28px; cursor: pointer; }
+
+/* Fertige Themen-Blätter (/lernmaterial/<thema>/). Karten, PDFs und
+   Generator-Links baut tool/worksheets/build_themes.mjs. */
+.ts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; margin-top: 32px; }
+.ts-card {
+  margin: 0; display: flex; flex-direction: column; gap: 16px; padding: 18px;
+  background: var(--card); border-radius: 20px; box-shadow: var(--shadow-soft);
+}
+.ts-card figcaption { flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.ts-card h3 { margin: 0; font-size: 1.15rem; }
+.ts-card p { flex: 1; margin: 0 0 6px; font-size: .92rem; color: var(--text-soft); }
+.ts-tweak { font-size: .88rem; font-weight: 650; color: var(--ws-text); padding: 4px 2px; }
+.ts-cc0 { font-size: .9rem; color: var(--text-soft); margin: 18px 0 0; }
+.ts-cta {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin-top: 28px;
+  padding: 20px 22px; border: 1.5px solid var(--ws); border-radius: 18px; background: var(--card);
+}
+.ts-cta p { flex: 1 1 18em; margin: 0; }
+/* Links auf fertige Blätter: Übersicht, Generatoren, Themen-Seiten */
+.ready { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.ready a {
+  display: inline-block; padding: 6px 14px; border-radius: 999px; font-size: .92rem;
+  color: var(--text); border: 1.5px solid var(--line); background: var(--card);
+}
+.ready a:hover { border-color: var(--ws); text-decoration: none; }
+.cat .ready-head { margin: 20px 0 10px; font-size: 1rem; }
+@media (max-width: 480px) {
+  .ts-card { padding: 16px; }
+  .ts-cta .b { flex: 1 1 100%; justify-content: center; }
+}

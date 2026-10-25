@@ -64,7 +64,10 @@
     schule: ["Schule", "Heft, Stift, Lineal, Tafel, Kreide, Pause, Ranzen, Buch, Kleber, Schere, Lehrer, Klasse"],
     farben: ["Farben", "Rot, Blau, Gelb, Grün, Lila, Rosa, Weiß, Braun, Grau, Orange, Schwarz, Bunt"],
     winter: ["Winter", "Schnee, Eis, Mütze, Schal, Schlitten, Kälte, Flocke, Frost, Handschuh, Ofen, Iglu, Pinguin"],
-    weihnachten: ["Weihnachten", "Stern, Kerze, Engel, Geschenk, Baum, Glocke, Plätzchen, Krippe, Schlitten, Rentier, Nikolaus, Advent"],
+    // Weihnachten und Advent: auch Wortlisten der fertigen Themen-Blätter
+    // (/lernmaterial/suchsel-weihnachten/, /suchsel-advent/, tool/worksheets/build_themes.mjs).
+    weihnachten: ["Weihnachten", "Stern, Kerze, Engel, Geschenk, Tannenbaum, Glocke, Krippe, Schlitten, Rentier, Christkind, Lametta, Kugel, Hirte, Esel, Stall, Plätzchen"],
+    advent: ["Advent", "Kerze, Kranz, Kalender, Türchen, Nikolaus, Stiefel, Plätzchen, Backen, Nüsse, Mandarine, Zimt, Tanne, Lebkuchen, Wunschzettel, Lichterkette, Advent"],
     koerper: ["Mein Körper", "Kopf, Hand, Fuß, Arm, Bein, Nase, Mund, Ohr, Auge, Bauch, Knie, Zahn"],
     obst: ["Obst und Gemüse", "Apfel, Birne, Banane, Kirsche, Traube, Möhre, Gurke, Tomate, Paprika, Erbse, Melone, Pflaume"]
   };
@@ -530,6 +533,11 @@
     if (new URLSearchParams(location.search).get("view") === "solution") setView("solution");
     else render();
   }
+
+  // Für den Bau der fertigen Themen-Blätter (tool/worksheets/build_themes.mjs):
+  // dieselbe Logik wie die Seite, ohne Formular.
+  window.WordSearch = { THEMES: THEMES, PRESETS: PRESETS, build: build, drawPage: drawPage,
+    fromHash: fromHash, toHash: toHash };
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();

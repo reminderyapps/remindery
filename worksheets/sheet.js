@@ -17,8 +17,8 @@ window.Sheet = (function () {
   var LANG = typeof document !== "undefined" && document.documentElement &&
     /^en\b/i.test(document.documentElement.lang || "") ? "en" : "de";
   var STR = {
-    de: { name: "Name:", date: "Datum:", footer: "Kostenlos erstellt auf remindery.de/lernmaterial" },
-    en: { name: "Name:", date: "Date:", footer: "Free from remindery.de/en/worksheets" }
+    de: { name: "Name:", date: "Datum:", footer: "Kostenlos erstellt auf remindery.de/lernmaterial · gemeinfrei (CC0)" },
+    en: { name: "Name:", date: "Date:", footer: "Free from remindery.de/en/worksheets · public domain (CC0)" }
   };
   function str() { return STR[api.lang] || STR.de; }
 
@@ -122,9 +122,15 @@ window.Sheet = (function () {
     return out.join("");
   }
 
-  function toPDF(pages, filename, title) {
+  // Baut das jsPDF-Dokument. o.date (Date) und o.fileId (32 Hex-Zeichen)
+  // machen das PDF bytegleich reproduzierbar (fertige Themen-Blätter,
+  // tool/worksheets/build_themes.mjs); ohne sie wie bisher.
+  function makeDoc(pages, title, o) {
+    o = o || {};
     var doc = new window.jspdf.jsPDF({ unit: "mm", format: "a4", compress: true });
-    doc.setProperties({ title: title || filename, creator: "remindery.de/worksheets" });
+    doc.setProperties({ title: title, creator: "remindery.de/worksheets" });
+    if (o.date) doc.setCreationDate(o.date);
+    if (o.fileId) doc.setFileId(o.fileId);
     pages.forEach(function (page, i) {
       if (i) doc.addPage();
       page.ops.forEach(function (o) {
@@ -145,7 +151,16 @@ window.Sheet = (function () {
         }
       });
     });
-    doc.save(filename);
+    return doc;
+  }
+
+  function toPDF(pages, filename, title) {
+    makeDoc(pages, title || filename).save(filename);
+  }
+
+  // Wie toPDF, aber ohne Speichern: die PDF-Bytes als Uint8Array.
+  function toPDFBytes(pages, title, o) {
+    return new Uint8Array(makeDoc(pages, title || "", o).output("arraybuffer"));
   }
 
   // Seed-fähiger Zufall (mulberry32): gleicher Seed = gleiches Blatt, damit
@@ -163,7 +178,7 @@ window.Sheet = (function () {
   function newSeed() { return Math.floor(Math.random() * 1e9); }
 
   var api = { W: W, H: H, MARGIN: MARGIN, INK: INK, SOFT: SOFT, LINE: LINE, PT: PT,
-    Page: Page, toSVG: toSVG, toPDF: toPDF, rng: rng, newSeed: newSeed, winAnsi: winAnsi,
+    Page: Page, toSVG: toSVG, toPDF: toPDF, toPDFBytes: toPDFBytes, rng: rng, newSeed: newSeed, winAnsi: winAnsi,
     lang: LANG };
   return api;
 })();
