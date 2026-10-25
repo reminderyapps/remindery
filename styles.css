@@ -517,7 +517,7 @@ article blockquote {
 /* Fuß der Startseite; die globalen footer-Regeln der Textseiten neutralisieren. */
 .home .site-foot { text-align: left; padding: 0; border-top: 1px solid var(--line); background: var(--tint); color: var(--text-soft); font-size: .93rem; }
 .home .site-foot nav { display: block; margin: 0; }
-.home .foot-in { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 32px; padding-block: 48px 28px; }
+.home .foot-in { display: grid; grid-template-columns: 1.4fr repeat(4, 1fr); gap: 32px; padding-block: 48px 28px; }
 .home .foot-in h2 { font-family: var(--sans); font-size: .78rem; letter-spacing: .09em; text-transform: uppercase; color: var(--text); margin-bottom: 8px; }
 .home .foot-in ul { list-style: none; margin: 0; padding: 0; }
 .home .foot-in li a { display: inline-flex; align-items: center; min-height: 44px; color: var(--text-soft); }
@@ -673,7 +673,7 @@ main.studio { max-width: 1120px; padding: 72px var(--gutter) 64px; }
 .studio h3 { font-family: var(--serif); font-weight: 700; }
 .site-foot { text-align: left; padding: 0; border-top: 1px solid var(--line); background: var(--tint); color: var(--text-soft); font-size: .93rem; }
 .site-foot nav { display: block; margin: 0; }
-.site-foot .foot-in { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 32px; padding-block: 48px 28px; }
+.site-foot .foot-in { display: grid; grid-template-columns: 1.4fr repeat(4, 1fr); gap: 32px; padding-block: 48px 28px; }
 .site-foot .foot-in h2 { font-family: var(--sans); font-size: .78rem; font-weight: 650; letter-spacing: .09em; text-transform: uppercase; color: var(--text); margin: 0 0 8px; }
 .site-foot .foot-in ul { list-style: none; margin: 0; padding: 0; }
 .site-foot .foot-in li a { display: inline-flex; align-items: center; min-height: 44px; color: var(--text-soft); }
@@ -690,5 +690,10 @@ main.studio { max-width: 1120px; padding: 72px var(--gutter) 64px; }
 .studio-hero .eyebrow { display: block; }
 @media (max-width: 860px) { main.studio { padding-top: 40px; } }
 
-/* Fuß: „Lernmaterial“ als eigener Abschnitt unter „Studio“ (PO 25.10.2026) */
-.site-foot .foot-col > nav + nav { margin-top: 20px; }
+
+/* Fuß mit vier Linkspalten (Lernmaterial, PO 25.10.2026): auf mittlerer
+   Breite bekommt die Marke eine eigene Zeile, damit die Spalten Platz haben. */
+@media (min-width: 761px) and (max-width: 1080px) {
+  .home .foot-in, .site-foot .foot-in { grid-template-columns: repeat(4, 1fr); }
+  .home .foot-brand, .site-foot .foot-brand { grid-column: 1 / -1; }
+}
