@@ -271,8 +271,9 @@
       tag: solution ? "Lösung" : "",
       nameLine: st.name, blank: solution,
       instruction: (mul
-        ? "Jeder Stein ist das Produkt der zwei Steine darunter. Fülle die Mauern aus."
-        : "Jeder Stein ist die Summe der zwei Steine darunter. Fülle die Mauern aus.")
+        // Malpunkt statt ×: so steht es in Grundschulheften. Beides ist WinAnsi.
+        ? "Rechne mal: Zwei Steine nebeneinander ergeben den Stein darüber, z. B. 2 · 3 = 6."
+        : "Rechne plus: Zwei Steine nebeneinander ergeben den Stein darüber, z. B. 2 + 3 = 5.")
     });
 
     var walls = sheet.walls, count = walls.length;

@@ -77,10 +77,10 @@
             <p class="hint" id="level-hint"></p>
           </div>
           <div class="field">
-            <span class="label" id="op-label">Rechenart</span>
-            <div class="seg" role="radiogroup" aria-labelledby="op-label">
-              <label><input type="radio" name="op" value="plus">Plus (Zahlenmauer)</label>
-              <label><input type="radio" name="op" value="mul">Mal (Malmauer)</label>
+            <span class="label" id="op-label">Plus oder Mal?</span>
+            <div class="op-cards" role="radiogroup" aria-labelledby="op-label">
+              <label class="op-card"><input type="radio" name="op" value="plus"><span class="op-sym" aria-hidden="true">+</span><span class="op-txt"><b>Plus-Mauer</b><svg class="op-wall" viewBox="0 0 64 34" aria-hidden="true"><rect x="16" y="1" width="32" height="15" rx="2"/><rect x="0" y="18" width="32" height="15" rx="2"/><rect x="32" y="18" width="32" height="15" rx="2"/><text x="32" y="12.5">5</text><text x="16" y="29.5">2</text><text x="48" y="29.5">3</text></svg><small>2 + 3 = 5</small></span></label>
+              <label class="op-card"><input type="radio" name="op" value="mul"><span class="op-sym op-dot" aria-hidden="true">·</span><span class="op-txt"><b>Mal-Mauer</b><svg class="op-wall" viewBox="0 0 64 34" aria-hidden="true"><rect x="16" y="1" width="32" height="15" rx="2"/><rect x="0" y="18" width="32" height="15" rx="2"/><rect x="32" y="18" width="32" height="15" rx="2"/><text x="32" y="12.5">6</text><text x="16" y="29.5">2</text><text x="48" y="29.5">3</text></svg><small>2 · 3 = 6</small></span></label>
             </div>
           </div>
           <div class="field">
