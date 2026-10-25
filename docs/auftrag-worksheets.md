@@ -43,3 +43,7 @@ Seite, Inhalt deutsch. Alles läuft im Browser, keine externen Requests
   Englisch: `/en/worksheets/`, `…/word-search-generator/`, `…/number-pyramid-generator/`,
   Skripte zweisprachig (`STR = {de, en}` je Datei, Sprache aus `<html lang>`).
   Offen: Search Console „Indexierung beantragen“ für die 6 Adressen (PO).
+- 25.10. Verzeichnis-Einträge (Kopierseite `docs/verzeichnisse-lernmaterial.html`):
+  Deutscher Bildungsserver, Onlineressource **Zahlenmauer-Generator eingereicht,
+  Eingangs-ID 9566** (Fach + ELIXIER: Schule › Grundschule › Mathematik › Rechnen,
+  Rechte „Sonstige Lizenz“, Kontakt hello@remindery.de). Prüfung „ein paar Tage“.
