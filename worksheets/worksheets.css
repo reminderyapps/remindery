@@ -174,12 +174,42 @@ main.ws { max-width: 1120px; }
 .ws-text h2:first-child { margin-top: 0; }
 .ws-text dt { font-weight: 650; margin-top: 1em; }
 .ws-text dd { margin: 4px 0 0; color: var(--text-soft); }
+/* App-Hinweis mit erkennbaren Store-Badges (PO 25.10.2026) */
 .app-hint {
-  display: flex; gap: 18px; align-items: center; margin-top: 32px; padding: 18px 20px;
-  background: var(--ws-soft); border-radius: 16px;
+  display: flex; gap: 20px; align-items: flex-start; margin-top: 32px; padding: 20px 22px;
+  background: var(--ws-soft); border-radius: 18px;
 }
-.app-hint img { width: 56px; height: 56px; border-radius: 14px; flex: 0 0 auto; }
+.app-hint .app-icon { width: 64px; height: 64px; border-radius: 16px; flex: 0 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,.12); }
 .app-hint p { margin: 0; }
+.app-badges { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin-top: 12px; }
+.app-badges a { display: inline-flex; border-radius: 8px; }
+.app-badges a:hover { text-decoration: none; transform: translateY(-1px); }
+.app-badges .badge-play { height: 48px; width: auto; }
+.app-badges .badge-amazon { height: 48px; width: auto; }
+@media (max-width: 520px) {
+  .app-hint { flex-direction: column; }
+}
+
+/* Kostenlos-Hinweise (PO 25.10.2026: „super wichtig“, mehrfach sichtbar) */
+.perks { list-style: none; padding: 0; margin: 18px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.perks li {
+  display: inline-flex; align-items: center; gap: 7px; font-size: .92rem; font-weight: 600;
+  color: var(--text); background: var(--card); border: 1.5px solid var(--line);
+  border-radius: 999px; padding: 6px 14px 6px 10px;
+}
+.perks li::before {
+  content: "✓"; display: grid; place-items: center; width: 18px; height: 18px; flex: 0 0 auto;
+  border-radius: 50%; font-size: .72rem; font-weight: 800; line-height: 1;
+  background: var(--ws); color: var(--ws-ink);
+}
+.perks li.free { background: var(--ws); border-color: var(--ws); color: var(--ws-ink); font-size: 1rem; }
+.perks li.free::before { background: var(--ws-ink); color: var(--ws); }
+.free-note { font-size: .88rem; color: var(--text-soft); margin: 10px 0 0; }
+.free-pill {
+  display: inline-block; vertical-align: 2px; margin-left: 6px; font-style: normal; font-size: .72rem;
+  font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: var(--ws-ink);
+  background: var(--ws); border-radius: 999px; padding: 2px 8px;
+}
 
 /* Übersicht /worksheets/ */
 .cats { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 28px; }
