@@ -93,6 +93,16 @@ for path, body in pages.items():
         if path not in back.values():
             errors.append(f"hreflang nicht gegenseitig  {path} -> {other}")
 
+# Jede App-Datenschutzseite muss in der Website-Erklaerung verlinkt sein (DE und EN)
+app_privacy = {m.group(1) for p, b in pages.items() if 'http-equiv="refresh"' not in b
+               for m in [re.fullmatch(r"/([^/]+)/privacy/", p)] if m and m.group(1) != "en"}
+for overview in ("/privacy/", "/en/privacy/"):
+    linked = set(re.findall(r'href="([^"#]+)"', pages.get(overview, "")))
+    for app in sorted(app_privacy):
+        want = f"/en/{app}/privacy/" if overview == "/en/privacy/" and f"/en/{app}/privacy/" in pages else f"/{app}/privacy/"
+        if want not in linked:
+            errors.append(f"App-Datenschutz nicht verlinkt  {overview} -> {want}")
+
 html = [p for p, b in pages.items() if 'http-equiv="refresh"' not in b]
 print(f"{BASE}: {len(status)} Adressen, {len(html)} Seiten, {len(pages) - len(html)} Weiterleitungen")
 for e in errors:
