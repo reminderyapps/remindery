@@ -38,6 +38,34 @@
     crazy: { label: "Verrückt", n: [6, 7], zr: 10000, minTop: 2000, mode: "mixed", extra: 0,
       baseGaps: 2, prop: false, mul: { n: 4, zr: 5000 } }
   };
+  // Sprache: aus <html lang> im Browser, in Node "de" (setLang für den Selbsttest).
+  var lang = typeof document !== "undefined" && document.documentElement &&
+    /^en\b/i.test(document.documentElement.lang || "") ? "en" : "de";
+  var STR = {
+    de: {
+      mulMaxBase: function () { return "Malmauern haben höchstens 4 Grundsteine"; },
+      zrRaised: function (z) { return "Zahlenraum auf " + z + " angehoben"; },
+      zrCapped: function (z) { return "Zahlenraum auf " + z + " begrenzt"; },
+      maxCount: function (c) { return "ab 6 Grundsteinen höchstens " + c + " Mauern (Platz zum Schreiben)"; },
+      titlePlus: "Zahlenmauern", titleMul: "Malmauern", tag: "Lösung",
+      // Malpunkt statt ×: so steht es in Grundschulheften. Beides ist WinAnsi.
+      instrMul: "Rechne mal: Zwei Steine nebeneinander ergeben den Stein darüber, z. B. 2 · 3 = 6.",
+      instrPlus: "Rechne plus: Zwei Steine nebeneinander ergeben den Stein darüber, z. B. 2 + 3 = 5."
+    },
+    en: {
+      mulMaxBase: function () { return "multiplication pyramids have at most 4 bottom blocks"; },
+      zrRaised: function (z) { return "number range raised to " + z.toLocaleString("en-US"); },
+      zrCapped: function (z) { return "number range capped at " + z.toLocaleString("en-US"); },
+      maxCount: function (c) { return "at most " + c + " pyramids with 6 or more bottom blocks (room to write)"; },
+      titlePlus: "Number Pyramids", titleMul: "Multiplication Pyramids", tag: "Answer key",
+      // English worksheets use × for multiplication (WinAnsi 0xD7).
+      instrMul: "Multiply the two blocks side by side and write the product above: 2 × 3 = 6.",
+      instrPlus: "Add the two blocks side by side and write the sum in the block above: 2 + 3 = 5."
+    }
+  };
+  function T() { return STR[lang] || STR.de; }
+  function setLang(l) { lang = l === "en" ? "en" : "de"; }
+
   var LEVEL_ORDER = ["starter", "grade1", "grade2", "pro", "master", "crazy"];
   var ZR_OPTIONS = [10, 20, 50, 100, 200, 500, 1000, 5000, 10000];
   var COUNTS = [2, 4, 6, 8];
@@ -137,22 +165,22 @@
     var nMin = mul ? L.mul.n : L.n[0], nMax = mul ? L.mul.n : L.n[1];
     if (st.base) {
       nMin = nMax = Math.max(MIN_N, Math.min(MAX_N, st.base));
-      if (mul && nMax > MAX_N_MUL) { nMin = nMax = MAX_N_MUL; notes.push("Malmauern haben höchstens 4 Grundsteine"); }
+      if (mul && nMax > MAX_N_MUL) { nMin = nMax = MAX_N_MUL; notes.push(T().mulMaxBase()); }
     }
     var custom = !!(st.base || st.zr);
     var zr = st.zr || (mul ? L.mul.zr : L.zr);
     var feas = feasMin(nMax, st.op);
     if (zr < 2 * feas) {
       zr = ZR_OPTIONS.filter(function (z) { return z >= 2 * feas; })[0];
-      notes.push("Zahlenraum auf " + zr + " angehoben");
+      notes.push(T().zrRaised(zr));
     }
-    if (mul && nMax === 3 && zr > MUL3_MAX_ZR) { zr = MUL3_MAX_ZR; notes.push("Zahlenraum auf " + zr + " begrenzt"); }
+    if (mul && nMax === 3 && zr > MUL3_MAX_ZR) { zr = MUL3_MAX_ZR; notes.push(T().zrCapped(zr)); }
     var minTop = custom ? Math.floor(zr * (mul ? 0.2 : 0.3)) : (mul ? Math.floor(zr * 0.2) : L.minTop);
     minTop = Math.max(minTop, feas);
     // Ab 6 Grundsteinen passen nur 3 Mauern aufs Blatt, wenn die Steine groß
     // genug zum Hineinschreiben bleiben sollen (mindestens 10 mm hoch).
     var count = COUNTS.indexOf(st.count) >= 0 ? st.count : 4;
-    if (nMax >= 6 && count > MAX_COUNT_BIG) { count = MAX_COUNT_BIG; notes.push("ab 6 Grundsteinen höchstens " + MAX_COUNT_BIG + " Mauern (Platz zum Schreiben)"); }
+    if (nMax >= 6 && count > MAX_COUNT_BIG) { count = MAX_COUNT_BIG; notes.push(T().maxCount(MAX_COUNT_BIG)); }
     return { nMin: nMin, nMax: nMax, zr: zr, minTop: minTop, op: mul ? "mul" : "plus", count: count,
       mode: L.mode, extra: (mul && L.mul.extra != null ? L.mul.extra : L.extra) || 0, baseGaps: L.baseGaps || 0, prop: !!L.prop, notes: notes };
   }
@@ -266,14 +294,12 @@
 
   function drawPage(S, st, sheet, solution) {
     var p = new S.Page(), mul = sheet.p.op === "mul";
-    var title = winAnsi(st.title || "").trim() || (mul ? "Malmauern" : "Zahlenmauern");
+    var tx = T();
+    var title = winAnsi(st.title || "").trim() || (mul ? tx.titleMul : tx.titlePlus);
     var top = p.header(title, {
-      tag: solution ? "Lösung" : "",
+      tag: solution ? tx.tag : "",
       nameLine: st.name, blank: solution,
-      instruction: (mul
-        // Malpunkt statt ×: so steht es in Grundschulheften. Beides ist WinAnsi.
-        ? "Rechne mal: Zwei Steine nebeneinander ergeben den Stein darüber, z. B. 2 · 3 = 6."
-        : "Rechne plus: Zwei Steine nebeneinander ergeben den Stein darüber, z. B. 2 + 3 = 5.")
+      instruction: mul ? tx.instrMul : tx.instrPlus
     });
 
     var walls = sheet.walls, count = walls.length;
@@ -333,6 +359,7 @@
     MIN_N: MIN_N, MAX_N: MAX_N, MAX_N_MUL: MAX_N_MUL,
     idx: idx, total: total, relations: relations, coeff: coeff, values: values,
     rank: rank, propagate: propagate, uniquelySolvable: uniquelySolvable,
-    params: params, build: build, drawPage: drawPage, winAnsi: winAnsi
+    params: params, build: build, drawPage: drawPage, winAnsi: winAnsi,
+    setLang: setLang, lang: function () { return lang; }
   };
 });

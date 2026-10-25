@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Number Pyramid Generator – free addition &amp; multiplication pyramid worksheets | Remindery</title>
+  <meta name="description" content="Make number pyramid worksheets for free: six levels from starter to “crazy”, addition or multiplication pyramids, 2 to 8 per sheet, each with exactly one solution. Printable PDF with answer key – no sign-up, no ads.">
+  <link rel="canonical" href="https://remindery.de/en/worksheets/number-pyramid-generator/">
+  <link rel="alternate" hreflang="de" href="https://remindery.de/lernmaterial/zahlenmauer-generator/">
+  <link rel="alternate" hreflang="en" href="https://remindery.de/en/worksheets/number-pyramid-generator/">
+  <link rel="alternate" hreflang="x-default" href="https://remindery.de/lernmaterial/zahlenmauer-generator/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=k1">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/worksheets/worksheets.css?v=20261025e">
+  <meta property="og:title" content="Number Pyramid Generator – free addition &amp; multiplication pyramid worksheets">
+  <meta property="og:description" content="Six levels, addition or multiplication, 2 to 8 pyramids per sheet, each with exactly one solution. PDF with answer key, no sign-up, no ads.">
+  <meta property="og:url" content="https://remindery.de/en/worksheets/number-pyramid-generator/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Number Pyramid Generator",
+    "alternateName": ["Addition Pyramid Generator", "Number Wall Generator", "Multiplication Pyramid Generator"],
+    "url": "https://remindery.de/en/worksheets/number-pyramid-generator/",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Browser",
+    "inLanguage": "en",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+    "publisher": { "@type": "Organization", "name": "Remindery Apps", "url": "https://remindery.de/en/" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://remindery.de/en/"}, {"@type": "ListItem", "position": 2, "name": "Worksheets", "item": "https://remindery.de/en/worksheets/"}, {"@type": "ListItem", "position": 3, "name": "Math", "item": "https://remindery.de/en/worksheets/#math"}, {"@type": "ListItem", "position": 4, "name": "Number Pyramid Generator", "item": "https://remindery.de/en/worksheets/number-pyramid-generator/"}]}
+  </script>
+</head>
+<!--
+  Number pyramid generator (English). German counterpart: /lernmaterial/zahlenmauer-generator/.
+  Same scripts as the German page; texts per <html lang> in number-wall/app.js + wall.js
+  (node worksheets/math/number-wall/selftest.js checks both languages).
+  Everything runs in the browser, no external requests.
+-->
+<body>
+  <header class="site-head">
+    <div class="head-in">
+      <a class="site-brand" href="/en/"><img src="/favicon.svg?v=k1" width="34" height="34" alt=""><span>Remindery Apps</span></a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="/en/">Apps</a>
+        <a href="/en/worksheets/" aria-current="page">Worksheets</a>
+        <a href="/en/method/">Method</a>
+        <a href="/en/about/">About</a>
+        <span class="lang" role="group" aria-label="Language"><a href="/lernmaterial/zahlenmauer-generator/" hreflang="de" lang="de" title="Deutsch">DE</a><a href="/en/worksheets/number-pyramid-generator/" hreflang="en" lang="en" title="English" aria-current="true">EN</a></span>
+      </nav>
+    </div>
+  </header>
+
+  <main class="ws">
+    <div class="ws-intro">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/">Home</a><span class="sep" aria-hidden="true">›</span><a href="/en/worksheets/">Worksheets</a><span class="sep" aria-hidden="true">›</span><a href="/en/worksheets/#math">Math</a><span class="sep" aria-hidden="true">›</span><span aria-current="page">Number Pyramid Generator</span></nav>
+      <h1>Free Number Pyramid Generator</h1>
+      <p>Make number pyramid worksheets – also known as addition pyramids or number walls – in seconds:
+      pick a level and print the PDF, answer key included. Every pyramid has exactly one solution.</p>
+      <ul class="perks" aria-label="At a glance">
+        <li class="free"><b>100&nbsp;% free</b></li>
+        <li>no sign-up</li>
+        <li>no ads</li>
+        <li>answer key included</li>
+      </ul>
+    </div>
+
+    <div class="tool">
+      <form class="controls" onsubmit="return false" aria-label="Settings">
+        <div class="panel controls">
+          <h2 class="panel-title"><span class="n">1</span>Choose your pyramids</h2>
+          <div class="field">
+            <span class="label" id="level-label">Level</span>
+            <div class="seg" role="radiogroup" aria-labelledby="level-label">
+              <label><input type="radio" name="level" value="starter">Starter</label>
+              <label><input type="radio" name="level" value="grade1">Grade 1</label>
+              <label><input type="radio" name="level" value="grade2">Grade 2</label>
+              <label><input type="radio" name="level" value="pro">Pro</label>
+              <label><input type="radio" name="level" value="master">Master</label>
+              <label><input type="radio" name="level" value="crazy">Crazy</label>
+            </div>
+            <p class="hint" id="level-hint"></p>
+          </div>
+          <div class="field">
+            <span class="label" id="op-label">Addition or multiplication</span>
+            <div class="seg op-seg" role="radiogroup" aria-labelledby="op-label">
+              <label><input type="radio" name="op" value="plus"><svg class="op-ic" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9"/><path d="M10 5.5v9M5.5 10h9"/></svg>Addition</label>
+              <label><input type="radio" name="op" value="mul"><svg class="op-ic" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9"/><path d="M6.8 6.8l6.4 6.4M13.2 6.8l-6.4 6.4"/></svg>Multiplication</label>
+            </div>
+          </div>
+          <div class="field">
+            <span class="label" id="count-label">Pyramids per sheet</span>
+            <div class="seg" role="radiogroup" aria-labelledby="count-label">
+              <label><input type="radio" name="count" value="2">2</label>
+              <label><input type="radio" name="count" value="4">4</label>
+              <label><input type="radio" name="count" value="6">6</label>
+              <label><input type="radio" name="count" value="8">8</label>
+            </div>
+          </div>
+          <div class="field">
+            <span class="label" id="pages-label">How many different sheets?</span>
+            <div class="seg" role="radiogroup" aria-labelledby="pages-label">
+              <label><input type="radio" name="pages" value="1">1</label>
+              <label><input type="radio" name="pages" value="2">2</label>
+              <label><input type="radio" name="pages" value="3">3</label>
+              <label><input type="radio" name="pages" value="5">5</label>
+              <label><input type="radio" name="pages" value="10">10</label>
+            </div>
+            <p class="hint">Every sheet gets new problems. All answer keys come together at the end of the PDF.</p>
+          </div>
+        </div>
+
+        <div class="panel controls">
+          <h2 class="panel-title"><span class="n">2</span>Adjust the sheet</h2>
+          <div class="field">
+            <label for="title">Heading</label>
+            <input type="text" id="title" maxlength="48" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="base">Bottom row</label>
+            <select id="base">
+              <option value="0">as the level</option>
+              <option value="3">3 blocks</option>
+              <option value="4">4 blocks</option>
+              <option value="5">5 blocks</option>
+              <option value="6">6 blocks</option>
+              <option value="7">7 blocks</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="zr">Number range</label>
+            <select id="zr">
+              <option value="0">as the level</option>
+              <option value="10">up to 10</option>
+              <option value="20">up to 20</option>
+              <option value="50">up to 50</option>
+              <option value="100">up to 100</option>
+              <option value="200">up to 200</option>
+              <option value="500">up to 500</option>
+              <option value="1000">up to 1,000</option>
+              <option value="5000">up to 5,000</option>
+              <option value="10000">up to 10,000</option>
+            </select>
+            <p class="hint">Picking a level resets both.</p>
+          </div>
+          <div class="field checks">
+            <span class="label">On the sheet</span>
+            <label><input type="checkbox" id="opt-solution"> Answer key as second page</label>
+            <label><input type="checkbox" id="opt-name"> Line for name and date</label>
+          </div>
+        </div>
+      </form>
+
+      <section class="preview" aria-label="Preview">
+        <div class="preview-bar">
+          <div class="toggle" role="group" aria-label="View">
+            <button type="button" data-view="puzzle" aria-pressed="true">Puzzle</button>
+            <button type="button" data-view="solution" aria-pressed="false">Answer key</button>
+          </div>
+          <span class="status" id="status" role="status" aria-live="polite"></span>
+        </div>
+        <div class="sheet" id="sheet"></div>
+        <div class="actions">
+          <button type="button" class="b primary" id="pdf"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m-5-5 5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Download free PDF</button>
+          <button type="button" class="b" id="shuffle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h3c5 0 5 10 10 10h3m-3-3 3 3-3 3M4 17h3c1.6 0 2.6-1 3.4-2.4M20 7h-3c-1.6 0-2.6 1-3.4 2.4M17 4l3 3-3 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>New numbers</button>
+          <button type="button" class="b" id="share"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Copy link</button>
+        </div>
+        <p class="free-note">Free and unlimited – no sign-up, no ads. Everything stays in your browser.</p>
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      </section>
+    </div>
+
+    <div class="app-hint">
+      <img class="app-icon" src="/puzzles/icon.png" width="64" height="64" alt="">
+      <div>
+        <p><strong>More puzzles on the go:</strong> our <a href="/en/puzzles/">Kinder Rätselheft</a> app for phone and tablet has word searches, number pyramids and 28 more kinds of puzzles for ages 6 to 8 – a fresh page every time, no ads, works offline. The app is in German.</p>
+        <div class="app-badges">
+          <a href="https://play.google.com/store/apps/details?id=de.remindery.puzzles.grade12"><img class="badge-play" src="/google-play-badge-de.png" width="646" height="250" alt="Get it on Google Play"></a>
+          <a href="https://www.amazon.de/dp/B0HMLJT19P"><img class="badge-amazon" src="/amazon-appstore-badge-de.png" width="572" height="168" alt="Available at Amazon Appstore"></a>
+        </div>
+      </div>
+    </div>
+
+    <article class="ws-text">
+      <h2>How the number pyramid generator works</h2>
+      <p>Choose a level, addition or multiplication, and how many pyramids you want
+      on the sheet. The preview shows exactly the sheet that will print. Don't like
+      the numbers? Click “New numbers”. If you want, the PDF gets a second page with
+      the answer key: the missing numbers are highlighted in yellow and set in
+      italics, the given numbers stay plain. Every pyramid is numbered, so in class
+      you can simply say “look at pyramid 3”. Given blocks are lightly shaded, so
+      children see at a glance where to write – and that works in black-and-white
+      printing too.</p>
+      <p>The generator checks every pyramid before it goes on the sheet: it has
+      exactly one solution, and all numbers are whole numbers within the chosen
+      range – no fractions, nothing negative.</p>
+
+      <h2>Which level for which grade?</h2>
+      <dl>
+        <dt>Starter – ages 5–6 (kindergarten, Reception and Year 1)</dt>
+        <dd>3 blocks in the bottom row, numbers up to 10. The bottom row is given,
+        children only add upwards. Big blocks to write in.</dd>
+        <dt>Grade 1 (Year 2 in the UK)</dt>
+        <dd>4 blocks in the bottom row, numbers up to 20, the bottom row is given.</dd>
+        <dt>Grade 2 (Year 3)</dt>
+        <dd>4 bottom blocks, numbers up to 100. Now numbers are missing at the
+        bottom too: children work backwards and solve missing-number problems.</dd>
+        <dt>Pro – Grade 3 (Year 4)</dt>
+        <dd>4 bottom blocks, numbers up to 1,000, only as many clues as needed.</dd>
+        <dt>Master – Grade 4 (Year 5)</dt>
+        <dd>5 bottom blocks, numbers up to 1,000, only 5 clues. The pyramid can
+        always be solved block by block – you just have to find where to start.</dd>
+        <dt>Crazy – for puzzle fans</dt>
+        <dd>6 or 7 bottom blocks, numbers up to 10,000, as few clues as possible.
+        Some pyramids can no longer be solved block by block – then trial and
+        error helps, or a letter for the unknown number.</dd>
+        <dt>Multiplication pyramids</dt>
+        <dd>Multiply instead of add, using times-table numbers. Multiplication
+        pyramids have 3 or 4 bottom blocks; they suit children who know their
+        times tables, from the end of Grade 2 (Year 3) on.</dd>
+      </dl>
+
+      <h2>Frequently asked questions</h2>
+      <dl>
+        <dt>What is a number pyramid?</dt>
+        <dd>A pyramid of blocks that gets narrower towards the top. Each block holds
+        the sum of the two blocks directly below it. Some numbers are given, and
+        children work out the rest. Number pyramids build addition and subtraction
+        skills – and thinking about how numbers fit together.</dd>
+        <dt>Number pyramid, addition pyramid, number wall – are they the same?</dt>
+        <dd>Yes. Depending on the textbook and the country, the same puzzle is called
+        a number pyramid, addition pyramid, number wall or pyramid puzzle. If you
+        multiply instead of add, it is a multiplication pyramid.</dd>
+        <dt>How do you solve a number pyramid when numbers are missing at the bottom?</dt>
+        <dd>Work backwards: if you know a block and one of the two blocks below it, the
+        missing block is the difference. If the top says 12 and the block below on
+        the left says 5, the block next to it must be 7, because 5 + 7 = 12. In
+        multiplication pyramids you divide instead. Always look for a spot where
+        two of the three numbers are already known.</dd>
+        <dt>Does every pyramid really have only one solution?</dt>
+        <dd>Yes. For every pyramid the generator checks that the given numbers allow
+        exactly one solution. Pyramids with more than one possible answer are
+        thrown out.</dd>
+        <dt>Is it free? Do I need to sign up?</dt>
+        <dd>It's completely free – no sign-up, no ads and no daily limit.</dd>
+        <dt>Can I share the worksheet?</dt>
+        <dd>Yes. “Copy link” gives you an address that opens exactly these pyramids
+        again – handy for colleagues or a class page. Nothing is sent to us;
+        everything is made in your browser.</dd>
+        <dt>Will it print on US Letter paper?</dt>
+        <dd>Yes. The PDF is A4; choose “Fit to page” in the print dialog and it fits
+        Letter paper with nothing cut off.</dd>
+      </dl>
+
+    </article>
+  </main>
+
+  <footer>
+    <nav>
+      <a href="/en/worksheets/">Worksheets</a>
+      <a href="/en/legal-notice/">Legal notice</a>
+      <a href="/en/privacy/">Privacy</a>
+      <a href="/en/">All apps</a>
+    </nav>
+    &copy; 2026 Remindery Apps
+  </footer>
+
+  <script src="/worksheets/vendor/jspdf.umd.min.js" defer></script>
+  <script src="/worksheets/sheet.js?v=20261025e" defer></script>
+  <script src="/worksheets/math/number-wall/wall.js?v=20261025e" defer></script>
+  <script src="/worksheets/math/number-wall/app.js?v=20261025e" defer></script>
+</body>
+</html>

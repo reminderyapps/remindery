@@ -1,4 +1,5 @@
-/* Zahlenmauer-Generator (Seite /lernmaterial/zahlenmauer-generator/). Läuft komplett im
+/* Zahlenmauer-Generator (Seiten /lernmaterial/zahlenmauer-generator/ und
+   /en/worksheets/number-pyramid-generator/, Texte je Sprache in STR). Läuft komplett im
    Browser: Logik in wall.js (auch von selftest.js in Node geprüft), Vorschau
    als SVG, PDF über Sheet.toPDF. Der Zustand steht im Link (#...), damit ein
    geteilter Link genau diese Mauern wieder erzeugt. */
@@ -7,23 +8,72 @@
 
   var S = window.Sheet, NW = window.NumberWall;
 
-  var HINTS = {
-    starter: "3 Grundsteine, Zahlen bis 10, nur die oberen Steine sind leer.",
-    grade1: "4 Grundsteine, Zahlen bis 20, die unterste Reihe ist vorgegeben.",
-    grade2: "4 Grundsteine, bis 100. Auch unten fehlen Zahlen – rückwärts rechnen.",
-    pro: "4 Grundsteine, bis 1000, nur so viele Vorgaben wie nötig.",
-    master: "5 Grundsteine, bis 1000, nur 5 Vorgaben, unten mindestens 2 Lücken.",
-    crazy: "6 bis 7 Grundsteine, bis 10.000, minimale Vorgaben – manchmal hilft nur Knobeln."
+  // Alle sichtbaren Texte je Sprache (<html lang>, über Sheet.lang).
+  var STR = {
+    de: {
+      hints: {
+        starter: "3 Grundsteine, Zahlen bis 10, nur die oberen Steine sind leer.",
+        grade1: "4 Grundsteine, Zahlen bis 20, die unterste Reihe ist vorgegeben.",
+        grade2: "4 Grundsteine, bis 100. Auch unten fehlen Zahlen – rückwärts rechnen.",
+        pro: "4 Grundsteine, bis 1000, nur so viele Vorgaben wie nötig.",
+        master: "5 Grundsteine, bis 1000, nur 5 Vorgaben, unten mindestens 2 Lücken.",
+        crazy: "6 bis 7 Grundsteine, bis 10.000, minimale Vorgaben – manchmal hilft nur Knobeln."
+      },
+      hintsMul: {
+        starter: "3 Grundsteine, Ergebnisse bis 20, nur die oberen Steine sind leer.",
+        grade1: "3 Grundsteine, Ergebnisse bis 50, die unterste Reihe ist vorgegeben.",
+        grade2: "3 Grundsteine, bis 100. Auch unten fehlen Zahlen – teilen.",
+        pro: "4 Grundsteine, bis 1000, 5 Vorgaben, auch unten Lücken.",
+        master: "4 Grundsteine, bis 1000, nur 4 Vorgaben, unten mindestens 2 Lücken.",
+        crazy: "4 Grundsteine, bis 5000, nur 4 Vorgaben – manchmal hilft nur Knobeln."
+      },
+      titles: { plus: "Zahlenmauern", mul: "Malmauern" },
+
+      custom: " Feineinstellung aktiv, siehe Vorschau.",
+      solution: "Lösung", preview: "Vorschau",
+      aria: function (n, op) { return " mit " + n + " " + (op === "mul" ? "Malmauern" : "Zahlenmauern"); },
+      range: function (a, b) { return a + " bis " + b; },
+      status: function (n, base, zr) {
+        return n + " Mauern · " + base + " Grundsteine · Zahlen bis " + (zr >= 10000 ? zr.toLocaleString("de-DE") : zr);
+      },
+      sheetNo: " · Blatt ", sheets: " Blätter",
+      madeSol: " mit Lösungen erstellt.", made: " erstellt.",
+      copied: "Link kopiert – er erzeugt genau diese Mauern.", copyPrompt: "Link kopieren:",
+      file: "zahlenmauern"
+    },
+    en: {
+      hints: {
+        starter: "3 blocks in the bottom row, numbers up to 10, only the upper blocks are empty.",
+        grade1: "4 blocks in the bottom row, numbers up to 20, the whole bottom row is given.",
+        grade2: "4 bottom blocks, up to 100. Some bottom numbers are missing too – work backwards.",
+        pro: "4 bottom blocks, up to 1,000, only as many clues as needed.",
+        master: "5 bottom blocks, up to 1,000, only 5 clues, at least 2 gaps in the bottom row.",
+        crazy: "6 or 7 bottom blocks, up to 10,000, minimal clues – sometimes only trial and error helps."
+      },
+      hintsMul: {
+        starter: "3 bottom blocks, products up to 20, only the upper blocks are empty.",
+        grade1: "3 bottom blocks, products up to 50, the whole bottom row is given.",
+        grade2: "3 bottom blocks, up to 100. Some bottom numbers are missing too – divide.",
+        pro: "4 bottom blocks, up to 1,000, 5 clues, gaps in the bottom row too.",
+        master: "4 bottom blocks, up to 1,000, only 4 clues, at least 2 gaps in the bottom row.",
+        crazy: "4 bottom blocks, up to 5,000, only 4 clues – sometimes only trial and error helps."
+      },
+      titles: { plus: "Number Pyramids", mul: "Multiplication Pyramids" },
+      custom: " Custom settings active, see preview.",
+      solution: "Answer key", preview: "Preview",
+      aria: function (n, op) { return " with " + n + " " + (op === "mul" ? "multiplication pyramids" : "number pyramids"); },
+      range: function (a, b) { return a + " to " + b; },
+      status: function (n, base, zr) {
+        return n + (n === 1 ? " pyramid · " : " pyramids · ") + base + " bottom blocks · numbers up to " + zr.toLocaleString("en-US");
+      },
+      sheetNo: " · Sheet ", sheets: " sheets",
+      madeSol: " with answer keys created.", made: " created.",
+      copied: "Link copied – it recreates exactly these pyramids.", copyPrompt: "Copy link:",
+      file: "number-pyramids"
+    }
   };
-  var HINTS_MUL = {
-    starter: "3 Grundsteine, Ergebnisse bis 20, nur die oberen Steine sind leer.",
-    grade1: "3 Grundsteine, Ergebnisse bis 50, die unterste Reihe ist vorgegeben.",
-    grade2: "3 Grundsteine, bis 100. Auch unten fehlen Zahlen – teilen.",
-    pro: "4 Grundsteine, bis 1000, 5 Vorgaben, auch unten Lücken.",
-    master: "4 Grundsteine, bis 1000, nur 4 Vorgaben, unten mindestens 2 Lücken.",
-    crazy: "4 Grundsteine, bis 5000, nur 4 Vorgaben – manchmal hilft nur Knobeln."
-  };
-  var TITLES = { plus: "Zahlenmauern", mul: "Malmauern" };
+  var T = STR[S.lang] || STR.de;
+  var HINTS = T.hints, HINTS_MUL = T.hintsMul, TITLES = T.titles;
 
   var DEFAULT = { level: "grade2", op: "plus", count: 4, base: 0, zr: 0,
     title: TITLES.plus, solution: true, name: true, pages: 1, seed: 0 };
@@ -96,14 +146,13 @@
   function render() {
     sheet = NW.build(state, S.rng);
     $("sheet").innerHTML = S.toSVG(NW.drawPage(S, state, sheet, view === "solution"));
-    var p = sheet.p, nText = p.nMin === p.nMax ? p.nMin : p.nMin + " bis " + p.nMax;
-    $("sheet").setAttribute("aria-label", (view === "solution" ? "Lösung" : "Vorschau") + " mit " +
-      sheet.walls.length + " " + (state.op === "mul" ? "Malmauern" : "Zahlenmauern"));
+    var p = sheet.p, nText = p.nMin === p.nMax ? p.nMin : T.range(p.nMin, p.nMax);
+    $("sheet").setAttribute("aria-label", (view === "solution" ? T.solution : T.preview) +
+      T.aria(sheet.walls.length, state.op));
     $("level-hint").textContent = (state.op === "mul" ? HINTS_MUL : HINTS)[state.level] +
-      (state.base || state.zr ? " Feineinstellung aktiv, siehe Vorschau." : "");
+      (state.base || state.zr ? T.custom : "");
     var st = $("status");
-    st.textContent = sheet.walls.length + " Mauern · " + nText + " Grundsteine · Zahlen bis " +
-      (p.zr >= 10000 ? p.zr.toLocaleString("de-DE") : p.zr) + (p.notes.length ? " · " + p.notes.join(", ") : "");
+    st.textContent = T.status(sheet.walls.length, nText, p.zr) + (p.notes.length ? " · " + p.notes.join(", ") : "");
     st.className = p.notes.length ? "status warn" : "status";
     // Malmauern: höchstens 4 Grundsteine.
     each("#base option", function (o) { o.disabled = state.op === "mul" && +o.value > NW.MAX_N_MUL; });
@@ -134,8 +183,8 @@
   }
 
   function slug(s) {
-    return (s || "zahlenmauern").toLowerCase().replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue")
-      .replace(/ß/g, "ss").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "zahlenmauern";
+    return (s || T.file).toLowerCase().replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue")
+      .replace(/ß/g, "ss").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || T.file;
   }
 
   function init() {
@@ -156,22 +205,22 @@
       var puzzles = [], solutions = [];
       for (var i = 0; i < state.pages; i++) {
         var st = Object.assign({}, state, { seed: (state.seed + i * 7919) >>> 0 });
-        if (state.pages > 1) st.title = title + " · Blatt " + (i + 1);
+        if (state.pages > 1) st.title = title + T.sheetNo + (i + 1);
         var sh = i ? NW.build(st, S.rng) : sheet;
         puzzles.push(NW.drawPage(S, st, sh, false));
         if (state.solution) solutions.push(NW.drawPage(S, st, sh, true));
       }
       var pages = puzzles.concat(solutions);
       S.toPDF(pages, slug(title) + ".pdf", NW.winAnsi(title));
-      toast((state.pages > 1 ? state.pages + " Blätter" : "PDF") +
-        (state.solution ? " mit Lösungen erstellt." : " erstellt."));
+      toast((state.pages > 1 ? state.pages + T.sheets : "PDF") +
+        (state.solution ? T.madeSol : T.made));
     });
     $("share").addEventListener("click", function () {
       var url = location.href.split("#")[0] + toHash(state);
-      var done = function () { toast("Link kopiert – er erzeugt genau diese Mauern."); };
+      var done = function () { toast(T.copied); };
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(url).then(done, function () { window.prompt("Link kopieren:", url); });
-      } else { window.prompt("Link kopieren:", url); }
+        navigator.clipboard.writeText(url).then(done, function () { window.prompt(T.copyPrompt, url); });
+      } else { window.prompt(T.copyPrompt, url); }
     });
 
     // Geteilten Link in einen schon offenen Tab einfügen: Blatt neu aufbauen.

@@ -120,6 +120,25 @@ NW.LEVEL_ORDER.forEach(function (level) {
   });
 });
 
+// Englisches Blatt (/en/worksheets/): gleiche Prüfungen, Texte englisch, × im Blatt.
+S.lang = "en"; NW.setLang("en");
+["starter", "grade2", "crazy"].forEach(function (level) {
+  ["plus", "mul"].forEach(function (op) {
+    var st = { level: level, op: op, count: 8, base: 7, zr: 10, title: "", name: true, solution: true, seed: 31 };
+    var sh = NW.build(st, S.rng), tag = "en/" + level + "/" + op;
+    checkPages(st, sh, tag);
+    var txt = [false, true].map(function (sol) {
+      return NW.drawPage(S, st, sh, sol).ops.filter(function (o) { return o.t === "text"; })
+        .map(function (o) { return o.s; }).join("|");
+    }).join("|");
+    if (!/Answer key/.test(txt) || !/Date:/.test(txt) || !/remindery\.de\/en\/worksheets/.test(txt)) fail(tag + " englische Texte fehlen");
+    if (op === "mul" && !/×/.test(txt)) fail(tag + " Malzeichen fehlt");
+    if (op === "mul" && sh.p.notes.join().indexOf("multiplication pyramids") < 0) fail(tag + " englische Hinweise fehlen");
+    if (/Lösung|Mauer|Rechne/.test(txt)) fail(tag + " deutscher Text im englischen Blatt");
+  });
+});
+S.lang = "de"; NW.setLang("de");
+
 if (fails.length) {
   console.log("FEHLER (" + fails.length + "):\n" + fails.slice(0, 30).join("\n"));
   process.exit(1);

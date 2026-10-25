@@ -1,10 +1,51 @@
-/* Suchsel-Generator (Seite /lernmaterial/suchsel-generator/). Läuft komplett im Browser:
+/* Suchsel-Generator (Seiten /lernmaterial/suchsel-generator/ und
+   /en/worksheets/word-search-generator/, Texte je Sprache in STR). Läuft komplett im Browser:
    Wörter verstecken, Vorschau als SVG, PDF über Sheet.toPDF. Der Zustand steht
    im Link (#...), damit ein geteilter Link genau dieses Suchsel wieder erzeugt. */
 (function () {
   "use strict";
 
   var S = window.Sheet;
+  var EN = S.lang === "en";
+
+  // Alle sichtbaren Texte je Sprache (<html lang>, über Sheet.lang).
+  var STR = {
+    de: {
+      titlePrefix: "Suchsel: ", title: "Suchsel", tag: "Lösung",
+      find: "Finde die versteckten Wörter und kreise sie ein.",
+      findN: function (n) { return "Finde " + n + " versteckte Wörter und kreise sie ein."; },
+      listHead: "Diese Wörter sind versteckt", listHeadSol: "Versteckte Wörter",
+      words: function (n) { return n + (n === 1 ? " Wort" : " Wörter"); },
+      solution: "Lösung", preview: "Vorschau",
+      aria: function (n) { return " des Suchsels mit " + n + " Wörtern"; },
+      empty: "Gib mindestens ein Wort ein.",
+      noRoom: function (w) { return "Kein Platz für: " + w + ". Gitter größer machen oder mehr Richtungen erlauben."; },
+      hidden: function (n) { return n + (n === 1 ? " Wort" : " Wörter") + " versteckt"; },
+      max: function (m) { return " (höchstens " + m + ")"; },
+      sheetNo: " · Blatt ", sheets: " Blätter",
+      madeSol: " mit Lösungen erstellt.", made: " erstellt.",
+      copied: "Link kopiert – er erzeugt genau dieses Suchsel.", copyPrompt: "Link kopieren:",
+      file: "suchsel"
+    },
+    en: {
+      titlePrefix: "Word Search: ", title: "Word Search", tag: "Answer key",
+      find: "Find the hidden words and circle them.",
+      findN: function (n) { return "Find " + n + " hidden words and circle them."; },
+      listHead: "Words to find", listHeadSol: "Hidden words",
+      words: function (n) { return n + (n === 1 ? " word" : " words"); },
+      solution: "Answer key", preview: "Preview",
+      aria: function (n) { return " of the word search with " + n + " words"; },
+      empty: "Enter at least one word.",
+      noRoom: function (w) { return "No room for: " + w + ". Make the grid bigger or allow more directions."; },
+      hidden: function (n) { return n + (n === 1 ? " word" : " words") + " hidden"; },
+      max: function (m) { return " (max. " + m + ")"; },
+      sheetNo: " · Sheet ", sheets: " sheets",
+      madeSol: " with answer keys created.", made: " created.",
+      copied: "Link copied – it recreates exactly this word search.", copyPrompt: "Copy link:",
+      file: "word-search"
+    }
+  };
+  var T = EN ? STR.en : STR.de;
 
   // Richtungen: Kennung, Schritt, Pfeil fürs Formular.
   var DIRS = {
@@ -17,7 +58,7 @@
     hard: ["E", "W", "S", "N", "SE", "NW", "NE", "SW"]
   };
 
-  var THEMES = {
+  var THEMES_DE = {
     herbst: ["Herbst", "Apfel, Blatt, Igel, Kürbis, Drachen, Regen, Pilz, Nebel, Kastanie, Wind, Eichel, Laterne"],
     tiere: ["Tiere", "Hund, Katze, Maus, Pferd, Kuh, Schaf, Ziege, Hase, Fuchs, Eule, Frosch, Igel"],
     schule: ["Schule", "Heft, Stift, Lineal, Tafel, Kreide, Pause, Ranzen, Buch, Kleber, Schere, Lehrer, Klasse"],
@@ -30,14 +71,33 @@
 
   // Füllbuchstaben: deutsche Buchstabenhäufigkeit, abgeflacht (Wurzel), damit
   // das Gitter natürlich aussieht, aber nicht nur aus E und N besteht.
-  var FREQ = { A: 6.5, B: 1.9, C: 3.1, D: 5.1, E: 17.4, F: 1.7, G: 3, H: 4.8, I: 7.6, J: 0.3,
+  var FREQ_DE = { A: 6.5, B: 1.9, C: 3.1, D: 5.1, E: 17.4, F: 1.7, G: 3, H: 4.8, I: 7.6, J: 0.3,
     K: 1.2, L: 3.4, M: 2.5, N: 9.8, O: 2.5, P: 0.8, Q: 0.1, R: 7, S: 7.3, T: 6.2, U: 4.4,
     V: 0.7, W: 1.9, X: 0.1, Y: 0.1, Z: 1.1 };
 
+  // Englisch: Themen für 5- bis 9-Jährige, Wörter ohne britisch/amerikanische
+  // Schreibvarianten (kein colour/color, grey/gray, sledge/sled).
+  var THEMES_EN = {
+    animals: ["Animals", "Dog, Cat, Mouse, Horse, Cow, Sheep, Goat, Rabbit, Fox, Owl, Frog, Duck"],
+    autumn: ["Autumn", "Apple, Leaf, Acorn, Pumpkin, Owl, Rain, Wind, Hedgehog, Squirrel, Mushroom, Scarecrow, Harvest"],
+    winter: ["Winter", "Snow, Ice, Hat, Scarf, Snowman, Mittens, Frost, Cold, Boots, Igloo, Penguin, Snowflake"],
+    christmas: ["Christmas", "Star, Candle, Angel, Gift, Tree, Bell, Reindeer, Sleigh, Stocking, Elf, Wreath, Holly"],
+    ocean: ["Under the Sea", "Fish, Shark, Whale, Crab, Shell, Wave, Starfish, Octopus, Dolphin, Seal, Sand, Boat"],
+    food: ["Healthy Food", "Apple, Pear, Banana, Cherry, Orange, Carrot, Tomato, Pea, Melon, Plum, Lemon, Potato"],
+    school: ["School", "Pencil, Book, Ruler, Desk, Paper, Glue, Scissors, Teacher, Crayon, Chair, Lunch, Map"],
+    body: ["My Body", "Head, Hand, Foot, Arm, Leg, Nose, Mouth, Ear, Eye, Knee, Tooth, Finger"]
+  };
+  // Englische Buchstabenhäufigkeit, abgeflacht wie oben.
+  var FREQ_EN = { A: 8.2, B: 1.5, C: 2.8, D: 4.3, E: 12.7, F: 2.2, G: 2, H: 6.1, I: 7, J: 0.15,
+    K: 0.8, L: 4, M: 2.4, N: 6.7, O: 7.5, P: 1.9, Q: 0.1, R: 6, S: 6.3, T: 9.1, U: 2.8,
+    V: 1, W: 2.4, X: 0.15, Y: 2, Z: 0.1 };
+
   var MAX_WORDS = 40,MIN_SIZE = 5, MAX_SIZE = 25;
+  var THEMES = EN ? THEMES_EN : THEMES_DE, FREQ = EN ? FREQ_EN : FREQ_DE;
+  var DEFAULT_THEME = EN ? THEMES.animals : THEMES.herbst;
 
   var DEFAULT = {
-    title: "Suchsel: Herbst", words: THEMES.herbst[1].split(", ").join("\n"),
+    title: T.titlePrefix + DEFAULT_THEME[0], words: DEFAULT_THEME[1].split(", ").join("\n"),
     cols: 12, rows: 12, dirs: PRESETS.medium.slice(), letters: "upper", umlauts: "keep",
     fill: "random", list: true, solution: true, name: true, lines: true, pages: 1, listSize: 12, seed: 0
   };
@@ -49,7 +109,17 @@
 
   // „behalten“: Ä Ö Ü und ß sind je ein Feld (ß bleibt ß, auch im Großdruck –
   // ein großes ẞ kennt die PDF-Schrift nicht). „ausschreiben“: AE OE UE SS.
+  // Englisch: Buchstaben allgemein behandeln – A–Z und jeder andere Buchstabe,
+  // den die PDF-Schrift kennt (é, ñ, ø …), ist ein Feld; ß bleibt ein Feld.
+  // Ein alter Link mit „ausschreiben“ wirkt auch hier.
+  function normalizeEn(word, umlauts) {
+    if (umlauts === "expand") word = word.replace(/ä/gi, "ae").replace(/ö/gi, "oe").replace(/ü/gi, "ue").replace(/ß/g, "ss");
+    var w = word.replace(/ß/g, "\u0000").toLocaleUpperCase("en").replace(/\u0000/g, "ß");
+    return S.winAnsi(w).replace(/[^A-Z\u00C0-\u00D6\u00D8-\u00DF\u0152\u0160\u017D\u0178]/g, "");
+  }
+
   function normalize(word, umlauts) {
+    if (EN) return normalizeEn(word, umlauts);
     var w = word.replace(/ß/g, umlauts === "expand" ? "ss" : "\u0000").toLocaleUpperCase("de-DE");
     if (umlauts === "expand") w = w.replace(/Ä/g, "AE").replace(/Ö/g, "OE").replace(/Ü/g, "UE");
     return w.replace(/\u0000/g, "ß").replace(/[^A-ZÄÖÜß]/g, "");
@@ -57,7 +127,10 @@
 
   // Wörter, die beim zufälligen Auffüllen nicht entstehen dürfen (in allen
   // acht Richtungen geprüft, nur in Füllbuchstaben-Bereichen relevant).
-  var BAD = ["ARSCH", "FICK", "SEX", "NAZI", "HITLER", "KACK", "PENIS", "SCHEISS", "HURE", "TOD", "WICHS", "NUTTE"];
+  var BAD_DE = ["ARSCH", "FICK", "SEX", "NAZI", "HITLER", "KACK", "PENIS", "SCHEISS", "HURE", "TOD", "WICHS", "NUTTE"];
+  var BAD_EN = ["FUCK", "FUK", "SHIT", "CUNT", "DICK", "COCK", "PISS", "ARSE", "ASS", "SEX", "PORN", "SLUT",
+    "WHORE", "TIT", "BITCH", "BOOB", "FAG", "NIGG", "RAPE", "KILL", "NAZI", "HITLER", "PENIS", "CRAP", "DAMN"];
+  var BAD = EN ? BAD_EN : BAD_DE;
 
   function hasBad(letters, cols, rows) {
     var lines = [], x, y;
@@ -170,21 +243,20 @@
 
   // ---------- Blatt zeichnen ----------
 
-  function shown(ch, st) { return st.letters === "lower" ? ch.toLocaleLowerCase("de-DE") : ch; }
+  function shown(ch, st) { return st.letters === "lower" ? ch.toLocaleLowerCase(EN ? "en" : "de-DE") : ch; }
   function listLabel(w, st) {
     if (st.letters !== "upper") return w.label;
+    if (EN) return w.label.replace(/ß/g, "\u0000").toLocaleUpperCase("en").replace(/\u0000/g, "ß");
     var keepSz = st.umlauts !== "expand";
     return w.label.replace(/ß/g, keepSz ? "\u0000" : "ß").toLocaleUpperCase("de-DE").replace(/\u0000/g, "ß");
   }
 
   function drawPage(st, puz, solution) {
     var p = new S.Page();
-    var top = p.header(st.title.trim() || "Suchsel", {
-      tag: solution ? "Lösung" : "",
+    var top = p.header(st.title.trim() || T.title, {
+      tag: solution ? T.tag : "",
       nameLine: st.name, blank: solution,
-      instruction: (st.list
-        ? "Finde die versteckten Wörter und kreise sie ein."
-        : "Finde " + puz.list.length + " versteckte Wörter und kreise sie ein.")
+      instruction: (st.list ? T.find : T.findN(puz.list.length))
     });
 
     // Wortliste vorab vermessen (ca. 0,55 × Schriftgröße je Zeichen). Die
@@ -235,8 +307,8 @@
       var by = gy + gh + 8, bh = listH;
       p.rect(S.MARGIN, by, usable, bh, { stroke: S.LINE, width: 0.35, radius: 3 });
       var ly = by + 8;
-      p.text(S.MARGIN + 5, ly, solution ? "Versteckte Wörter" : "Diese Wörter sind versteckt", { size: 11, bold: true });
-      p.text(S.W - S.MARGIN - 5, ly, items.length + (items.length === 1 ? " Wort" : " Wörter"),
+      p.text(S.MARGIN + 5, ly, solution ? T.listHeadSol : T.listHead, { size: 11, bold: true });
+      p.text(S.W - S.MARGIN - 5, ly, T.words(items.length),
         { size: 10, align: "right", color: S.SOFT });
       ly += 8.5;
       var cw = (usable - 10) / ncol;
@@ -269,7 +341,8 @@
       title: $("title").value, words: $("words").value,
       cols: clampSize($("cols").value), rows: clampSize($("rows").value), dirs: dirs,
       letters: document.querySelector("input[name=letters]:checked").value,
-      umlauts: document.querySelector("input[name=umlauts]:checked").value,
+      // Englische Seite hat keine Umlaut-Wahl: Wert aus dem Link bleibt erhalten.
+      umlauts: (document.querySelector("input[name=umlauts]:checked") || { value: (state && state.umlauts) || "keep" }).value,
       fill: document.querySelector("input[name=fill]:checked").value,
       list: $("opt-list").checked, solution: $("opt-solution").checked,
       name: $("opt-name").checked, lines: $("opt-lines").checked,
@@ -348,18 +421,17 @@
   function render() {
     puzzle = build(state);
     $("sheet").innerHTML = S.toSVG(drawPage(state, puzzle, view === "solution"));
-    $("sheet").setAttribute("aria-label", (view === "solution" ? "Lösung" : "Vorschau") +
-      " des Suchsels mit " + puzzle.list.length + " Wörtern");
+    $("sheet").setAttribute("aria-label", (view === "solution" ? T.solution : T.preview) +
+      T.aria(puzzle.list.length));
     var st = $("status");
     if (!puzzle.total) {
-      st.textContent = "Gib mindestens ein Wort ein."; st.className = "status warn";
+      st.textContent = T.empty; st.className = "status warn";
     } else if (puzzle.missing.length) {
-      st.textContent = "Kein Platz für: " + puzzle.missing.map(function (w) { return w.label; }).join(", ") +
-        ". Gitter größer machen oder mehr Richtungen erlauben.";
+      st.textContent = T.noRoom(puzzle.missing.map(function (w) { return w.label; }).join(", "));
       st.className = "status warn";
     } else {
-      st.textContent = puzzle.list.length + (puzzle.list.length === 1 ? " Wort" : " Wörter") + " versteckt" +
-        (parseWords(state.words, state.umlauts).length >= MAX_WORDS ? " (höchstens " + MAX_WORDS + ")" : "");
+      st.textContent = T.hidden(puzzle.list.length) +
+        (parseWords(state.words, state.umlauts).length >= MAX_WORDS ? T.max(MAX_WORDS) : "");
       st.className = "status";
     }
     $("pdf").disabled = !puzzle.list.length;
@@ -389,8 +461,8 @@
   }
 
   function slug(s) {
-    return (s || "suchsel").toLowerCase().replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue")
-      .replace(/ß/g, "ss").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "suchsel";
+    return (s || T.file).toLowerCase().replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue")
+      .replace(/ß/g, "ss").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || T.file;
   }
 
   function init() {
@@ -418,7 +490,7 @@
     $("theme").addEventListener("change", function () {
       var th = THEMES[this.value];
       if (!th) return;
-      $("title").value = "Suchsel: " + th[0];
+      $("title").value = T.titlePrefix + th[0];
       $("words").value = th[1].split(", ").join("\n");
       this.value = "";
       changed();
@@ -429,24 +501,24 @@
     $("pdf").addEventListener("click", function () {
       // Mehrere Blätter: Blatt 1 = Vorschau, jedes weitere neu gemischt.
       // Erst alle Rätsel, dann alle Lösungen.
-      var title = state.title.trim() || "Suchsel", puzzles = [], solutions = [];
+      var title = state.title.trim() || T.title, puzzles = [], solutions = [];
       for (var i = 0; i < state.pages; i++) {
         var st = Object.assign({}, state, { seed: (state.seed + i * 7919) >>> 0 });
-        if (state.pages > 1) st.title = title + " · Blatt " + (i + 1);
+        if (state.pages > 1) st.title = title + T.sheetNo + (i + 1);
         var pz = i ? build(st) : puzzle;
         puzzles.push(drawPage(st, pz, false));
         if (state.solution) solutions.push(drawPage(st, pz, true));
       }
       S.toPDF(puzzles.concat(solutions), slug(state.title) + ".pdf", title);
-      toast((state.pages > 1 ? state.pages + " Blätter" : "PDF") +
-        (state.solution ? " mit Lösungen erstellt." : " erstellt."));
+      toast((state.pages > 1 ? state.pages + T.sheets : "PDF") +
+        (state.solution ? T.madeSol : T.made));
     });
     $("share").addEventListener("click", function () {
       var url = location.href.split("#")[0] + toHash(state);
-      var done = function () { toast("Link kopiert – er erzeugt genau dieses Suchsel."); };
+      var done = function () { toast(T.copied); };
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(url).then(done, function () { window.prompt("Link kopieren:", url); });
-      } else { window.prompt("Link kopieren:", url); }
+        navigator.clipboard.writeText(url).then(done, function () { window.prompt(T.copyPrompt, url); });
+      } else { window.prompt(T.copyPrompt, url); }
     });
 
     // Geteilten Link in einen schon offenen Tab einfügen: Blatt neu aufbauen.

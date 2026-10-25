@@ -2,7 +2,8 @@
    Ein Blatt ist eine Liste von Zeichenbefehlen in mm auf A4 hochkant. Dieselbe
    Liste wird zur Vorschau (SVG) und zum PDF (jsPDF, liegt lokal) – die Vorschau
    ist damit exakt der Druck. Schrift überall Helvetica (PDF-Standardschrift,
-   kann Ä Ö Ü ß ohne eingebettete Datei). */
+   kann Ä Ö Ü ß ohne eingebettete Datei). Texte deutsch oder englisch je nach
+   <html lang>, siehe STR. */
 window.Sheet = (function () {
   "use strict";
 
@@ -11,10 +12,33 @@ window.Sheet = (function () {
   var NAME = "#6E6258"; // Beschriftung Name/Datum: weich, aber auf Papier gut lesbar
   var PT = 0.3528; // 1 pt in mm
 
+  // Sprache der Seite (<html lang>): "de" (Standard, auch in Node/selftest)
+  // oder "en". Alle sichtbaren Texte des Blatts kommen aus dieser Tabelle.
+  var LANG = typeof document !== "undefined" && document.documentElement &&
+    /^en\b/i.test(document.documentElement.lang || "") ? "en" : "de";
+  var STR = {
+    de: { name: "Name:", date: "Datum:", footer: "Kostenlos erstellt auf remindery.de/lernmaterial" },
+    en: { name: "Name:", date: "Date:", footer: "Free from remindery.de/en/worksheets" }
+  };
+  function str() { return STR[api.lang] || STR.de; }
+
+  // Nur Zeichen, die Helvetica im PDF kennt (WinAnsi); alles andere fällt weg.
+  var WIN_EXTRA = "€‚ƒ„…†‡ˆ‰Š‹ŒŽ" +
+    "‘’“”•–—˜™š›œžŸ";
+  function winAnsi(s) {
+    var out = "";
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charCodeAt(i);
+      if ((c >= 32 && c <= 126) || (c >= 160 && c <= 255) || WIN_EXTRA.indexOf(s[i]) >= 0) out += s[i];
+    }
+    return out;
+  }
+
   function Page() { this.ops = []; }
   Page.prototype.text = function (x, y, s, o) {
     o = o || {};
-    this.ops.push({ t: "text", x: x, y: y, s: String(s), size: o.size || 11,
+    // WinAnsi-Filter schon hier, damit Vorschau und PDF dasselbe zeigen.
+    this.ops.push({ t: "text", x: x, y: y, s: winAnsi(String(s)), size: o.size || 11,
       bold: !!o.bold, italic: !!o.italic, align: o.align || "left", color: o.color || INK });
     return this;
   };
@@ -51,9 +75,9 @@ window.Sheet = (function () {
     if (o.nameLine) {
       y += 9;
       if (!o.blank) {
-        this.text(MARGIN, y, "Name:", { size: 11, color: NAME });
+        this.text(MARGIN, y, str().name, { size: 11, color: NAME });
         this.line(MARGIN + 13, y + 0.8, 120, y + 0.8, { width: 0.3, color: LINE });
-        this.text(128, y, "Datum:", { size: 11, color: NAME });
+        this.text(128, y, str().date, { size: 11, color: NAME });
         this.line(142, y + 0.8, W - MARGIN, y + 0.8, { width: 0.3, color: LINE });
       }
     }
@@ -64,7 +88,7 @@ window.Sheet = (function () {
     return y + 7;
   };
   Page.prototype.footer = function (text) {
-    this.text(W / 2, H - 10, text || "Kostenlos erstellt auf remindery.de/lernmaterial", {
+    this.text(W / 2, H - 10, text || str().footer, {
       size: 8, align: "center", color: SOFT });
     return this;
   };
@@ -138,6 +162,8 @@ window.Sheet = (function () {
   }
   function newSeed() { return Math.floor(Math.random() * 1e9); }
 
-  return { W: W, H: H, MARGIN: MARGIN, INK: INK, SOFT: SOFT, LINE: LINE, PT: PT,
-    Page: Page, toSVG: toSVG, toPDF: toPDF, rng: rng, newSeed: newSeed };
+  var api = { W: W, H: H, MARGIN: MARGIN, INK: INK, SOFT: SOFT, LINE: LINE, PT: PT,
+    Page: Page, toSVG: toSVG, toPDF: toPDF, rng: rng, newSeed: newSeed, winAnsi: winAnsi,
+    lang: LANG };
+  return api;
 })();
