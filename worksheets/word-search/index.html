@@ -8,7 +8,7 @@
   <link rel="canonical" href="https://remindery.de/worksheets/word-search/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=k1">
   <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="/worksheets/worksheets.css">
+  <link rel="stylesheet" href="/worksheets/worksheets.css?v=20261025b">
   <meta property="og:title" content="Suchsel-Generator: Suchsel kostenlos erstellen, mit Lösung als PDF">
   <meta property="og:description" content="Eigene Wörter, acht Richtungen, freie Gittergröße, PDF mit Lösung. Ohne Anmeldung, ohne Werbung.">
   <meta property="og:url" content="https://remindery.de/worksheets/word-search/">
@@ -49,7 +49,7 @@
 
   <main class="ws">
     <div class="ws-intro">
-      <nav class="crumbs" aria-label="Brotkrümelnavigation"><ol><li><a href="/">Start</a></li><li><a href="/worksheets/">Lernmaterial</a></li><li><a href="/worksheets/#deutsch">Deutsch</a></li><li aria-current="page">Suchsel-Generator</li></ol></nav>
+      <nav class="crumbs" aria-label="Brotkrümelnavigation"><a href="/">Start</a><span class="sep" aria-hidden="true">›</span><a href="/worksheets/">Lernmaterial</a><span class="sep" aria-hidden="true">›</span><a href="/worksheets/#deutsch">Deutsch</a><span class="sep" aria-hidden="true">›</span><span aria-current="page">Suchsel-Generator</span></nav>
       <h1>Suchsel kostenlos erstellen</h1>
       <p>Der kostenlose Suchsel-Generator für Schule und Zuhause: eigene Wörter eingeben, Richtungen und Größe wählen – fertig ist das
       Suchsel als PDF, mit Lösungsblatt.</p>
@@ -159,6 +159,15 @@
             <label><input type="checkbox" id="opt-name"> Zeile für Name und Datum</label>
             <label><input type="checkbox" id="opt-lines"> Gitterlinien</label>
           </div>
+          <div class="field" id="list-size-field">
+            <label for="list-size">Platz auf dem Blatt</label>
+            <div class="balance">
+              <span>Gitter größer</span>
+              <input type="range" id="list-size" min="8" max="16" step="1" aria-describedby="list-size-hint">
+              <span>Wörter größer</span>
+            </div>
+            <p class="hint" id="list-size-hint">Bei vielen Wörtern nach links schieben: kleinere Wortliste, größeres Gitter.</p>
+          </div>
         <div class="field">
           <span class="label" id="pages-label">Wie viele verschiedene Blätter?</span>
           <div class="seg" role="radiogroup" aria-labelledby="pages-label">
@@ -258,7 +267,7 @@
   </footer>
 
   <script src="/worksheets/vendor/jspdf.umd.min.js" defer></script>
-  <script src="/worksheets/sheet.js" defer></script>
-  <script src="/worksheets/word-search/app.js" defer></script>
+  <script src="/worksheets/sheet.js?v=20261025b" defer></script>
+  <script src="/worksheets/word-search/app.js?v=20261025b" defer></script>
 </body>
 </html>

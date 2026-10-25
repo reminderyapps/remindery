@@ -39,7 +39,7 @@
   var DEFAULT = {
     title: "Suchsel: Herbst", words: THEMES.herbst[1].split(", ").join("\n"),
     cols: 12, rows: 12, dirs: PRESETS.medium.slice(), letters: "upper", umlauts: "keep",
-    fill: "random", list: true, solution: true, name: true, lines: true, pages: 1, seed: 0
+    fill: "random", list: true, solution: true, name: true, lines: true, pages: 1, listSize: 12, seed: 0
   };
 
   var state;
@@ -187,12 +187,14 @@
         : "Finde " + puz.list.length + " versteckte Wörter und kreise sie ein.")
     });
 
-    // Wortliste vorab vermessen (ca. 0,55 × Schriftgröße je Zeichen).
-    var listSize = 12, lineH = 7.6, items = puz.list.map(function (w) { return listLabel(w, st); });
+    // Wortliste vorab vermessen (ca. 0,55 × Schriftgröße je Zeichen). Die
+    // Schriftgröße stellt der Regler „Gitter ⟷ Wörter“ ein (8–16 pt); kleinere
+    // Schrift = mehr Spalten, weniger Zeilen, mehr Platz fürs Gitter.
+    var listSize = st.listSize || 12, lineH = listSize * 0.633, items = puz.list.map(function (w) { return listLabel(w, st); });
     var longest = items.reduce(function (m, s) { return Math.max(m, s.length); }, 0);
     var colW = longest * listSize * S.PT * 0.62 + 10;
     var usable = S.W - 2 * S.MARGIN;
-    var ncol = Math.max(1, Math.min(4, Math.floor((usable - 10) / colW)));
+    var ncol = Math.max(1, Math.min(6, Math.floor((usable - 10) / colW)));
     var nline = Math.ceil(items.length / ncol);
     var listH = st.list && items.length ? 14 + nline * lineH : 0;
 
@@ -240,12 +242,13 @@
       var cw = (usable - 10) / ncol;
       items.forEach(function (s, k) {
         var cx = S.MARGIN + 5 + Math.floor(k / nline) * cw, cy = ly + (k % nline) * lineH;
-        p.rect(cx, cy - 3.5, 4, 4, { stroke: S.SOFT, width: 0.35, radius: 0.8 });
+        var k4 = listSize / 12; // Kästchen wächst mit der Schrift
+        p.rect(cx, cy - 3.5 * k4, 4 * k4, 4 * k4, { stroke: S.SOFT, width: 0.35, radius: 0.8 });
         if (solution) {
-          p.line(cx + 0.9, cy - 1.6, cx + 1.8, cy - 0.6, { width: 0.5, round: true });
-          p.line(cx + 1.8, cy - 0.6, cx + 3.3, cy - 2.9, { width: 0.5, round: true });
+          p.line(cx + 0.9 * k4, cy - 1.6 * k4, cx + 1.8 * k4, cy - 0.6 * k4, { width: 0.5, round: true });
+          p.line(cx + 1.8 * k4, cy - 0.6 * k4, cx + 3.3 * k4, cy - 2.9 * k4, { width: 0.5, round: true });
         }
-        p.text(cx + 6.5, cy, s, { size: listSize });
+        p.text(cx + 6.5 * k4, cy, s, { size: listSize });
       });
     }
     p.footer();
@@ -270,7 +273,8 @@
       fill: document.querySelector("input[name=fill]:checked").value,
       list: $("opt-list").checked, solution: $("opt-solution").checked,
       name: $("opt-name").checked, lines: $("opt-lines").checked,
-      pages: +((document.querySelector("input[name=pages]:checked") || {}).value) || 1, seed: state.seed
+      pages: +((document.querySelector("input[name=pages]:checked") || {}).value) || 1,
+      listSize: +$("list-size").value || 12, seed: state.seed
     };
   }
 
@@ -288,6 +292,7 @@
     $("opt-name").checked = st.name; $("opt-lines").checked = st.lines;
     var pg = document.querySelector("input[name=pages][value='" + (st.pages || 1) + "']");
     if (pg) pg.checked = true;
+    $("list-size").value = st.listSize || 12;
   }
 
   function toHash(st) {
@@ -300,6 +305,7 @@
       st.fill === "words" ? "f" : "", st.list ? "" : "L", st.solution ? "" : "S",
       st.name ? "" : "N", st.lines ? "" : "G"].join(""));
     if (st.pages > 1) q.set("p", st.pages);
+    if (st.listSize && st.listSize !== 12) q.set("ls", st.listSize);
     q.set("s", st.seed);
     return "#" + q.toString();
   }
@@ -317,6 +323,7 @@
         letters: o.indexOf("k") >= 0 ? "lower" : "upper", umlauts: o.indexOf("u") >= 0 ? "expand" : "keep",
         fill: o.indexOf("f") >= 0 ? "words" : "random", list: o.indexOf("L") < 0,
         solution: o.indexOf("S") < 0, name: o.indexOf("N") < 0, lines: o.indexOf("G") < 0,
+        listSize: Math.max(8, Math.min(16, parseInt(q.get("ls"), 10) || 12)),
         pages: [1, 2, 3, 5, 10].indexOf(parseInt(q.get("p"), 10)) >= 0 ? parseInt(q.get("p"), 10) : 1,
         seed: parseInt(q.get("s"), 10) || S.newSeed()
       };
@@ -357,6 +364,7 @@
     }
     $("pdf").disabled = !puzzle.list.length;
     syncPresets();
+    $("list-size-field").hidden = !state.list;
     try { history.replaceState(null, "", toHash(state)); } catch (e) { /* file:// o. ä. */ }
   }
 

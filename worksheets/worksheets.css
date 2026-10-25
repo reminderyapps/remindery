@@ -24,14 +24,11 @@ main.ws { max-width: 1120px; }
 
 .ws-intro { max-width: 46em; }
 /* Brotkrümel: Start › Lernmaterial › Fach › Seite (PO 25.10.2026) */
-.crumbs ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; font-size: .9rem; }
-.crumbs li { display: inline-flex; align-items: center; color: var(--text-soft); }
-.crumbs li + li::before {
-  content: "›"; margin: 0 9px; color: var(--text-soft); opacity: .7; font-size: 1.1rem; line-height: 1;
-}
+.crumbs { display: flex; flex-wrap: wrap; align-items: center; font-size: .9rem; color: var(--text-soft); }
+.crumbs .sep { margin: 0 9px; opacity: .7; font-size: 1.1rem; line-height: 1; }
 .crumbs a { color: var(--ws-text); text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); text-underline-offset: 3px; }
 .crumbs a:hover { text-decoration-color: currentColor; }
-.crumbs li[aria-current] { color: var(--text); font-weight: 600; }
+.crumbs [aria-current] { color: var(--text); font-weight: 600; }
 .ws-intro h1 { font-size: clamp(1.9rem, 4.5vw, 2.7rem); margin: 14px 0 8px; }
 .ws-intro p { color: var(--text-soft); font-size: 1.08rem; margin: 0; }
 
@@ -279,3 +276,8 @@ main.ws { max-width: 1120px; }
 .op-wall text { font: 700 10px Helvetica, Arial, sans-serif; text-anchor: middle; fill: var(--text); }
 @media (max-width: 380px) { .op-cards { grid-template-columns: 1fr; } }
 .op-sym.op-dot { font-size: 3.2rem; padding-bottom: 4px; box-sizing: border-box; }
+
+/* Regler „Gitter ⟷ Wörter“ (Suchsel, PO 25.10.2026) */
+.balance { display: flex; align-items: center; gap: 10px; font-size: .85rem; color: var(--text-soft); }
+.balance span { flex: 0 0 auto; }
+.balance input[type=range] { flex: 1 1 auto; min-width: 0; accent-color: var(--ws); height: 28px; cursor: pointer; }
