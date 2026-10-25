@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verzeichnis-Einträge Lernmaterial</title>
+<!-- Kopierseite für den PO: Einträge in Lehrer-Verzeichnisse (25.10.2026).
+     Recherche dazu: docs/verzeichnisse-recherche.md. Nicht öffentlich (docs/ ist
+     in _config.yml ausgeschlossen). Haken werden nur in diesem Browser gemerkt. -->
+<style>
+  :root { --bg:#FAF7F2; --card:#fff; --text:#2B2622; --soft:#6E6258; --line:#EAE2D8; --ws:#23784C; --wsoft:#E6F2EA; --warn:#B5442F; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#211A15; --card:#2C231C; --text:#F4EDE4; --soft:#B3A697; --line:#3B3129; --ws:#5CC48C; --wsoft:#1E3328; --warn:#F2907C; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  main { max-width:900px; margin:0 auto; padding:32px 16px 64px; }
+  h1 { font-family:Georgia,serif; font-size:2rem; margin:0 0 6px; }
+  h2 { font-family:Georgia,serif; font-size:1.35rem; margin:0 0 4px; }
+  .lead { color:var(--soft); margin:0 0 24px; }
+  section { background:var(--card); border-radius:18px; padding:22px; margin:18px 0; box-shadow:0 1px 2px rgba(0,0,0,.05),0 10px 28px rgba(0,0,0,.06); }
+  .meta { color:var(--soft); font-size:.92rem; margin:0 0 14px; }
+  .meta a, a { color:var(--ws); }
+  ol.steps { margin:0 0 14px; padding-left:20px; }
+  ol.steps li { margin:4px 0; }
+  .f { border-top:1px solid var(--line); padding:12px 0; display:grid; grid-template-columns:190px 1fr auto; gap:12px; align-items:start; }
+  .f b { font-size:.9rem; }
+  .f .v { white-space:pre-wrap; font-size:.95rem; }
+  .f .n { display:block; color:var(--soft); font-size:.8rem; margin-top:4px; }
+  button.c { font:inherit; font-size:.85rem; font-weight:600; border:1.5px solid var(--line); background:var(--bg); color:var(--text); border-radius:999px; padding:5px 12px; cursor:pointer; }
+  button.c:hover { border-color:var(--ws); }
+  button.c.ok { background:var(--ws); border-color:var(--ws); color:#fff; }
+  .done { display:flex; gap:10px; align-items:center; margin-top:12px; padding:10px 14px; background:var(--wsoft); border-radius:12px; font-weight:600; }
+  .done input { width:20px; height:20px; accent-color:var(--ws); }
+  .note { border-left:4px solid var(--warn); padding:8px 12px; background:var(--bg); border-radius:8px; font-size:.92rem; margin:10px 0; }
+  .tag { display:inline-block; font-size:.75rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:2px 8px; border-radius:999px; background:var(--wsoft); color:var(--ws); margin-left:8px; vertical-align:3px; }
+  @media (max-width:640px) { .f { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Verzeichnis-Einträge Lernmaterial</h1>
+  <p class="lead">Ziel: Links von Lehrer-Verzeichnissen auf die Generatoren. Reihenfolge = Wert.
+  Je Eintrag: Link öffnen, Felder per Knopf kopieren, abschicken, Haken setzen.
+  Haken bleiben nur in diesem Browser – sag mir im Chat kurz, was raus ist, dann trage ich es ins Protokoll ein.</p>
+
+  <div class="note"><b>Eine Entscheidung vorab (Default gesetzt):</b> Bei „Lizenz/Nutzung“ steht unten,
+  dass die erzeugten Blätter frei im Unterricht und privat genutzt, kopiert und weitergegeben werden dürfen.
+  Verzeichnisse fragen danach. Wenn du das anders willst, sag es vor dem Abschicken.</div>
+
+  <!-- ===================== Gemeinsame Angaben ===================== -->
+  <section>
+    <h2>Gemeinsame Angaben</h2>
+    <p class="meta">Brauchen fast alle Formulare.</p>
+    <div class="f"><b>Anbieter</b><div class="v">Remindery Apps</div><button class="c">Kopieren</button></div>
+    <div class="f"><b>Kontakt-Mail</b><div class="v">hello@remindery.de</div><button class="c">Kopieren</button></div>
+    <div class="f"><b>Impressum</b><div class="v">https://remindery.de/legal-notice/</div><button class="c">Kopieren</button></div>
+    <div class="f"><b>Datenschutz</b><div class="v">https://remindery.de/privacy/</div><button class="c">Kopieren</button></div>
+    <div class="f"><b>Übersicht (alle Generatoren)</b><div class="v">https://remindery.de/lernmaterial/</div><button class="c">Kopieren</button></div>
+    <div class="f"><b>Zielgruppe</b><div class="v">Lehrkräfte und Eltern; Schülerinnen und Schüler der Grundschule (Klasse 1–4), Vorschule</div><button class="c">Kopieren</button></div>
+    <div class="f"><b>Schulstufe</b><div class="v">Primarstufe / Grundschule</div><button class="c">Kopieren</button></div>
+    <div class="f"><b>Materialart</b><div class="v">Online-Werkzeug (Arbeitsblatt-Generator), Ausgabe als PDF mit Lösungsblatt</div><button class="c">Kopieren</button></div>
+    <div class="f"><b>Kosten</b><div class="v">Kostenlos, ohne Anmeldung, ohne Werbung, ohne Nutzungslimit</div><button class="c">Kopieren</button></div>
+    <div class="f"><b>Lizenz / Nutzung</b><div class="v">Die Nutzung des Generators ist kostenlos. Die erzeugten Arbeitsblätter dürfen ohne Einschränkung im Unterricht und privat genutzt, vervielfältigt und weitergegeben werden.</div><button class="c">Kopieren</button></div>
+    <div class="f"><b>Datenschutz (Kurztext)</b><div class="v">Keine Anmeldung, keine Cookies, kein Tracking. Rätsel und PDF entstehen vollständig im Browser; eingegebene Wörter werden nicht an einen Server übertragen.</div><button class="c">Kopieren</button></div>
+    <div class="f"><b>Sprache</b><div class="v">Deutsch (englische Fassung: https://remindery.de/en/worksheets/)</div><button class="c">Kopieren</button></div>
+  </section>
+
+  <!-- ===================== Texte je Generator ===================== -->
+  <section>
+    <h2>Suchsel-Generator</h2>
+    <p class="meta">Fach: Deutsch (Lesen, Rechtschreibung, Wortschatz)</p>
+    <div class="f"><b>Titel</b><div class="v">Suchsel-Generator – Suchsel kostenlos erstellen, mit Lösung als PDF</div><button class="c">Kopieren</button></div>
+    <div class="f"><b>URL</b><div class="v">https://remindery.de/lernmaterial/suchsel-generator/</div><button class="c">Kopieren</button></div>
+    <div class="f"><b>Kurzbeschreibung</b><div class="v">Kostenloser Suchsel-Generator für die Grundschule: eigene Wörter eingeben, erlaubte Richtungen und Gittergröße wählen und als PDF mit Lösungsblatt drucken. Ohne Anmeldung, ohne Werbung.</div><button class="c">Kopieren</button></div>
+    <div class="f"><b>Beschreibung (lang)</b><div class="v">Mit dem Suchsel-Generator erstellen Lehrkräfte und Eltern in Sekunden Wortsuchrätsel zum eigenen Wortschatz: bis zu 40 Wörter oder fertige Themenlisten, die acht Richtungen einzeln wählbar, Gitter von 5 × 5 bis 25 × 25 Feldern, Groß- oder Kleinbuchstaben, Ä, Ö, Ü und ß als ein Feld. Auf Wunsch mehrere verschieden gemischte Blätter auf einmal (gegen Abschreiben) und ein Lösungsblatt. Der Generator läuft vollständig im Browser – kostenlos, ohne Anmeldung, ohne Werbung.</div><button class="c">Kopieren</button></div>
+    <div class="f"><b>Schlagworte</b><div class="v">Suchsel, Wortsuchrätsel, Buchstabengitter, Wortgitter, Arbeitsblatt-Generator, Arbeitsblatt, Rechtschreibung, Lesen, Wortschatz, Deutsch, Grundschule</div><button class="c">Kopieren</button></div>
+  </section>
+
+  <section>
+    <h2>Zahlenmauer-Generator</h2>
+    <p class="meta">Fach: Mathematik (Addition, Subtraktion, Multiplikation, Kopfrechnen)</p>
+    <div class="f"><b>Titel</b><div class="v">Zahlenmauer-Generator – Zahlenmauern kostenlos erstellen, mit Lösung als PDF</div><button class="c">Kopieren</button></div>
+    <div class="f"><b>URL</b><div class="v">https://remindery.de/lernmaterial/zahlenmauer-generator/</div><button class="c">Kopieren</button></div>
+    <div class="f"><b>Kurzbeschreibung</b><div class="v">Kostenloser Zahlenmauer-Generator: Zahlenmauern (Rechenmauern) in sechs Stufen von Klasse 1 bis „verrückt“, als Plus- oder Malmauer, als PDF mit Lösungsblatt. Jede Mauer ist eindeutig lösbar. Ohne Anmeldung, ohne Werbung.</div><button class="c">Kopieren</button></div>
+    <div class="f"><b>Beschreibung (lang)</b><div class="v">Der Zahlenmauer-Generator erstellt Arbeitsblätter mit Zahlenmauern – auch Rechenmauern oder Mathe-Pyramiden genannt – für die Grundschule: sechs Stufen vom Zahlenraum bis 10 bis 10.000, Plus- oder Malmauern, 2 bis 8 Mauern pro Blatt, in höheren Stufen mit Lücken auch in der unteren Reihe. Jede Mauer ist eindeutig lösbar. Lösungsblatt inklusive, auf Wunsch mehrere verschiedene Blätter auf einmal. Kostenlos, ohne Anmeldung, ohne Werbung, läuft vollständig im Browser.</div><button class="c">Kopieren</button></div>
+    <div class="f"><b>Schlagworte</b><div class="v">Zahlenmauer, Rechenmauer, Mathe-Pyramide, Zahlenpyramide, Addition, Subtraktion, Multiplikation, Kopfrechnen, Arbeitsblatt-Generator, Arbeitsblatt, Mathematik, Grundschule</div><button class="c">Kopieren</button></div>
+  </section>
+
+  <!-- ===================== Verzeichnisse ===================== -->
+  <section>
+    <h2>1 · Deutscher Bildungsserver <span class="tag">Wert hoch</span></h2>
+    <p class="meta">„Link vorschlagen“, Kategorie Onlineressourcen. Redaktion prüft, laut Seite „ein paar Tage“. Kein Konto erwähnt.
+    Die Seite „Mathematik in der Grundschule“ listet schon vergleichbare Generatoren. Von hier aus speisen sich auch Elixier und Landesserver.</p>
+    <ol class="steps">
+      <li>Öffnen: <a href="https://www.bildungsserver.de/eintragen.html" target="_blank" rel="noopener">bildungsserver.de/eintragen.html</a></li>
+      <li><b>Zwei Einträge</b>, je Generator einer (Zahlenmauer → Mathematik Grundschule, Suchsel → Deutsch Grundschule). Texte aus den Kästen oben.</li>
+      <li>Felder, die das Formular verlangt, aus „Gemeinsame Angaben“ nehmen. Unbekanntes Feld: Screenshot-frei kurz im Chat beschreiben, ich liefere den Text.</li>
+    </ol>
+    <label class="done"><input type="checkbox" data-k="dbs-zm"> Zahlenmauer eingereicht</label>
+    <label class="done"><input type="checkbox" data-k="dbs-ss"> Suchsel eingereicht</label>
+  </section>
+
+  <section>
+    <h2>2 · WirLernenOnline <span class="tag">Wert hoch</span></h2>
+    <p class="meta">„Tool vorschlagen“. Kriterien: kostenlos, ohne Anmeldung, Anbieter erkennbar, DSGVO – erfüllen wir.
+    OER ist keine Pflicht, die Lizenz wird nur erfasst. Ob ein Konto nötig ist: nicht belegt.</p>
+    <ol class="steps">
+      <li>Öffnen: <a href="https://wirlernenonline.de/mitmachen/" target="_blank" rel="noopener">wirlernenonline.de/mitmachen</a> → „Tool vorschlagen“</li>
+      <li>Je Generator ein Eintrag, Materialart „Tool“.</li>
+      <li>Lizenz: „Lizenz / Nutzung“ aus den gemeinsamen Angaben. Falls nur eine Auswahlliste: „Sonstige / kostenlos nutzbar“ wählen, nicht CC – die Seite selbst ist nicht CC-lizenziert.</li>
+    </ol>
+    <label class="done"><input type="checkbox" data-k="wlo-zm"> Zahlenmauer eingereicht</label>
+    <label class="done"><input type="checkbox" data-k="wlo-ss"> Suchsel eingereicht</label>
+  </section>
+
+  <section>
+    <h2>3 · 4teachers – Toolbox <span class="tag">Wert mittel</span></h2>
+    <p class="meta">Linkportal: „Du kannst jederzeit Links und Rubriken vorschlagen“. <b>Braucht ein kostenloses Konto</b> – deine Entscheidung.
+    Zielgruppe sind direkt Lehrkräfte.</p>
+    <ol class="steps">
+      <li>Konto: <a href="https://www.4teachers.de/?action=register" target="_blank" rel="noopener">4teachers.de – Registrierung</a> (Zugangsdaten in deinen Passwort-Manager, nicht hierher)</li>
+      <li>Linkportal: <a href="https://www.4teachers.de/?action=show&amp;id=18" target="_blank" rel="noopener">4teachers.de – Links</a> → Rubrik „Toolbox“ → Link vorschlagen</li>
+      <li>Je Generator ein Link mit Titel, URL und Kurzbeschreibung.</li>
+    </ol>
+    <label class="done"><input type="checkbox" data-k="4t-acc"> Konto angelegt</label>
+    <label class="done"><input type="checkbox" data-k="4t-zm"> Zahlenmauer vorgeschlagen</label>
+    <label class="done"><input type="checkbox" data-k="4t-ss"> Suchsel vorgeschlagen</label>
+  </section>
+
+  <section>
+    <h2>4 · ZUM-Unterrichten <span class="tag">Wert mittel</span></h2>
+    <p class="meta">Wiki, Selbsteinträge von Anbietern sind nicht der Weg – erst höflich anfragen. Per Mail an die Adresse aus dem
+    <a href="https://unterrichten.zum.de/wiki/ZUM-Unterrichten:Impressum" target="_blank" rel="noopener">ZUM-Impressum</a>
+    (Zentrale für Unterrichtsmedien e. V.). Mit der Remindery-Signatur aus deinem Postfach senden.</p>
+    <div class="f"><b>An</b><div class="v">info@zum.de</div><button class="c">Kopieren</button></div>
+    <div class="f"><b>Betreff</b><div class="v">Hinweis: kostenlose Arbeitsblatt-Generatoren (Suchsel, Zahlenmauern) für die Grundschule</div><button class="c">Kopieren</button></div>
+    <div class="f"><b>Nachricht</b><div class="v">Hallo liebes ZUM-Team,
+
+wir haben zwei kostenlose Arbeitsblatt-Generatoren für die Grundschule gebaut und fragen, ob sie für eine Ihrer Sammelseiten (z. B. zu Werkzeugen für Arbeitsblätter, Suchseln oder Zahlenmauern) passen könnten:
+
+• Suchsel-Generator: https://remindery.de/lernmaterial/suchsel-generator/
+• Zahlenmauer-Generator: https://remindery.de/lernmaterial/zahlenmauer-generator/
+
+Beide sind kostenlos, ohne Anmeldung und ohne Werbung, laufen vollständig im Browser (keine Daten an einen Server) und erzeugen ein PDF mit Lösungsblatt. Die Zahlenmauern sind in sechs Stufen eindeutig lösbar, beim Suchsel lassen sich die acht Richtungen einzeln wählen und mehrere verschiedene Blätter gegen das Abschreiben erzeugen. Die Blätter dürfen frei im Unterricht genutzt und vervielfältigt werden.
+
+Wenn es passt, freuen wir uns über einen Eintrag – wir tragen ihn auf Wunsch auch selbst ein, wenn Sie uns die passende Seite nennen.
+
+Viele Grüße
+Remindery Apps
+hello@remindery.de · https://remindery.de/legal-notice/</div><button class="c">Kopieren</button></div>
+    <label class="done"><input type="checkbox" data-k="zum"> Anfrage verschickt</label>
+  </section>
+
+  <section>
+    <h2>Bewusst nicht</h2>
+    <ul>
+      <li><b>Wikipedia</b> („Suchsel“, „Zahlenmauer“): Eigenlinks werden entfernt und schaden dem Ruf.</li>
+      <li><b>Lehrer-Online</b>: kein Verzeichnis, nur bezahlte Werbung oder Autorenschaft.</li>
+      <li><b>Landesbildungsserver, mebis</b>: kein eigener Einreichweg gefunden; laufen über den Deutschen Bildungsserver.</li>
+      <li><b>Facebook-Gruppen</b>: wirkt wie Spam, Risiko einer Sperre.</li>
+    </ul>
+  </section>
+</main>
+<script>
+  // Kopierknöpfe: kopieren den Wert daneben, kurz grün als Bestätigung.
+  document.querySelectorAll("button.c").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var v = b.parentNode.querySelector(".v").textContent;
+      var ok = function () { b.textContent = "Kopiert ✓"; b.classList.add("ok");
+        setTimeout(function () { b.textContent = "Kopieren"; b.classList.remove("ok"); }, 1500); };
+      if (navigator.clipboard) navigator.clipboard.writeText(v).then(ok, function () { window.prompt("Kopieren:", v); });
+      else window.prompt("Kopieren:", v);
+    });
+  });
+  // Haken nur lokal merken (Status gehört ins Protokoll, nicht hierher).
+  document.querySelectorAll(".done input").forEach(function (c) {
+    var k = "verz-" + c.dataset.k;
+    try { c.checked = localStorage.getItem(k) === "1"; } catch (e) {}
+    c.addEventListener("change", function () { try { localStorage.setItem(k, c.checked ? "1" : "0"); } catch (e) {} });
+  });
+</script>
+</body>
+</html>
