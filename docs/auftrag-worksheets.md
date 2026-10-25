@@ -55,3 +55,9 @@ Seite, Inhalt deutsch. Alles läuft im Browser, keine externen Requests
   Kurzbeschreibung. 4teachers und ZUM vom PO zurückgestellt („die ersten beiden reichen erstmal“).
   Nächster Blick: ob Bildungsserver (9566, 9567) und WLO freigeschaltet haben – mit den
   Messpunkten 22.11. / 20.12.
+- 25.10. Themenseiten live (Agent): /lernmaterial/suchsel-{weihnachten,advent,winter,herbst,tiere}/,
+  /lernmaterial/zahlenmauern-klasse-{1..4}/, /lernmaterial/malmauern/ – je 3 fertige PDFs mit
+  Lösung (30 PDFs), Vorschau, Link in den Generator. Build: `node tool/worksheets/build_themes.mjs`
+  (`--check` = nur prüfen, feste Seeds). Erzeugte Arbeitsblätter gemeinfrei (CC0 1.0): Fuß auf
+  jedem Blatt, FAQ, Plaketten, JSON-LD `license` auf den Themenseiten. App-Kasten auf dem
+  Lösungsblatt = Board STDIO-a0046 (später).
