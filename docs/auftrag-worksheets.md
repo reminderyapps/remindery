@@ -47,3 +47,6 @@ Seite, Inhalt deutsch. Alles läuft im Browser, keine externen Requests
   Deutscher Bildungsserver, Onlineressource **Zahlenmauer-Generator eingereicht,
   Eingangs-ID 9566** (Fach + ELIXIER: Schule › Grundschule › Mathematik › Rechnen,
   Rechte „Sonstige Lizenz“, Kontakt hello@remindery.de). Prüfung „ein paar Tage“.
+  **Suchsel-Generator eingereicht, Eingangs-ID 9567** (Titel „Suchsel-Generator – Suchsel
+  und Wortgitter kostenlos erstellen, mit Lösung als PDF“, Fach + ELIXIER: Schule ›
+  Grundschule › Deutsch › Lesen). Offen: WirLernenOnline, 4teachers (Konto = PO), ZUM-Mail.
