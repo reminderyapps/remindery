@@ -8,7 +8,7 @@
   <link rel="canonical" href="https://remindery.de/worksheets/math/number-wall/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=k1">
   <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="/worksheets/worksheets.css?v=20261025b">
+  <link rel="stylesheet" href="/worksheets/worksheets.css?v=20261025c">
   <meta property="og:title" content="Zahlenmauer-Generator: Arbeitsblätter kostenlos erstellen, mit Lösung">
   <meta property="og:description" content="Sechs Stufen, Plus oder Mal, 2 bis 8 Mauern pro Blatt, jede eindeutig lösbar. PDF mit Lösung, ohne Anmeldung, ohne Werbung.">
   <meta property="og:url" content="https://remindery.de/worksheets/math/number-wall/">
@@ -80,10 +80,10 @@
             <p class="hint" id="level-hint"></p>
           </div>
           <div class="field">
-            <span class="label" id="op-label">Plus oder Mal?</span>
-            <div class="op-cards" role="radiogroup" aria-labelledby="op-label">
-              <label class="op-card"><input type="radio" name="op" value="plus"><span class="op-sym" aria-hidden="true">+</span><span class="op-txt"><b>Plus-Mauer</b><svg class="op-wall" viewBox="0 0 64 34" aria-hidden="true"><rect x="16" y="1" width="32" height="15" rx="2"/><rect x="0" y="18" width="32" height="15" rx="2"/><rect x="32" y="18" width="32" height="15" rx="2"/><text x="32" y="12.5">5</text><text x="16" y="29.5">2</text><text x="48" y="29.5">3</text></svg><small>2 + 3 = 5</small></span></label>
-              <label class="op-card"><input type="radio" name="op" value="mul"><span class="op-sym op-dot" aria-hidden="true">·</span><span class="op-txt"><b>Mal-Mauer</b><svg class="op-wall" viewBox="0 0 64 34" aria-hidden="true"><rect x="16" y="1" width="32" height="15" rx="2"/><rect x="0" y="18" width="32" height="15" rx="2"/><rect x="32" y="18" width="32" height="15" rx="2"/><text x="32" y="12.5">6</text><text x="16" y="29.5">2</text><text x="48" y="29.5">3</text></svg><small>2 · 3 = 6</small></span></label>
+            <span class="label" id="op-label">Plus- oder Mal-Mauer</span>
+            <div class="seg op-seg" role="radiogroup" aria-labelledby="op-label">
+              <label><input type="radio" name="op" value="plus"><svg class="op-ic" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9"/><path d="M10 5.5v9M5.5 10h9"/></svg>Plus-Mauer</label>
+              <label><input type="radio" name="op" value="mul"><svg class="op-ic" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9"/><path d="M6.8 6.8l6.4 6.4M13.2 6.8l-6.4 6.4"/></svg>Mal-Mauer</label>
             </div>
           </div>
           <div class="field">
@@ -260,8 +260,8 @@
   </footer>
 
   <script src="/worksheets/vendor/jspdf.umd.min.js" defer></script>
-  <script src="/worksheets/sheet.js?v=20261025b" defer></script>
-  <script src="/worksheets/math/number-wall/wall.js?v=20261025b" defer></script>
-  <script src="/worksheets/math/number-wall/app.js?v=20261025b" defer></script>
+  <script src="/worksheets/sheet.js?v=20261025c" defer></script>
+  <script src="/worksheets/math/number-wall/wall.js?v=20261025c" defer></script>
+  <script src="/worksheets/math/number-wall/app.js?v=20261025c" defer></script>
 </body>
 </html>

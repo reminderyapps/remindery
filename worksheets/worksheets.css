@@ -250,32 +250,11 @@ main.ws { max-width: 1120px; }
   .tool *, .cat a.item { transition: none !important; }
 }
 
-/* Plus oder Mal als Karten mit Symbol und Mini-Mauer (PO 25.10.2026:
-   „Plus und Mal kann man schwer verstehen“). */
-.op-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.op-card {
-  position: relative; display: flex; gap: 12px; align-items: center; cursor: pointer;
-  background: var(--bg); border: 1.5px solid var(--line); border-radius: 14px; padding: 12px;
-  transition: border-color .15s var(--ease), background .15s var(--ease);
-}
-.op-card:hover { border-color: var(--ws); }
-.op-card input { position: absolute; opacity: 0; pointer-events: none; }
-.op-card:has(input:checked) { border-color: var(--ws); background: var(--ws-soft); box-shadow: inset 0 0 0 1px var(--ws); }
-.op-card:has(input:focus-visible) { outline: 3px solid var(--accent); outline-offset: 2px; }
-.op-sym {
-  flex: 0 0 auto; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%;
-  font-size: 1.7rem; font-weight: 800; line-height: 1; background: var(--card); color: var(--ws-text);
-  border: 1.5px solid var(--line);
-}
-.op-card:has(input:checked) .op-sym { background: var(--ws); color: var(--ws-ink); border-color: var(--ws); }
-.op-txt { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-.op-txt b { font-size: .95rem; }
-.op-txt small { font-size: .85rem; color: var(--text-soft); font-variant-numeric: tabular-nums; }
-.op-wall { width: 64px; height: 34px; }
-.op-wall rect { fill: var(--card); stroke: var(--ws); stroke-width: 1.3; }
-.op-wall text { font: 700 10px Helvetica, Arial, sans-serif; text-anchor: middle; fill: var(--text); }
-@media (max-width: 380px) { .op-cards { grid-template-columns: 1fr; } }
-.op-sym.op-dot { font-size: 3.2rem; padding-bottom: 4px; box-sizing: border-box; }
+/* Plus- oder Mal-Mauer: Segment-Auswahl mit eindeutigem Icon (PO 25.10.2026) */
+.op-seg label { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px 8px 10px; font-weight: 600; }
+.op-ic { width: 20px; height: 20px; flex: 0 0 auto; }
+.op-ic circle { fill: none; stroke: currentColor; stroke-width: 1.6; }
+.op-ic path { fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; }
 
 /* Regler „Gitter ⟷ Wörter“ (Suchsel, PO 25.10.2026) */
 .balance { display: flex; align-items: center; gap: 10px; font-size: .85rem; color: var(--text-soft); }
