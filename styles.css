@@ -689,3 +689,6 @@ main.studio { max-width: 1120px; padding: 72px var(--gutter) 64px; }
 .eyebrow, .home .eyebrow { line-height: 1.65; }
 .studio-hero .eyebrow { display: block; }
 @media (max-width: 860px) { main.studio { padding-top: 40px; } }
+
+/* Fuß: „Lernmaterial“ als eigener Abschnitt unter „Studio“ (PO 25.10.2026) */
+.site-foot .foot-col > nav + nav { margin-top: 20px; }
