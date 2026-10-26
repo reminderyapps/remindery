@@ -98,6 +98,8 @@
   function build() {
     const r = devicePixelRatio || 1;
     SW = stage.clientWidth; SH = stage.clientHeight;
+    // Safari: absolute Kind im Grid misst gegen den Grid-Bereich (ohne padding-top) – CSS-Größe daher fest in px.
+    cv.style.width = SW + 'px'; cv.style.height = SH + 'px';
     cv.width = SW * r; cv.height = SH * r; ctx.setTransform(r, 0, 0, r, 0, 0);
     const padX = Math.max(24, SW * .08), spanX = SW - 2 * padX, top = SH * .34, spanY = SH * .6;
     nodes = []; edges = [];
