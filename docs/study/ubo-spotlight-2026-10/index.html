@@ -68,102 +68,31 @@
     .pick { max-width: 980px; margin: 48px auto 64px; padding: 20px; border: 1px solid #DDD; border-radius: 12px; }
     .pick textarea { width: 100%; min-height: 70px; font: inherit; }
     @media (prefers-color-scheme: dark) { .study-head .rec { background: #1E2A24; } .variant-label p { color: #A9B1BC; } }
+    .frames { max-width: 1700px; margin: 0 auto; padding-inline: 16px; display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
+    .frames iframe { border: 1px solid #CCC; border-radius: 12px; background: var(--bg); }
+    .f-desk { width: 1240px; max-width: 100%; height: 760px; }
+    .f-phone { width: 390px; height: 1100px; }
+    .done-list { max-width: 980px; margin: 0 auto; padding-left: 40px; }
   </style>
 </head>
 <body class="home">
   <header class="study-head">
-    <h1>Ubo auf die große Bühne – drei Richtungen</h1>
-    <p>Gleicher Text, gleiche drei Screens (Foto-Prüfliste, Lernplan bis zum Testtag, Probetest 17 / 21), drei Aufbauten.
-      Die Bühne ersetzt die Einkaufsliste; die Einkaufsliste bleibt als Karte im Raster. Fenster schmal ziehen = Handy-Ansicht.</p>
-    <p class="rec"><strong>Meine Empfehlung: B „Buchseite → App“.</strong> Sie zeigt in einem Blick, was keine andere App kann:
-      die Seite aus dem eigenen Vokabelbuch wird zur Lernliste. A ist die sichere Wahl (bewährte Bühne, nur neue Farbe), wirkt aber
-      wie „noch eine App mit drei Screenshots“. C erklärt am besten, ist aber am wenigsten Bühne und auf dem Handy ein Wisch-Streifen.</p>
+    <h1>Ubo auf die große Bühne – Stand 2</h1>
+    <p>Deine Wahl A „Fächer“ mit deinem Feedback vom 27.10. Noch nicht live – live erst, wenn du sagst, es ist fertig.</p>
   </header>
 
-  <!-- ===================== A ===================== -->
-  <div class="variant-label"><h2>A · Fächer</h2><p>Bühne wie bei der Einkaufsliste, drei Telefone gefächert.</p></div>
-  <section class="spotlight wrap" aria-label="Variante A">
-    <div class="spot ubo">
-      <div class="spot-copy">
-        <p class="spot-tag"><img class="ubo-mini" src="../../../ubo/icon.png" width="22" height="22" alt="">Ubo · unser Flaggschiff · bei Google&nbsp;Play</p>
-        <h2><a href="/ubo/">Der Vokabeltrainer, der dein Buch kennt</a></h2>
-        <p class="spot-lead">Vokabelseite fotografieren, die KI liest die Wörter heraus – und dann gezielt auf den Vokabeltest hin üben.
-          Nie mehr Vokabeln abtippen.</p>
-        <ul class="spot-points">
-          <li>Englisch, Französisch, Spanisch, Latein und Italienisch</li>
-          <li>Lernplan bis zum Testtag, Probetest wie in der Schule</li>
-          <li>Ohne Konto, ohne Werbung, die ersten drei Fotoseiten frei</li>
-        </ul>
-        <div class="ctas">
-          <a class="pill-btn" href="/ubo/">App ansehen <span aria-hidden="true">→</span></a>
-          <a class="badge play" href="https://play.google.com/store/apps/details?id=de.remindery.wortkarten"><img src="../../../google-play-badge-de.png" width="646" height="250" alt="Ubo – Vokabeltrainer bei Google Play"></a>
-        </div>
-      </div>
-      <div class="spot-visual" aria-hidden="true">
-        <span class="phone p1"><img src="../../../ubo/screen-photo.webp" width="480" height="1067" alt=""></span>
-        <span class="phone p2"><img src="../../../ubo/screen-plan.webp" width="480" height="1067" alt=""></span>
-        <span class="phone p3"><img src="../../../ubo/screen-test.webp" width="480" height="1067" alt=""></span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== B ===================== -->
-  <div class="variant-label"><h2>B · Buchseite → App</h2><p>Links die Seite aus dem Vokabelbuch, darüber das Telefon mit den gelesenen Wörtern. Empfehlung.</p></div>
-  <section class="spotlight wrap" aria-label="Variante B">
-    <div class="spot ubo">
-      <div class="spot-copy">
-        <p class="spot-tag"><img class="ubo-mini" src="../../../ubo/icon.png" width="22" height="22" alt="">Ubo · unser Flaggschiff · bei Google&nbsp;Play</p>
-        <h2><a href="/ubo/">Der Vokabeltrainer, der dein Buch kennt</a></h2>
-        <p class="spot-lead">Vokabelseite fotografieren, die KI liest die Wörter heraus – und dann gezielt auf den Vokabeltest hin üben.
-          Nie mehr Vokabeln abtippen.</p>
-        <ul class="spot-points">
-          <li>Englisch, Französisch, Spanisch, Latein und Italienisch</li>
-          <li>Lernplan bis zum Testtag, Probetest wie in der Schule</li>
-          <li>Ohne Konto, ohne Werbung, die ersten drei Fotoseiten frei</li>
-        </ul>
-        <div class="ctas">
-          <a class="pill-btn" href="/ubo/">App ansehen <span aria-hidden="true">→</span></a>
-          <a class="badge play" href="https://play.google.com/store/apps/details?id=de.remindery.wortkarten"><img src="../../../google-play-badge-de.png" width="646" height="250" alt="Ubo – Vokabeltrainer bei Google Play"></a>
-        </div>
-      </div>
-      <div class="spot-visual" aria-hidden="true">
-        <div class="book">
-          <b>Unit 3 · Vocabulaire</b>
-          <span>le cartable <i>die Schultasche</i></span>
-          <span>la trousse <i>das Mäppchen</i></span>
-          <span>le cahier <i>das Heft</i></span>
-          <span>le stylo <i>der Stift</i></span>
-          <span>la règle <i>das Lineal</i></span>
-          <span>le livre <i>das Buch</i></span>
-        </div>
-        <span class="flash">Foto → 12 Wörter gelesen</span>
-        <span class="phone b-phone"><img src="../../../ubo/screen-photo.webp" width="480" height="1067" alt=""></span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== C ===================== -->
-  <div class="variant-label"><h2>C · Drei Schritte</h2><p>Text oben mittig, darunter Foto → Lernplan → Probetest mit Nummern.</p></div>
-  <section class="spotlight wrap" aria-label="Variante C">
-    <div class="spot ubo steps">
-      <div class="spot-copy">
-        <p class="spot-tag"><img class="ubo-mini" src="../../../ubo/icon.png" width="22" height="22" alt="">Ubo · unser Flaggschiff · bei Google&nbsp;Play</p>
-        <h2><a href="/ubo/">Der Vokabeltrainer, der dein Buch kennt</a></h2>
-        <p class="spot-lead">Vokabelseite fotografieren, die KI liest die Wörter heraus – und dann gezielt auf den Vokabeltest hin üben.
-          Englisch, Französisch, Spanisch, Latein und Italienisch, ohne Konto, ohne Werbung.</p>
-        <div class="ctas">
-          <a class="pill-btn" href="/ubo/">App ansehen <span aria-hidden="true">→</span></a>
-          <a class="badge play" href="https://play.google.com/store/apps/details?id=de.remindery.wortkarten"><img src="../../../google-play-badge-de.png" width="646" height="250" alt="Ubo – Vokabeltrainer bei Google Play"></a>
-        </div>
-      </div>
-      <div class="step-row" aria-hidden="true">
-        <div class="step"><span class="cap"><span class="num">1</span>Seite fotografieren</span><span class="phone"><img src="../../../ubo/screen-photo.webp" width="480" height="1067" alt=""></span></div>
-        <div class="step"><span class="cap"><span class="num">2</span>Lernplan bis zum Test</span><span class="phone"><img src="../../../ubo/screen-plan.webp" width="480" height="1067" alt=""></span></div>
-        <div class="step"><span class="cap"><span class="num">3</span>Probetest wie in der Schule</span><span class="phone"><img src="../../../ubo/screen-test.webp" width="480" height="1067" alt=""></span></div>
-      </div>
-    </div>
-  </section>
-
+  <div class="variant-label"><h2>Stand 2 · Fächer mit deinem Feedback</h2><p>links Desktop, rechts Handy (390 px)</p></div>
+  <div class="frames">
+    <iframe src="stage.html" title="Desktop" class="f-desk"></iframe>
+    <iframe src="stage.html" title="Handy" class="f-phone"></iframe>
+  </div>
+  <div class="variant-label"><h2>Eingearbeitet</h2></div>
+  <ul class="done-list">
+    <li>Kennzeichnung „Ubo · KI-Vokabeltrainer · bei Google Play“ statt „Flaggschiff“</li>
+    <li>Überschrift „Jede Vokabelliste wird zum Lernplan.“ statt „… der dein Buch kennt“; Text: Buchseite, Arbeitsblatt oder Heft</li>
+    <li>Fächer: 1 Scan-Grafik (Sucher, Ecken, laufende Scan-Linie), 2 Lernen, 3 gelesene Wörter</li>
+    <li>Linke Seite entlastet (kürzere Überschrift, kürzere Punkte), rechts mehr Breite und größere Telefone</li>
+  </ul>
   <div class="pick">
     <h2>Wahl</h2>
     <p>Buchstabe + Anmerkungen hier eintragen, „Wahl kopieren“, in den Chat einfügen.</p>
