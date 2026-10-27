@@ -21,7 +21,7 @@
   <link rel="alternate" hreflang="en" href="https://remindery.de/en/">
   <link rel="alternate" hreflang="x-default" href="https://remindery.de/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=k1">
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/styles.css?v=ubo1">
 </head>
 <body class="home">
   <header class="site-head">
@@ -60,31 +60,30 @@
       </nav>
     </section>
 
-    <!-- Launch stage of the newest app (live on Google Play since 2026-10-08).
-         The app is also a card in the grid; the stage goes once the next app
-         needs it. -->
-    <section class="spotlight wrap" id="shopping" aria-labelledby="shop-h">
-      <div class="spot">
+    <!-- Stage = Ubo (PO 2026-10-27), no longer the newest app.
+         New apps get the New tag in “Straight to the app” and the first card in the grid. -->
+    <section class="spotlight wrap" id="ubo-stage" aria-labelledby="ubo-h">
+      <div class="spot ubo">
+        <div class="spot-head">
+          <p class="spot-tag"><img class="ubo-mini" src="/ubo/icon.png" width="22" height="22" alt="">Ubo · AI vocabulary trainer</p>
+          <h2 id="ubo-h"><a href="/en/ubo/">Every word list becomes a study plan.</a></h2>
+        </div>
         <div class="spot-copy">
-          <p class="spot-tag"><span class="live-dot" aria-hidden="true"></span>New · now on Google&nbsp;Play</p>
-          <h2 id="shop-h"><a href="/en/shopping/">The shared shopping list</a></h2>
-          <p class="spot-lead">One of you adds “milk” at home, the other sees it instantly in the store.
-            The list on the fridge – on two phones at once.</p>
+          <p class="spot-lead">Snap a textbook page, a worksheet or a notebook: the AI reads out the words, and Ubo turns them into a plan up to the vocabulary test.</p>
           <ul class="spot-points">
-            <li>No account, no sign-up, free</li>
-            <li>Share with a code – joined in under a minute</li>
-            <li>Sorted by your store’s aisles, works offline</li>
+            <li>English, French, Spanish, Latin, Italian</li>
+            <li>A plan up to test day, a practice test like at school</li>
+            <li>No account, no ads, three photo pages free</li>
           </ul>
           <div class="ctas">
-            <a class="pill-btn" href="/en/shopping/">See the app <span aria-hidden="true">→</span></a>
-            <a class="badge play" href="https://play.google.com/store/apps/details?id=app.remindery.shopping"><img src="/google-play-badge-de.png" width="646" height="250" alt="Shopping List on Google Play"></a>
+            <a class="pill-btn" href="/en/ubo/">See the app <span aria-hidden="true">→</span></a>
+            <a class="badge play" href="https://play.google.com/store/apps/details?id=de.remindery.wortkarten&amp;hl=en"><img src="/google-play-badge-de.png" width="646" height="250" alt="Ubo – AI vocabulary trainer on Google Play"></a>
           </div>
         </div>
         <div class="spot-visual" aria-hidden="true">
-          <span class="phone p1"><picture><source srcset="/shopping/screen-gemeinsam-dark.webp" media="(prefers-color-scheme: dark)"><img src="/shopping/screen-gemeinsam-light.webp" width="480" height="1067" alt="" loading="lazy"></picture></span>
-          <span class="phone p2"><picture><source srcset="/shopping/screen-teilen-dark.webp" media="(prefers-color-scheme: dark)"><img src="/shopping/screen-teilen-light.webp" width="480" height="1067" alt="" loading="lazy"></picture></span>
-          <span class="phone p3"><picture><source srcset="/shopping/screen-sortiert-dark.webp" media="(prefers-color-scheme: dark)"><img src="/shopping/screen-sortiert-light.webp" width="480" height="1067" alt="" loading="lazy"></picture></span>
-          <img class="mascot" src="/shopping/figur.webp" width="402" height="490" alt="" loading="lazy">
+          <span class="phone p1 scan"><span class="cam"><span class="sheet"><b></b><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="c tl"></span><span class="c tr"></span><span class="c bl"></span><span class="c br"></span><span class="beam"></span></span><span class="shutter"></span></span>
+          <span class="phone p2"><img src="/ubo/screen-plan.webp" width="480" height="1067" alt="" loading="lazy"></span>
+          <span class="phone p3"><img src="/ubo/screen-photo.webp" width="480" height="1067" alt="" loading="lazy"></span>
         </div>
       </div>
     </section>
