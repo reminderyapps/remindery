@@ -51,15 +51,26 @@
 @media (prefers-reduced-motion: reduce) { .home .scan .beam { animation: none; } }
 @media (max-width: 860px) { .home .spot.ubo { grid-template-columns: 1fr; } .home .spot.ubo .spot-visual { height: clamp(260px, 82vw, 420px); } }
 
+
+.home .spot.ubo { grid-template-areas: "head head" "copy visual"; row-gap: 8px; }
+.home .spot.ubo .spot-head { grid-area: head; }
+.home .spot.ubo .spot-copy { grid-area: copy; }
+.home .spot.ubo .spot-visual { grid-area: visual; }
+.home .spot.ubo h2 { font-size: clamp(1.9rem, 3.7vw, 2.9rem); margin-top: 16px; max-width: none; }
+.home .spot.ubo .spot-copy { align-self: start; padding-top: 12px; }
+.home .spot.ubo .spot-lead { margin-top: 0; }
+@media (max-width: 860px) { .home .spot.ubo { grid-template-areas: "head" "copy" "visual"; } }
   </style>
 </head>
 <body class="home">
   <main>
     <section class="spotlight wrap" id="ubo-stage" aria-labelledby="ubo-h">
       <div class="spot ubo">
-        <div class="spot-copy">
-          <p class="spot-tag"><img class="ubo-mini" src="../../../ubo/icon.png" width="22" height="22" alt="">Ubo · KI-Vokabeltrainer · bei Google&nbsp;Play</p>
+        <div class="spot-head">
+          <p class="spot-tag"><img class="ubo-mini" src="../../../ubo/icon.png" width="22" height="22" alt="">Ubo · KI-Vokabeltrainer</p>
           <h2 id="ubo-h"><a href="../../../ubo/">Jede Vokabelliste wird zum Lernplan.</a></h2>
+        </div>
+        <div class="spot-copy">
           <p class="spot-lead">Buchseite, Arbeitsblatt oder Heft fotografieren: Die KI liest die Wörter heraus, Ubo macht daraus einen Plan bis zum Vokabeltest.</p>
           <ul class="spot-points">
             <li>Englisch, Französisch, Spanisch, Latein, Italienisch</li>
