@@ -37,7 +37,7 @@
     `<div class="row"><div class="name">${r.name}<small>${r.when}${r.note ? ' · ' + r.note : ''}</small>
      <div class="ic">${r.drv.map(k => `<span title="${D.drv[k]}">${D.sym[k]}</span>`).join('')}</div></div>
      <div class="track"><div class="act" data-w="${r.act / max * 85}"></div>
-     <div class="val" style="left:calc(${r.act / max * 85}% + 10px)">${r.act} ${D.days}</div></div></div>`).join('');
+     <div class="val" style="left:calc(${r.act / max * 85}% + 10px)">${r.act} ${r.act === 1 ? (D.day || D.days) : D.days}</div></div></div>`).join('');
   const leg = document.getElementById('sym-legend');
   if (leg) leg.innerHTML = D.cols.map(k => `<span>${D.sym[k]} ${D.drv[k]}</span>`).join('');
   onView(speed, () => {
