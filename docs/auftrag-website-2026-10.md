@@ -68,3 +68,6 @@ Zustand dieses Pakets lebt in dieser Datei (Haken, Protokoll), nicht im Chatverl
   „kein Wettlauf gegen andere“ statt „kein Zeitdruck“, „ehrlich zu dir“ ohne Berichts-Versprechen);
   die Vision-Fassung steht in der HQ-Datei. `tool/header.py` ist veraltet (setzt die alte Navigation
   ohne Lernmaterial/Methode und `favicon.svg` ohne `?v=k1`) und wurde **nicht** angewendet.
+- 27.10.2026: EN-Startseite: Hinweis „Most of our learning apps are made for German-speaking families …“
+  aus dem Hero entfernt (PO: wirkt dort wie eine Entschuldigung). Offen: Sprachhinweis je App im
+  Kleintext der App-Karten, falls englische Besucher deutsche Apps installieren (Commit d85cd33).
