@@ -57,3 +57,14 @@ Zustand dieses Pakets lebt in dieser Datei (Haken, Protokoll), nicht im Chatverl
   Einreichung" (Geburtstage 05.→06.07., Silben 01.→21.08., Uhr 14.08.→06.09., Ox 03.→~14.09.).
   PO „push": gepusht (b9b9c6e), Pages gebaut, Live-Crawl OK (22 Seiten + 16 Weiterleitungen),
   viewport.py live OK (88 Ansichten), docs/ und tool/ live 404. **Auftrag abgeschlossen.**
+- 27.10.2026: **Neues Markenversprechen auf der Startseite** (PO-Wortlaut, Quelle
+  `C:\privat\hq\ventures\remindery\purpose-vision-strategie.md`, Karte STDIO-a0048): Hero DE
+  „Wie ein guter Lehrer: Unsere Apps sehen dein Kind und verstehen es.“ + Team-Satz, EN eigenständig
+  formuliert; Titel/Meta/OG beider Startseiten und beider Über-uns-Seiten nachgezogen; Abschnitt
+  „Unsere Lern-Apps“ statt „Eine Aufgabe je App“; neuer Block „Unser Versprechen“ (fünf Sätze,
+  `.promise-list` in styles.css, `?v=fair1`); Einkaufsliste und Geburtstage aus „Direkt zur App“
+  heraus in einen nachgeordneten Block „Für die Familie“ (Seiten und Links unverändert).
+  Versprechen-Sätze auf das beschränkt, was die Apps heute halten (kein Konto statt „keine Daten“,
+  „kein Wettlauf gegen andere“ statt „kein Zeitdruck“, „ehrlich zu dir“ ohne Berichts-Versprechen);
+  die Vision-Fassung steht in der HQ-Datei. `tool/header.py` ist veraltet (setzt die alte Navigation
+  ohne Lernmaterial/Methode und `favicon.svg` ohne `?v=k1`) und wurde **nicht** angewendet.
