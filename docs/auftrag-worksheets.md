@@ -42,7 +42,9 @@ Seite, Inhalt deutsch. Alles läuft im Browser, keine externen Requests
   `/worksheets/…`-Seiten leiten weiter, Assets bleiben unter `/worksheets/`.
   Englisch: `/en/worksheets/`, `…/word-search-generator/`, `…/number-pyramid-generator/`,
   Skripte zweisprachig (`STR = {de, en}` je Datei, Sprache aus `<html lang>`).
-  Offen: Search Console „Indexierung beantragen“ für die 6 Adressen (PO).
+  Search Console 27.10.: `/lernmaterial/` indexiert (gecrawlt 25.10. 23:25). Sitemap zuletzt
+  gelesen 24.10. (34 Seiten, ohne Lernmaterial) → PO reicht sie neu ein (Soll: 54). Offen beim PO:
+  die 5 Generator-Adressen per URL-Prüfung, bei „nicht auf Google“ Indexierung beantragen.
 - 25.10. Verzeichnis-Einträge (Kopierseite `docs/verzeichnisse-lernmaterial.html`):
   Deutscher Bildungsserver, Onlineressource **Zahlenmauer-Generator eingereicht,
   Eingangs-ID 9566** (Fach + ELIXIER: Schule › Grundschule › Mathematik › Rechnen,
