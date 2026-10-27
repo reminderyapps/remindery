@@ -61,9 +61,10 @@
 .home .spot.ubo .spot-lead { margin-top: 0; }
 @media (max-width: 860px) { .home .spot.ubo { grid-template-areas: "head" "copy" "visual"; } }
 @media (min-width: 861px) {
-  .home .spot.ubo .spot-copy { padding-top: 40px; }
+  .home .spot.ubo .spot-copy { padding-top: 40px; align-self: stretch; display: flex; flex-direction: column; }
   .home .spot.ubo .spot-points { margin-top: 30px; }
-  .home .spot.ubo .ctas { margin-top: 36px; }
+  .home .spot.ubo .ctas { margin-top: auto; padding-top: 40px; }   /* Knöpfe unten an der Karte */
+  .home .spot.ubo .spot-visual { height: clamp(360px, 38vw, 470px); }   /* weniger Luft über den Telefonen */
 }
   </style>
 </head>
