@@ -43,8 +43,9 @@ Seite, Inhalt deutsch. Alles läuft im Browser, keine externen Requests
   Englisch: `/en/worksheets/`, `…/word-search-generator/`, `…/number-pyramid-generator/`,
   Skripte zweisprachig (`STR = {de, en}` je Datei, Sprache aus `<html lang>`).
   Search Console 27.10.: `/lernmaterial/` indexiert (gecrawlt 25.10. 23:25). Sitemap zuletzt
-  gelesen 24.10. (34 Seiten, ohne Lernmaterial) → PO reicht sie neu ein (Soll: 54). Offen beim PO:
-  die 5 Generator-Adressen per URL-Prüfung, bei „nicht auf Google“ Indexierung beantragen.
+  gelesen 24.10. (34 Seiten, ohne Lernmaterial) → PO hat sie 27.10. neu eingereicht (Soll: 54).
+  5 von 6 Adressen indexiert; `/en/worksheets/number-pyramid-generator/` war Google unbekannt,
+  Indexierung am 27.10. beantragt. Prüfen beim Messpunkt 22.11.
 - 25.10. Verzeichnis-Einträge (Kopierseite `docs/verzeichnisse-lernmaterial.html`):
   Deutscher Bildungsserver, Onlineressource **Zahlenmauer-Generator eingereicht,
   Eingangs-ID 9566** (Fach + ELIXIER: Schule › Grundschule › Mathematik › Rechnen,
