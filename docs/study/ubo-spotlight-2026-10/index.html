@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Studie: Ubo-Bühne auf der Startseite</title>
+  <link rel="stylesheet" href="../../../styles.css">
+  <style>
+    /* Ubo-Bühne: gleiche Bühne wie die Einkaufsliste, eigene Farbe (App-Grün). */
+    :root { --ubo: #2E6B58; --ubo-deep: #1C4A3D; --ubo-ink: #FFFFFF; --ubo-soft: rgba(255, 255, 255, .82); --ubo-accent: #B9E4C9; }
+    .home .spot.ubo {
+      color: var(--ubo-ink);
+      background:
+        radial-gradient(520px 380px at 100% 0%, rgba(185, 228, 201, .28), transparent 70%),
+        radial-gradient(420px 300px at 0% 100%, rgba(10, 40, 32, .55), transparent 70%),
+        var(--ubo);
+      box-shadow: 0 30px 60px -30px rgba(20, 70, 55, .6);
+    }
+    .home .spot.ubo .spot-tag { background: rgba(255, 255, 255, .14); color: var(--ubo-ink); }
+    .home .spot.ubo .spot-lead { color: var(--ubo-soft); }
+    .home .spot.ubo .spot-points li::before { background: var(--ubo-accent); color: var(--ubo-deep); }
+    .home .spot.ubo .pill-btn { background: #fff; color: var(--ubo-deep); }
+    .home .spot.ubo .phone { border-color: #0E2A22; }
+    .ubo-mini { width: 22px; height: 22px; border-radius: 6px; }
+    .ubo-icon { width: 56px; height: 56px; border-radius: 14px; box-shadow: 0 6px 16px rgba(0,0,0,.25); }
+
+    /* B: Buchseite → App */
+    .home .spot.ubo .book {
+      position: absolute; left: 2%; bottom: 14%; width: 58%; aspect-ratio: 3 / 4; z-index: 1;
+      background: repeating-linear-gradient(#FFFDF6 0 27px, #DCE6F2 27px 28px); border-radius: 6px;
+      transform: rotate(-6deg); box-shadow: 0 18px 40px -12px rgba(0,0,0,.45);
+      padding: 18px 14px 0 30px; color: #29313D; font: 600 clamp(.56rem, .92vw, .76rem)/28px Georgia, serif;
+    }
+    .home .spot.ubo .book::before { content: ""; position: absolute; left: 20px; top: 0; bottom: 0; width: 1px; background: #E8A0A0; }
+    .home .spot.ubo .book b { display: block; font: 700 .8em/28px system-ui, sans-serif; letter-spacing: .06em; text-transform: uppercase; color: #6B7280; }
+    .home .spot.ubo .book span { display: flex; justify-content: space-between; gap: 8px; white-space: nowrap; }
+    .home .spot.ubo .book i { font-style: normal; color: #5B6472; }
+    .home .spot.ubo .b-phone { position: absolute; right: 6%; bottom: -16%; width: 40%; z-index: 2; transform: rotate(4deg); }
+    .home .spot.ubo .flash {
+      position: absolute; z-index: 3; left: 44%; top: 18%; display: inline-flex; gap: 8px; align-items: center;
+      padding: 8px 14px; border-radius: 999px; background: #fff; color: var(--ubo-deep); font-weight: 750; font-size: .85rem;
+      box-shadow: 0 10px 24px rgba(0,0,0,.25);
+    }
+
+    /* C: drei Schritte nebeneinander */
+    .home .spot.ubo.steps { grid-template-columns: 1fr; text-align: center; }
+    .home .spot.ubo.steps .spot-copy { padding-bottom: 8px; justify-self: center; max-width: 46em; }
+    .home .spot.ubo.steps .spot-lead { margin-inline: auto; }
+    .home .spot.ubo.steps .ctas { justify-content: center; }
+    .home .spot.ubo .step-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(12px, 3vw, 40px); align-items: end; }
+    .home .spot.ubo .step { display: grid; gap: 14px; justify-items: center; }
+    .home .spot.ubo .step .cap { display: inline-flex; gap: 10px; align-items: center; font-weight: 700; }
+    .home .spot.ubo .step .num { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--ubo-accent); color: var(--ubo-deep); font-size: .85rem; }
+    .home .spot.ubo .step .phone { position: relative; width: min(220px, 100%); aspect-ratio: 480 / 640; border-bottom: 0; border-radius: 28px 28px 0 0; }
+    .home .spot.ubo .step .phone img { object-position: top; }
+    @media (max-width: 760px) {
+      .home .spot.ubo .step-row { grid-template-columns: repeat(3, 60%); overflow-x: auto; scroll-snap-type: x mandatory; justify-content: start; padding-bottom: 4px; }
+      .home .spot.ubo .step { scroll-snap-align: center; }
+    }
+
+    /* Studien-Rahmen */
+    .study-head { max-width: 980px; margin: 32px auto 8px; padding-inline: 16px; }
+    .study-head h1 { font-size: clamp(1.6rem, 3vw, 2.2rem); }
+    .study-head .rec { background: #EAF4EE; border-left: 4px solid var(--ubo); padding: 12px 16px; border-radius: 8px; }
+    .variant-label { max-width: 1200px; margin: 40px auto 12px; padding-inline: 16px; display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+    .variant-label h2 { margin: 0; font-size: 1.3rem; }
+    .variant-label p { margin: 0; color: #5B6472; }
+    .pick { max-width: 980px; margin: 48px auto 64px; padding: 20px; border: 1px solid #DDD; border-radius: 12px; }
+    .pick textarea { width: 100%; min-height: 70px; font: inherit; }
+    @media (prefers-color-scheme: dark) { .study-head .rec { background: #1E2A24; } .variant-label p { color: #A9B1BC; } }
+  </style>
+</head>
+<body class="home">
+  <header class="study-head">
+    <h1>Ubo auf die große Bühne – drei Richtungen</h1>
+    <p>Gleicher Text, gleiche drei Screens (Foto-Prüfliste, Lernplan bis zum Testtag, Probetest 17 / 21), drei Aufbauten.
+      Die Bühne ersetzt die Einkaufsliste; die Einkaufsliste bleibt als Karte im Raster. Fenster schmal ziehen = Handy-Ansicht.</p>
+    <p class="rec"><strong>Meine Empfehlung: B „Buchseite → App“.</strong> Sie zeigt in einem Blick, was keine andere App kann:
+      die Seite aus dem eigenen Vokabelbuch wird zur Lernliste. A ist die sichere Wahl (bewährte Bühne, nur neue Farbe), wirkt aber
+      wie „noch eine App mit drei Screenshots“. C erklärt am besten, ist aber am wenigsten Bühne und auf dem Handy ein Wisch-Streifen.</p>
+  </header>
+
+  <!-- ===================== A ===================== -->
+  <div class="variant-label"><h2>A · Fächer</h2><p>Bühne wie bei der Einkaufsliste, drei Telefone gefächert.</p></div>
+  <section class="spotlight wrap" aria-label="Variante A">
+    <div class="spot ubo">
+      <div class="spot-copy">
+        <p class="spot-tag"><img class="ubo-mini" src="../../../ubo/icon.png" width="22" height="22" alt="">Ubo · unser Flaggschiff · bei Google&nbsp;Play</p>
+        <h2><a href="/ubo/">Der Vokabeltrainer, der dein Buch kennt</a></h2>
+        <p class="spot-lead">Vokabelseite fotografieren, die KI liest die Wörter heraus – und dann gezielt auf den Vokabeltest hin üben.
+          Nie mehr Vokabeln abtippen.</p>
+        <ul class="spot-points">
+          <li>Englisch, Französisch, Spanisch, Latein und Italienisch</li>
+          <li>Lernplan bis zum Testtag, Probetest wie in der Schule</li>
+          <li>Ohne Konto, ohne Werbung, die ersten drei Fotoseiten frei</li>
+        </ul>
+        <div class="ctas">
+          <a class="pill-btn" href="/ubo/">App ansehen <span aria-hidden="true">→</span></a>
+          <a class="badge play" href="https://play.google.com/store/apps/details?id=de.remindery.wortkarten"><img src="../../../google-play-badge-de.png" width="646" height="250" alt="Ubo – Vokabeltrainer bei Google Play"></a>
+        </div>
+      </div>
+      <div class="spot-visual" aria-hidden="true">
+        <span class="phone p1"><img src="../../../ubo/screen-photo.webp" width="480" height="1067" alt=""></span>
+        <span class="phone p2"><img src="../../../ubo/screen-plan.webp" width="480" height="1067" alt=""></span>
+        <span class="phone p3"><img src="../../../ubo/screen-test.webp" width="480" height="1067" alt=""></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== B ===================== -->
+  <div class="variant-label"><h2>B · Buchseite → App</h2><p>Links die Seite aus dem Vokabelbuch, darüber das Telefon mit den gelesenen Wörtern. Empfehlung.</p></div>
+  <section class="spotlight wrap" aria-label="Variante B">
+    <div class="spot ubo">
+      <div class="spot-copy">
+        <p class="spot-tag"><img class="ubo-mini" src="../../../ubo/icon.png" width="22" height="22" alt="">Ubo · unser Flaggschiff · bei Google&nbsp;Play</p>
+        <h2><a href="/ubo/">Der Vokabeltrainer, der dein Buch kennt</a></h2>
+        <p class="spot-lead">Vokabelseite fotografieren, die KI liest die Wörter heraus – und dann gezielt auf den Vokabeltest hin üben.
+          Nie mehr Vokabeln abtippen.</p>
+        <ul class="spot-points">
+          <li>Englisch, Französisch, Spanisch, Latein und Italienisch</li>
+          <li>Lernplan bis zum Testtag, Probetest wie in der Schule</li>
+          <li>Ohne Konto, ohne Werbung, die ersten drei Fotoseiten frei</li>
+        </ul>
+        <div class="ctas">
+          <a class="pill-btn" href="/ubo/">App ansehen <span aria-hidden="true">→</span></a>
+          <a class="badge play" href="https://play.google.com/store/apps/details?id=de.remindery.wortkarten"><img src="../../../google-play-badge-de.png" width="646" height="250" alt="Ubo – Vokabeltrainer bei Google Play"></a>
+        </div>
+      </div>
+      <div class="spot-visual" aria-hidden="true">
+        <div class="book">
+          <b>Unit 3 · Vocabulaire</b>
+          <span>le cartable <i>die Schultasche</i></span>
+          <span>la trousse <i>das Mäppchen</i></span>
+          <span>le cahier <i>das Heft</i></span>
+          <span>le stylo <i>der Stift</i></span>
+          <span>la règle <i>das Lineal</i></span>
+          <span>le livre <i>das Buch</i></span>
+        </div>
+        <span class="flash">Foto → 12 Wörter gelesen</span>
+        <span class="phone b-phone"><img src="../../../ubo/screen-photo.webp" width="480" height="1067" alt=""></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== C ===================== -->
+  <div class="variant-label"><h2>C · Drei Schritte</h2><p>Text oben mittig, darunter Foto → Lernplan → Probetest mit Nummern.</p></div>
+  <section class="spotlight wrap" aria-label="Variante C">
+    <div class="spot ubo steps">
+      <div class="spot-copy">
+        <p class="spot-tag"><img class="ubo-mini" src="../../../ubo/icon.png" width="22" height="22" alt="">Ubo · unser Flaggschiff · bei Google&nbsp;Play</p>
+        <h2><a href="/ubo/">Der Vokabeltrainer, der dein Buch kennt</a></h2>
+        <p class="spot-lead">Vokabelseite fotografieren, die KI liest die Wörter heraus – und dann gezielt auf den Vokabeltest hin üben.
+          Englisch, Französisch, Spanisch, Latein und Italienisch, ohne Konto, ohne Werbung.</p>
+        <div class="ctas">
+          <a class="pill-btn" href="/ubo/">App ansehen <span aria-hidden="true">→</span></a>
+          <a class="badge play" href="https://play.google.com/store/apps/details?id=de.remindery.wortkarten"><img src="../../../google-play-badge-de.png" width="646" height="250" alt="Ubo – Vokabeltrainer bei Google Play"></a>
+        </div>
+      </div>
+      <div class="step-row" aria-hidden="true">
+        <div class="step"><span class="cap"><span class="num">1</span>Seite fotografieren</span><span class="phone"><img src="../../../ubo/screen-photo.webp" width="480" height="1067" alt=""></span></div>
+        <div class="step"><span class="cap"><span class="num">2</span>Lernplan bis zum Test</span><span class="phone"><img src="../../../ubo/screen-plan.webp" width="480" height="1067" alt=""></span></div>
+        <div class="step"><span class="cap"><span class="num">3</span>Probetest wie in der Schule</span><span class="phone"><img src="../../../ubo/screen-test.webp" width="480" height="1067" alt=""></span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="pick">
+    <h2>Wahl</h2>
+    <p>Buchstabe + Anmerkungen hier eintragen, „Wahl kopieren“, in den Chat einfügen.</p>
+    <textarea id="w" placeholder="z. B. B, aber Kugelschreiber-Zeile raus"></textarea>
+    <p><button onclick="navigator.clipboard.writeText('Ubo-Bühne: '+document.getElementById('w').value)">Wahl kopieren</button></p>
+  </div>
+</body>
+</html>
