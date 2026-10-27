@@ -14,7 +14,7 @@
   --head-bg: rgba(250, 247, 242, .86);
   --shadow: 0 10px 40px rgba(43, 38, 34, 0.08);
   --shadow-soft: 0 1px 2px rgba(43, 38, 34, .05), 0 12px 32px rgba(43, 38, 34, .07);
-  --ox: #6B8E23; --silben: #3F7DBF; --uhr: #E8604C; --geb: #C2647A; --raetsel: #2E9A63;
+  --times: #4C5FD7; --ox: #6B8E23; --silben: #3F7DBF; --uhr: #E8604C; --geb: #C2647A; --raetsel: #2E9A63;
   --serif: Georgia, "Times New Roman", ui-serif, serif;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --gutter: clamp(16px, 4vw, 32px);
