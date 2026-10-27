@@ -24,7 +24,7 @@ dann http://127.0.0.1:8790/method/
 
 Bautage = Tage mit Commits vom ersten Commit bis zur ersten Produktions-Einreichung (versionen.md je Repo):
 Geburtstage (PoC) 4 / 27 (05.07. → Production 31.07.), Silben 9 / 22 Kalendertage, Uhr 7 / 38 (Einreichdatum nur „~20.09.“ – PO prüft in der Console),
-Ubo 10 / 11, Einkaufsliste 5 / 11, Rätselheft 3 / 3. Store-Prüfzeit nicht eingerechnet.
+Ubo 10 / 11, Einkaufsliste 5 / 11, Rätselheft 3 / 3, Einmaleins 1 / 1 (25.10.2026: erster Commit 11:31, Amazon eingereicht 18:09; nachgetragen 27.10.). Store-Prüfzeit nicht eingerechnet.
 Commits aller Repos (apps/*, remindery-site, hq, dedupliziert) 2.690; Tests (`test(`/`testWidgets(`) 4.391;
 mp3-Clips silben+uhr+raetselblock 7.527; Board-Läufe seit 07.10. 32.
 Nacht-Replay: Rätselblock-Git-Log 07.10. 23:34 → 08.10. 06:07, 121 Commits; Stunden 6/18/45/19/1/23/3/6.
