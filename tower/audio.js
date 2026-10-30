@@ -40,7 +40,7 @@
   const samples = {};
   let white = null, brown = null;
   let voices = 0;
-  let rect = null, zoomF = 0;
+  let rect = null, zoomF = 0, tempo = 1;
   let attached = null;
   let preview = null;                // { kind: 'carpet'|'layer', name, until }
   let lastTick = 0, updAcc = 1;
@@ -473,9 +473,10 @@
     return clamp(((x - rect.x0) / (rect.x1 - rect.x0)) * 2 - 1, -1, 1) * 0.6;
   }
   const NOTE = n => 440 * Math.pow(2, (n - 69) / 12);
+  const DOOR_NEAR = 15;   // door gongs only with at most this many floors in view
   const SFX = {
-    door(t, o) {      // elevator gong, slightly varied pitch; express a fourth lower
-      const f = (o.express ? 740 : 988) * Math.pow(2, rnd(-0.5, 0.5) / 12);
+    door(t, o) {      // elevator gong, slightly varied pitch; the lower one for the local elevator, express a fourth higher (PO 30.10.2026: swapped)
+      const f = (o.express ? 988 : 740) * Math.pow(2, rnd(-0.5, 0.5) / 12);
       return bell(panned(busSfx, o.pan), f, t, 0.16 * (o.level || 1), 1.1);
     },
     movein(t, o) {
@@ -595,9 +596,12 @@
     if (!running() || preview) return;
     const now = ac.currentTime;
     if (type === 'door') {
-      const s = d && d.shaft; if (!s) return;
+      // PO 30.10.2026 („ich hör es nur noch plingen“): only when someone gets on or off, only close up
+      // (like SimTower's close-up window), and rarer the faster the game runs
+      const s = d && d.shaft; if (!s || !d.n) return;
+      if (!rect || (rect.y1 - rect.y0) / rect.fh > DOOR_NEAR) return;
       const pan = inView(s.c + 0.5, d.f); if (pan == null) return;
-      const gap = 0.2 + 1.0 * (1 - zoomF);      // further out = rarer gongs
+      const gap = 0.6 * Math.sqrt(Math.max(1, tempo));   // 1× 0,6 s · 3× 1 s · 10× 1,9 s · 20× 2,7 s
       if (now - last.door < gap) return;
       last.door = now;
       if (play('door', { pan, express: s.kind === 'express', level: 0.5 + 0.5 * zoomF })) stats.doorPlayed++;
@@ -661,8 +665,9 @@
   })();
 
   // ---------- per frame ----------
-  function frame(game, view, cssW, cssH, fh) {
+  function frame(game, view, cssW, cssH, fh, speed) {
     if (game !== attached) attach(game);
+    tempo = speed || 1;
     if (view && view.s > 0) rect = { x0: view.x, x1: view.x + cssW / view.s, y0: view.y, y1: view.y + cssH / view.s, fh: fh || 1.6 };
     if (!running() || offline) return;
     const now = performance.now() / 1000, dt = Math.min(0.1, Math.max(0, now - (lastTick || now)));

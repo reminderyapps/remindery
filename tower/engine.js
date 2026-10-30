@@ -62,16 +62,16 @@
       office:      { w: 4, cost: 40000,  rent: 5000, cap: 6, label: 'Büro',       icon: '💼' },
       condo:       { w: 3, cost: 50000,  rent: 3000, cap: 3, label: 'Wohnung',    icon: '🏠' },
       restaurant:  { w: 6, cost: 80000,  price: 80, seats: 24, label: 'Restaurant', icon: '🍽️', no: 'kein Restaurant' },
-      skylobby:    { w: 6, cost: 100000, star: 2, label: 'Sky-Lobby', icon: '🛋️' },
-      workshop:    { w: 4, cost: 60000,  upkeep: 5000, star: 1, label: 'Werkstatt', icon: '🔧' },
-      cafe:        { w: 3, cost: 45000,  seats: 8,  price: 60,  upkeep: 2000, star: 2, label: 'Café',       icon: '☕', no: 'kein Café' },
-      daycare:     { w: 4, cost: 70000,  seats: 10, price: 600, upkeep: 4000, star: 2, label: 'Kita',       icon: '🧸', no: 'keine Kita' },
-      supermarket: { w: 6, cost: 120000, seats: 16, price: 150, upkeep: 6000, star: 2, walkIn: 30, label: 'Supermarkt', icon: '🛒', no: 'kein Supermarkt' },
-      gym:         { w: 5, cost: 90000,  seats: 12, price: 200, upkeep: 2000, star: 2, label: 'Fitness',    icon: '🏋️', no: 'kein Fitness' },
+      skylobby:    { w: 6, cost: 100000, star: 1, label: 'Sky-Lobby', icon: '🛋️' },
+      workshop:    { w: 4, cost: 60000,  upkeep: 5000, label: 'Werkstatt', icon: '🔧' },
+      cafe:        { w: 3, cost: 45000,  seats: 8,  price: 60,  upkeep: 2000, star: 1, label: 'Café',       icon: '☕', no: 'kein Café' },
+      daycare:     { w: 4, cost: 70000,  seats: 10, price: 600, upkeep: 4000, star: 1, label: 'Kita',       icon: '🧸', no: 'keine Kita' },
+      supermarket: { w: 6, cost: 120000, seats: 16, price: 150, upkeep: 6000, star: 1, walkIn: 30, label: 'Supermarkt', icon: '🛒', no: 'kein Supermarkt' },
+      gym:         { w: 5, cost: 90000,  seats: 12, price: 200, upkeep: 2000, star: 1, label: 'Fitness',    icon: '🏋️', no: 'kein Fitness' },
     },
     shafts: {
       normal:  { base: 30000, perFloor: 2000, car: 15000, upkeep: 3000, cap: 10, speed: 1 / 20, maxSpan: 15, maxCars: 4, wearPerStop: 0.015, wearPerFloor: 0.016, label: 'Aufzug' },
-      express: { base: 80000, perFloor: 3000, car: 30000, upkeep: 6000, cap: 20, speed: 1 / 8,  maxSpan: 50, maxCars: 4, wearPerStop: 0.015, wearPerFloor: 0.006, star: 2, label: 'Express' },
+      express: { base: 80000, perFloor: 3000, car: 30000, upkeep: 6000, cap: 20, speed: 1 / 8,  maxSpan: 50, maxCars: 4, wearPerStop: 0.015, wearPerFloor: 0.006, star: 1, label: 'Express' },
     },
     // ----- needs, penalties, tiers (TOWER-a0006 P2, concept sections 3–5) -----
     // fulfilment of a need from the felt minutes t to the provider: 1 up to t0, 1 − ((t − t0)/(t1 − t0))^k
@@ -92,10 +92,10 @@
     // tiers 0 standard, 1 upscale, 2 luxury: needs per room type, rent factor, extra upkeep per day as a
     // share of the standard rent (also when vacant), penalty sensitivity; luxury is locked in this run
     tiers: [
-      { label: 'Standard', star: 1, rent: 1,   upkeep: 0,   sens: { office: 0.5, condo: 1.0 }, needs: { office: ['lunch'], condo: [] } },
-      { label: 'Gehoben',  star: 2, rent: 1.8, upkeep: 0.2, sens: { office: 1.5, condo: 1.5 }, needs: { office: ['lunch', 'coffee', 'childcare'], condo: ['shopping', 'sport'] } },
+      { label: 'Standard', star: 0, rent: 1,   upkeep: 0,   sens: { office: 0.5, condo: 1.0 }, needs: { office: ['lunch'], condo: [] } },
+      { label: 'Gehoben',  star: 1, rent: 1.8, upkeep: 0.2, sens: { office: 1.5, condo: 1.5 }, needs: { office: ['lunch', 'coffee', 'childcare'], condo: ['shopping', 'sport'] } },
       // luxury needs (sport for offices, spa, prestige restaurant …) come with ★★★ (follow-up card)
-      { label: 'Luxus',    star: 3, rent: 3,   upkeep: 0.6, sens: { office: 1.5, condo: 1.5 }, needs: { office: ['lunch', 'coffee', 'childcare'], condo: ['shopping', 'sport'] }, locked: true },
+      { label: 'Luxus',    star: 2, rent: 3,   upkeep: 0.6, sens: { office: 1.5, condo: 1.5 }, needs: { office: ['lunch', 'coffee', 'childcare'], condo: ['shopping', 'sport'] }, locked: true },
     ],
     upgradeShare: 0.5,        // upgrading costs this share of the room's build price
     warnBelow: 0.5,           // fulfilment at most this (whole percent as shown) = below the threshold. Not "below":
@@ -136,7 +136,8 @@
     // (rooms, shell, the lobby). Building fills the whole gap around the tapped tile.
     shell: { cost: 1000, label: 'Rohbau', icon: '🧱' },
     seasonDays: 5,         // days per season (spring, summer, autumn, winter) – looks only
-    // index = stars - 1; requirement to REACH this star, maxFloor unlocked with it
+    // index = stars (PO 30.10.2026: a game starts with 0 stars); requirement to REACH this star,
+    // maxFloor unlocked with it
     stars: [
       { maxFloor: 15 },
       { pop: 100, sat: 0.70, maxFloor: 30 },
@@ -219,7 +220,9 @@
       const s = saved || {};
       this.money = s.money ?? CFG.startMoney;
       this.day = s.day ?? 1;
-      this.stars = s.stars ?? 1;
+      // stars count from 0 since 30.10.2026 (starsFrom: 0 in the save); older saves and plain objects
+      // (sim_check) count from 1 and step down by one – same level, one star less shown
+      this.stars = s.starsFrom === 0 ? s.stars : Math.max(0, (s.stars ?? 1) - 1);
       this.seed = s.seed ?? ((Math.random() * 1e9) | 0);
       this.nextId = s.nextId ?? 1;
       this.sat = s.sat ?? 1;
@@ -257,9 +260,12 @@
     }
 
     // ----- persistence -----
-    serialize() {
+    // a load always restarts the day at 06:00 (people are not saved): mid-day saves (rewind) take back
+    // today's sales and repairs, so the replayed day books them once; building costs stay paid
+    serialize(rewind) {
+      const money = rewind ? this.money - this.today.sales + this.today.repairs : this.money;
       return {
-        v: 1, money: this.money, day: this.day, stars: this.stars, seed: this.seed,
+        v: 1, money, day: this.day, stars: this.stars, starsFrom: 0, seed: this.seed,
         nextId: this.nextId, sat: this.sat, won: this.won,
         loan: this.loan, negDays: this.negDays, serviceAt: this.serviceAt,
         rooms: this.rooms.map(r => ({ id: r.id, type: r.type, f: r.f, x: r.x, occupied: r.occupied, score: r.score, tenancy: r.tenancy,
@@ -353,7 +359,7 @@
     _emit(type, data) { if (this.onEvent) this.onEvent(type, data); }
 
     // ----- derived structure -----
-    get maxFloor() { return CFG.stars[Math.min(this.stars, CFG.stars.length) - 1].maxFloor; }
+    get maxFloor() { return CFG.stars[Math.min(this.stars, CFG.stars.length - 1)].maxFloor; }
     get season() { return Math.floor((this.day - 1) / CFG.seasonDays) % 4; }   // 0 spring … 3 winter
 
     _structureChanged() {
@@ -611,7 +617,7 @@
       if (!def) return { ok: false, reason: 'Unbekannt' };
       x = Math.max(0, Math.min(CFG.W - def.w, x));
       const res = { ok: false, x, cost: def.cost };
-      if ((def.star || 1) > this.stars) { res.reason = 'Erst ab ' + '★'.repeat(def.star); return res; }
+      if ((def.star || 0) > this.stars) { res.reason = 'Erst ab ' + '★'.repeat(def.star); return res; }
       if (f < 1) { res.reason = 'Im EG ist die Lobby'; return res; }
       if (f > this.maxFloor) { res.reason = 'Höher geht es erst mit mehr Sternen'; return res; }
       if (type === 'skylobby' && f % CFG.SKY_EVERY !== 0) { res.reason = 'Sky-Lobby nur im 15., 30. oder 45. OG'; return res; }
@@ -644,7 +650,10 @@
     }
 
     // shell floor: fills the whole gap around tile x on floor f (as far as the floor below carries)
-    checkShell(f, x) {
+    // x2 (optional, PO 30.10.2026 „click and ziehen“): the other end of a dragged piece – it runs from x
+    // towards x2 and stops at the first tile that is taken or has no foundation below; without x2 the
+    // whole gap around x (sim_check and the dev towers rely on that)
+    checkShell(f, x, x2) {
       x = Math.max(0, Math.min(CFG.W - 1, x));
       const res = { ok: false, f, x, w: 1, cost: CFG.shell.cost };
       if (f < 1) { res.reason = 'Im EG ist die Lobby'; return res; }
@@ -653,17 +662,18 @@
       if (!free(x)) { res.reason = 'Hier ist schon Boden'; return res; }
       const ext = this.floorExtent(f - 1);
       if (!ext || x < ext[0] || x > ext[1]) { res.reason = 'Darunter fehlt das Fundament'; return res; }
-      let a = x, b = x;
-      while (a - 1 >= ext[0] && free(a - 1)) a--;
-      while (b + 1 <= ext[1] && free(b + 1)) b++;
+      let a = x, b = x, lo = ext[0], hi = ext[1];
+      if (x2 != null) { x2 = Math.max(0, Math.min(CFG.W - 1, x2)); lo = Math.max(lo, Math.min(x, x2)); hi = Math.min(hi, Math.max(x, x2)); }
+      while (a - 1 >= lo && free(a - 1)) a--;
+      while (b + 1 <= hi && free(b + 1)) b++;
       res.x = a; res.w = b - a + 1; res.cost = res.w * CFG.shell.cost;
       if (this.money < res.cost) { res.reason = 'Zu wenig Geld'; return res; }
       res.ok = true;
       return res;
     }
 
-    buildShell(f, x) {
-      const c = this.checkShell(f, x);
+    buildShell(f, x, x2) {
+      const c = this.checkShell(f, x, x2);
       if (!c.ok) return c;
       this.money -= c.cost;
       for (let i = c.x; i < c.x + c.w; i++) this.shellRows[f][i] = 1;
@@ -690,7 +700,7 @@
       const f0 = Math.min(fa, fb), f1 = Math.max(fa, fb);
       const res = { ok: false, f0, f1, c, cost: this.shaftCost(kind, f0, f1) };
       if (c < 0 || c >= CFG.W) { res.reason = 'Außerhalb'; return res; }
-      if ((def.star || 1) > this.stars) { res.reason = 'Erst ab ' + '★'.repeat(def.star); return res; }
+      if ((def.star || 0) > this.stars) { res.reason = 'Erst ab ' + '★'.repeat(def.star); return res; }
       if (f1 === f0) { res.reason = 'Mindestens zwei Etagen'; return res; }
       if (f1 - f0 > def.maxSpan) { res.reason = def.label + ' schafft höchstens ' + def.maxSpan + ' Etagen'; return res; }
       if (f1 > this.maxFloor) { res.reason = 'Höher geht es erst mit mehr Sternen'; return res; }
@@ -715,6 +725,8 @@
       const res = { ok: false, x, f, cost: def.cost };
       if (f < 0 || f + 1 > this.maxFloor) { res.reason = 'Höher geht es erst mit mehr Sternen'; return res; }
       for (let i = x; i < x + def.w; i++) if (this.lgrid[f][i]) { res.reason = 'Da ist schon eine Treppe'; return res; }
+      // both ends on floor (lobby, room, shell) – the rule the routing uses; no more stairs in the air (PO 30.10.2026)
+      if (!this.walkable(f, x) || !this.walkable(f + 1, x + def.w - 1)) { res.reason = def.label + ': unten und oben braucht es Boden'; return res; }
       if (this.money < def.cost) { res.reason = 'Zu wenig Geld'; return res; }
       res.ok = true;
       return res;
@@ -1872,7 +1884,7 @@
       for (const r of this.rooms) {
         if (r.type !== 'restaurant' || !this.roomReachable(r)) continue;
         const q = r.score == null || r.score <= CFG.goodMin ? 1 : r.score <= CFG.okMin ? 0.7 : 0.4;
-        const n = Math.round((10 + 4 * this.stars) * q);
+        const n = Math.round((14 + 4 * this.stars) * q);   // stars from 0: same as 10 + 4 × the old count
         for (const [a, b] of [[hm(11, 30), hm(13, 30)], [hm(18, 0), hm(20, 30)]]) {
           for (let i = 0; i < n; i++) {
             const v = this._newPerson('visitor', null);
@@ -2130,16 +2142,16 @@
       const okRooms = occ.filter(r => (r.score == null || r.score <= CFG.okMin) && !r.warnDays).length;
       this.sat = occ.length ? okRooms / occ.length : 1;
       const pop = this.population;
-      while (this.stars < CFG.stars.length) {
-        const req = CFG.stars[this.stars];
+      while (this.stars < CFG.stars.length - 1) {
+        const req = CFG.stars[this.stars + 1];
         const rest = this.rooms.filter(r => r.type === 'restaurant').length;
         if (pop >= req.pop && this.sat >= req.sat && rest >= (req.restaurants || 0) && this.upgradedRooms() >= (req.upgraded || 0)) {
           this.stars++;
-          this.msg('★ Neuer Stern! Jetzt ' + this.stars + ' Sterne – bauen bis ' + floorName(this.maxFloor), 'star');
+          this.msg('★ Neuer Stern! Jetzt ' + this.stars + (this.stars === 1 ? ' Stern' : ' Sterne') + ' – bauen bis ' + floorName(this.maxFloor), 'star');
           this._emit('star', { stars: this.stars });
         } else break;
       }
-      if (this.stars >= CFG.stars.length && !this.won) { this.won = true; this.msg('🏆 4 Sterne – Ziel des Prototyps erreicht!', 'star'); }
+      if (this.stars >= CFG.stars.length - 1 && !this.won) { this.won = true; this.msg('🏆 ' + this.stars + ' Sterne – Ziel des Prototyps erreicht!', 'star'); }
       const eu = n => Math.round(n).toLocaleString('de-DE');
       this.msg('Tag ' + this.day + ': +' + eu(rent) + ' € Miete, +' + eu(T.sales) + ' € Umsatz, −' + eu(upkeep) + ' € Betrieb'
         + (T.repairs ? ', −' + eu(T.repairs) + ' € Wartung' : '') + (interest ? ', −' + eu(interest) + ' € Zins' : '')
@@ -2157,7 +2169,7 @@
       return n;
     }
 
-    nextStarReq() { return this.stars < CFG.stars.length ? CFG.stars[this.stars] : null; }
+    nextStarReq() { return this.stars < CFG.stars.length - 1 ? CFG.stars[this.stars + 1] : null; }
 
     // ----- simulation step -----
     step(dt) {

@@ -13,7 +13,7 @@
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { margin: 0; height: 100%; background: #07090d; color: var(--text);
     font: 14px/1.3 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; overscroll-behavior: none; }
-  #app { max-width: 440px; height: 100dvh; margin: 0 auto; display: flex; flex-direction: column;
+  #app { position: relative; max-width: 440px; height: 100dvh; margin: 0 auto; display: flex; flex-direction: column;
     background: var(--bg); border-left: 1px solid var(--line); border-right: 1px solid var(--line); user-select: none; }
   /* wide mode (PC test only): the stage takes the whole window, header, hint, menus and panel stay phone-sized */
   body.wide #app { max-width: none; border: 0; }
@@ -39,7 +39,9 @@
   .msg { background: rgba(17,21,28,.88); border: 1px solid var(--line); border-radius: 8px; padding: 5px 9px; font-size: 12.5px;
     transition: opacity .5s; }
   .msg.bad { border-color: var(--bad); } .msg.good { border-color: #3fbf7f; } .msg.star { border-color: var(--accent); color: var(--accent); font-weight: 600; }
-  #hint { min-height: 30px; padding: 6px 10px; font-size: 12.5px; color: var(--muted); background: var(--panel); border-top: 1px solid var(--line); }
+  /* fixed two lines (PO 30.10.2026): a hint that wrapped to a second line shrank the stage and shook the map;
+     longer ones are cut, the details are in ❓ Hilfe */
+  #hint { height: 41px; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-height: 16px; padding: 8px 10px 0; font-size: 12.5px; color: var(--muted); background: var(--panel); border-top: 1px solid var(--line); }
   #hint.err { color: var(--bad); }
   #hint.go { color: #7ee0a8; }
   nav { display: flex; gap: 4px; padding: 6px; overflow-x: auto; background: var(--panel); scrollbar-width: none; }
@@ -94,6 +96,35 @@
   .pos { color: #7ee0a8; } .neg { color: var(--bad); }
   .log div { padding: 3px 0; border-bottom: 1px solid var(--line); font-size: 12.5px; }
   .help li { margin: 4px 0; }
+  /* save slots (menu panel and start screen) */
+  .slots { display: flex; flex-direction: column; gap: 5px; margin: 6px 0; }
+  .slot { display: flex; align-items: center; gap: 8px; padding: 7px 9px; border-radius: 9px; border: 1px solid var(--line);
+    background: var(--panel2); cursor: pointer; text-align: left; color: var(--text); font: inherit; width: 100%; }
+  .slot.on { border-color: var(--accent); background: #2c2818; }
+  .slot.empty { color: var(--muted); }
+  .slot .nr { color: var(--muted); font-size: 12px; min-width: 16px; }
+  .slot .nm { flex: 1; min-width: 0; }
+  .slot .nm b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .slot .nm small { color: var(--muted); font-size: 11.5px; }
+  .slot .del { color: var(--muted); font-size: 15px; cursor: pointer; padding: 2px 4px; }
+  .slot .del.armed { color: var(--bad); font-size: 12px; }
+  .nameIn { flex: 1; min-width: 0; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--text); font: inherit; }
+  /* start screen: over the whole app, the tower of the last game in the background */
+  #start { position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column; justify-content: center; align-items: center;
+    padding: 20px 18px; background: rgba(9,12,17,.86); backdrop-filter: blur(3px); }
+  #start[hidden] { display: none; }
+  #start .box { width: 100%; max-width: 340px; }
+  #start h1 { margin: 0 0 2px; font-size: 34px; letter-spacing: 2px; text-align: center; color: var(--accent); }
+  #start .sub { text-align: center; color: var(--muted); margin: 0 0 22px; font-size: 13px; }
+  #start .big { display: block; width: 100%; margin: 8px 0; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line);
+    background: var(--panel2); color: var(--text); font: inherit; font-size: 16px; font-weight: 600; text-align: left; cursor: pointer; }
+  #start .big small { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  #start .big.main { border-color: var(--accent); background: #2c2818; }
+  #start .big.dis { opacity: .4; cursor: default; }
+  #start .big.armed { border-color: var(--bad); }
+  #start .back { margin-top: 10px; }
+  #start .nameIn { width: 100%; flex: none; font-size: 17px; padding: 10px 12px; margin: 4px 0 10px; }
+  #start label { color: var(--muted); font-size: 13px; }
 </style>
 </head>
 <body>
@@ -102,7 +133,7 @@
     <div class="row">
       <span id="clock">Tag 1 · 06:00</span>
       <span id="money">0 €</span>
-      <span id="stars">★☆☆☆</span>
+      <span id="stars">☆☆☆</span>
     </div>
     <div class="row">
       <span id="stats"></span>
@@ -123,22 +154,27 @@
   </div>
   <div id="hint"></div>
   <nav id="tools"></nav>
+  <div id="start" hidden><div class="box"></div></div>
 </div>
-<script src="engine.js?v=e1d3a906a0"></script>
+<script src="engine.js?v=2fb3f226e9"></script>
+<script src="dev-saves.js?v=22fbd16725"></script>
 <script src="sounds.js?v=80df8bb98d"></script>
-<script src="audio.js?v=23fac203f0"></script>
+<script src="audio.js?v=21cdb59ebf"></script>
 <script src="styles/render.js?v=81c3aa2a12"></script>
-<script src="styles/pixel.js?v=27ecb1ed19"></script>
+<script src="styles/pixel.js?v=54ab2d48c9"></script>
 <script>
 'use strict';
 const { CFG, Game, floorName, fmtTime } = window.TowerEngine;
 const SAVE_KEY = 'tower-game-save-v1';
-const BASE_RATE = 120;           // game seconds per real second at 1×
+const BASE_RATE = 60;            // game seconds per real second at 1× (PO 30.10.2026: 120 → 60, people and cars looked rushed)
 const FH = 1.6;                  // floor height in tiles
 const MARGIN_L = 1.7, MARGIN_R = 0.5;
+const SCROLL_BELOW = 240;        // screen px the view may scroll below the ground (menus float over the stage)
 const W = CFG.W;
 
 // ---------- state ----------
+let curSlot = null;              // save slot the running game came from or was last saved to (preselected in „Speichern“)
+let curName = '';                // the tower's name: given at „Neues Spiel“, default name when saving
 let game = loadGame();
 let speed = 1;
 let tool = 'inspect';
@@ -150,9 +186,10 @@ let selected = null;             // inspected room/shaft
 let panelMode = null;            // 'obj' | 'menu' | 'log' | 'help' | 'money'
 
 function loadGame() {
-  let saved = null;
-  try { const s = localStorage.getItem(SAVE_KEY); if (s) saved = JSON.parse(s); } catch (e) { saved = null; }
-  const g = new Game(saved && saved.v === 1 ? saved : null);
+  const saved = readAutosave();
+  if (saved && saved.slot != null) curSlot = saved.slot;
+  if (saved && saved.name) curName = saved.name;
+  const g = new Game(saved);
   hook(g);
   return g;
 }
@@ -161,13 +198,23 @@ function hook(g) {
   g.onDayEnd = () => save(g);
   g.W = W; g.entranceX = CFG.ENTRANCE_X;   // world fields TowerRender expects (not saved)
 }
-function save(g) { try { localStorage.setItem(SAVE_KEY, JSON.stringify(g.serialize())); } catch (e) { /* ignore */ } }
+// autosave (= „Fortsetzen“): every morning and when the page is left (mid-day: the day restarts at 06:00)
+function save(g, rewind) {
+  const d = g.serialize(rewind); if (curSlot != null) d.slot = curSlot; if (curName) d.name = curName;
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify(d)); } catch (e) { /* ignore */ }
+}
+function saveNow() { if (startEl.hidden || startFromMenu) save(game, true); }
+window.addEventListener('pagehide', saveNow);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveNow(); });
+function readAutosave() {
+  try { const s = localStorage.getItem(SAVE_KEY); const d = s && JSON.parse(s); return d && d.v === 1 ? d : null; } catch (e) { return null; }
+}
 const euro = n => Math.round(n).toLocaleString('de-DE') + ' €';
 const kEuro = n => n >= 1000 ? (n / 1000).toLocaleString('de-DE') + 'k' : String(n);
 
 // ---------- tools ----------
 // two levels: groups in the bottom row, a group's items in a second row above it
-const roomItem = id => ({ id, ic: CFG.rooms[id].icon, lb: CFG.rooms[id].label, ct: kEuro(CFG.rooms[id].cost), star: CFG.rooms[id].star || 1 });
+const roomItem = id => ({ id, ic: CFG.rooms[id].icon, lb: CFG.rooms[id].label, ct: kEuro(CFG.rooms[id].cost), star: CFG.rooms[id].star || 0 });
 const GROUPS = [
   { id: 'inspect', ic: '🔍', lb: 'Ansehen' },
   { id: 'rooms', ic: '🏢', lb: 'Räume', items: [
@@ -178,7 +225,7 @@ const GROUPS = [
     { id: 'stairs', ic: '🪜', lb: 'Treppe', ct: kEuro(CFG.links.stairs.cost) },
     { id: 'escalator', ic: '↗️', lb: 'Rolltreppe', ct: kEuro(CFG.links.escalator.cost) },
     { id: 'normal', ic: '🛗', lb: 'Aufzug', ct: 'ab ' + kEuro(CFG.shafts.normal.base) },
-    { id: 'express', ic: '⚡', lb: 'Express', ct: 'ab ' + kEuro(CFG.shafts.express.base), star: CFG.shafts.express.star || 1 },
+    { id: 'express', ic: '⚡', lb: 'Express', ct: 'ab ' + kEuro(CFG.shafts.express.base), star: CFG.shafts.express.star || 0 },
   ] },
   { id: 'demolish', ic: '🧨', lb: 'Abriss' },
   // heatmaps: entries of their own group; tapping the active one again switches it off, the tool stays
@@ -194,23 +241,23 @@ const HEAT_HINTS = {
   time: 'Heatmap Wegzeit: blau gut, gelb geht so, rot schlecht.',
   energy: 'Heatmap Energie (Ø Kraft bei Ankunft): blau frisch, gelb müde, rot erschöpft.',
   money: 'Heatmap Geld (Netto je Etage gestern: Miete + Umsatz − Betrieb − Wartung): rot Verlust, grau ±0, grün Gewinn.',
-  needs: 'Heatmap Bedürfnisse (Erfüllung je Büro und Wohnung, leere nach Vorhersage): blau ab ' + Math.round(CFG.needHeat.good * 100) + ' %, gelb darunter, rot höchstens ' + Math.round(CFG.warnBelow * 100) + ' % = Warnung.',
+  needs: 'Heatmap Bedürfnisse (Erfüllung je Raum, leere nach Vorhersage): blau ab ' + Math.round(CFG.needHeat.good * 100) + ' %, gelb, rot ≤ ' + Math.round(CFG.warnBelow * 100) + ' % = Warnung.',
   noise: 'Heatmap Lärm (Strafe je Büro und Wohnung): blau ruhig, gelb etwas, rot ab ' + Math.round(CFG.noiseHeat.bad * 100) + ' % Abzug.',
 };
 const HINTS = {
   stairs: 'Treppe: verbindet die angetippte Etage mit der darüber. Langsam, unbequem und anstrengend (hoch ' + CFG.links.stairs.energyUp + ' Energie je Etage).',
   escalator: 'Rolltreppe: verbindet die angetippte Etage mit der darüber. Bequemer und schont die Kraft (' + CFG.links.escalator.energyUp + ' Energie je Etage).',
-  inspect: 'Antippen zeigt Details. Ziehen = scrollen, Mausrad/zwei Finger/+ − = zoomen (0 = Startansicht).',
+  inspect: '',   // PO 30.10.2026: no standing help text while looking around
   office: 'Büro: 6 Leute, 5.000 € Miete/Tag. Stelle antippen, nochmal tippen = bauen.',
   condo: 'Wohnung: 3 Leute, 3.000 € Miete/Tag. Stelle antippen, nochmal tippen = bauen.',
   restaurant: 'Restaurant: Gäste von außen + Mittagessen der Büros. Antippen, nochmal = bauen.',
   skylobby: 'Sky-Lobby (nur 15./30./45. OG): hier darf man umsteigen, Express hält hier.',
-  workshop: 'Werkstatt: 2 Handwerker warten die Aufzüge (' + euro(CFG.rooms.workshop.upkeep) + '/Tag). Nah an den Schächten = kurze Wege. Laut: Strafe für Nachbarn. Antippen, nochmal = bauen.',
-  cafe: 'Café: Kaffee für gehobene Büros (' + CFG.rooms.cafe.seats + ' Plätze, ' + euro(CFG.rooms.cafe.price) + ' je Besuch, ' + euro(CFG.rooms.cafe.upkeep) + '/Tag). Ein Café reicht für ~10 gehobene Büros. Antippen, nochmal = bauen.',
-  daycare: 'Kita: Kinderbetreuung für gehobene Büros (morgens vom Eingang, ' + euro(CFG.rooms.daycare.price) + ' je Kind und Tag, ' + euro(CFG.rooms.daycare.upkeep) + '/Tag). Laut. Antippen, nochmal = bauen.',
-  supermarket: 'Supermarkt: Einkauf für gehobene Wohnungen auf dem Heimweg + Kundschaft von außen (' + euro(CFG.rooms.supermarket.price) + ' je Besuch, ' + euro(CFG.rooms.supermarket.upkeep) + '/Tag). Nah am Eingang = kurze Wege. Laut. Antippen, nochmal = bauen.',
-  gym: 'Fitness: Sport für gehobene Wohnungen, morgens und abends (' + euro(CFG.rooms.gym.price) + ' je Besuch, ' + euro(CFG.rooms.gym.upkeep) + '/Tag). Etwas laut. Antippen, nochmal = bauen.',
-  shell: 'Rohbau: schließt die ganze Lücke an der angetippten Stelle (' + euro(CFG.shell.cost) + ' je Feld). Gelaufen und angestanden wird nur auf Boden.',
+  workshop: 'Werkstatt: 2 Handwerker warten die Aufzüge (' + euro(CFG.rooms.workshop.upkeep) + '/Tag), nah an den Schächten = kurze Wege. Laut. Antippen, nochmal = bauen.',
+  cafe: 'Café: Kaffee für gehobene Büros, reicht für ~10 (' + euro(CFG.rooms.cafe.price) + ' je Besuch, ' + euro(CFG.rooms.cafe.upkeep) + '/Tag). Antippen, nochmal = bauen.',
+  daycare: 'Kita: für gehobene Büros (' + euro(CFG.rooms.daycare.price) + ' je Kind, ' + euro(CFG.rooms.daycare.upkeep) + '/Tag), nah am Eingang. Laut. Antippen, nochmal = bauen.',
+  supermarket: 'Supermarkt: für gehobene Wohnungen (' + euro(CFG.rooms.supermarket.price) + ' je Besuch, ' + euro(CFG.rooms.supermarket.upkeep) + '/Tag), nah am Eingang. Laut. Antippen, nochmal = bauen.',
+  gym: 'Fitness: Sport für gehobene Wohnungen (' + euro(CFG.rooms.gym.price) + ' je Besuch, ' + euro(CFG.rooms.gym.upkeep) + '/Tag). Etwas laut. Antippen, nochmal = bauen.',
+  shell: 'Rohbau: antippen = ein Feld, drücken und waagerecht ziehen = mehrere; nochmal tippen = bauen (' + euro(CFG.shell.cost) + ' je Feld).',
   normal: 'Aufzug: erste Etage antippen, dann die zweite (höchstens 15 Etagen).',
   express: 'Express: hält nur in Lobbys, fährt schnell und beliebig weit.',
   demolish: 'Abriss: antippen, nochmal tippen = weg. Kein Geld zurück.',
@@ -221,7 +268,7 @@ const subEl = document.getElementById('subtools');
 let openGroup = null;
 const lastInGroup = {};
 const groupOf = id => GROUPS.find(g => g.id === id || (g.items && g.items.some(i => i.id === id)));
-// t.star: locked until that star (chip greyed with "ab ★★")
+// t.star: locked until that star (chip greyed with "ab ★")
 function toolButton(t) {
   const b = document.createElement('button');
   const locked = t.star > game.stars;
@@ -332,7 +379,7 @@ function updateHeader() {
   const mt = euro(game.money) + (game.loan > 0 ? ' <span class="loan">· Kredit ' + kEuro(game.loan) + '</span>' : '');
   if (m.innerHTML !== mt) m.innerHTML = mt;
   m.classList.toggle('neg', game.money < 0);
-  document.getElementById('stars').textContent = '★'.repeat(game.stars) + '☆'.repeat(CFG.stars.length - game.stars);
+  document.getElementById('stars').textContent = '★'.repeat(game.stars) + '☆'.repeat(CFG.stars.length - 1 - game.stars);
   const req = game.nextStarReq();
   let s = '👥 ' + game.population + ' · 😊 ' + Math.round(game.sat * 100) + ' %';
   if (req) s += ' · nächster ★: ' + req.pop + ' 👥, ' + Math.round(req.sat * 100) + ' %' + (req.restaurants ? ', 🍽️' : '') + (req.upgraded ? ', ' + game.upgradedRooms() + '/' + req.upgraded + ' ▲' : '');
@@ -379,14 +426,29 @@ panelEl.addEventListener('click', e => {
   if (act === 'loan') { const r = game.takeLoan(); setHint(r.ok ? 'Kredit: +' + euro(r.amount) : r.reason, r.ok ? 'go' : 'err'); openMoney(); return; }
   if (act === 'repay') { const r = game.repayLoan(b.dataset.amt === 'all' ? null : +b.dataset.amt); setHint(r.ok ? 'Zurückgezahlt: ' + euro(r.amount) : r.reason, r.ok ? 'go' : 'err'); openMoney(); return; }
   if (act === 'help') { openHelp(); return; }
-  if (act === 'log') { openLog(); return; }
-  if (act === 'new') {
-    if (b.dataset.armed) {
-      try { localStorage.removeItem(SAVE_KEY); } catch (e2) { /* ignore */ }
-      game = new Game(null); hook(game); closePanel(); setTool('inspect'); resetView(); toast('Neues Spiel – viel Spaß!', 'good');
-      if (openGroup) showGroup(openGroup);
-    } else { b.dataset.armed = '1'; b.textContent = 'Wirklich? Nochmal tippen'; }
+  if (act === 'save') { const sl = readSlots(); openSave(curSlot != null ? curSlot : Math.max(0, sl.indexOf(null))); return; }
+  if (act === 'load') { openLoad(); return; }
+  if (act === 'dev') { openDev(); return; }
+  if (act === 'devLoad') {
+    if (b.dataset.armed) { loadDev(+b.dataset.dev); return; }
+    panelEl.querySelectorAll('.slot[data-armed]').forEach(x => { delete x.dataset.armed; x.classList.remove('on'); });
+    b.dataset.armed = '1'; b.classList.add('on'); b.querySelector('small').textContent = 'Nochmal tippen = laden (ersetzt das laufende Spiel)';
+    return;
   }
+  if (act === 'pickSlot') { openSave(+b.dataset.slot); return; }
+  if (act === 'saveSlot') { saveToSlot(+b.dataset.slot); return; }
+  if (act === 'delSlot') {
+    if (b.dataset.armed) { delSlot(+b.dataset.slot); openLoad(); } else { b.dataset.armed = '1'; b.classList.add('armed'); b.textContent = 'löschen?'; }
+    return;
+  }
+  if (act === 'loadSlot') {
+    if (b.dataset.armed) { loadSlot(+b.dataset.slot); return; }
+    panelEl.querySelectorAll('.slot[data-armed]').forEach(x => { delete x.dataset.armed; x.classList.remove('on'); });
+    b.dataset.armed = '1'; b.classList.add('on'); b.querySelector('small').textContent = 'Nochmal tippen = laden (ersetzt das laufende Spiel)';
+    return;
+  }
+  if (act === 'log') { openLog(); return; }
+  if (act === 'new') { closePanel(); openStart('new', true); }
 });
 
 // workshop panel: the slider sets the wear at which jobs open (the panel refreshes without redrawing it)
@@ -647,26 +709,161 @@ function openMoney() {
 
 function openMenu() {
   selected = null;
-  openPanel(`<h3>Menü<button class="close" data-act="close">✕</button></h3>
-    <div class="btnrow"><button class="btn" data-act="help">❓ So geht's</button><button class="btn" data-act="log">📜 Meldungen</button></div>
+  openPanel(`<h3>${curName ? '🏢 ' + esc(curName) : 'Menü'}<button class="close" data-act="close">✕</button></h3>
+    <div class="btnrow"><button class="btn" data-act="help">❓ Hilfe</button><button class="btn" data-act="log">📜 Meldungen</button></div>
     ${window.TowerAudio ? TowerAudio.menuHtml() : ''}
     <div class="btnrow"><button class="btn ${wide ? 'on' : ''}" data-act="wide">↔ Breit${wide ? ' (an)' : ''}</button><span style="color:var(--muted);font-size:12px">nur zum Testen am PC: das Spiel füllt das Fenster</span></div>
-    <div class="btnrow"><button class="btn warn" data-act="new">Neues Spiel</button></div>
-    <p>Gespeichert wird automatisch jeden Morgen.</p>`, 'menu');
+    ${window.TOWER_DEV_SAVES ? '<div class="btnrow"><button class="btn" data-act="dev">🛠 Entwickler</button><span style="color:var(--muted);font-size:12px">fertige Test-Türme laden (☆, ★, ★+)</span></div>' : ''}
+    <div class="btnrow"><button class="btn" data-act="save">💾 Speichern</button><button class="btn" data-act="load">📂 Laden</button><button class="btn warn" data-act="new">Neues Spiel</button></div>
+    <p>„Fortsetzen“ merkt sich das Spiel von selbst (jeden Morgen und beim Schließen). Auf einen Speicherplatz kommt es nur über 💾. Ein geladenes Spiel beginnt um 06:00 des gespeicherten Tags.</p>`, 'menu');
 }
+// ---------- save slots ----------
+// meta list in one key (cheap to show), each game in its own key
+const SLOTS_KEY = 'tower-game-slots-v1', SLOT_N = 6;
+const slotKey = i => 'tower-game-slot-' + i + '-v1';
+function readSlots() {
+  let a = null;
+  try { a = JSON.parse(localStorage.getItem(SLOTS_KEY)); } catch (e) { a = null; }
+  a = Array.isArray(a) ? a : [];
+  return Array.from({ length: SLOT_N }, (_, i) => a[i] || null);
+}
+const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+const stamp = ms => { const d = new Date(ms); return d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' }) + ' ' + d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }); };
+// stars from 0 since 30.10.2026: older saves and slot lists (no starsFrom) count from 1
+const starCount = m => m.starsFrom === 0 ? m.stars : Math.max(0, (m.stars ?? 1) - 1);
+const gameLine = m => 'Tag ' + m.day + ' · ' + euro(m.money) + ' · ' + ('★'.repeat(starCount(m)) || '☆') + (m.pop != null ? ' · 👥 ' + m.pop : '');
+// the delete mark is a span, a button inside the slot button would not be valid HTML
+function slotRow(m, i, act, on, extra) {
+  return `<button class="slot${m ? '' : ' empty'}${on ? ' on' : ''}" data-act="${act}" data-slot="${i}"><span class="nr">${i + 1}</span>`
+    + `<span class="nm"><b>${m ? esc(m.name) : 'leer'}</b><small>${m ? gameLine(m) + ' · ' + stamp(m.at) : 'freier Platz'}</small></span>${extra || ''}</button>`;
+}
+function openSave(pick) {
+  const slots = readSlots();
+  const rows = slots.map((m, i) => slotRow(m, i, 'pickSlot', i === pick)).join('');
+  let form = '<p>Platz wählen.</p>';
+  if (pick != null) {
+    const m = slots[pick];
+    const name = curName || (m ? m.name : 'Turm Tag ' + game.day);
+    form = `<div class="btnrow"><input class="nameIn" id="slotName" maxlength="40" value="${esc(name)}" placeholder="Name">`
+      + `<button class="btn on" data-act="saveSlot" data-slot="${pick}">${m ? 'Überschreiben' : 'Speichern'}</button></div>`;
+  }
+  openPanel(`<h3>Speichern<button class="close" data-act="close">✕</button></h3><div class="slots">${rows}</div>${form}`, 'save');
+  const inp = document.getElementById('slotName');
+  if (inp) { inp.focus(); inp.select(); inp.onkeydown = e => { if (e.key === 'Enter') saveToSlot(pick); }; }
+}
+function saveToSlot(i) {
+  const inp = document.getElementById('slotName');
+  const name = (inp && inp.value.trim()) || curName || 'Turm Tag ' + game.day;
+  const slots = readSlots();
+  const data = game.serialize(true);
+  try {
+    localStorage.setItem(slotKey(i), JSON.stringify(data));
+    slots[i] = { name, at: Date.now(), day: game.day, money: data.money, stars: game.stars, starsFrom: 0, pop: game.population };
+    localStorage.setItem(SLOTS_KEY, JSON.stringify(slots));
+  } catch (e) { setHint('Speichern ging nicht – der Browser-Speicher ist voll oder gesperrt.', 'err'); return; }
+  curSlot = i; curName = name; save(game, true);
+  closePanel(); toast('💾 Gespeichert auf Platz ' + (i + 1) + ': ' + name, 'good');
+}
+function readSlot(i) { try { const d = JSON.parse(localStorage.getItem(slotKey(i))); return d && d.v === 1 ? d : null; } catch (e) { return null; } }
+function delSlot(i) {
+  const slots = readSlots(); slots[i] = null;
+  try { localStorage.removeItem(slotKey(i)); localStorage.setItem(SLOTS_KEY, JSON.stringify(slots)); } catch (e) { /* ignore */ }
+  if (curSlot === i) curSlot = null;
+}
+function loadSlot(i) {
+  const d = readSlot(i);
+  if (!d) { setHint('Dieser Spielstand ist nicht lesbar.', 'err'); return; }
+  const name = readSlots()[i].name;
+  startGame(d, i, name); toast('📂 Geladen: ' + name, 'good');
+}
+function openLoad() {
+  const slots = readSlots();
+  const rows = slots.map((m, i) => m ? slotRow(m, i, 'loadSlot', false, `<span class="del" data-act="delSlot" data-slot="${i}" title="Löschen">🗑</span>`) : '').join('');
+  openPanel(`<h3>Laden<button class="close" data-act="close">✕</button></h3>`
+    + (rows ? `<div class="slots">${rows}</div><p>Antippen, dann nochmal = laden. Der Tag beginnt um 06:00.</p>` : '<p>Noch nichts gespeichert – im Menü über 💾 Speichern.</p>'), 'load');
+}
+// developer towers (dev-saves.js, built by tool/dev_towers.js): load like a slot, but into no slot
+const devPop = d => d.rooms.reduce((n, r) => n + (r.occupied ? CFG.rooms[r.type].cap || 0 : 0), 0);
+function openDev() {
+  const rows = window.TOWER_DEV_SAVES.map((t, i) => `<button class="slot" data-act="devLoad" data-dev="${i}"><span class="nr">🛠</span>`
+    + `<span class="nm"><b>${esc(t.name)}</b><small>${esc(t.sub)} · ${gameLine({ day: t.data.day, money: t.data.money, stars: t.data.stars, starsFrom: t.data.starsFrom, pop: devPop(t.data) })}</small></span></button>`).join('');
+  openPanel(`<h3>Entwickler<button class="close" data-act="close">✕</button></h3><div class="slots">${rows}</div>`
+    + '<p>Antippen, dann nochmal = laden. Ersetzt das laufende Spiel und „Fortsetzen“, die Speicherplätze bleiben.</p>', 'dev');
+}
+function loadDev(i) {
+  const t = window.TOWER_DEV_SAVES[i];
+  startGame(JSON.parse(JSON.stringify(t.data)), null, t.name); toast('🛠 Geladen: ' + t.name, 'good');
+}
+// replaces the running game (new: data null); the autosave follows at once, so „Fortsetzen“ means this game
+function startGame(data, slot, name) {
+  game = new Game(data); hook(game); curSlot = slot; curName = name || '';
+  save(game);
+  closePanel(); closeStart(); setTool('inspect'); resetView(); lastSeason = null;
+  if (openGroup) showGroup(openGroup);
+  if (!data) toast('🏗️ ' + curName + ' – viel Spaß!', 'good');
+}
+// no help at the start (PO 30.10.2026): everything is in Menü → ❓ Hilfe, an onboarding comes later
+
+// ---------- start screen ----------
+const startEl = document.getElementById('start');
+const startBox = startEl.querySelector('.box');
+let startFromMenu = false;        // „Neues Spiel“ from the in-game menu: ‹ Zurück returns to the game
+function closeStart() { startEl.hidden = true; }
+function openStart(view, fromMenu) {
+  startFromMenu = view === 'new' && !!fromMenu;
+  const auto = readAutosave();
+  const slots = readSlots(), n = slots.filter(Boolean).length;
+  let h;
+  if (view === 'new') {
+    h = `<h1>Neuer Turm</h1><p class="sub">Leeres Grundstück, ${CFG.stars.length - 1} Sterne als Ziel</p>`
+      + `<label for="towerName">Wie heißt dein Turm?</label><input class="nameIn" id="towerName" maxlength="40" value="Mein Turm">`
+      + `<button class="big main" data-sa="go">🏗️ Los geht's<small>${auto ? 'Ersetzt den Fortsetzen-Stand, Speicherplätze bleiben' : 'Der Name ist auch der Name des Spielstands'}</small></button>`
+      + `<button class="btn back" data-sa="${startFromMenu ? 'resume' : 'home'}">‹ Zurück</button>`;
+  } else if (view === 'load') {
+    h = `<h1>Laden</h1><p class="sub">Spielstand wählen</p><div class="slots">${slots.map((m, i) => m ? slotRow(m, i, 'sLoad', false) : '').join('')}</div>`
+      + `<button class="btn back" data-sa="home">‹ Zurück</button>`;
+  } else {
+    const autoName = auto && (auto.name || (auto.slot != null && slots[auto.slot] ? slots[auto.slot].name : null));
+    h = `<h1>TOWER</h1><p class="sub">Prototyp</p>`
+      + (auto ? `<button class="big main" data-sa="continue">▶ Fortsetzen<small>${autoName ? esc(autoName) + ' · ' : ''}${gameLine({ day: auto.day, money: auto.money, stars: auto.stars, starsFrom: auto.starsFrom })}</small></button>` : '')
+      + `<button class="big${auto ? '' : ' main'}" data-sa="new">＋ Neues Spiel<small>Turm benennen und loslegen</small></button>`
+      + `<button class="big${n ? '' : ' dis'}" data-sa="load">📂 Laden<small>${n ? n + (n === 1 ? ' gespeichertes Spiel' : ' gespeicherte Spiele') : 'noch nichts gespeichert'}</small></button>`;
+  }
+  startBox.innerHTML = h; startEl.hidden = false;
+  const inp = document.getElementById('towerName');
+  if (inp) { inp.focus(); inp.select(); inp.onkeydown = e => { if (e.key === 'Enter') newTower(); }; }
+}
+function newTower() {
+  const inp = document.getElementById('towerName');
+  const name = inp.value.trim();
+  if (!name) { inp.focus(); inp.placeholder = 'Bitte einen Namen eingeben'; return; }
+  startGame(null, null, name);
+}
+startEl.addEventListener('click', e => {
+  const b = e.target.closest('[data-sa],[data-act]'); if (!b) return;
+  const a = b.dataset.sa || b.dataset.act;
+  if (a === 'continue') closeStart();
+  else if (a === 'new') openStart('new');
+  else if (a === 'go') newTower();
+  else if (a === 'resume') closeStart();
+  else if (a === 'load') { if (!b.classList.contains('dis')) openStart('load'); }
+  else if (a === 'home') openStart();
+  else if (a === 'sLoad') loadSlot(+b.dataset.slot);
+});
+
 function openLog() {
   const items = game.msgs.slice().reverse().map(m => `<div>Tag ${m.day} · ${fmtTime(m.t)} – ${m.text}</div>`).join('') || '<p>Noch nichts passiert.</p>';
   openPanel(`<h3>Meldungen<button class="close" data-act="close">✕</button></h3><div class="log">${items}</div>`, 'log');
 }
 function openHelp() {
-  openPanel(`<h3>So geht's<button class="close" data-act="close">✕</button></h3>
+  openPanel(`<h3>Hilfe<button class="close" data-act="close">✕</button></h3>
   <ul class="help">
-    <li><b>Ziel:</b> 4 Sterne. Sterne gibt es für Bewohner und zufriedene Mieter, und jeder Stern erlaubt höher zu bauen: ★ bis 15. OG, ★★ bis 30., ★★★ bis 50. ★★ schaltet Sky-Lobby, Express, ☕ Café, 🧸 Kita, 🛒 Supermarkt, 🏋️ Fitness und die Stufe Gehoben frei; für ★★★ braucht es auch ${CFG.stars[2].upgraded} gehobene Räume. Gesperrtes steht grau mit „ab ★★“ im Menü.</li>
+    <li><b>Ziel:</b> ${CFG.stars.length - 1} Sterne. Du startest ohne Stern. Sterne gibt es für Bewohner und zufriedene Mieter, und jeder Stern erlaubt höher zu bauen: ohne Stern bis 15. OG, ★ bis 30., ★★ bis 50. ★ schaltet Sky-Lobby, Express, ☕ Café, 🧸 Kita, 🛒 Supermarkt, 🏋️ Fitness und die Stufe Gehoben frei; für ★★ braucht es auch ${CFG.stars[2].upgraded} gehobene Räume. Gesperrtes steht grau mit „ab ★“ im Menü.</li>
     <li><b>Bauen:</b> Werkzeug wählen, Stelle antippen, nochmal antippen = bauen. Räume brauchen etwas darunter.</li>
-    <li><b>Wege</b> (🛗-Menü): 🪜 Treppe → ↗️ Rolltreppe → 🛗 Aufzug → ⚡ Express, jeweils schneller und bequemer. Treppen und Rolltreppen verbinden zwei Etagen, ohne Warten, aber langsamer und unbequemer.</li>
+    <li><b>Wege</b> (🛗-Menü): 🪜 Treppe → ↗️ Rolltreppe → 🛗 Aufzug → ⚡ Express, jeweils schneller und bequemer. Treppen und Rolltreppen verbinden zwei Etagen und brauchen unten und oben Boden, ohne Warten, aber langsamer und unbequemer.</li>
     <li><b>Energie:</b> Jeder hat eigene Kraft (${CFG.energy.min}–${CFG.energy.max}). Jeder Teil des Wegs kostet: Flur ${String(CFG.energy.corridor * CFG.W).replace('.', ',')} für die ganze Etagenbreite, Treppe hoch ${CFG.links.stairs.energyUp} / runter ${CFG.links.stairs.energyDown} je Etage, Rolltreppe ${CFG.links.escalator.energyUp}, Warten ${CFG.energy.waitPerMin} je Minute, Aufzugfahren nichts. Reicht die Kraft nicht, ist der Weg unmöglich – die Person gibt auf. Wer müde ist, empfindet jede Minute länger. Im Raum erholt man sich, im Restaurant schneller, nachts ganz. Darum zählt, <i>wo</i> der Aufzug steht: lange Flure kosten Zeit und Kraft.</li>
     <li><b>Aufzüge:</b> erste Etage antippen, dann die zweite. Ein Aufzug schafft höchstens 15 Etagen und darf durch Räume gebaut werden. Wächst der Turm, lässt er sich mit 🔍 nachträglich oben oder unten um je eine Etage verlängern (bis zur Grenze seines Typs).</li>
-    <li><b>Boden:</b> Gelaufen und am Aufzug angestanden wird nur auf Boden (Räume, Lobby, 🧱 Rohbau). Lücken zwischen Räumen schließt der Rohbau unter 🏢 Räume: ein Tipp füllt die ganze Lücke. Wird ein Raum abgerissen, bleibt der Rohbau stehen.</li>
+    <li><b>Boden:</b> Gelaufen und am Aufzug angestanden wird nur auf Boden (Räume, Lobby, 🧱 Rohbau). Lücken zwischen Räumen schließt der Rohbau unter 🏢 Räume: antippen = ein Feld, auf einem freien Feld drücken und waagerecht ziehen = so viele Felder, wie du willst; nochmal tippen = bauen. Wird ein Raum abgerissen, bleibt der Rohbau stehen.</li>
     <li><b>Umsteigen</b> geht nur in einer Lobby: im EG oder in einer Sky-Lobby (15./30./45. OG). Express-Aufzüge halten nur dort, fahren dafür schnell und weit.</li>
     <li><b>Mieter</b> messen jeden Weg (Ø gefühlte Minuten) und ihre Bedürfnisse (unten). <b>Schwelle:</b> Ø über ${CFG.okMin} Min. pro Weg oder höchstens ${Math.round(CFG.warnBelow * 100)} % Erfüllung. <span class="st-ok">Gelbes ⚠</span> = knapp davor (über ${Math.round(CFG.warnNearWait * CFG.okMin)} Min. oder höchstens ${Math.round(CFG.warnNearNeed * 100)} %), noch nichts passiert. <span class="st-bad">Rotes ⚠</span> mit Meldung = am Abend unter der Schwelle gemessen: Ab dann können die Mieter jede Stunde ${CFG.moveOutHours[0]}–${CFG.moveOutHours[1]} Uhr ausziehen, am 1. Tag mit ${Math.round(CFG.moveOutP[0] * 100)} %, dann ${CFG.moveOutP.slice(1).map(p => Math.round(p * 100) + ' %').join(', ')} je Tag – der Turm <b>bröckelt</b>, du hast ein paar Tage Zeit. Ein guter Tag nimmt Rot wieder weg. <b>Nachfrage:</b> Neue Mieter kommen ${CFG.demandHours[0]}–${CFG.demandHours[1]} Uhr, je Stunde höchstens einer pro angefangene ${CFG.demandPer} belegte Räume (mindestens einer), in einen zufälligen freien Raum – sicher erst ab ${Math.round((CFG.moveInMin + CFG.moveInRamp) * 100)} % Vorhersage, ab ${Math.round(CFG.moveInMin * 100)} % zögernd. 🌡️ Heatmap (Einträge der Gruppe, nochmal tippen = aus): Wegzeit – blau gut, gelb geht so, rot schlecht · Energie bei Ankunft – blau frisch, gelb müde, rot erschöpft · Geld – Netto je Etage · Bedürfnisse – Erfüllung je Raum · Lärm – Abzug je Raum. Müde Leute tragen Senfgelb, erschöpfte Rostrot und gehen gebückt. Wer lange wartet, wird rosa, dann rot.</li>
     <li><b>Bedürfnisse:</b> Büros wollen Mittagessen (🍽️ Restaurant oder die Straße), gehobene Büros dazu ☕ Kaffee und 🧸 Kinderbetreuung (morgens vom Eingang), gehobene Wohnungen 🛒 Einkauf (auf dem Heimweg) und 🏋️ Sport. Die Leute gehen wirklich hin; zählt die gefühlte Zeit bis dorthin (mit Warten): bis ${CFG.needCurve.t0} Min. voll, ab ${CFG.needCurve.t1} Min. nichts, dazwischen erst langsam, dann schnell weniger. Ist ein Versorger voll, wartet man davor – nach ${Math.round(CFG.visitGiveUp / 60)} Min. gibt man auf. Erfüllung = Mittel der Bedürfnisse × (1 − Lärm), Miete = Miete der Stufe × Erfüllung. Bei höchstens ${Math.round(CFG.warnBelow * 100)} % gibt es das rote ⚠ mit Grund (siehe Mieter); wer deshalb auszieht, lässt die Stufe stehen – neue Mieter kommen erst nach einer Bauänderung und ab ${Math.round(CFG.moveInMin * 100)} % Vorhersage. Raum antippen: Liste mit Versorger, Minuten, Vorhersage und gestern gemessen; alle Versorger werden nach ihrem Beitrag eingefärbt, Lärmquellen rot umrandet.</li>
@@ -732,9 +929,11 @@ function clampView() {
   const worldW = W + MARGIN_L + MARGIN_R, visW = cssW / view.s;
   if (visW >= worldW) view.x = -MARGIN_L - (visW - worldW) / 2;
   else view.x = Math.max(-MARGIN_L, Math.min(W + MARGIN_R - visW, view.x));
-  const top = -(CFG.MAX_FLOOR + 2) * FH, bottom = 2.2;
+  // below the ground there is room for SCROLL_BELOW screen px more, so the lower floors can be pushed
+  // above the floating menu bars (PO 30.10.2026); a view that shows the whole height stays on the ground
+  const top = -(CFG.MAX_FLOOR + 2) * FH, ground = 2.2, bottom = ground + SCROLL_BELOW / view.s;
   const visH = cssH / view.s;
-  if (visH >= bottom - top) view.y = bottom - visH;
+  if (visH >= ground - top) view.y = ground - visH;
   else view.y = Math.max(top, Math.min(bottom - visH, view.y));
   // scrolling stays free, but on whole device px, so the art grid never shifts by a fraction
   const q = view.s * dpr;
@@ -753,7 +952,12 @@ let drag = null, pinch = null;
 cv.addEventListener('pointerdown', e => {
   cv.setPointerCapture(e.pointerId);
   ptrs.set(e.pointerId, { x: e.offsetX, y: e.offsetY });
-  if (ptrs.size === 1) drag = { x: e.offsetX, y: e.offsetY, vx: view.x, vy: view.y, moved: false, t: performance.now() };
+  if (ptrs.size === 1) {
+    drag = { x: e.offsetX, y: e.offsetY, vx: view.x, vy: view.y, moved: false, t: performance.now() };
+    // shell: a drag that starts on a buildable tile marks a piece instead of scrolling
+    const c = cellAt(e.offsetX, e.offsetY);
+    if (tool === 'shell' && c.inside && game.checkShell(c.f, c.x, c.x).ok) drag.shell = { f: c.f, x: c.x };
+  }
   if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; pinch = { d: Math.hypot(a.x - b.x, a.y - b.y), s: view.s }; drag = null; }
 });
 cv.addEventListener('pointermove', e => {
@@ -768,7 +972,10 @@ cv.addEventListener('pointermove', e => {
   if (drag) {
     const dx = e.offsetX - drag.x, dy = e.offsetY - drag.y;
     if (!drag.moved && Math.hypot(dx, dy) > 7) drag.moved = true;
-    if (drag.moved) { view.x = drag.vx - dx / view.s; view.y = drag.vy - dy / view.s; clampView(); }
+    if (drag.moved && drag.shell) {
+      const g = makeGhost({ f: drag.shell.f, x: drag.shell.x, inside: true }, cellAt(e.offsetX, e.offsetY).x);
+      if (!sameGhost(g, ghost)) { ghost = g; ghostHint(g); }
+    } else if (drag.moved) { view.x = drag.vx - dx / view.s; view.y = drag.vy - dy / view.s; clampView(); }
   }
 });
 function endPtr(e) {
@@ -793,8 +1000,11 @@ cv.addEventListener('wheel', e => {
   wheelAcc += e.deltaMode === 1 ? e.deltaY * 40 : e.deltaY;
   if (Math.abs(wheelAcc) >= 50) { zoomStep(e.offsetX, e.offsetY, wheelAcc < 0 ? 1 : -1); wheelAcc = 0; }
 }, { passive: false });
-window.addEventListener('keydown', e => { if (e.key === 'Escape') { setTool('inspect'); closePanel(); } if (e.key === ' ') { togglePause(); e.preventDefault(); }
-  if (e.target.tagName === 'INPUT') return;
+window.addEventListener('keydown', e => {
+  if (!startEl.hidden) return;
+  if (e.key === 'Escape') { setTool('inspect'); closePanel(); }
+  if (e.target.tagName === 'INPUT') return;   // typing a save name must not pause or zoom
+  if (e.key === ' ') { togglePause(); e.preventDefault(); }
   if (e.key === '+' || e.key === '=') zoomStep(cssW / 2, cssH / 2, 1);
   if (e.key === '-') zoomStep(cssW / 2, cssH / 2, -1);
   if (e.key === '0') resetView();
@@ -817,11 +1027,12 @@ function cellAt(px, py) {
   return { x, f, inside: x >= 0 && x < W && f >= 0 && f <= CFG.MAX_FLOOR };
 }
 
-function makeGhost(c) {
+// x2: shell only, the other end of a dragged piece (a tap = one tile)
+function makeGhost(c, x2) {
   if (!c.inside) return null;
   if (tool === 'shell') {
-    const chk = game.checkShell(c.f, c.x);
-    return { kind: 'shell', f: c.f, x: chk.ok ? chk.x : c.x, w: chk.ok ? chk.w : 1, chk };
+    const b = x2 == null ? c.x : x2, chk = game.checkShell(c.f, c.x, b);
+    return { kind: 'shell', f: c.f, x: chk.ok ? chk.x : c.x, w: chk.ok ? chk.w : 1, chk, ax: c.x, bx: b };
   }
   if (CFG.rooms[tool]) {
     const w = CFG.rooms[tool].w;
@@ -877,14 +1088,21 @@ function ghostHint(g) {
   } else if (g.kind === 'demolish') setHint('Abreißen? Nochmal tippen.', 'err');
 }
 
+const inShell = (g, c) => g && g.kind === 'shell' && g.chk.ok && c.f === g.f && c.x >= g.x && c.x < g.x + g.w;
 function hover(px, py) {
   if (tool === 'inspect') return;
-  const g = makeGhost(cellAt(px, py));
+  const c = cellAt(px, py);
+  if (inShell(ghost, c)) return;            // a dragged piece stays while the mouse goes to tap it
+  const g = makeGhost(c);
   if (!sameGhost(g, ghost)) { ghost = g; ghostHint(g); }
 }
 
 function tap(px, py, isMouse) {
   const c = cellAt(px, py);
+  // easter egg: a tap on a cloud (not on the tower in front of it) makes it rain for a moment
+  if (STYLE.rainAt && !(c.inside && game.objectAt(c.f, c.x))) STYLE.rainAt(px, py, performance.now() / 1000);
+  // easter egg: a tap on a cloud (not on the tower in front of it) makes it rain for a moment
+  if (STYLE.rainAt && !(c.inside && game.objectAt(c.f, c.x))) STYLE.rainAt(px, py, performance.now() / 1000);
   if (tool === 'inspect') {
     const o = c.inside ? game.objectAt(c.f, c.x) : null;
     if (o) { selected = o; renderObjPanel(); } else closePanel();
@@ -895,12 +1113,12 @@ function tap(px, py, isMouse) {
     setHint(`Start ${floorName(c.f)} gesetzt – jetzt die zweite Etage antippen (Esc/Werkzeug = abbrechen)`, 'go');
     return;
   }
-  const g = makeGhost(c);
+  const g = inShell(ghost, c) ? ghost : makeGhost(c);   // a tap anywhere on the shown (dragged) piece builds it
   if (!g) { ghost = null; setHint(HINTS[tool] || ''); return; }
   if (!sameGhost(g, ghost)) { ghost = g; ghostHint(g); return; }
   // second tap on the same ghost: act
   if (g.kind === 'shell') {
-    const r = game.buildShell(g.f, g.x);
+    const r = game.buildShell(g.f, g.ax, g.bx);
     if (r.ok) { setHint(`Gebaut: Rohbau ${floorName(g.f)}, ${r.w} Felder (−${euro(r.cost)})`, 'go'); ghost = isMouse ? makeGhost(c) : null; }
     else setHint(r.reason, 'err');
   } else if (g.kind === 'room') {
@@ -1092,12 +1310,12 @@ function drawGhost(g, rc) {
 let last = performance.now(), panelTick = 0;
 function frame(now) {
   const dt = Math.min(0.1, (now - last) / 1000); last = now;
-  if (speed > 0) {
+  if (speed > 0 && startEl.hidden) {   // the game stands still behind the start screen
     try { game.step(dt * BASE_RATE * speed); }
     catch (err) { speed = 0; console.error(err); setHint('Fehler in der Simulation: ' + err.message, 'err'); }
   }
   draw();
-  if (window.TowerAudio) TowerAudio.frame(game, view, cssW, cssH, FH);
+  if (window.TowerAudio) TowerAudio.frame(game, view, cssW, cssH, FH, speed);
   updateHeader();
   panelTick += dt;
   if (panelTick > 0.5 && panelMode === 'obj' && selected) { panelTick = 0; renderObjPanel(); }
@@ -1106,10 +1324,7 @@ function frame(now) {
 }
 resize();
 setTool('inspect');
-if (!game.rooms.length && !game.shafts.length) {
-  openHelp();
-  toast('Willkommen! Starte mit einem Aufzug ab dem EG und ein paar Büros.', 'good');
-}
+openStart();
 requestAnimationFrame(frame);
 </script>
 </body>

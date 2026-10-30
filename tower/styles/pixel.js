@@ -615,6 +615,11 @@
       for (const h of hits || []) if (h && h.room) mark(rc, h.room, h.pen);
     }
 
+    // easter egg: a tapped cloud turns grey and rains for a while (screen coords, set by sky())
+    const RAIN_SECS = 6, DROP_V = 220;
+    let clouds = [];
+    const rain = new Map();                                // cloud index -> { from, until }
+
     return {
       id: o.id, label: o.label, grid: o.grid || 0,
       roomTypes: ROOM_TYPES,                         // types this style draws; others get the UI's placeholder
@@ -631,7 +636,9 @@
         }
         const ap = Math.max(2, Math.round(rc.s / G * 1.5));
         const dp = v => Math.round(v * rc.dpr) / rc.dpr;            // smooth motion on whole device px
+        clouds = [];
         if (rc.night) {
+          rain.clear();
           for (let i = 0; i < 70; i++) {                              // stars twinkle slowly
             const x = Math.floor(U.hash(i, 3, 1) * rc.cssW / ap) * ap, y = Math.floor(U.hash(i, 5, 2) * rc.cssH * 0.8 / ap) * ap;
             ctx.globalAlpha = 0.55 + 0.45 * Math.sin(T * (0.3 + 0.5 * U.hash(i, 7, 7)) + i * 1.7);
@@ -640,16 +647,34 @@
           }
           ctx.globalAlpha = 1;
         } else {
-          const cloud = (cx, cy) => {
-            ctx.fillStyle = '#ffffff';
+          const cloud = (cx, cy, grey) => {
+            ctx.fillStyle = grey ? '#b4bccb' : '#ffffff';
             ctx.fillRect(cx, cy, ap * 12, ap * 2); ctx.fillRect(cx + ap * 2, cy - ap * 2, ap * 6, ap * 2); ctx.fillRect(cx + ap * 4, cy - ap * 3, ap * 3, ap);
-            ctx.fillStyle = '#dfe8f4'; ctx.fillRect(cx, cy + ap * 2, ap * 12, ap);
+            ctx.fillStyle = grey ? '#959eaf' : '#dfe8f4'; ctx.fillRect(cx, cy + ap * 2, ap * 12, ap);
+          };
+          const drops = (i, cx, cy, r) => {                            // fall from the cloud to the ground, behind the tower
+            const top = cy + ap * 3, len = Math.min(H, rc.sy(0)) - top;
+            if (len < ap * 4) return;
+            const per = len / DROP_V, lanes = 9, m = Math.ceil(len / (ap * 22));
+            const dw = Math.max(1, Math.round(ap / 2)), dh = ap * 2;
+            ctx.fillStyle = '#7fa8d8';
+            for (let k = 0; k < lanes; k++) for (let j = 0; j < m; j++) {
+              const age = ((T - r.from) / per + U.hash(i * 31 + k, j, 41) / m + j / m) % 1 * per;
+              const born = T - age;                                    // only drops that left the cloud while it rained
+              if (born < r.from || born > r.until) continue;
+              ctx.fillRect(dp(cx + ap * (0.5 + 11 * U.hash(i, k, 42))), dp(top + age * DROP_V), dw, dh);
+            }
           };
           const span = W + ap * 26;                                    // clouds drift slowly to the right
           for (let i = 0; i < 5; i++) {
             const v = 2 + 4 * U.hash(i, 21, 3);
-            const x = ((U.hash(i, 22, 3) * span + T * v) % span) - ap * 13;
-            cloud(dp(x), Math.round(H * (0.06 + 0.42 * U.hash(i, 23, 3))));
+            const x = dp(((U.hash(i, 22, 3) * span + T * v) % span) - ap * 13), y = Math.round(H * (0.06 + 0.42 * U.hash(i, 23, 3)));
+            const r = rain.get(i);
+            if (r && T > r.until + H / DROP_V) rain.delete(i);
+            const raining = r && T <= r.until;
+            if (r) drops(i, x, y, r);
+            cloud(x, y, raining);
+            clouds.push({ i, x, y: y - ap * 3, w: ap * 12, h: ap * 6, pad: ap * 2 });
           }
           if (rc.season < 2) {                                         // spring/summer: a few birds now and then
             const per = 40, ph = (T % per) / per, bp = Math.max(1, Math.round(ap / 2));
@@ -681,12 +706,23 @@
         }
       },
 
+      // tap at screen px (css px): a cloud there starts raining; true if one was hit
+      rainAt(px, py, time) {
+        const c = clouds.find(c => px >= c.x - c.pad && px <= c.x + c.w + c.pad && py >= c.y - c.pad && py <= c.y + c.h + c.pad);
+        if (!c) return false;
+        const r = rain.get(c.i);
+        if (r && time <= r.until) r.until = time + RAIN_SECS;            // tapping again keeps it going
+        else rain.set(c.i, { from: time, until: time + RAIN_SECS });
+        return true;
+      },
+
       ground(rc) {
-        const x0 = rc.view.x, w = rc.cssW / rc.s + 1;
-        rc.rect(x0, 0, w, 4, '#6a4a30');
+        // earth down to the bottom of the view (the view may scroll below the ground)
+        const x0 = rc.view.x, w = rc.cssW / rc.s + 1, d = Math.max(4, Math.ceil(rc.view.y + rc.cssH / rc.s) + 1);
+        rc.rect(x0, 0, w, d, '#6a4a30');
         if (rc.detail > 0 && texture(rc)) {
           const gx0 = Math.floor(x0 * G);
-          for (let i = 0; i < w * G; i += 3) for (let j = 3; j < 36; j += 4) {
+          for (let i = 0; i < w * G; i += 3) for (let j = 3; j < d * G - 4; j += 4) {
             if (U.hash(gx0 + i, j, 4) > 0.8) P(rc, gx0 + i, j, 1, 1, '#54381f');
           }
         }
