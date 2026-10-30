@@ -38,6 +38,9 @@ englisch), Deutsch an der Wurzel, Englisch unter `en/`. Zuordnung alt → neu:
                        nicht in der Sitemap, noindex. Kommt aus dem Repo monster-arena
                        (tool/veroeffentlichen.ps1) – dort ändern, nicht hier.
     arena-0xzhva/      alte Adresse der Arena, leitet nur auf /arena/ weiter (noindex).
+    tower/             Hobby-Prototyp des PO (Hochhaus-Spiel), bewusst NICHT verlinkt,
+                       nicht in der Sitemap, noindex. Kommt aus dem Repo tower-game
+                       (tool/publish.ps1) – dort ändern, nicht hier.
 
 Eine neue App bekommt einen neuen Ordner – **keine Dateien mehr im Root**.
 Jede App-Datenschutzerklärung enthält den Website-Teil noch einmal
