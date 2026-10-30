@@ -23,7 +23,8 @@
   .row { display: flex; align-items: center; gap: 8px; }
   .row + .row { margin-top: 4px; }
   #clock { font-weight: 600; min-width: 92px; }
-  #money { font-weight: 700; color: var(--accent); flex: 1; text-align: center; font-variant-numeric: tabular-nums; }
+  #money { font-weight: 700; color: var(--accent); flex: 1; text-align: center; font-variant-numeric: tabular-nums; cursor: pointer; }
+  #money .loan { font-weight: 400; font-size: 11px; color: var(--muted); }
   #money.neg { color: var(--bad); }
   #stars { font-size: 16px; letter-spacing: 1px; color: var(--accent); }
   #stats { flex: 1; color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -47,7 +48,10 @@
   #subtools { position: absolute; left: 8px; right: 8px; bottom: 8px; z-index: 3; justify-content: center;
     background: rgba(21,26,34,.92); border: 1px solid var(--line); border-radius: 12px; padding: 5px; box-shadow: 0 6px 20px rgba(0,0,0,.45); }
   #subtools[hidden] { display: none; }
+  #subtools { flex-wrap: wrap; }
   #subtools .tool { flex: 1 1 0; max-width: 96px; }
+  .tool.lock { opacity: .45; }
+  .tool.lock .ct { color: var(--ok); }
   #tools .tool { flex: 1 1 0; }
   .tool.group.on { border-color: var(--accent); background: #2c2818; }
   .tool { flex: 0 0 auto; min-width: 58px; padding: 5px 4px 4px; border-radius: 10px; border: 1px solid var(--line);
@@ -77,6 +81,17 @@
   .btn.dis { opacity: .35; cursor: default; }
   .btn.on { border-color: #4f8cff; background: #1f2d4a; }
   .st-good { color: var(--good); } .st-ok { color: var(--ok); } .st-bad { color: var(--bad); }
+  .bar { display: inline-block; width: 70px; height: 8px; border-radius: 4px; background: var(--panel2); border: 1px solid var(--line); vertical-align: middle; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--good); }
+  .bar i.ok { background: var(--ok); } .bar i.bad { background: var(--bad); }
+  .cars { display: grid; grid-template-columns: auto auto 1fr; gap: 4px 8px; align-items: center; margin: 6px 0; font-size: 12.5px; }
+  .needs { display: grid; grid-template-columns: auto 1fr auto auto; gap: 3px 10px; align-items: baseline; margin: 6px 0; font-size: 12.5px; }
+  .needs .hd { color: var(--muted); font-size: 11px; }
+  .warnbox { border: 1px solid var(--ok); border-radius: 8px; padding: 5px 8px; margin: 6px 0; color: #ffe08a; font-size: 12.5px; }
+  .warnbox.red { border-color: var(--bad); color: #ffb4a8; }
+  .fc { color: var(--muted); font-size: 12.5px; margin: 2px 0 4px; }
+  input[type=range] { width: 100%; accent-color: var(--accent); }
+  .pos { color: #7ee0a8; } .neg { color: var(--bad); }
   .log div { padding: 3px 0; border-bottom: 1px solid var(--line); font-size: 12.5px; }
   .help li { margin: 4px 0; }
 </style>
@@ -127,11 +142,12 @@ const W = CFG.W;
 let game = loadGame();
 let speed = 1;
 let tool = 'inspect';
-let heat = null;                 // heatmap: null = off, 'time' = Wegzeit, 'energy' = Energie
+let heat = null;                 // heatmap: null = off, 'time' Wegzeit, 'energy' Energie, 'money' Geld, 'needs' Bedürfnisse, 'noise' Lärm
+let selInfo = null;              // selected office/flat: provider shares and penalty sources (refreshed with the panel, not per frame)
 let ghost = null;                // {kind:'room'|'shaft'|'demolish', ...}
 let anchor = null;               // first tap for shafts
 let selected = null;             // inspected room/shaft
-let panelMode = null;            // 'obj' | 'menu' | 'log' | 'help'
+let panelMode = null;            // 'obj' | 'menu' | 'log' | 'help' | 'money'
 
 function loadGame() {
   let saved = null;
@@ -141,7 +157,7 @@ function loadGame() {
   return g;
 }
 function hook(g) {
-  g.onMessage = m => toast(m.text, m.kind);
+  g.onMessage = m => { toast(m.text, m.kind); if (m.kind === 'star' && openGroup) showGroup(openGroup); };   // unlocked chips
   g.onDayEnd = () => save(g);
   g.W = W; g.entranceX = CFG.ENTRANCE_X;   // world fields TowerRender expects (not saved)
 }
@@ -151,24 +167,36 @@ const kEuro = n => n >= 1000 ? (n / 1000).toLocaleString('de-DE') + 'k' : String
 
 // ---------- tools ----------
 // two levels: groups in the bottom row, a group's items in a second row above it
+const roomItem = id => ({ id, ic: CFG.rooms[id].icon, lb: CFG.rooms[id].label, ct: kEuro(CFG.rooms[id].cost), star: CFG.rooms[id].star || 1 });
 const GROUPS = [
   { id: 'inspect', ic: '🔍', lb: 'Ansehen' },
   { id: 'rooms', ic: '🏢', lb: 'Räume', items: [
-    { id: 'office', ic: '💼', lb: 'Büro', ct: kEuro(CFG.rooms.office.cost) },
-    { id: 'condo', ic: '🏠', lb: 'Wohnung', ct: kEuro(CFG.rooms.condo.cost) },
-    { id: 'restaurant', ic: '🍽️', lb: 'Restaurant', ct: kEuro(CFG.rooms.restaurant.cost) },
-    { id: 'skylobby', ic: '🛋️', lb: 'Sky-Lobby', ct: kEuro(CFG.rooms.skylobby.cost) },
+    ...['office', 'condo', 'restaurant', 'skylobby', 'workshop', 'cafe', 'daycare', 'supermarket', 'gym'].map(roomItem),
     { id: 'shell', ic: CFG.shell.icon, lb: CFG.shell.label, ct: kEuro(CFG.shell.cost) + '/Feld' },
   ] },
   { id: 'ways', ic: '🛗', lb: 'Wege', items: [
     { id: 'stairs', ic: '🪜', lb: 'Treppe', ct: kEuro(CFG.links.stairs.cost) },
     { id: 'escalator', ic: '↗️', lb: 'Rolltreppe', ct: kEuro(CFG.links.escalator.cost) },
     { id: 'normal', ic: '🛗', lb: 'Aufzug', ct: 'ab ' + kEuro(CFG.shafts.normal.base) },
-    { id: 'express', ic: '⚡', lb: 'Express', ct: 'ab ' + kEuro(CFG.shafts.express.base) },
+    { id: 'express', ic: '⚡', lb: 'Express', ct: 'ab ' + kEuro(CFG.shafts.express.base), star: CFG.shafts.express.star || 1 },
   ] },
   { id: 'demolish', ic: '🧨', lb: 'Abriss' },
-  { id: 'heat', ic: '🌡️', lb: 'Heatmap', toggle: true },
+  // heatmaps: entries of their own group; tapping the active one again switches it off, the tool stays
+  { id: 'heat', ic: '🌡️', lb: 'Heatmap', heat: true, items: [
+    { id: 'heat:time', heat: 'time', ic: '⏱️', lb: 'Wegzeit' },
+    { id: 'heat:energy', heat: 'energy', ic: '🔋', lb: 'Energie' },
+    { id: 'heat:money', heat: 'money', ic: '💶', lb: 'Geld' },
+    { id: 'heat:needs', heat: 'needs', ic: '🧺', lb: 'Bedürfnisse' },
+    { id: 'heat:noise', heat: 'noise', ic: '🔊', lb: 'Lärm' },
+  ] },
 ];
+const HEAT_HINTS = {
+  time: 'Heatmap Wegzeit: blau gut, gelb geht so, rot schlecht.',
+  energy: 'Heatmap Energie (Ø Kraft bei Ankunft): blau frisch, gelb müde, rot erschöpft.',
+  money: 'Heatmap Geld (Netto je Etage gestern: Miete + Umsatz − Betrieb − Wartung): rot Verlust, grau ±0, grün Gewinn.',
+  needs: 'Heatmap Bedürfnisse (Erfüllung je Büro und Wohnung, leere nach Vorhersage): blau ab ' + Math.round(CFG.needHeat.good * 100) + ' %, gelb darunter, rot höchstens ' + Math.round(CFG.warnBelow * 100) + ' % = Warnung.',
+  noise: 'Heatmap Lärm (Strafe je Büro und Wohnung): blau ruhig, gelb etwas, rot ab ' + Math.round(CFG.noiseHeat.bad * 100) + ' % Abzug.',
+};
 const HINTS = {
   stairs: 'Treppe: verbindet die angetippte Etage mit der darüber. Langsam, unbequem und anstrengend (hoch ' + CFG.links.stairs.energyUp + ' Energie je Etage).',
   escalator: 'Rolltreppe: verbindet die angetippte Etage mit der darüber. Bequemer und schont die Kraft (' + CFG.links.escalator.energyUp + ' Energie je Etage).',
@@ -177,6 +205,11 @@ const HINTS = {
   condo: 'Wohnung: 3 Leute, 3.000 € Miete/Tag. Stelle antippen, nochmal tippen = bauen.',
   restaurant: 'Restaurant: Gäste von außen + Mittagessen der Büros. Antippen, nochmal = bauen.',
   skylobby: 'Sky-Lobby (nur 15./30./45. OG): hier darf man umsteigen, Express hält hier.',
+  workshop: 'Werkstatt: 2 Handwerker warten die Aufzüge (' + euro(CFG.rooms.workshop.upkeep) + '/Tag). Nah an den Schächten = kurze Wege. Laut: Strafe für Nachbarn. Antippen, nochmal = bauen.',
+  cafe: 'Café: Kaffee für gehobene Büros (' + CFG.rooms.cafe.seats + ' Plätze, ' + euro(CFG.rooms.cafe.price) + ' je Besuch, ' + euro(CFG.rooms.cafe.upkeep) + '/Tag). Ein Café reicht für ~10 gehobene Büros. Antippen, nochmal = bauen.',
+  daycare: 'Kita: Kinderbetreuung für gehobene Büros (morgens vom Eingang, ' + euro(CFG.rooms.daycare.price) + ' je Kind und Tag, ' + euro(CFG.rooms.daycare.upkeep) + '/Tag). Laut. Antippen, nochmal = bauen.',
+  supermarket: 'Supermarkt: Einkauf für gehobene Wohnungen auf dem Heimweg + Kundschaft von außen (' + euro(CFG.rooms.supermarket.price) + ' je Besuch, ' + euro(CFG.rooms.supermarket.upkeep) + '/Tag). Nah am Eingang = kurze Wege. Laut. Antippen, nochmal = bauen.',
+  gym: 'Fitness: Sport für gehobene Wohnungen, morgens und abends (' + euro(CFG.rooms.gym.price) + ' je Besuch, ' + euro(CFG.rooms.gym.upkeep) + '/Tag). Etwas laut. Antippen, nochmal = bauen.',
   shell: 'Rohbau: schließt die ganze Lücke an der angetippten Stelle (' + euro(CFG.shell.cost) + ' je Feld). Gelaufen und angestanden wird nur auf Boden.',
   normal: 'Aufzug: erste Etage antippen, dann die zweite (höchstens 15 Etagen).',
   express: 'Express: hält nur in Lobbys, fährt schnell und beliebig weit.',
@@ -188,32 +221,35 @@ const subEl = document.getElementById('subtools');
 let openGroup = null;
 const lastInGroup = {};
 const groupOf = id => GROUPS.find(g => g.id === id || (g.items && g.items.some(i => i.id === id)));
+// t.star: locked until that star (chip greyed with "ab ★★")
 function toolButton(t) {
   const b = document.createElement('button');
-  b.className = 'tool' + (t.toggle ? ' toggle' : '') + (t.items ? ' group' : '');
+  const locked = t.star > game.stars;
+  b.className = 'tool' + (t.heat ? ' toggle' : '') + (t.items ? ' group' : '') + (locked ? ' lock' : '');
   b.dataset.id = t.id;
-  b.innerHTML = `<span class="ic">${t.ic}</span><span class="lb">${t.lb}${t.items ? ' ▴' : ''}</span>` + (t.ct ? `<span class="ct">${t.ct}</span>` : '');
+  const ct = locked ? 'ab ' + '★'.repeat(t.star) : t.ct;
+  b.innerHTML = `<span class="ic">${t.ic}</span><span class="lb">${t.lb}${t.items ? ' ▴' : ''}</span>` + (ct ? `<span class="ct">${ct}</span>` : '');
   return b;
 }
 for (const g of GROUPS) {
   const b = toolButton(g);
   b.onclick = () => {
-    if (g.toggle) { cycleHeat(b); return; }
     if (!g.items) { showGroup(null); setTool(g.id); return; }
     if (openGroup === g) { showGroup(null); return; }      // second tap folds the row, tool stays
     showGroup(g);
-    setTool(lastInGroup[g.id] || g.items[0].id);
+    if (!g.heat) setTool(lastInGroup[g.id] || g.items[0].id);
   };
   toolsEl.appendChild(b);
 }
-// heatmap button: off → Wegzeit → Energie → off
-function cycleHeat(b) {
-  heat = heat == null ? 'time' : heat === 'time' ? 'energy' : null;
+// heatmap entry: on, or off when it is already on (the build tool is not touched)
+function setHeat(h) {
+  heat = heat === h ? null : h;
+  const b = toolsEl.querySelector('[data-id="heat"]');
+  const it = heat && GROUPS.find(g => g.heat).items.find(i => i.heat === heat);
   b.classList.toggle('on', heat != null);
-  b.querySelector('.lb').textContent = heat === 'time' ? 'Wegzeit' : heat === 'energy' ? 'Energie' : 'Heatmap';
-  setHint(heat === 'time' ? 'Heatmap Wegzeit: blau gut, gelb geht so, rot schlecht. Nochmal tippen = Energie.'
-    : heat === 'energy' ? 'Heatmap Energie (Ø Kraft bei Ankunft): blau frisch, gelb müde, rot erschöpft. Nochmal tippen = aus.'
-    : HINTS[tool] || '');
+  b.querySelector('.lb').textContent = it ? it.lb + ' ▴' : 'Heatmap ▴';
+  setHint(heat ? HEAT_HINTS[heat] + ' Nochmal tippen = aus.' : HINTS[tool] || '');
+  markTools();
 }
 function showGroup(g) {
   openGroup = g;
@@ -222,7 +258,11 @@ function showGroup(g) {
   if (!g) return;
   for (const it of g.items) {
     const b = toolButton(it);
-    b.onclick = () => setTool(it.id);
+    b.onclick = () => {
+      if (it.heat) { setHeat(it.heat); return; }
+      if (it.star > game.stars) { setHint(it.lb + ': erst ab ' + '★'.repeat(it.star) + ' – ' + (HINTS[it.id] || ''), 'err'); return; }
+      setTool(it.id);
+    };
     subEl.appendChild(b);
   }
   markTools();
@@ -230,7 +270,7 @@ function showGroup(g) {
 function markTools() {
   const g = groupOf(tool);
   for (const b of toolsEl.children) if (b.dataset.id !== 'heat') b.classList.toggle('on', g && b.dataset.id === g.id);
-  for (const b of subEl.children) b.classList.toggle('on', b.dataset.id === tool);
+  for (const b of subEl.children) b.classList.toggle('on', b.dataset.id === tool || b.dataset.id === 'heat:' + heat);
 }
 function setTool(id) {
   tool = id; ghost = null; anchor = null;
@@ -266,6 +306,7 @@ speedEl.onclick = e => {
   applySpeed();
 };
 document.getElementById('menuBtn').onclick = () => openMenu();
+document.getElementById('money').onclick = () => openMoney();
 
 // wide mode: PC-only test option, stage fills the window, menus stay phone-sized
 const WIDE_KEY = 'tower-game-wide-v1';
@@ -288,11 +329,13 @@ function updateHeader() {
     lastSeason = game.season;
   }
   const m = document.getElementById('money');
-  m.textContent = euro(game.money); m.classList.toggle('neg', game.money < 0);
+  const mt = euro(game.money) + (game.loan > 0 ? ' <span class="loan">· Kredit ' + kEuro(game.loan) + '</span>' : '');
+  if (m.innerHTML !== mt) m.innerHTML = mt;
+  m.classList.toggle('neg', game.money < 0);
   document.getElementById('stars').textContent = '★'.repeat(game.stars) + '☆'.repeat(CFG.stars.length - game.stars);
   const req = game.nextStarReq();
   let s = '👥 ' + game.population + ' · 😊 ' + Math.round(game.sat * 100) + ' %';
-  if (req) s += ' · nächster ★: ' + req.pop + ' 👥, ' + Math.round(req.sat * 100) + ' %' + (req.restaurants ? ', 🍽️' : '');
+  if (req) s += ' · nächster ★: ' + req.pop + ' 👥, ' + Math.round(req.sat * 100) + ' %' + (req.restaurants ? ', 🍽️' : '') + (req.upgraded ? ', ' + game.upgradedRooms() + '/' + req.upgraded + ' ▲' : '');
   else s += ' · Ziel erreicht 🏆';
   document.getElementById('stats').textContent = s;
 }
@@ -310,8 +353,8 @@ function toast(text, kind) {
 
 // ---------- panel ----------
 const panelEl = document.getElementById('panel');
-function closePanel() { panelEl.hidden = true; panelMode = null; selected = null; }
-function openPanel(html, mode) { panelEl.innerHTML = html; panelEl.hidden = false; panelMode = mode; }
+function closePanel() { panelEl.hidden = true; panelMode = null; selected = null; selInfo = null; }
+function openPanel(html, mode) { panelEl.innerHTML = html; panelEl.hidden = false; panelMode = mode; panelEl.dataset.key = ''; }
 panelEl.addEventListener('click', e => {
   const b = e.target.closest('[data-act]'); if (!b) return;
   const act = b.dataset.act;
@@ -321,19 +364,41 @@ panelEl.addEventListener('click', e => {
   if (act === 'extend') { if (b.classList.contains('dis')) { setHint(b.title, 'err'); return; } const r = game.extendShaft(selected, +b.dataset.dir); if (!r.ok) setHint(r.reason, 'err'); renderObjPanel(); return; }
   if (act === 'wide') { setWide(!wide); openMenu(); return; }
   if (act === 'stop') { if (b.classList.contains('dis')) return; game.toggleStop(selected, +b.dataset.f); renderObjPanel(); return; }
+  if (act === 'emergency') {
+    if (b.classList.contains('dis')) { setHint(b.title, 'err'); return; }
+    const r = game.callEmergency(selected.cars[+b.dataset.car]);
+    if (!r.ok) setHint(r.reason, 'err');
+    renderObjPanel(); return;
+  }
+  if (act === 'upgrade' || act === 'upgradeFloor') {
+    if (b.classList.contains('dis')) { setHint(b.title, 'err'); return; }
+    const r = act === 'upgrade' ? game.upgrade(selected) : game.upgradeFloor(selected.f);
+    setHint(r.ok ? 'Aufgewertet (−' + euro(r.cost) + ')' : r.reason, r.ok ? 'go' : 'err');
+    renderObjPanel(); return;
+  }
+  if (act === 'loan') { const r = game.takeLoan(); setHint(r.ok ? 'Kredit: +' + euro(r.amount) : r.reason, r.ok ? 'go' : 'err'); openMoney(); return; }
+  if (act === 'repay') { const r = game.repayLoan(b.dataset.amt === 'all' ? null : +b.dataset.amt); setHint(r.ok ? 'Zurückgezahlt: ' + euro(r.amount) : r.reason, r.ok ? 'go' : 'err'); openMoney(); return; }
   if (act === 'help') { openHelp(); return; }
   if (act === 'log') { openLog(); return; }
   if (act === 'new') {
     if (b.dataset.armed) {
       try { localStorage.removeItem(SAVE_KEY); } catch (e2) { /* ignore */ }
       game = new Game(null); hook(game); closePanel(); setTool('inspect'); resetView(); toast('Neues Spiel – viel Spaß!', 'good');
+      if (openGroup) showGroup(openGroup);
     } else { b.dataset.armed = '1'; b.textContent = 'Wirklich? Nochmal tippen'; }
   }
 });
 
+// workshop panel: the slider sets the wear at which jobs open (the panel refreshes without redrawing it)
+panelEl.addEventListener('input', e => {
+  if (e.target.dataset.act !== 'serviceAt') return;
+  game.serviceAt = +e.target.value;
+  const l = document.getElementById('serviceAtVal'); if (l) l.textContent = game.serviceAt + ' %';
+});
+
 function statusText(st) {
-  return { good: '<span class="st-good">gut</span>', ok: '<span class="st-ok">geht so</span>', bad: '<span class="st-bad">schlecht – Mieter zieht bald aus</span>',
-    vacant: 'frei – Mieter kommen bald', unreachable: '<span class="st-bad">nicht erreichbar – kein Weg aus der Lobby, oder er kostet zu viel Kraft</span>', lobby: 'Umsteige-Etage' }[st];
+  return { good: '<span class="st-good">gut</span>', ok: '<span class="st-ok">geht so</span>', bad: '<span class="st-bad">schlecht – über der Schwelle</span>',
+    vacant: 'frei – Mieter kommen nach und nach', unreachable: '<span class="st-bad">nicht erreichbar – kein Weg aus der Lobby, oder er kostet zu viel Kraft</span>', lobby: 'Umsteige-Etage' }[st];
 }
 
 function energyText(e) {
@@ -342,8 +407,151 @@ function energyText(e) {
   return `<span class="${cls}">${Math.round(e * 100)} % – ${word}</span>`;
 }
 
+const COND = { ok: 'fährt', slow: '<span class="st-ok">langsam – verschlissen</span>', waiting: '<span class="st-ok">wartet auf Handwerker</span>',
+  repair: '<span class="st-ok">🔧 in Reparatur</span>', broken: '<span class="st-bad">⚠ Panne</span>' };
+function wearBar(w) {
+  const cls = w >= 100 ? 'bad' : w >= CFG.wear.slowAt || w >= game.serviceAt ? 'ok' : '';
+  return `<span class="bar" title="Verschleiß ${Math.round(w)} %"><i class="${cls}" style="width:${Math.min(100, w).toFixed(0)}%"></i></span>`;
+}
+function signedEuro(n) { return `<span class="${n < 0 ? 'neg' : 'pos'}">${n < 0 ? '−' : '+'}${euro(Math.abs(n))}</span>`; }
+function floorNetRow(f) {
+  return game.floorNet ? `<span>Etage netto gestern</span><span>${signedEuro(game.floorNet[f])}</span>` : '';
+}
+
+// one row per car: wear bar, condition, emergency button when it is broken and nobody comes
+function carRows(o) {
+  let rows = '';
+  o.cars.forEach((car, i) => {
+    let st = COND[car.cond] || car.cond;
+    if (car.cond === 'waiting' && car.mech && car.mech.emergency) st = '<span class="st-ok">🚨 Notdienst unterwegs</span>';
+    else if (car.cond === 'waiting' && car.fix === 'park') st = '<span class="st-ok">fährt leer zur Wartung</span>';
+    let btn = '';
+    if (car.cond === 'broken') {
+      const chk = game.checkEmergency(o, car);
+      btn = `<button class="btn warn ${chk.ok ? '' : 'dis'}" data-act="emergency" data-car="${i}" title="${chk.ok ? 'Kommt in ' + Math.round(CFG.emergency.delaySec / 60) + ' Min. durch den Eingang' : chk.reason}">🚨 Notdienst rufen (${euro(chk.cost)})</button>`;
+      if (!chk.ok) btn += `<span style="color:var(--muted);font-size:11.5px">${chk.reason}</span>`;
+    }
+    rows += `<span>Kabine ${i + 1}</span><span>${wearBar(car.wear)} ${Math.round(car.wear)} %</span><span>${st}</span>`;
+    if (btn) rows += `<span></span><span style="grid-column: span 2">${btn}</span>`;
+  });
+  return rows;
+}
+
+function renderWorkshopPanel(o) {
+  const def = CFG.rooms[o.type];
+  const ws = game.workshopStats();
+  const staff = (o.staff || []).map((p, i) => {
+    let s = p.state === 'out' ? 'nicht da' : p.state === 'in' ? (p.restUntil > game.t ? 'ruht sich aus (müde)' : 'in der Werkstatt') : '';
+    if (p.job) {
+      const sh = p.job.s, carName = sh.name + (sh.cars.length > 1 ? '/' + (sh.cars.indexOf(p.job.car) + 1) : '');
+      s = p.job.car.fix === 'repair' ? 'repariert Aufzug ' + carName : p.state === 'work' ? 'wartet an Aufzug ' + carName : 'unterwegs zu Aufzug ' + carName;
+    } else if (!s) s = p.mGoal === 'out' ? 'geht nach Hause' : 'unterwegs';
+    return `<span>Handwerker ${i + 1}</span><span>${s}</span>`;
+  }).join('');
+  const stats = `<div class="kv">
+    <span>Etage</span><span>${floorName(o.f)}${game.roomStatus(o) === 'unreachable' ? ' – <span class="st-bad">nicht erreichbar</span>' : ''}</span>
+    ${staff}
+    <span>Ø Anlaufzeit heute</span><span>${ws.avgApproachMin == null ? '–' : ws.avgApproachMin.toFixed(1).replace('.', ',') + ' Min.'}</span>
+    <span>Aufträge heute</span><span>${ws.jobsToday}</span>
+    <span>Ausfälle heute</span><span>${ws.breakdownsToday ? '<span class="st-bad">' + ws.breakdownsToday + '</span>' : 0}</span>
+    <span>Betrieb</span><span>${euro(def.upkeep)} pro Tag, Teile ${euro(CFG.repair.parts)} je Reparatur</span>
+    ${providerRows(o)}${floorNetRow(o.f)}</div>`;
+  const key = 'ws' + o.id;
+  if (panelMode === 'obj' && panelEl.dataset.key === key) { document.getElementById('wsStats').innerHTML = stats; return; }
+  openPanel(`<h3>${def.icon} ${def.label}<button class="close" data-act="close">✕</button></h3>
+    <div id="wsStats">${stats}</div>
+    <p>Wartung ab Verschleiß <b id="serviceAtVal">${game.serviceAt} %</b> (gilt für alle Aufzüge):</p>
+    <input type="range" min="${CFG.serviceMin}" max="${CFG.serviceMax}" step="5" value="${game.serviceAt}" data-act="serviceAt">
+    <p>Früh warten = viele kurze Pausen, nie Pannen. Spät warten = seltener, aber eine Panne in der Mittagswelle wird teuer. Handwerker fahren selbst Aufzug – eine Werkstatt nah an den Schächten kommt schneller hin.</p>`, 'obj');
+  panelEl.dataset.key = key;
+}
+
+// ----- needs, penalties, tiers (TOWER-a0006 P2) -----
+const pct = v => Math.round(v * 100) + ' %';
+const minTxt = m => Math.round(m) + ' Min.';
+function shareCls(v) { return TowerEngine.needWarn(v) ? 'st-bad' : v >= CFG.needHeat.good ? 'st-good' : 'st-ok'; }
+const isTenant = o => o.type === 'office' || o.type === 'condo';
+
+// list of needs: provider with felt minutes, forecast, yesterday's measurement; penalty; warning
+function needsHtml(o) {
+  const fc = game.forecast(o, o.tier), measured = o.occupied && o.fulfil != null;
+  const v = measured ? o.fulfil : fc.fulfil;
+  let h = `<p>Bedürfnisse ${CFG.tiers[o.tier].label}: Erfüllung <b class="${shareCls(v)}">${pct(v)}</b>${measured ? '' : ' (Vorhersage)'}</p>`;
+  if (fc.needs.length) {
+    h += '<div class="needs"><span class="hd">Bedürfnis</span><span class="hd">Versorger, gefühlt</span><span class="hd">Vorhersage</span><span class="hd">gestern</span>';
+    for (const e of fc.needs) {
+      const prov = e.min == null ? `<span class="st-bad">${e.reason}</span>`
+        : (e.type === 'street' ? 'Straße (EG)' : CFG.rooms[e.type].label + ' ' + floorName(e.provider.f)) + ', ' + minTxt(e.min);
+      const ms = e.measured == null ? '–' : `<span class="${shareCls(e.measured)}">${pct(e.measured)}</span>` + (e.measuredMin != null ? ' · ' + minTxt(e.measuredMin) : '');
+      h += `<span>${CFG.needs[e.need].label}</span><span>${prov}</span><span class="${shareCls(e.share)}">${pct(e.share)}</span><span>${ms}</span>`;
+    }
+    h += '</div>';
+  } else h += '<p class="fc">Keine Bedürfnisse auf dieser Stufe – nur Lärm zählt.</p>';
+  const src = game.penaltySources(o)[0];
+  if (o.pen > 0 && src) h += `<p class="fc">Lärm: <span class="st-bad">−${pct(o.pen)}</span> von ${CFG.rooms[src.room.type].label} ${floorName(src.room.f)} (die stärkste Quelle zählt)</p>`;
+  if (!o.occupied && o.needOut) h += `<div class="warnbox">Ausgezogen wegen Bedürfnissen. Neue Mieter erst nach einer Bauänderung und ab ${pct(CFG.moveInMin)} Vorhersage.</div>`;
+  else if (!o.occupied && fc.fulfil < CFG.moveInMin) h += `<p class="fc">Neue Mieter erst ab ${pct(CFG.moveInMin)} Vorhersage.</p>`;
+  return h;
+}
+
+// sign over the room (TOWER-a0007): yellow = close to the threshold, red = below it, the tenants may go any hour
+function warnHtml(o) {
+  const lv = game.warnLevel(o);
+  if (!lv) return '';
+  const why = game.warnReason(o).replace(/\.$/, '');   // "… 18 Min." ends with a dot already
+  if (lv === 1) return `<div class="warnbox">⚠ Knapp vor der Schwelle: ${why}. Noch kein Auszug – die Schwelle ist Ø über ${CFG.okMin} Min. pro Weg oder höchstens ${pct(CFG.warnBelow)} Erfüllung.</div>`;
+  const d = o.warnDays, [a, b] = CFG.moveOutHours;
+  return `<div class="warnbox red">⚠ Unter der Schwelle, ${d}. Tag: ${why}. Heute ziehen die Mieter mit <b>${pct(game.moveOutChance(o))}</b> Wahrscheinlichkeit aus (jede Stunde ${a}–${b} Uhr ein Teil davon); ab morgen mehr. Ein guter Tag nimmt die Warnung weg.</div>`;
+}
+
+// forecast text for a tier: "voraussichtlich 35 %: Supermarkt 14 Min., kein Fitness erreichbar"
+function forecastText(f) {
+  const parts = f.needs.map(e => e.reason);
+  if (f.pen > 0) parts.push('Lärm −' + pct(f.pen));
+  return `voraussichtlich <b class="${shareCls(f.fulfil)}">${pct(f.fulfil)}</b>${parts.length ? ': ' + parts.join(', ') : ''}`;
+}
+
+// upgrade buttons (room, whole floor) with the forecast on the next tier first
+function upgradeHtml(o) {
+  const nt = CFG.tiers[o.tier + 1];
+  if (!nt) return '';
+  const c = game.checkUpgrade(o), cf = game.checkUpgradeFloor(o.f);
+  let h = '';
+  if (!nt.locked && nt.star <= game.stars) {
+    const rent = CFG.rooms[o.type].rent;
+    h += `<p class="fc">▲ ${nt.label}: ${forecastText(game.forecast(o, o.tier + 1))} · Miete bis ${euro(game.potentialRent(o, o.tier + 1))}, Betrieb +${euro(Math.round(rent * nt.upkeep))} pro Tag</p>`;
+  }
+  h += `<div class="btnrow"><button class="btn ${c.ok ? '' : 'dis'}" data-act="upgrade" title="${c.ok ? 'Aufwerten' : c.reason}">▲ Aufwerten (${euro(c.cost)})</button>`
+    + `<button class="btn ${cf.ok ? '' : 'dis'}" data-act="upgradeFloor" title="${cf.ok ? 'Ganze Etage aufwerten' : cf.reason}">▲ ganze Etage${cf.n ? ' (' + cf.n + ', ' + euro(cf.cost) + ')' : ''}</button></div>`;
+  if (!c.ok) h += `<p class="fc">${c.reason}</p>`;
+  else h += '<p class="fc">Kein Zurück: Abwerten geht nicht, nur Abriss und Neubau.</p>';
+  return h;
+}
+
+// rows for a provider (café, Kita, supermarket, fitness) and for disturbers
+function providerRows(o) {
+  const def = CFG.rooms[o.type];
+  let rows = '';
+  if (def.seats && o.type !== 'restaurant') {
+    rows += `<span>Plätze</span><span>${o.inside} von ${def.seats} belegt${o.queue.length ? ', <span class="st-ok">' + o.queue.length + ' warten</span>' : ''}</span>
+      <span>Pro ${o.type === 'daycare' ? 'Kind und Tag' : 'Besuch'}</span><span>${euro(def.price)}</span>
+      <span>Betrieb</span><span>${euro(def.upkeep)} pro Tag</span>
+      <span>Besuche</span><span>heute ${o.vN}${o.lastVisits != null ? ', gestern ' + o.lastVisits : ''}</span>`;
+    if (o.lastQ || o.lastGU) rows += `<span>Schlange gestern</span><span>Ø ${o.lastQ.toFixed(1).replace('.', ',')} Min.${o.lastGU ? ', <span class="st-bad">' + pct(o.lastGU) + ' aufgegeben</span>' : ''}</span>`;
+  }
+  const N = CFG.noise[o.type];
+  if (N) rows += `<span>Lärm</span><span>bis −${pct(N.s)} für Nachbarn (Radius ${String(N.r).replace('.', ',')} Etagen)</span>`;
+  return rows;
+}
+
 function renderObjPanel() {
   const o = selected; if (!o) return;
+  selInfo = null;
+  if (o.type && CFG.rooms[o.type]) {
+    if (isTenant(o)) selInfo = { room: o, shares: game.providerShares(o), sources: game.penaltySources(o) };
+    else if (CFG.noise[o.type]) selInfo = { room: o, area: game.penaltyArea(o.type, o.f, o.x) };
+  }
+  if (o.type === 'workshop') { renderWorkshopPanel(o); return; }
   if (o.cars) {
     const def = CFG.shafts[o.kind];
     const waiting = o.qUp.reduce((a, q) => a + q.length, 0) + o.qDown.reduce((a, q) => a + q.length, 0);
@@ -360,15 +568,20 @@ function renderObjPanel() {
       <div class="kv"><span>Etagen</span><span>${floorName(o.f0)} – ${floorName(o.f1)} · ${o.f1 - o.f0} von höchstens ${def.maxSpan} Etagen hoch</span>
       <span>Wartende jetzt</span><span>${waiting}</span>
       <span>Ø Wartezeit heute</span><span>${avg}</span>
-      <span>Kabinen</span><span>${o.cars.length} von ${def.maxCars} · je ${def.cap} Personen</span></div>
+      <span>Kabinen</span><span>${o.cars.length} von ${def.maxCars} · je ${def.cap} Personen</span>
+      <span>Betrieb</span><span>${euro(def.upkeep * o.cars.length)} pro Tag (${euro(def.upkeep)} je Kabine)</span>
+      <span>Wartung</span><span>${o.svc == null ? '<span class="st-bad">nicht möglich – keine Halte-Etage mit Boden</span>' : 'im ' + floorName(o.svc) + ' ab ' + game.serviceAt + ' % Verschleiß' + (game.rooms.some(r => r.type === 'workshop') ? '' : ' – <span class="st-ok">keine Werkstatt gebaut</span>')}</span></div>
+      <p>Verschleiß und Zustand (ab ${CFG.wear.slowAt} % langsamer, bei 100 % Panne):</p>
+      <div class="cars">${carRows(o)}</div>
       <div class="btnrow"><button class="btn" data-act="delcar">− Kabine</button><button class="btn" data-act="addcar">+ Kabine (${euro(def.car)})</button></div>
       <div class="btnrow">${extBtn(up, 1, '▲ Oben +1')}${extBtn(down, -1, '▼ Unten +1')}<span style="color:var(--muted);font-size:12px">je ${euro(def.perFloor)}</span></div>
       <p>Halte (antippen = an/aus)${o.kind === 'express' ? ' – Express hält nur in Lobbys' : ''}:</p>
       <div class="chips">${chips}</div>`, 'obj');
   } else if (o.isShell) {
     openPanel(`<h3>${CFG.shell.icon} ${CFG.shell.label}<button class="close" data-act="close">✕</button></h3>
-      <div class="kv"><span>Etage</span><span>${floorName(o.f)}</span><span>Breite</span><span>${o.w} Felder</span></div>
-      <p>Boden ohne Mieter: hier kann man laufen und am Aufzug anstehen. Räume lassen sich direkt darauf bauen; wird ein Raum abgerissen, bleibt der Rohbau stehen.</p>`, 'obj');
+      <div class="kv"><span>Etage</span><span>${floorName(o.f)}</span><span>Breite</span><span>${o.w} Felder</span>
+      <span>Etage kostet</span><span>${o.f > 0 ? euro(game.floorUpkeep(o.f)) + ' pro Tag' : 'nichts (Lobby)'}</span>${floorNetRow(o.f)}</div>
+      <p>Boden ohne Mieter: hier kann man laufen und am Aufzug anstehen. Räume lassen sich direkt darauf bauen; wird ein Raum abgerissen, bleibt der Rohbau stehen. Jede Etage mit Boden kostet Betrieb, oben mehr.</p>`, 'obj');
   } else if (o.isLink) {
     const def = CFG.links[o.kind];
     openPanel(`<h3>${def.icon} ${def.label}<button class="close" data-act="close">✕</button></h3>
@@ -382,11 +595,16 @@ function renderObjPanel() {
     const st = game.roomStatus(o);
     const live = game.liveAvg(o);
     let rows = `<span>Etage</span><span>${floorName(o.f)}</span><span>Zustand</span><span>${statusText(st)}</span>`;
-    if (o.type === 'office' || o.type === 'condo') {
-      rows += `<span>Mieter</span><span>${o.occupied ? o.people.length + ' Personen, ' + o.inside + ' drin' : '–'}</span>
-        <span>Miete</span><span>${euro(def.rent)} pro Tag</span>`;
+    let more = '';
+    if (isTenant(o)) {
+      rows += `<span>Stufe</span><span>${CFG.tiers[o.tier].label}</span>
+        <span>Mieter</span><span>${o.occupied ? o.people.length + ' Personen, ' + o.inside + ' drin' : '–'}</span>
+        <span>Miete</span><span>${o.occupied ? euro(game.rentOf(o)) + ' pro Tag' + (o.fulfil != null && o.fulfil < 1 ? ' (' + pct(o.fulfil) + ' von ' + euro(game.potentialRent(o)) + ')' : '') : 'bis ' + euro(game.potentialRent(o)) + ' pro Tag'}</span>`;
+      if (o.tier) rows += `<span>Betrieb Stufe</span><span>${euro(game.tierUpkeep(o))} pro Tag, auch leer</span>`;
+      more = warnHtml(o) + needsHtml(o) + upgradeHtml(o);
     }
     if (o.type === 'restaurant') rows += `<span>Gäste drin</span><span>${o.inside} von ${def.seats}</span><span>Pro Gast</span><span>${euro(def.price)}</span>`;
+    rows += providerRows(o);
     if (o.type !== 'skylobby') {
       rows += `<span>Ø Weg heute</span><span>${live == null ? '–' : live.toFixed(1).replace('.', ',') + ' Min.'}</span>
         <span>Bewertung</span><span>${o.score == null ? '–' : o.score.toFixed(1).replace('.', ',') + ' Min. (gut ≤ ' + CFG.goodMin + ', schlecht > ' + CFG.okMin + ')'}</span>`;
@@ -394,8 +612,37 @@ function renderObjPanel() {
       rows += `<span>Ø Energie bei Ankunft</span><span>${en == null ? '–' : energyText(en)}</span>`;
       if (o.failN) rows += `<span>Aufgegeben heute</span><span class="st-bad">${o.failN}× – Weg zu lang oder zu anstrengend</span>`;
     }
-    openPanel(`<h3>${def.icon} ${def.label}<button class="close" data-act="close">✕</button></h3><div class="kv">${rows}</div>`, 'obj');
+    rows += floorNetRow(o.f);
+    openPanel(`<h3>${def.icon} ${def.label}${o.tier ? ' · ' + CFG.tiers[o.tier].label : ''}<button class="close" data-act="close">✕</button></h3><div class="kv">${rows}</div>${more}`, 'obj');
   }
+}
+
+// money panel (tap on the bank balance): yesterday's items, loan buttons
+function openMoney() {
+  selected = null;
+  const E = CFG.economy, L = game.lastDay;
+  const item = (lb, v) => `<span>${lb}</span><span>${signedEuro(v)}</span>`;
+  const rows = L && L.net != null
+    ? item('Miete', L.rent) + item('Umsatz (Restaurant, Café, Kita, Supermarkt, Fitness)', L.sales) + item('Betrieb Etagen', -L.upkeepFloors) + item('Betrieb Räume (Werkstatt, Versorger, Stufen)', -L.upkeepRooms)
+      + item('Betrieb Aufzüge, Rolltreppen', -L.upkeepShafts) + item('Wartung (Teile, Notdienst)', -L.repairs) + item('Zins', -L.interest)
+      + `<span><b>Netto</b></span><span><b>${signedEuro(L.net)}</b></span>`
+    : '<span>Noch kein Tagesabschluss</span><span></span>';
+  const loanBtn = game.canLoan()
+    ? `<button class="btn" data-act="loan">+ ${euro(E.loanStep)} Kredit</button>`
+    : `<button class="btn dis" data-act="loan" title="${game.loan >= E.loanMax ? 'Höchstens ' + euro(E.loanMax) : 'gesperrt'}">+ Kredit</button>`;
+  const repay = game.loan > 0
+    ? `<button class="btn ${game.money >= Math.min(E.loanStep, game.loan) ? '' : 'dis'}" data-act="repay" data-amt="${Math.min(E.loanStep, game.loan)}">− ${euro(Math.min(E.loanStep, game.loan))}</button><button class="btn ${game.money > 0 ? '' : 'dis'}" data-act="repay" data-amt="all">Alles zurück</button>` : '';
+  let note = `Zins ${Math.round(E.loanRate * 100)} % je Tag auf den Stand, Stufen zu ${euro(E.loanStep)}, höchstens ${euro(E.loanMax)}. Nach ${E.loanBlockDays} Verlusttagen in Folge gibt es keinen Kredit mehr.`;
+  if (game.negDays >= E.loanBlockDays) note = `<span class="st-bad">Kredit gesperrt: ${game.negDays} Tage in Folge Verlust.</span> Erst ein Tag mit Gewinn hebt die Sperre auf.`;
+  else if (game.negDays > 0) note = `<span class="st-ok">${game.negDays} Verlusttag${game.negDays > 1 ? 'e' : ''} in Folge.</span> ` + note;
+  openPanel(`<h3>💶 Geld<button class="close" data-act="close">✕</button></h3>
+    <div class="kv"><span>Kontostand</span><span>${signedEuro(game.money)}</span>
+    <span>Kredit</span><span>${euro(game.loan)}${game.loan ? ' · Zins ' + euro(Math.round(E.loanRate * game.loan)) + ' pro Tag' : ''}</span></div>
+    <p>Gestern${L && L.day ? ' (Tag ' + L.day + ')' : ''}:</p>
+    <div class="kv">${rows}</div>
+    <div class="btnrow">${loanBtn}${repay}</div>
+    <p>${note}</p>
+    <p>Jede Etage mit Boden kostet Betrieb (EG frei), je 5 Etagen höher ${Math.round(E.floorUpkeepStep * 100)} % mehr. 🌡️ Heatmap „Geld“ zeigt, welche Etage sich trägt.</p>`, 'money');
 }
 
 function openMenu() {
@@ -414,14 +661,19 @@ function openLog() {
 function openHelp() {
   openPanel(`<h3>So geht's<button class="close" data-act="close">✕</button></h3>
   <ul class="help">
-    <li><b>Ziel:</b> 4 Sterne. Sterne gibt es für Bewohner und zufriedene Mieter, und jeder Stern erlaubt höher zu bauen: ★ bis 15. OG, ★★ bis 30., ★★★ bis 50.</li>
+    <li><b>Ziel:</b> 4 Sterne. Sterne gibt es für Bewohner und zufriedene Mieter, und jeder Stern erlaubt höher zu bauen: ★ bis 15. OG, ★★ bis 30., ★★★ bis 50. ★★ schaltet Sky-Lobby, Express, ☕ Café, 🧸 Kita, 🛒 Supermarkt, 🏋️ Fitness und die Stufe Gehoben frei; für ★★★ braucht es auch ${CFG.stars[2].upgraded} gehobene Räume. Gesperrtes steht grau mit „ab ★★“ im Menü.</li>
     <li><b>Bauen:</b> Werkzeug wählen, Stelle antippen, nochmal antippen = bauen. Räume brauchen etwas darunter.</li>
     <li><b>Wege</b> (🛗-Menü): 🪜 Treppe → ↗️ Rolltreppe → 🛗 Aufzug → ⚡ Express, jeweils schneller und bequemer. Treppen und Rolltreppen verbinden zwei Etagen, ohne Warten, aber langsamer und unbequemer.</li>
     <li><b>Energie:</b> Jeder hat eigene Kraft (${CFG.energy.min}–${CFG.energy.max}). Jeder Teil des Wegs kostet: Flur ${String(CFG.energy.corridor * CFG.W).replace('.', ',')} für die ganze Etagenbreite, Treppe hoch ${CFG.links.stairs.energyUp} / runter ${CFG.links.stairs.energyDown} je Etage, Rolltreppe ${CFG.links.escalator.energyUp}, Warten ${CFG.energy.waitPerMin} je Minute, Aufzugfahren nichts. Reicht die Kraft nicht, ist der Weg unmöglich – die Person gibt auf. Wer müde ist, empfindet jede Minute länger. Im Raum erholt man sich, im Restaurant schneller, nachts ganz. Darum zählt, <i>wo</i> der Aufzug steht: lange Flure kosten Zeit und Kraft.</li>
     <li><b>Aufzüge:</b> erste Etage antippen, dann die zweite. Ein Aufzug schafft höchstens 15 Etagen und darf durch Räume gebaut werden. Wächst der Turm, lässt er sich mit 🔍 nachträglich oben oder unten um je eine Etage verlängern (bis zur Grenze seines Typs).</li>
     <li><b>Boden:</b> Gelaufen und am Aufzug angestanden wird nur auf Boden (Räume, Lobby, 🧱 Rohbau). Lücken zwischen Räumen schließt der Rohbau unter 🏢 Räume: ein Tipp füllt die ganze Lücke. Wird ein Raum abgerissen, bleibt der Rohbau stehen.</li>
     <li><b>Umsteigen</b> geht nur in einer Lobby: im EG oder in einer Sky-Lobby (15./30./45. OG). Express-Aufzüge halten nur dort, fahren dafür schnell und weit.</li>
-    <li><b>Mieter</b> messen jeden Weg. Wer im Schnitt zu lange braucht, zieht nach zwei schlechten Tagen aus. 🌡️ Heatmap (mehrmals tippen): Wegzeit – blau gut, gelb geht so, rot schlecht · Energie bei Ankunft – blau frisch, gelb müde, rot erschöpft. Müde Leute tragen Senfgelb, erschöpfte Rostrot und gehen gebückt. Wer lange wartet, wird rosa, dann rot.</li>
+    <li><b>Mieter</b> messen jeden Weg (Ø gefühlte Minuten) und ihre Bedürfnisse (unten). <b>Schwelle:</b> Ø über ${CFG.okMin} Min. pro Weg oder höchstens ${Math.round(CFG.warnBelow * 100)} % Erfüllung. <span class="st-ok">Gelbes ⚠</span> = knapp davor (über ${Math.round(CFG.warnNearWait * CFG.okMin)} Min. oder höchstens ${Math.round(CFG.warnNearNeed * 100)} %), noch nichts passiert. <span class="st-bad">Rotes ⚠</span> mit Meldung = am Abend unter der Schwelle gemessen: Ab dann können die Mieter jede Stunde ${CFG.moveOutHours[0]}–${CFG.moveOutHours[1]} Uhr ausziehen, am 1. Tag mit ${Math.round(CFG.moveOutP[0] * 100)} %, dann ${CFG.moveOutP.slice(1).map(p => Math.round(p * 100) + ' %').join(', ')} je Tag – der Turm <b>bröckelt</b>, du hast ein paar Tage Zeit. Ein guter Tag nimmt Rot wieder weg. <b>Nachfrage:</b> Neue Mieter kommen ${CFG.demandHours[0]}–${CFG.demandHours[1]} Uhr, je Stunde höchstens einer pro angefangene ${CFG.demandPer} belegte Räume (mindestens einer), in einen zufälligen freien Raum – sicher erst ab ${Math.round((CFG.moveInMin + CFG.moveInRamp) * 100)} % Vorhersage, ab ${Math.round(CFG.moveInMin * 100)} % zögernd. 🌡️ Heatmap (Einträge der Gruppe, nochmal tippen = aus): Wegzeit – blau gut, gelb geht so, rot schlecht · Energie bei Ankunft – blau frisch, gelb müde, rot erschöpft · Geld – Netto je Etage · Bedürfnisse – Erfüllung je Raum · Lärm – Abzug je Raum. Müde Leute tragen Senfgelb, erschöpfte Rostrot und gehen gebückt. Wer lange wartet, wird rosa, dann rot.</li>
+    <li><b>Bedürfnisse:</b> Büros wollen Mittagessen (🍽️ Restaurant oder die Straße), gehobene Büros dazu ☕ Kaffee und 🧸 Kinderbetreuung (morgens vom Eingang), gehobene Wohnungen 🛒 Einkauf (auf dem Heimweg) und 🏋️ Sport. Die Leute gehen wirklich hin; zählt die gefühlte Zeit bis dorthin (mit Warten): bis ${CFG.needCurve.t0} Min. voll, ab ${CFG.needCurve.t1} Min. nichts, dazwischen erst langsam, dann schnell weniger. Ist ein Versorger voll, wartet man davor – nach ${Math.round(CFG.visitGiveUp / 60)} Min. gibt man auf. Erfüllung = Mittel der Bedürfnisse × (1 − Lärm), Miete = Miete der Stufe × Erfüllung. Bei höchstens ${Math.round(CFG.warnBelow * 100)} % gibt es das rote ⚠ mit Grund (siehe Mieter); wer deshalb auszieht, lässt die Stufe stehen – neue Mieter kommen erst nach einer Bauänderung und ab ${Math.round(CFG.moveInMin * 100)} % Vorhersage. Raum antippen: Liste mit Versorger, Minuten, Vorhersage und gestern gemessen; alle Versorger werden nach ihrem Beitrag eingefärbt, Lärmquellen rot umrandet.</li>
+    <li><b>Lärm:</b> 🔧 Werkstatt, 🧸 Kita, 🛒 Supermarkt, 🏋️ Fitness und 🍽️ Restaurant stören durch Wände und Decken, nur ganz in der Nähe (eine Etage, wenige Felder); die stärkste Quelle zählt. Büros stört es halb so sehr, gehobene Räume mehr. Beim Bauen zeigt das Geisterbild den Radius und die betroffenen Räume.</li>
+    <li><b>Stufen:</b> Büro oder Wohnung antippen → ▲ Aufwerten (oder die ganze Etage), ${Math.round(CFG.upgradeShare * 100)} % des Baupreises. Gehoben bringt ${String(CFG.tiers[1].rent).replace('.', ',')}× Miete, kostet aber ${Math.round(CFG.tiers[1].upkeep * 100)} % der Standard-Miete Betrieb je Tag, auch leer, und hat mehr Bedürfnisse. Das Panel zeigt vorher die Vorhersage. Zurück geht es nicht (nur Abriss) – Aufwerten ist eine Wette. Luxus kommt später.</li>
+    <li><b>Geld:</b> Miete und Umsatz (Restaurant, Café, Kita, Supermarkt, Fitness) kommen herein, jede Etage mit Boden kostet Betrieb (EG frei, je 5 Etagen höher ${Math.round(CFG.economy.floorUpkeepStep * 100)} % mehr), dazu Aufzüge, Rolltreppen, Werkstatt, Versorger und gehobene Räume. Halb leere oder hohe Etagen tragen sich nicht. Kontostand antippen = Posten von gestern und Kredit (Stufen zu ${euro(CFG.economy.loanStep)}, ${Math.round(CFG.economy.loanRate * 100)} % Zins je Tag, gesperrt nach ${CFG.economy.loanBlockDays} Verlusttagen in Folge). 🌡️ Heatmap „Geld“: rot Verlust, grün Gewinn je Etage.</li>
+    <li><b>Wartung:</b> Kabinen verschleißen mit jedem Halt und jeder Etage. Ab ${CFG.wear.slowAt} % fahren sie langsamer, bei 100 % ist Panne. Eine 🔧 Werkstatt (unter 🏢 Räume) schickt 2 Handwerker, die selbst Aufzug fahren: ab dem eingestellten Verschleiß (Werkstatt antippen, ${CFG.serviceMin}–${CFG.serviceMax} %) parkt die Kabine im untersten Halt und wird ${Math.round(CFG.repair.sec / 60)} Min. repariert (Teile ${euro(CFG.repair.parts)}). Ohne Werkstatt hilft bei einer Panne nur der 🚨 Notdienst im Aufzug-Panel (${euro(CFG.emergency.cost)}, kommt nach ${Math.round(CFG.emergency.delaySec / 60)} Min.).</li>
     <li><b>Stoßzeiten:</b> morgens 7:30–9, mittags 12–13, abends 17–18:30.</li>
     <li><b>Tipp:</b> Mit 🔍 einen Aufzug antippen: Kabinen nachkaufen, Halte abschalten (ein Aufzug, der nur jede zweite Etage anfährt, ist schneller).</li>
   </ul>`, 'help');
@@ -605,7 +857,19 @@ function sameGhost(a, b) {
 function ghostHint(g) {
   if (!g) return;
   if (g.kind === 'shell') setHint(g.chk.ok ? `Rohbau ${floorName(g.f)}, ${g.w} Felder für ${euro(g.chk.cost)} – nochmal tippen = bauen` : g.chk.reason, g.chk.ok ? 'go' : 'err');
-  else if (g.kind === 'room') setHint(g.chk.ok ? `${CFG.rooms[g.type].label} ${floorName(g.f)} für ${euro(g.chk.cost)} – nochmal tippen = bauen` : g.chk.reason, g.chk.ok ? 'go' : 'err');
+  else if (g.kind === 'room') {
+    // P2: forecast for offices and flats (needs floor to walk on), penalty area of a disturber
+    let extra = '';
+    if (g.type === 'office' || g.type === 'condo') {
+      const fc = game.forecastAt(g.type, 0, g.f, g.x);
+      extra = fc ? ' · Erfüllung voraussichtlich ' + pct(fc.fulfil) : ' · Vorhersage nach dem Bauen';
+    }
+    if (CFG.noise[g.type]) {
+      g.area = game.penaltyArea(g.type, g.f, g.x);
+      extra += g.area.length ? ' · Lärm trifft ' + g.area.length + (g.area.length > 1 ? ' Räume' : ' Raum') : ' · Lärm trifft niemanden';
+    }
+    setHint(g.chk.ok ? `${CFG.rooms[g.type].label} ${floorName(g.f)} für ${euro(g.chk.cost)}${extra} – nochmal tippen = bauen` : g.chk.reason + extra, g.chk.ok ? 'go' : 'err');
+  }
   else if (g.kind === 'link') setHint(g.chk.ok ? `${CFG.links[g.type].label} ${floorName(g.f)} ↔ ${floorName(g.f + 1)} für ${euro(g.chk.cost)} – nochmal tippen = bauen` : g.chk.reason, g.chk.ok ? 'go' : 'err');
   else if (g.kind === 'shaft') {
     if (g.start) setHint(`Start: ${floorName(g.f0)} antippen`, 'go');
@@ -661,19 +925,50 @@ function tap(px, py, isMouse) {
 // ---------- drawing ----------
 // The world is drawn by the pixel style A2 "Pixel ruhig" (styles/pixel.js via styles/render.js);
 // this file only adds what belongs to the game UI on top: height-limit text, selection, ghost.
-const STYLE = TowerStyles.pixel_calm;
+// Room types the style cannot draw yet (not in style.roomTypes; without that list: the four original
+// ones) get a placeholder: coloured area + icon from CFG.rooms. Keeps main running before the graphics
+// track (TOWER-a0006 G) is merged, and is the fallback if it fails.
+const BASE_STYLE = TowerStyles.pixel_calm;
+const STYLE_TYPES = new Set(BASE_STYLE.roomTypes || ['office', 'condo', 'restaurant', 'skylobby']);
+const PH_HEAT = { good: '#4a8cff', ok: '#ffc94d', bad: '#ff4d5e', unreachable: '#7a2633', vacant: '#8e959e', none: '#c3c8d0', lobby: '#d9c9a8',
+  loss: '#c8323c', lossLow: '#e08a80', even: '#8e959e', gainLow: '#8ccf98', gain: '#3a9a50' };
+const STYLE = Object.assign({}, BASE_STYLE, {
+  room(rc, r, st, hs) {
+    if (STYLE_TYPES.has(r.type)) { BASE_STYLE.room(rc, r, st, hs); return; }
+    const def = CFG.rooms[r.type], c = rc.ctx, y = rc.floorTop(r.f);
+    const fill = rc.heat ? PH_HEAT[hs || st] || '#c3c8d0' : st === 'unreachable' ? '#5a3a40' : rc.night && !r.inside ? '#2a3048' : '#8a7a62';
+    rc.rect(r.x + 0.06, y + 0.12, r.w - 0.12, rc.FH - 0.12, fill);
+    rc.rect(r.x + 0.06, y + rc.FH - 0.3, r.w - 0.12, 0.18, 'rgba(0,0,0,.25)');
+    if (rc.s * rc.FH >= 14) {
+      c.font = Math.round(rc.s * rc.FH * 0.5) + 'px system-ui'; c.textAlign = 'center'; c.textBaseline = 'middle';
+      c.fillText(def.icon, rc.sx(r.x + r.w / 2), rc.sy(y + 0.06 + rc.FH / 2));
+      c.textAlign = 'left';
+    }
+  },
+});
 const rview = { s: 16, x: 0, y: 0, w: 0, h: 0, dpr: 1 };
 const drawOpt = {
   heat: null,
-  heatStatus: (r, st) => (heat === 'energy' ? game.energyStatus(r) : st),
+  // heat status per room – and per shell piece ({f, x, w, isShell}; st = null): the money map colours
+  // shell too (it costs upkeep), every other map leaves it plain concrete as before (null)
+  heatStatus: (r, st) => {
+    if (heat === 'money') return game.moneyStatus(r);
+    if (r.isShell) return null;
+    if (heat === 'energy') return game.energyStatus(r);
+    if (heat === 'needs') return st === 'unreachable' || st === 'lobby' ? st : game.needStatus(r);
+    if (heat === 'noise') return st === 'lobby' ? st : game.noiseStatus(r);
+    return st;
+  },
   tired: tiredLevel,
 };
 
 function draw() {
   rview.s = view.s; rview.x = view.x; rview.y = view.y; rview.w = cssW; rview.h = cssH; rview.dpr = dpr;
   drawOpt.heat = heat; drawOpt.time = performance.now() / 1000;
-  TowerRender.draw(ctx, STYLE, game, rview, drawOpt);
+  const rc = TowerRender.draw(ctx, STYLE, game, rview, drawOpt);
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  drawVisitQueues(rc);
+  drawNeedsOverlay(rc);
 
   // height limit text (the style draws the line)
   const lim = floorTop(game.maxFloor);
@@ -681,6 +976,16 @@ function draw() {
     ctx.font = '11px system-ui'; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
     ctx.fillStyle = 'rgba(0,0,0,.45)'; ctx.fillText('Mehr Höhe mit dem nächsten ★', sx(0.2) + 1, sy(lim) - 4 + 1);
     ctx.fillStyle = 'rgba(255,255,255,.9)'; ctx.fillText('Mehr Höhe mit dem nächsten ★', sx(0.2), sy(lim) - 4);
+  }
+
+  // simple marks for cars out of service until the style draws car.cond itself: ⚠ broken, 🔧 repair
+  if (view.s * FH >= 11) {
+    ctx.font = Math.round(view.s * 0.9) + 'px system-ui'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    for (const s of game.shafts) for (const car of s.cars) {
+      if (car.cond !== 'broken' && car.cond !== 'repair') continue;
+      ctx.fillText(car.cond === 'broken' ? '⚠' : '🔧', sx(s.c + 0.5), sy(floorTop(car.y) + 0.45));
+    }
+    ctx.textAlign = 'left';
   }
 
   // selection
@@ -692,7 +997,35 @@ function draw() {
   }
 
   // ghost
-  if (ghost) drawGhost(ghost);
+  if (ghost) drawGhost(ghost, rc);
+}
+
+// people waiting at a full provider stand on its tiles (render.js only draws elevator queues)
+function drawVisitQueues(rc) {
+  if (!rc || !STYLE.person) return;
+  for (const list of Object.values(game.providers || {})) for (const r of list) {
+    if (!r.queue.length || r.f < rc.fBot || r.f > rc.fTop) continue;
+    const n = Math.min(r.queue.length, Math.max(1, Math.floor((r.w - 0.4) / 0.42)));
+    for (let k = n - 1; k >= 0; k--) {
+      const p = r.queue[k], wait = (game.t - p.waitStart) / 60;
+      STYLE.person(rc, r.x + 0.3 + k * 0.42, r.f, { id: p.id, mode: 'wait', wait, level: wait >= 10 ? 2 : wait >= 5 ? 1 : 0, front: k === 0, dir: 1 });
+    }
+  }
+}
+
+// selected office/flat: every provider coloured by what it gives this room (tint), penalty sources red
+// (mark); selected disturber: the rooms it reaches. Hooks of the style (TOWER-a0006 G), else a frame.
+function drawNeedsOverlay(rc) {
+  const si = selInfo;
+  if (!rc || !si || si.room !== selected) return;
+  const frame = (r, col) => outlineRect(r.x, floorTop(r.f), r.w, FH, col);
+  const shareCol = s => s == null ? '#8e939a' : s >= 0.8 ? '#3fa65a' : s >= 0.5 ? '#e8c040' : '#d8483a';
+  if (si.shares) for (const e of si.shares) {
+    if (!e.room) continue;                       // the street (entrance) has no room to colour
+    if (STYLE.tint) STYLE.tint(rc, e.room, e.share); else frame(e.room, shareCol(e.share));
+  }
+  for (const e of si.sources || si.area || []) { if (STYLE.mark) STYLE.mark(rc, e.room, e.pen); else frame(e.room, '#ff4d5e'); }
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 
 // people on the move: 0 fresh, 1 tired (< 50 % of their own maximum), 2 exhausted (< 25 %)
@@ -718,7 +1051,14 @@ function drawLinkOutline(f, x, w, col) {
   ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.stroke();
 }
 
-function drawGhost(g) {
+function drawGhost(g, rc) {
+  // disturber (workshop, Kita, supermarket, fitness, restaurant): its penalty radius and the rooms it hits
+  if (g.kind === 'room' && CFG.noise[g.type]) {
+    if (g.area === undefined) g.area = game.penaltyArea(g.type, g.f, g.x);
+    if (rc && STYLE.radius) STYLE.radius(rc, { type: g.type, f: g.f, x: g.x, w: g.w, r: CFG.noise[g.type].r }, g.area);
+    else for (const h of g.area) outlineRect(h.room.x, floorTop(h.room.f), h.room.w, FH, '#ff4d5e');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
   ctx.lineWidth = 2;
   if (g.kind === 'link') {
     drawLinkOutline(g.f, g.x, g.w, g.chk.ok ? '#7ee0a8' : '#ff4d5e');
@@ -761,6 +1101,7 @@ function frame(now) {
   updateHeader();
   panelTick += dt;
   if (panelTick > 0.5 && panelMode === 'obj' && selected) { panelTick = 0; renderObjPanel(); }
+  else if (panelTick > 0.5 && panelMode === 'money') { panelTick = 0; openMoney(); }
   requestAnimationFrame(frame);
 }
 resize();

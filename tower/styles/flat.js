@@ -128,7 +128,7 @@
     room(rc, r, st) {
       const ctx = rc.ctx, s = rc.s, y0 = rc.floorTop(r.f) + 0.07, h = rc.FH - 0.14;
       const X = rc.sx(r.x + 0.05), Y = rc.sy(y0), Wd = (r.w - 0.1) * s, Hd = h * s, rad = 0.16 * s;
-      const T = TYPE[r.type], lit = r.inside > 0;
+      const T = TYPE[r.type] || TYPE.office, lit = r.inside > 0;   // unknown types (study style) fall back to office colours
       const vacant = st === 'vacant', unreach = st === 'unreachable', occ = !vacant && !unreach;
       let fill, glyphCol, dash = null;
       if (rc.heat) { fill = HEAT[st] || T.fill; glyphCol = 'rgba(255,255,255,.9)'; }

@@ -285,7 +285,7 @@
       const T = rc.floorTop(r.f), fl = T + rc.FH - 0.16, x0 = r.x, w = r.w;
       const vacant = st === 'vacant', unreach = st === 'unreachable', occ = !vacant && !unreach;
       const lit = r.inside > 0;
-      const pal = WALL[occ ? r.type : st];
+      const pal = WALL[occ ? r.type : st] || WALL.vacant;
       wash(rc, x0, T, w, rc.FH - 0.16, pal[0], pal[1]);
       if (rc.detail > 0 && !(rc.heat && rc.detail === 1)) {
         if (occ) {

@@ -34,7 +34,18 @@
   const top = f => -(f + 1) * FA;      // art row of a floor's ceiling
   const bot = f => -f * FA;            // art row below the slab (= ceiling of the floor below)
 
-  const HEAT = { good: '#4a8cff', ok: '#ffc94d', bad: '#ff4d5e', vacant: '#8e959e', unreachable: '#7a2633', lobby: '#d9c9a8', none: '#c3c8d0' };
+  // heat colours; the money map (game.moneyStatus) runs red → grey → green: brick red with dashes
+  // (loss, unlike the dotted pink-red `bad`), salmon, warm grey (unlike the cool vacant/none), light
+  // green, green
+  const HEAT = { good: '#4a8cff', ok: '#ffc94d', bad: '#ff4d5e', vacant: '#8e959e', unreachable: '#7a2633', lobby: '#d9c9a8', none: '#c3c8d0',
+    loss: '#d8553a', lossLow: '#eeab90', even: '#bab3a3', gainLow: '#a6d48e', gain: '#3fa45e' };
+  // staff on the move: mechanics in a blue overall with a yellow cap and a red toolbox; the
+  // emergency service in orange-red with a reflective stripe, a white helmet and a white case
+  const MECH = { cap: '#d8b040', suit: '#4a6ea4', leg: '#3a5888', box: '#b8402e', stripe: null, far: ['#e0b838', '#5a86d0'] };
+  const EMG = { cap: '#f2f2ee', suit: '#d8562e', leg: '#b04422', box: '#f2f2ee', stripe: '#f0d84a', far: ['#f6e04a', '#e8602e'] };
+  const WARN_Y = '#ffd23f', WARN_R = '#e8383a', INK = '#2c2c36';
+  // room types every variant draws with its own look (contract TOWER-a0006: `style.roomTypes`)
+  const ROOM_TYPES = ['office', 'condo', 'restaurant', 'skylobby', 'workshop', 'cafe', 'daycare', 'supermarket', 'gym'];
   const SKIN = ['#f1c7a0', '#d9a074', '#a56a43', '#7a4a2a'];
   const STRESS = [null, ['#ff8fbf', '#e86aa0'], ['#ff2a2a', '#b81420']];   // pink, red
   // seasons (0 spring, 1 summer, 2 autumn, 3 winter): sky tint [colour, amount], grass [top, below]
@@ -54,6 +65,11 @@
         skylobby:   { wall: '#e8ddc4', low: '#d2c3a2', trim: '#9c8a66' },
         vacant:     { wall: '#a9a9b0', low: '#96969e', trim: '#707078' },
         unreachable:{ wall: '#8c5c62', low: '#784a50', trim: '#5a3036' },
+        workshop:   { wall: '#c4bea0', low: '#aca684', trim: '#7a7456' },
+        cafe:       { wall: '#bfe0cc', low: '#9ccab0', trim: '#5f907a' },
+        daycare:    { wall: '#f6e090', low: '#ecce6c', trim: '#b89a40' },
+        supermarket:{ wall: '#e4eada', low: '#ccd4c0', trim: '#6a9a58' },
+        gym:        { wall: '#cbbfe0', low: '#b2a4cc', trim: '#7a6a9c' },
       },
       lobby: '#eadfc8', SLAB_T: '#80808c', SLAB_B: '#4a4a56', EDGE: '#2c2c36', mute: 0,
       HAIR: ['#2a1a10', '#5a3a1a', '#c89a50', '#161616', '#8a4a2a', '#d8d0c0'],
@@ -69,6 +85,11 @@
         skylobby:   { wall: '#ebe2cf', low: '#ddd2ba', trim: '#b2a488' },
         vacant:     { wall: '#b6b6bb', low: '#aaaab0', trim: '#8e8e96' },
         unreachable:{ wall: '#a17478', low: '#93676c', trim: '#7a5458' },
+        workshop:   { wall: '#ccc7ae', low: '#bcb69a', trim: '#938c72' },
+        cafe:       { wall: '#cde0d2', low: '#bcd1c1', trim: '#8ea897' },
+        daycare:    { wall: '#f0e2a2', low: '#e4d48a', trim: '#b8a466' },
+        supermarket:{ wall: '#e3e7dc', low: '#d2d8ca', trim: '#97ab8b' },
+        gym:        { wall: '#d3cbe0', low: '#c3b9d2', trim: '#998fab' },
       },
       lobby: '#ece4d2', SLAB_T: '#9a9aa4', SLAB_B: '#6a6a76', EDGE: '#6a6a78', mute: 0.28,
       HAIR: ['#3a2a1e', '#5a4030', '#a88458', '#2a2a2a'],
@@ -84,6 +105,11 @@
         skylobby:   { wall: '#efe2c6', low: '#e0cfac', trim: '#a8926c' },
         vacant:     { wall: '#c4bcae', low: '#b6ad9e', trim: '#8e8474' },
         unreachable:{ wall: '#b08276', low: '#a07266', trim: '#7e5448' },
+        workshop:   { wall: '#d6ccae', low: '#c6ba98', trim: '#8c7e62' },
+        cafe:       { wall: '#d4dcbe', low: '#c4ccaa', trim: '#888e6e' },
+        daycare:    { wall: '#f4da98', low: '#e8c87e', trim: '#ae8c52' },
+        supermarket:{ wall: '#ebe5d2', low: '#dcd3bc', trim: '#9a9276' },
+        gym:        { wall: '#dbc8bc', low: '#cbb6a8', trim: '#988070' },
       },
       lobby: '#f0e2c4', SLAB_T: '#9a7c62', SLAB_B: '#5e4636', EDGE: '#5a4434', mute: 0.22,
       HAIR: ['#3a2416', '#6a4428', '#b88a4a', '#2a2018'],
@@ -215,14 +241,22 @@
     }
 
     // ---------- furniture ----------
-    function office(rc, gx, T, B, n, lit, tone) {
+    // tier: 1 upscale (desk plants, rug, warmer wall), 2 luxury (plus curtains, art instead of every
+    // other window, a floor lamp instead of the file cabinet)
+    function office(rc, gx, T, B, n, lit, tone, tier) {
       const units = Math.round(n / G), tx = texture(rc);
+      if (tier) P(rc, gx + 1, B - 3, n - 2, 1, tone(tier > 1 ? '#8a3a40' : '#a0704a'));   // rug
       for (let u = 0; u < units; u++) {             // window strip on the back wall
-        P(rc, gx + u * G + 2, T + 2, 6, 3, tone(lit ? '#d8f0ff' : '#7a90a8'));
-        if (tx) { P(rc, gx + u * G + 2, T + 2, 6, 1, tone('#eef8ff')); P(rc, gx + u * G + 4, T + 2, 1, 3, tone('#8aa0b8')); }
+        const wx = gx + u * G;
+        if (tier > 1 && u % 2) { art(rc, wx + 2, T + 2, 6, 4, tone, u); continue; }
+        P(rc, wx + 2, T + 2, 6, 3, tone(lit ? '#d8f0ff' : '#7a90a8'));
+        if (tx) { P(rc, wx + 2, T + 2, 6, 1, tone('#eef8ff')); P(rc, wx + 4, T + 2, 1, 3, tone('#8aa0b8')); }
+        if (tier > 1) curtains(rc, wx + 1, T + 1, 8, tone);
       }
+      if (tier > 1) floorLamp(rc, gx + n - 4, B, lit, tone);
       for (let u = 0; u < units; u++) {
         const x = gx + u * G + 1;
+        if (tier) { P(rc, x, B - 8, 1, 1, tone('#a0522d')); P(rc, x - 1, B - 10, 2, 2, tone('#4f9a48')); }   // desk plant
         P(rc, x, B - 7, 6, 1, tone('#8a5a32'));        // desk
         P(rc, x, B - 6, 1, 4, tone('#6a4224')); P(rc, x + 5, B - 6, 1, 4, tone('#6a4224'));
         P(rc, x + 1, B - 11, 4, 3, tone('#30343c'));   // monitor
@@ -235,19 +269,30 @@
           if (lit) { P(rc, x + 4, B - 9.5, 0.5, 0.5, 'rgba(255,255,255,.6)'); P(rc, x + 4.5, B - 10.5, 0.5, 0.5, 'rgba(255,255,255,.4)'); }
         }
       }
-      if (clutter(rc)) { P(rc, gx + n - 6, T + 6, 4, 6, tone('#6a4224')); P(rc, gx + n - 6, T + 8, 4, 1, tone('#4a2c18')); }  // file cabinet
+      if (clutter(rc) && tier < 2) { P(rc, gx + n - 6, T + 6, 4, 6, tone('#6a4224')); P(rc, gx + n - 6, T + 8, 4, 1, tone('#4a2c18')); }  // file cabinet
     }
-    function condo(rc, r, gx, T, B, lit, tone) {
+    // tier: 1 upscale (rug, bookshelf, plant, warmer wall), 2 luxury (rug, canopy curtains over the bed,
+    // a framed painting, a floor lamp)
+    function condo(rc, r, gx, T, B, lit, tone, tier) {
       if (texture(rc)) for (let i = 3; i < 30; i += 4) P(rc, gx + i, T + 1, 1, 9, tone('#e0c08a'));   // wallpaper
+      if (tier) P(rc, gx + 16, B - 3, 13, 1, tone(tier > 1 ? '#8a3a40' : '#a0704a'));                 // rug
+      if (tier === 1) {                                 // bookshelf over the bed
+        P(rc, gx + 2, T + 3, 7, 1, tone('#6a4024'));
+        if (clutter(rc)) for (let i = 0; i < 6; i++) P(rc, gx + 2 + i, T + 1 + (i % 3 === 2 ? 1 : 0), 1, i % 3 === 2 ? 1 : 2, tone(['#8a3a3a', '#3a5a8a', '#c8a040', '#4a7a4a', '#7a4a7a', '#a05a2a'][i]));
+      }
+      if (tier > 1) curtains(rc, gx + 1, T + 1, 12, tone, 6);   // canopy bed
       P(rc, gx + 1, B - 10, 1, 8, tone('#6a4024'));     // bed
       P(rc, gx + 2, B - 5, 10, 3, tone('#8a5a32'));
       P(rc, gx + 2, B - 6, 10, 1, tone('#f4f0e8'));
       P(rc, gx + 6, B - 7, 6, 2, tone('#5a7ac8'));
       P(rc, gx + 2, B - 7, 3, 1, tone('#ffffff'));
-      P(rc, gx + 9, T + 3, 4, 3, tone('#6a4024')); P(rc, gx + 10, T + 4, 2, 1, tone('#7ab0d0'));  // picture
+      if (tier > 1) art(rc, gx + 13, T + 1, 4, 3, tone, r.id | 0);
+      else { P(rc, gx + 9, T + 3, 4, 3, tone('#6a4024')); P(rc, gx + 10, T + 4, 2, 1, tone('#7ab0d0')); }  // picture
       P(rc, gx + 14, B - 5, 3, 3, tone('#8a5a32'));     // night table + lamp
       P(rc, gx + 15, B - 7, 1, 2, tone('#3a3a3a'));
       P(rc, gx + 14, B - 9, 3, 2, tone(lit ? '#ffe58a' : '#c8b890'));
+      if (tier === 1) { P(rc, gx + 17, B - 5, 2, 2, tone('#a0522d')); P(rc, gx + 17, B - 9, 2, 4, tone('#4f9a48')); P(rc, gx + 18, B - 11, 1, 2, tone('#6ab25a')); }  // plant
+      if (tier > 1) floorLamp(rc, gx + 17, B, lit, tone);
       P(rc, gx + 21, T + 2, 7, 4, tone('#26262e'));     // tv
       P(rc, gx + 22, T + 3, 5, 2, tone(lit ? '#8fd0ff' : '#3a4048'));
       if (fine && lit && !rc.heat) P(rc, gx + 21, T + 6, 7, 3, 'rgba(143,208,255,.16)');   // tv glow
@@ -260,6 +305,206 @@
         P(rc, gx + 28, B - 11, 0.5, 0.5, cat); P(rc, gx + 25.5, B - 9, 0.5, 1, cat);
       }
     }
+    // ---------- tier props (office, condo) ----------
+    function curtains(rc, x, y, w, tone, drop) {          // valance across, a drape at each side
+      const c = tone('#8a3040'), d = drop || 4;
+      P(rc, x, y, w, 1, c); P(rc, x, y + 1, 1, d, c); P(rc, x + w - 1, y + 1, 1, d, c);
+      if (clutter(rc)) { const g = tone('#c8a040'), ty = y + 1 + (d >> 1); P(rc, x, ty, 1, 1, g); P(rc, x + w - 1, ty, 1, 1, g); }   // tie-backs
+    }
+    const ART = [['#4a7ab0', '#e0b050'], ['#c0604a', '#5a8a5a'], ['#7a5a9a', '#e8d8a0']];
+    function art(rc, x, y, w, h, tone, seed) {             // gilded frame, a painting of two colour fields
+      const a = ART[Math.abs(seed | 0) % ART.length];
+      P(rc, x, y, w, h, tone('#b8923a'));
+      P(rc, x + 1, y + 1, w - 2, h - 2, tone(a[0]));
+      if (h > 3) P(rc, x + 1, y + h - 2, w - 2, 1, tone(a[1])); else P(rc, x + w - 2, y + 1, 1, h - 2, tone(a[1]));
+    }
+    function floorLamp(rc, x, B, lit, tone) {              // 3 art px wide: shade, pole, foot
+      const on = lit && !rc.heat;
+      if (on && rc.night) P(rc, x - 1, B - 13, 5, 4, 'rgba(255,214,140,.3)');
+      P(rc, x, B - 13, 3, 2, tone(on ? '#ffe08a' : '#d8c8a0'));
+      P(rc, x + 1, B - 11, 1, 8, tone('#5a4a3a'));
+      P(rc, x, B - 3, 3, 1, tone('#5a4a3a'));
+    }
+    const tierCache = {};
+    function tierPal(pal, tier) {                          // upscale and luxury rooms get a warmer wall
+      const k = pal.wall + tier;
+      return tierCache[k] || (tierCache[k] = {
+        wall: U.mix(pal.wall, '#f4c88a', 0.1 * tier), low: U.mix(pal.low, '#d89a6a', 0.12 * tier),
+        trim: tier > 1 ? U.mix(pal.trim, '#a8823a', 0.45) : pal.trim });
+    }
+
+    // ---------- heat patterns (also readable without colour): bad = dots, loss = dashes ----------
+    function heatPattern(rc, hs, gx, T, n) {
+      if (hs === 'bad') for (let i = 1; i < n; i += 2) for (let j = 1; j < 13; j += 2) P(rc, gx + i + (j % 4 === 1 ? 0 : 1), T + j, 1, 1, '#d8303e');
+      else if (hs === 'loss') for (let j = 3; j < 13; j += 4) for (let i = (j % 8 === 3 ? 2 : 5); i < n - 3; i += 6) P(rc, gx + i, T + j, 3, 1, '#a8321c');
+    }
+    function heatMark(rc, hs, x, f, w) {                   // whole-tower view
+      if (hs === 'bad') for (let i = 0; i < w * 2; i += 2) rc.rect(x + 0.1 + i * 0.5, rc.floorTop(f) + 0.5, 0.45, 0.4, '#b8202e');
+      else if (hs === 'loss') rc.rect(x + 0.2, rc.floorTop(f) + 0.75, w - 0.4, 0.2, '#a8321c');
+    }
+
+    // ---------- signs ----------
+    // room.warn 0/1 yellow/2 red (TOWER-a0007); worlds without it: warnDays > 0 = red
+    const warnOf = r => r.warn ?? (r.warnDays > 0 ? 2 : 0);
+    // warning triangle 7 art px wide and 6 tall, apex at (cx, y), on a dark rim so it reads on any wall
+    const TRI = [[0, 1], [-1, 3], [-1, 3], [-2, 5], [-2, 5], [-3, 7]];
+    function warnSign(rc, cx, y, col) {
+      for (let i = 0; i < 6; i++) P(rc, cx + TRI[i][0] - 1, y + i - 1, TRI[i][1] + 2, 2, INK);
+      P(rc, cx - 4, y + 6, 9, 1, INK);
+      for (let i = 0; i < 6; i++) P(rc, cx + TRI[i][0], y + i, TRI[i][1], 1, col);
+      P(rc, cx, y + 2, 1, 2, INK); P(rc, cx, y + 5, 1, 1, INK);
+    }
+
+    // ---------- staff figures ----------
+    function workerLook(id, emg) { const c = emg ? EMG : MECH; return { hair: c.cap, skin: SKIN[(U.hash(id, 2, 7) * SKIN.length) | 0], shirt: c.suit, pants: c.leg }; }
+    // mechanic (or emergency service): overall, cap or helmet, toolbox in the hand on the side it faces
+    function worker(rc, gx, feet, id, emg, face, box) {
+      const c = emg ? EMG : MECH, h = fine ? 0.5 : 1;
+      figure(rc, gx, feet, workerLook(id, emg), false, 0, false, 0, face || 1);
+      if (c.stripe) P(rc, gx + (fine ? 0.5 : 0), feet - 4, fine ? 2 : 3, h, c.stripe);
+      if (box === false) return;
+      const bx = (face || 1) < 0 ? gx - 2 : gx + 3;
+      P(rc, bx, feet - 3, 2, 2, c.box); P(rc, bx, feet - 3, 2, h, U.mix(c.box, '#000000', 0.3));
+    }
+    const KID = ['#d8705a', '#5a90c8', '#e0b040', '#6aa860', '#b070a8'];
+    function kidLook(id) { const lk = look(id); lk.shirt = KID[(U.hash(id, 3, 9) * KID.length) | 0]; return lk; }
+    function kid(rc, gx, feet, lk, face) {                 // 2×6 sprite (half art px in the fine variants)
+      if (fine) return figureFine(rc, gx, feet, lk, false, 0, true);
+      P(rc, gx, feet - 5, 2, 1, lk.hair); P(rc, gx, feet - 4, 2, 1, lk.skin);
+      P(rc, face < 0 ? gx + 1 : gx, feet - 4, 1, 1, U.mix(lk.skin, lk.hair, 0.5));
+      P(rc, gx, feet - 3, 2, 2, lk.shirt); P(rc, gx, feet - 1, 2, 2, lk.pants);
+    }
+    const BARISTA = { hair: '#2a2018', skin: SKIN[1], shirt: '#3e4a42', pants: '#2a2a32' };
+
+    // ---------- providers (depth run): workshop, café, daycare, supermarket, gym ----------
+    // ppl: draw the people inside (not in heatmaps); each room places them between its furniture
+    function workshop(rc, r, gx, T, B, n, lit, tone, ppl) {
+      const det = clutter(rc);
+      P(rc, gx + 2, T + 2, 16, 6, tone('#b89a6a'));                                 // tool wall
+      if (det) {
+        for (let i = 3; i < 17; i += 3) for (let j = 3; j < 8; j += 2) P(rc, gx + i, T + j, 1, 1, tone('#a0845a'));
+        P(rc, gx + 4, T + 3, 1, 4, tone('#8a5a32')); P(rc, gx + 3, T + 3, 3, 1, tone('#5a5f6a'));                 // hammer
+        P(rc, gx + 8, T + 4, 1, 3, tone('#8a909a')); P(rc, gx + 7, T + 3, 1, 1, tone('#8a909a')); P(rc, gx + 9, T + 3, 1, 1, tone('#8a909a'));  // wrench
+        P(rc, gx + 11, T + 4, 4, 2, tone('#b0b6be')); P(rc, gx + 15, T + 3, 2, 3, tone('#b0402e'));               // saw
+      } else { P(rc, gx + 5, T + 3, 1, 4, tone('#5a5f6a')); P(rc, gx + 9, T + 3, 1, 4, tone('#5a5f6a')); P(rc, gx + 12, T + 4, 4, 2, tone('#8a909a')); }
+      P(rc, gx + 2, B - 7, 18, 1, tone('#8a5a32'));                                 // workbench with a shelf
+      P(rc, gx + 3, B - 6, 1, 4, tone('#6a4224')); P(rc, gx + 18, B - 6, 1, 4, tone('#6a4224'));
+      P(rc, gx + 3, B - 4, 16, 1, tone('#6a4224'));
+      if (det) {
+        P(rc, gx + 2, B - 9, 3, 2, tone('#4a5060'));                                 // vise
+        P(rc, gx + 12, B - 9, 4, 2, tone('#b8402e')); P(rc, gx + 13, B - 10, 2, 1, tone('#3a3a3a'));   // toolbox
+        P(rc, gx + 6, B - 5, 3, 1, tone('#c8a040')); P(rc, gx + 11, B - 5, 2, 1, tone('#8a909a'));     // parts
+      }
+      P(rc, gx + 24, B - 10, 6, 7, tone('#a8483a'));                                // tool cabinet
+      P(rc, gx + 24, B - 8, 6, 1, tone('#7a2e24')); P(rc, gx + 24, B - 6, 6, 1, tone('#7a2e24'));
+      if (n >= 38) { P(rc, gx + 33, B - 8, 4, 5, tone('#6a7078')); P(rc, gx + 34, B - 7, 2, 3, tone('#3a3e46')); }   // cable drum
+      if (!ppl) return;
+      const at = [8, 21, 31, 14];
+      for (let i = 0; i < Math.min(r.inside, at.length); i++) {
+        const p = r.staff && r.staff[i], id = p && p.id != null ? p.id : (r.id | 0) * 31 + i;
+        worker(rc, gx + at[i], B - 3, id, !!(p && p.emergency), i % 2 ? 1 : -1, false);
+      }
+    }
+    function cafe(rc, r, gx, T, B, n, lit, tone, ppl) {
+      const det = clutter(rc), cx = n - 10;                                          // counter on the right
+      P(rc, gx + cx + 1, T + 2, 8, 4, tone('#3e4a42'));                               // menu board
+      if (det) { P(rc, gx + cx + 2, T + 3, 5, 1, tone('#d8dcd0')); P(rc, gx + cx + 2, T + 4, 3, 1, tone('#d8dcd0')); P(rc, gx + cx + 6, T + 4, 2, 1, tone('#e0b050')); }
+      const tables = [4, 14];
+      for (const t of tables) { P(rc, gx + t + 1, T + 1, 1, 2, tone('#3a3a3a')); P(rc, gx + t, T + 3, 3, 1, tone(lit ? '#ffe08a' : '#b89a5a')); }   // pendant lamps
+      if (ppl) figure(rc, gx + cx + 6, B - 3, BARISTA, false, 0, false, 0, -1);
+      P(rc, gx + cx, B - 8, 10, 1, tone('#a0703a'));                                 // counter with a cake display
+      P(rc, gx + cx + 1, B - 7, 8, 4, tone('#7a4a2a'));
+      P(rc, gx + cx + 2, B - 6, 6, 2, tone('#e8dcc0'));
+      if (det) { P(rc, gx + cx + 3, B - 5, 1, 1, tone('#c87a5a')); P(rc, gx + cx + 5, B - 5, 1, 1, tone('#e8c070')); }
+      P(rc, gx + cx + 1, B - 12, 4, 4, tone('#9aa0a8'));                             // espresso machine
+      P(rc, gx + cx + 2, B - 10, 2, 1, tone('#3a3e46'));
+      if (det) P(rc, gx + cx + 4, B - 12, 1, 1, lit && !rc.heat ? '#e04a3a' : tone('#7a5a5a'));
+      tables.forEach((t, ti) => {                                                    // bistro tables, two chairs each
+        P(rc, gx + t - 2, B - 9, 1, 6, tone('#4a3a2e')); P(rc, gx + t - 2, B - 5, 2, 1, tone('#4a3a2e'));
+        P(rc, gx + t + 5, B - 9, 1, 6, tone('#4a3a2e')); P(rc, gx + t + 4, B - 5, 2, 1, tone('#4a3a2e'));
+        P(rc, gx + t, B - 7, 4, 1, tone('#f2ede2')); P(rc, gx + t + 1, B - 6, 1, 3, tone('#5a5a62')); P(rc, gx + t, B - 3, 3, 1, tone('#5a5a62'));
+        if (det || (ppl && r.inside > 1 + ti * 2)) P(rc, gx + t + 2, B - 8, 1, 1, tone('#f4f0e8'));   // cup
+      });
+      if (!ppl) return;
+      const seats = [[1, 1], [8, -1], [11, 1], [18, -1]];
+      for (let i = 0; i < Math.min(r.inside, seats.length); i++) figure(rc, gx + seats[i][0], B - 6, look((r.id | 0) * 31 + i), true, 0, false, 0, seats[i][1]);
+    }
+    function daycare(rc, r, gx, T, B, n, lit, tone, ppl) {
+      const det = clutter(rc);
+      (det ? [3, 8, 13, 22, 27] : [4, 12, 24]).forEach((x, i) => {                  // children's drawings
+        P(rc, gx + x, T + 2 + (i % 2), 4, 3, tone('#f8f6ee'));
+        P(rc, gx + x + 1, T + 3 + (i % 2), 2, 1, tone(KID[i % KID.length]));
+        if (det) P(rc, gx + x + (i % 2 ? 2 : 1), T + 2 + (i % 2), 1, 1, tone(KID[(i + 2) % KID.length]));
+      });
+      P(rc, gx + 15, B - 3, 12, 1, tone('#d88a7a'));                                 // rug
+      P(rc, gx + 4, B - 6, 9, 1, tone('#e0a040')); P(rc, gx + 5, B - 5, 1, 2, tone('#b07a30')); P(rc, gx + 11, B - 5, 1, 2, tone('#b07a30'));   // low table
+      P(rc, gx + 2, B - 7, 1, 4, tone('#5a90c8')); P(rc, gx + 2, B - 5, 2, 1, tone('#5a90c8'));       // tiny chairs
+      P(rc, gx + 14, B - 7, 1, 4, tone('#6aa860')); P(rc, gx + 13, B - 5, 2, 1, tone('#6aa860'));
+      const sx = n - 10;                                                              // toy shelf with bins
+      P(rc, gx + sx, B - 10, 8, 7, tone('#c8a070'));
+      P(rc, gx + sx + 1, B - 9, 2, 2, tone('#d8705a')); P(rc, gx + sx + 4, B - 9, 3, 2, tone('#5a90c8'));
+      P(rc, gx + sx + 1, B - 6, 3, 2, tone('#e0b040')); P(rc, gx + sx + 5, B - 6, 2, 2, tone('#6aa860'));
+      if (det) {                                                                      // blocks and a ball
+        P(rc, gx + 17, B - 4, 2, 1, tone('#d8705a')); P(rc, gx + 18, B - 5, 1, 1, tone('#5a90c8')); P(rc, gx + 19, B - 4, 1, 1, tone('#e0b040'));
+        P(rc, gx + 24, B - 5, 2, 2, tone('#e88aa0'));
+      }
+      if (!ppl) return;
+      figure(rc, gx + 21, B - 3, look((r.id | 0) * 31), false, 0, false, 0, -1);    // the carer, then the children
+      const at = [[5, 1], [9, -1], [16, 1], [26, -1], [28, 1], [7, 1]];
+      for (let i = 1; i < Math.min(r.inside, at.length + 1); i++) kid(rc, gx + at[i - 1][0], B - 3, kidLook((r.id | 0) * 31 + i), at[i - 1][1]);
+    }
+    const GOODS = [['#d8705a', '#e0b040', '#6aa860'], ['#5a90c8', '#e8e0c8', '#c86a8a'], ['#e0a040', '#8a6a4a', '#6aa860']];
+    function supermarket(rc, r, gx, T, B, n, lit, tone, ppl) {
+      const det = clutter(rc), units = Math.max(1, Math.floor((n - 22) / 11));
+      for (let u = 0; u < units; u++) {                                              // shelves: three boards of goods
+        const x = gx + 2 + u * 11, g = GOODS[u % GOODS.length];
+        P(rc, x, T + 3, 1, 9, tone('#8a909a')); P(rc, x + 9, T + 3, 1, 9, tone('#8a909a'));
+        for (let k = 0; k < 3; k++) {
+          const y = T + 3 + k * 3;
+          if (det) for (let i = 0; i < 8; i++) P(rc, x + 1 + i, y + (i % 3 === 1 ? 1 : 0), 1, i % 3 === 1 ? 1 : 2, tone(g[(i + k) % 3]));
+          else P(rc, x + 1, y, 8, 2, tone(g[k]));
+          P(rc, x + 1, y + 2, 8, 1, tone('#a8aeb6'));
+        }
+      }
+      const fx = gx + 2 + units * 11;                                                // cooler
+      P(rc, fx, T + 2, 7, 10, tone('#8a96a6')); P(rc, fx + 1, T + 3, 5, 8, tone(lit ? '#d4ecf4' : '#a8bcc8'));
+      if (det) for (let j = 0; j < 3; j++) for (let i = 0; i < 2; i++) P(rc, fx + 2 + i * 2, T + 4 + j * 3, 1, 2, tone(['#e8e0c8', '#6aa860', '#d8705a'][(i + j) % 3]));
+      const kx = gx + n - 14;                                                         // checkout
+      if (ppl) figure(rc, kx + 8, B - 6, look((r.id | 0) * 31), true, 0, false, 0, -1);
+      P(rc, kx, B - 8, 12, 1, tone('#8a9098')); P(rc, kx + 1, B - 7, 10, 4, tone('#6a7078'));
+      P(rc, kx, B - 8, 4, 1, tone('#2c2c36'));                                        // conveyor
+      P(rc, kx + 4, B - 11, 3, 3, tone('#3a3e46')); P(rc, kx + 4, B - 11, 3, 1, tone(lit ? '#7fd8ff' : '#4a5a6a'));   // till
+      if (!ppl) return;
+      const at = [7, 18, 29, fx - gx + 2, kx - gx - 3, 13, 24];
+      for (let i = 1; i < Math.min(r.inside, at.length + 1); i++) figure(rc, gx + at[i - 1], B - 3, look((r.id | 0) * 31 + i), false, 0, false, 0, i % 2 ? 1 : -1);
+    }
+    function gym(rc, r, gx, T, B, n, lit, tone, ppl) {
+      const det = clutter(rc), people = ppl ? Math.min(r.inside, 5) : 0;
+      const lk = i => look((r.id | 0) * 31 + i);
+      P(rc, gx + 2, T + 2, 24, 6, tone('#dfe8ee'));                                   // mirror wall
+      if (det) { P(rc, gx + 5, T + 3, 1, 1, tone('#ffffff')); P(rc, gx + 6, T + 4, 1, 1, tone('#ffffff')); P(rc, gx + 17, T + 3, 1, 1, tone('#ffffff')); P(rc, gx + 18, T + 4, 1, 1, tone('#ffffff')); }
+      [3, 15].forEach((t, i) => {                                                     // treadmills, runners on the belt
+        P(rc, gx + t, B - 4, 9, 1, tone('#2c2c36')); P(rc, gx + t, B - 3, 9, 1, tone('#5a5f6a'));
+        if (people > i) figure(rc, gx + t + 3, B - 5, lk(i), false, 0, false, 0, 1);
+        P(rc, gx + t + 8, B - 10, 1, 6, tone('#5a5f6a')); P(rc, gx + t + 6, B - 11, 3, 2, tone('#3a3e46'));
+        P(rc, gx + t + 6, B - 8, 2, 1, tone('#5a5f6a'));
+        if (det) P(rc, gx + t + 7, B - 11, 1, 1, lit && !rc.heat ? '#7fd8ff' : tone('#4a5a6a'));
+      });
+      const bx = 28;                                                                  // bench press
+      P(rc, gx + bx, B - 6, 9, 1, tone('#3a3a48')); P(rc, gx + bx + 1, B - 5, 1, 2, tone('#3a3a48')); P(rc, gx + bx + 7, B - 5, 1, 2, tone('#3a3a48'));
+      if (people > 2) figure(rc, gx + bx + 3, B - 6, lk(2), true, 0, false, 0, 1);
+      P(rc, gx + bx + 1, B - 11, 1, 5, tone('#5a5f6a')); P(rc, gx + bx + 7, B - 11, 1, 5, tone('#5a5f6a'));
+      P(rc, gx + bx - 1, B - 11, 11, 1, tone('#9aa0a8'));
+      P(rc, gx + bx - 1, B - 13, 1, 4, tone('#2c2c36')); P(rc, gx + bx + 9, B - 13, 1, 4, tone('#2c2c36'));
+      const dx = n - 10;                                                              // dumbbell rack
+      P(rc, gx + dx, B - 6, 8, 1, tone('#5a5f6a')); P(rc, gx + dx, B - 5, 1, 2, tone('#5a5f6a')); P(rc, gx + dx + 7, B - 5, 1, 2, tone('#5a5f6a'));
+      if (det) for (let i = 0; i < 4; i++) { P(rc, gx + dx + i * 2, B - 8, 1, 2, tone('#2c2c36')); P(rc, gx + dx + i * 2 + 1, B - 7, 1, 1, tone('#9aa0a8')); }
+      else P(rc, gx + dx, B - 8, 8, 2, tone('#3a3a48'));
+      if (people > 3) figure(rc, gx + dx + 3, B - 3, lk(3), false, 0, false, 0, -1);
+      if (people > 4) figure(rc, gx + 22, B - 3, lk(4), false, 0, false, 0, -1);
+    }
+    const PROVIDERS = { workshop, cafe, daycare, supermarket, gym };
+
     const TABLES = [6, 17, 28, 39];
     function restaurant(rc, r, gx, T, B, lit, tone) {
       if (texture(rc)) for (let i = 0; i < 60; i += 2) P(rc, gx + i, B - 4, 1, 2, tone('#c07a62'));          // tiles
@@ -316,8 +561,63 @@
       ctx.textAlign = 'left';
     }
 
+    // ---------- overlays: provider tint, penalty mark, penalty radius ----------
+    function onTop(rc, fn) {                       // after draw() the context is restored, so set the transform again
+      const c = rc.ctx; c.save(); c.setTransform(rc.dpr || 1, 0, 0, rc.dpr || 1, 0, 0);
+      try { fn(); } finally { c.restore(); }
+    }
+    function frameBox(rc, gx, gy, w, h, t, col) {
+      P(rc, gx, gy, w, t, col); P(rc, gx, gy + h - t, w, t, col); P(rc, gx, gy, t, h, col); P(rc, gx + w - t, gy, t, h, col);
+    }
+    function shareColor(s) {                       // 0 red → 0.5 yellow → 1 green
+      s = Math.max(0, Math.min(1, +s || 0));
+      return s < 0.5 ? U.mix('#d8483a', '#e8c040', s * 2) : U.mix('#e8c040', '#3fa65a', (s - 0.5) * 2);
+    }
+    // provider colouring while a room is selected: share 0..1 of what it gives that room, null = unreachable
+    function tint(rc, r, share) {
+      if (!r || typeof r.f !== 'number') return;     // e.g. providerShares' street entry (room: null)
+      onTop(rc, () => {
+        const gx = Math.round(r.x * G), n = r.w * G, T = top(r.f), col = share == null ? '#8e939a' : shareColor(share);
+        rc.ctx.globalAlpha = 0.42; P(rc, gx + 1, T + 1, n - 2, 13, col); rc.ctx.globalAlpha = 1;
+        frameBox(rc, gx, T, n, 14, rc.detail === 0 ? 3 : 1, col);
+        if (rc.detail === 2) plate(rc, r.x + 0.2, rc.floorTop(r.f) + 0.2, share == null ? 'KEIN WEG' : Math.round(share * 100) + ' %', col, INK);
+      });
+    }
+    // penalty source or affected room: red frame, penalty in % (pen 0..1)
+    function mark(rc, r, pen) {
+      if (!r || typeof r.f !== 'number') return;
+      onTop(rc, () => {
+        const gx = Math.round(r.x * G), n = r.w * G, T = top(r.f);
+        frameBox(rc, gx, T, n, 14, rc.detail === 0 ? 3 : 2, WARN_R);
+        if (rc.detail > 0 && pen != null) plate(rc, r.x + 0.2, rc.floorTop(r.f) + 0.85, '-' + Math.round(pen * 100) + ' %', WARN_R, '#ffffff');
+      });
+    }
+    // ghost of a disturber: src {type, f, x, w, r}; area where d = max(|Δfloor|, |Δtiles| / 6) < r,
+    // stronger near the source; hits [{room, pen}] get mark()
+    function radius(rc, src, hits) {
+      if (!src || typeof src.f !== 'number') return;
+      onTop(rc, () => {
+        const R = +src.r || 0, kmax = Math.ceil(R) - 1;
+        for (let k = -kmax; k <= kmax; k++) {
+          const fl = src.f + k;
+          if (fl < Math.max(0, rc.fBot) || fl > rc.fTop) continue;
+          for (let c = 0; c < rc.W; c++) {
+            const gap = Math.max(0, src.x - (c + 1), c - (src.x + src.w));
+            const d = Math.max(Math.abs(k), gap / 6);
+            if (d >= R) continue;
+            rc.ctx.globalAlpha = 0.14 + 0.36 * (1 - d / R);
+            P(rc, c * G, top(fl), G, 14, WARN_R);
+          }
+        }
+        rc.ctx.globalAlpha = 1;
+        frameBox(rc, Math.round(src.x * G), top(src.f), Math.round(src.w * G), 14, 1, WARN_Y);
+      });
+      for (const h of hits || []) if (h && h.room) mark(rc, h.room, h.pen);
+    }
+
     return {
       id: o.id, label: o.label, grid: o.grid || 0,
+      roomTypes: ROOM_TYPES,                         // types this style draws; others get the UI's placeholder
 
       sky(rc) {
         const ctx = rc.ctx, N = 14, H = rc.cssH, W = rc.cssW, T = rc.time;
@@ -396,15 +696,19 @@
       },
 
       // shell floor ("Rohbau"): bare concrete, a few columns, no furniture
-      shell(rc, sh) {
+      // hs: heat status from the caller (money map colours bare floors too, they cost upkeep)
+      shell(rc, sh, hs) {
+        const heat = rc.heat && hs ? HEAT[hs] || null : null;
         if (rc.detail === 0) {
-          rc.rect(sh.x, rc.floorTop(sh.f) + 0.12, sh.w, rc.FH - 0.12, rc.night && !rc.heat ? '#3a3e48' : '#b8b4ac');
+          rc.rect(sh.x, rc.floorTop(sh.f) + 0.12, sh.w, rc.FH - 0.12, heat || (rc.night && !rc.heat ? '#3a3e48' : '#b8b4ac'));
+          if (heat) heatMark(rc, hs, sh.x, sh.f, sh.w);
           return;
         }
         const gx = sh.x * G, n = sh.w * G, T = top(sh.f), B = bot(sh.f);
-        P(rc, gx, T, n, 14, rc.heat ? '#a4a7ad' : '#c6c2ba');
-        for (let c = 0; c < sh.w; c++) if ((sh.x + c) % 3 === 1) P(rc, gx + c * G + 4, T + 1, 2, 13, '#b4b0a7');
-        P(rc, gx, T, n, 1, '#a29e95');
+        P(rc, gx, T, n, 14, heat || (rc.heat ? '#a4a7ad' : '#c6c2ba'));
+        if (heat) heatPattern(rc, hs, gx, T, n);
+        else for (let c = 0; c < sh.w; c++) if ((sh.x + c) % 3 === 1) P(rc, gx + c * G + 4, T + 1, 2, 13, '#b4b0a7');
+        P(rc, gx, T, n, 1, heat ? U.mix(heat, '#000000', 0.32) : '#a29e95');
         P(rc, gx, B - 2, n, 1, SLAB_T); P(rc, gx, B - 1, n, 1, SLAB_B);
         if (!rc.heat && rc.night) P(rc, gx, T + 1, n, 13, th.nightDark);
         roofSnow(rc, sh.f, sh.x, sh.w);
@@ -452,13 +756,20 @@
       room(rc, r, st, hs) {
         const gx = Math.round(r.x * G), n = r.w * G, T = top(r.f), B = bot(r.f);
         const lit = r.inside > 0;
-        const heat = rc.heat ? HEAT[hs || st] || HEAT.none : null;   // hs: heat status from the caller (energy map)
-        const pal = th.PAL[st === 'vacant' || st === 'unreachable' ? st : r.type];
+        const occ = st !== 'vacant' && st !== 'unreachable';
+        const hk = rc.heat ? hs || st : null;                  // hs: heat status from the caller (energy/money map)
+        const heat = rc.heat ? HEAT[hk] || HEAT.none : null;
+        const tier = occ && (r.type === 'office' || r.type === 'condo') ? r.tier | 0 : 0;   // missing tier = standard
+        let pal = th.PAL[occ ? r.type : st] || th.PAL.vacant;
+        if (tier && !heat) pal = tierPal(pal, tier);
         if (rc.detail === 0) {
           let c = heat || pal.wall;
-          if (!heat && rc.night) c = lit ? '#f2d27a' : '#2a3048';
+          if (!heat && rc.night) c = lit ? (tier ? '#f4c870' : '#f2d27a') : '#2a3048';
           rc.rect(r.x + 0.06, rc.floorTop(r.f) + 0.12, r.w - 0.12, rc.FH - 0.12, c);
-          if (heat === HEAT.bad) for (let i = 0; i < r.w * 2; i += 2) rc.rect(r.x + 0.1 + i * 0.5, rc.floorTop(r.f) + 0.5, 0.45, 0.4, '#b8202e');
+          if (heat) heatMark(rc, hk, r.x, r.f, r.w);
+          else if (tier) rc.rect(r.x + 0.06, rc.floorTop(r.f) + 0.12, r.w - 0.12, 0.16, tier > 1 ? '#b8862e' : '#dcb878');   // gold / warm ceiling line
+          const wl = warnOf(r);   // whole tower: a small bar on a dark rim, readable at any zoom
+          if (wl) { rc.rect(r.x + r.w - 0.56, rc.floorTop(r.f) + 0.24, 0.48, 0.72, INK); rc.rect(r.x + r.w - 0.5, rc.floorTop(r.f) + 0.3, 0.36, 0.6, wl > 1 ? WARN_R : WARN_Y); }
           return;
         }
         const dark = heat ? U.mix(heat, '#000000', 0.32) : null;
@@ -467,12 +778,12 @@
         P(rc, gx, B - 5, n, 3, heat ? U.mix(heat, '#000000', 0.12) : pal.low);
         P(rc, gx, T, n, 1, heat ? dark : pal.trim);
         if (!heat && o.theme === 'warm') P(rc, gx, T + 1, n, 1, U.mix(pal.wall, '#5a4030', 0.18));   // ceiling shade
-        if (heat === HEAT.bad) for (let i = 1; i < n; i += 2) for (let j = 1; j < 13; j += 2) P(rc, gx + i + (j % 4 === 1 ? 0 : 1), T + j, 1, 1, '#d8303e');
-        const occ = st !== 'vacant' && st !== 'unreachable';
+        if (heat) heatPattern(rc, hk, gx, T, n);
         if (occ) {
-          if (r.type === 'office') office(rc, gx, T, B, n, lit, tone);
-          else if (r.type === 'condo') condo(rc, r, gx, T, B, lit, tone);
+          if (r.type === 'office') office(rc, gx, T, B, n, lit, tone, tier);
+          else if (r.type === 'condo') condo(rc, r, gx, T, B, lit, tone, tier);
           else if (r.type === 'restaurant') restaurant(rc, r, gx, T, B, lit, tone);
+          else if (PROVIDERS[r.type]) PROVIDERS[r.type](rc, r, gx, T, B, n, lit, tone, !heat && r.inside > 0);
           else if (r.type === 'skylobby') {
             for (let c = 4; c < n; c += 20) P(rc, gx + c, T + 1, 2, 11, tone('#cbbd9c'));
             P(rc, gx + 22, B - 7, 14, 3, tone('#3a6a8a')); P(rc, gx + 22, B - 9, 14, 2, tone('#4a7a9a')); P(rc, gx + 22, B - 4, 1, 2, tone('#2a2a2a')); P(rc, gx + 35, B - 4, 1, 2, tone('#2a2a2a'));
@@ -508,7 +819,7 @@
         P(rc, gx, B - 2, n, 1, SLAB_T); P(rc, gx, B - 1, n, 1, SLAB_B);
         roofSnow(rc, r.f, r.x, r.w);
         if (!heat && o.theme === 'warm' && lit) lampLight(rc, r);
-        if (!heat && rc.night) P(rc, gx + 1, T + 1, n - 2, 13, lit ? th.nightLit : th.nightDark);
+        if (!heat && rc.night) P(rc, gx + 1, T + 1, n - 2, 13, lit ? (tier ? 'rgba(255,176,84,.18)' : th.nightLit) : th.nightDark);
         if (rc.detail === 2 || (rc.detail === 1 && r.w >= 3)) {
           if (st === 'vacant') plate(rc, r.x + 0.35, rc.floorTop(r.f) + 0.45, 'FREI', '#f6f2e0', '#2c2c36');
           if (st === 'unreachable') {
@@ -519,6 +830,8 @@
           }
           if (r.type === 'skylobby' && rc.detail === 2) plate(rc, r.x + 1.6, rc.floorTop(r.f) + 0.25, 'SKY-LOBBY', '#2c3a5a', '#ffd23f');
         }
+        const wl = warnOf(r);   // yellow: close to the threshold · red: below it, the tenants may go any hour
+        if (wl) warnSign(rc, gx + n - 6, T + 2, wl > 1 ? WARN_R : WARN_Y);
       },
 
       link(rc, kind, f, x, w) {
@@ -593,22 +906,39 @@
       car(rc, sh, car, full) {
         const ex = sh.kind === 'express', gx = sh.c * G + 1;
         const T = Math.round(-(car.y + 1) * FA) + 1;
-        const frame = ex ? '#e07a30' : '#d8b030', door = ex ? '#a8501c' : '#9a7a18';
+        // car.cond (depth run): slow / wear ≥ 70 = steady yellow sign, waiting = blinking sign,
+        // repair = mechanic in the open car, broken = lights out, sparks and a red sign; missing = as before
+        const cond = car.cond || 'ok', broken = cond === 'broken', repair = cond === 'repair';
+        const worn = cond === 'slow' || (car.wear || 0) >= 70, blink = Math.floor((rc.time || 0) * 1.6) % 2 === 0;
+        const frame = ex ? '#e07a30' : '#d8b030', door0 = ex ? '#a8501c' : '#9a7a18';
+        const door = broken ? U.mix(door0, '#000000', 0.4) : door0;
         if (rc.detail === 0) {
           P(rc, gx, T, 8, 13, frame);
           P(rc, gx, T + Math.round(13 * (1 - full)), 8, Math.round(13 * full), door);
+          if (broken) P(rc, gx, T, 8, 6, WARN_R);
+          else if (repair) P(rc, gx, T, 8, 6, MECH.far[1]);
+          else if (cond === 'waiting') { if (blink) P(rc, gx, T, 8, 6, WARN_Y); }
+          else if (worn) P(rc, gx, T, 8, 3, WARN_Y);
           return;
         }
+        const open = car.state === 'doors' || repair;
         P(rc, gx, T, 8, 13, frame);
-        P(rc, gx + 1, T + 2, 6, 10, car.state === 'doors' ? '#fff4c8' : '#6a5a3a');
+        P(rc, gx + 1, T + 2, 6, 10, broken ? '#2a2a30' : open ? '#fff4c8' : '#6a5a3a');
         P(rc, gx, T, 8, 1, '#2c2c36');
-        const shown = Math.round(full * 6);          // up to 6 figures stand for the load
+        const shown = broken || repair ? 0 : Math.round(full * 6);          // up to 6 figures stand for the load
         for (let i = 0; i < shown; i++) {
           const row = i < 3 ? 0 : 1, k = i % 3;
           const fx = gx + 1 + k * 2, feet = T + 11 - row * 2;
           P(rc, fx, feet - 5, 2, 1, HAIR[i % HAIR.length]); P(rc, fx, feet - 4, 2, 1, SKIN[(i * 7) % 4]); P(rc, fx, feet - 3, 2, 3, SHIRT[(i * 3 + sh.c) % SHIRT.length]);
         }
-        if (car.state !== 'doors') {
+        if (repair) {                                // the mechanic works in the open car, case at the feet
+          const m = car.mech, emg = !!(m && m.emergency);
+          worker(rc, gx + 2, T + 11, m && m.id != null ? m.id : sh.c * 97 + 1, emg, 1, false);
+          P(rc, gx + 5, T + 10, 2, 2, (emg ? EMG : MECH).box);
+          P(rc, gx, T + 12, 8, 1, WARN_Y);
+          for (let i = 1; i < 8; i += 2) P(rc, gx + i, T + 12, 1, 1, INK);
+        }
+        if (!open) {
           if (texture(rc)) {                         // closed: dithered door panels with a seam
             for (let j = 0; j < 10; j++) for (let i = (j % 2); i < 6; i += 2) P(rc, gx + 1 + i, T + 2 + j, 1, 1, door);
           } else {                                   // calm: two flat panels, the load shows through a window
@@ -619,19 +949,35 @@
         } else {
           P(rc, gx + 1, T + 2, 1, 10, door); P(rc, gx + 6, T + 2, 1, 10, door);
         }
+        if (broken) {                                // sparks flicker around the roof (real time)
+          const k = Math.floor((rc.time || 0) * 8);
+          for (let i = 0; i < 5; i++) {
+            if (U.hash(sh.c * 7 + i, k, 3) < 0.4) continue;
+            P(rc, gx - 1 + Math.floor(U.hash(i, k, sh.c) * 10), T - 1 + Math.floor(U.hash(k, i, 9) * 4), 1, 1, i % 2 ? '#fff4a0' : '#ffb030');
+          }
+          warnSign(rc, gx + 3, T - 8, WARN_R);
+        } else if (cond === 'waiting') { if (blink) warnSign(rc, gx + 3, T - 8, WARN_Y); }
+        else if (worn && !repair) warnSign(rc, gx + 3, T - 8, WARN_Y);
       },
 
       person(rc, x, f, o2) {
         const feet = Math.round(-f * FA) - 3;
         const gx = Math.round(x * G) - 1;
-        const stress = o2.mode === 'wait' ? o2.level : 0;
+        // mechanics and the emergency service keep their work clothes (no stress or tired colours)
+        const staff = o2.role === 'mechanic' || !!o2.emergency;
+        const stress = o2.mode === 'wait' && !staff ? o2.level : 0;
         if (rc.detail === 0) {
+          if (staff) { const c = o2.emergency ? EMG : MECH; P(rc, gx, feet - 8, 3, 3, c.far[0]); P(rc, gx, feet - 5, 3, 6, c.far[1]); return; }
           const c = stress ? STRESS[stress][0] : TIRED_FAR[o2.tired || 0];
           P(rc, gx, feet - 8, 3, 9, c);
           return;
         }
+        if (staff) { worker(rc, gx, feet, o2.id, !!o2.emergency, o2.mode === 'wait' && o2.dir ? -o2.dir : 1); return; }
         figure(rc, gx, feet, look(o2.id), false, stress, false, o2.tired || 0);
       },
+
+      // ---------- optional overlays (depth run); the game UI calls them after draw() with its rc ----------
+      tint, mark, radius,
 
       overflow(rc, text, x, f, dir) {
         const size = Math.max(9, Math.round(rc.s * 0.5));

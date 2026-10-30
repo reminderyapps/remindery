@@ -10,7 +10,17 @@
 //   t, W, entranceX, maxFloor, maxFloors, rooms[{type,f,x,w,inside}], links[{kind,f,x,w}],
 //   shafts[{kind,c,f0,f1,cars[{y,pax[],state}],qUp[][],qDown[][]}] (queue entries {id,waitStart}),
 //   walking/climbing (iterables of {id,x,f} / {id,x,cy}), roomStatus(r), serves(sh,f), isLobby(f);
-//   optional: shells[{f,x,w}] (bare floor, style hook shell), walkable(f,x), season (0..3).
+//   optional: shells[{f,x,w}] (bare floor, style hook shell(rc, sh, hs) – hs = opt.heatStatus(sh, null)
+//   in heatmap mode, else null), walkable(f,x), season (0..3).
+//   Depth run (TOWER-a0006), all optional – a missing field draws like before:
+//     room types workshop, cafe, daycare, supermarket, gym; room.tier 0 standard · 1 upscale ·
+//     2 luxury (office/condo); room.warn 1 = yellow / 2 = red warning sign (TOWER-a0007; without warn: warnDays > 0 = red); room.id (stable per room);
+//     car.cond 'ok'|'slow'|'waiting'|'repair'|'broken', car.wear 0..100, car.mech (person or null);
+//     person.role 'tenant'|'guest'|'mechanic', person.emergency (emergency service) – passed on to
+//     style.person as o2.role / o2.emergency for walking, climbing and waiting people.
+//   Optional style hooks the game UI calls itself after draw() with the returned rc (only if the
+//   style has them): tint(rc, room, share 0..1|null), mark(rc, room, pen 0..1),
+//   radius(rc, {type,f,x,w,r}, hits[{room,pen}]). Not in STYLE_HOOKS, so older styles still pass check().
 (function (root) {
   'use strict';
 
@@ -97,7 +107,7 @@
     }
     if (rc.fBot === 0) style.lobby(rc, world.entranceX);
     if (world.shells && style.shell) for (const sh of world.shells) {
-      if (sh.f >= rc.fBot && sh.f <= rc.fTop) style.shell(rc, sh);
+      if (sh.f >= rc.fBot && sh.f <= rc.fTop) style.shell(rc, sh, opt.heat && opt.heatStatus ? opt.heatStatus(sh, null) : null);
     }
 
     for (const r of world.rooms) {
@@ -112,7 +122,7 @@
     }
     for (const p of world.climbing) {
       if (p.cy + 1 < rc.fBot || p.cy > rc.fTop + 1) continue;
-      style.person(rc, p.x, p.cy, { id: p.id, mode: 'climb', tired: tired(p) });
+      style.person(rc, p.x, p.cy, { id: p.id, mode: 'climb', tired: tired(p), role: p.role, emergency: p.emergency });
     }
     for (const sh of world.shafts) {
       if (sh.f1 < rc.fBot || sh.f0 > rc.fTop) continue;
@@ -137,7 +147,7 @@
     }
     for (const p of world.walking) {
       if (p.f < rc.fBot || p.f > rc.fTop) continue;
-      style.person(rc, p.x, p.f, { id: p.id, mode: 'walk', tired: tired(p) });
+      style.person(rc, p.x, p.f, { id: p.id, mode: 'walk', tired: tired(p), role: p.role, emergency: p.emergency });
     }
     if (style.post) style.post(rc);
     ctx.restore();
@@ -152,7 +162,7 @@
       const p = q[k];
       const wait = (rc.t - p.waitStart) / 60;
       maxWait = Math.max(maxWait, wait);
-      style.person(rc, x0 + dir * (0.25 + k * 0.42), f, { id: p.id, mode: 'wait', wait, level: waitLevel(wait), front: k === 0, dir });
+      style.person(rc, x0 + dir * (0.25 + k * 0.42), f, { id: p.id, mode: 'wait', wait, level: waitLevel(wait), front: k === 0, dir, role: p.role, emergency: p.emergency });
     }
     if (style.queueInfo) style.queueInfo(rc, x0, f, dir, q.length, maxWait);
     if (q.length > n && rc.s * FH >= 14) style.overflow(rc, '+' + (q.length - n), x0 + dir * (0.25 + n * 0.42), f, dir);

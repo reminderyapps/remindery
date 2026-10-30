@@ -23,3 +23,7 @@ Umgewandelt mit ffmpeg: mono, 44,1 kHz, MP3 64 kbit/s. Eingebettet in `../sounds
 Alles andere (Vögel, Verkehr, Grillen, Brummen, Tippen, Telefon, Fernseher, Kinder, Gemurmel,
 Geschirr, Gong, Einzug, Auszug, Stern, Kasse, Hall) wird zur Laufzeit per Web Audio erzeugt –
 keine Fremddateien. freesound.org wurde nicht genutzt (Download nur mit Konto).
+
+Spieltiefe (TOWER-a0006): Panne, Notdienst, Reparatur, Aufwertung, Warnung, Besuche (Café, Kita,
+Supermarkt, Fitness, Restaurant) und die Raum-Ebenen Werkstatt, Café, Kita, Supermarkt, Fitness sind
+ebenfalls synthetisiert – keine neuen Dateien, `sounds.js` unverändert.

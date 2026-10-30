@@ -4,6 +4,9 @@
 //      zoomed out = carpet only,
 //   3. events only when in view (elevator door gong, move-in, move-out), star + day summary always,
 //      build / demolish / error / menu clicks.
+//   Depth run (TOWER-a0006): layers for workshop, café, daycare, supermarket, gym; events breakdown,
+//   emergency, upgrade (always audible), repairStart, repairDone, downgrade, visit {kind} (only in view,
+//   at least 0.6 s apart per type). All synthesized, no new sample files.
 // Hooks into the game: game.onEvent (engine.js), TowerAudio.frame(...) once per frame and
 // TowerAudio.menuHtml() in the menu (index.html). Build, demolish and their errors are picked up by
 // wrapping Game.prototype methods below, so tap() in index.html needs no changes.
@@ -13,7 +16,8 @@
   const PREF_KEY = 'tower-game-audio-v1';
   const MAX_VOICES = 28;   // simultaneous one-shot voices overall
   const AMB_VOICES = 18;   // carpet and room grains may use at most this many, events keep headroom
-  const LAYERS = ['office', 'condo', 'restaurant', 'lobby'];
+  const LAYERS = ['office', 'condo', 'restaurant', 'lobby', 'workshop', 'cafe', 'daycare', 'supermarket', 'gym'];
+  const zeroLayers = () => Object.fromEntries(LAYERS.map(k => [k, 0]));
   const TODS = ['morning', 'day', 'evening', 'night'];
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const rnd = (a, b) => a + Math.random() * (b - a);
@@ -42,9 +46,11 @@
   let lastTick = 0, updAcc = 1;
   const rates = {};                  // grain name -> per second
   const busyHold = {};               // floor -> smoothed number of people walking/waiting
-  const lvl = { carpet: 1, office: 0, condo: 0, restaurant: 0, lobby: 0 };
-  const last = { door: 0, movein: 0, moveout: 0 };
+  const lvl = Object.assign({ carpet: 1 }, zeroLayers());
+  const last = { door: 0, movein: 0, moveout: 0 };   // event key -> audio time it last played (more keys added on the fly)
   const stats = { door: 0, doorPlayed: 0, movein: 0, moveinPlayed: 0, moveout: 0, moveoutPlayed: 0, star: 0, day: 0, build: 0, demolish: 0, error: 0, click: 0, dropped: 0 };
+  const DEPTH_EVENTS = ['breakdown', 'emergency', 'upgrade', 'downgrade', 'repairStart', 'repairDone', 'visit'];
+  for (const k of DEPTH_EVENTS) { stats[k] = 0; stats[k + 'Played'] = 0; }
 
   // ---------- graph ----------
   function gainNode(v, dest) { const g = ac.createGain(); g.gain.value = v; if (dest) g.connect(dest); return g; }
@@ -282,15 +288,83 @@
       return last;
     },
     lobbyTalk(dest, t) { return murmur(panned(dest, rnd(-0.7, 0.7)), t, 0.18, { f0: rnd(95, 230), wall: 2400 }); },
+    // workshop: hammer taps on metal, now and then a drill
+    hammer(dest, t) {
+      const p = panned(dest, rnd(-0.6, 0.6)), n = 2 + ((Math.random() * 3) | 0), f = rnd(1700, 2500), gap = rnd(0.28, 0.4);
+      let o = null;
+      for (let i = 0; i < n; i++) {
+        burst(p, t + i * gap, 0.001, 0.04, 0.35, 'lowpass', 900, 0.7, brown);
+        o = bell(p, f * rnd(0.98, 1.02), t + i * gap, 0.05, 0.09, [[1, 1, 1], [2.76, 0.5, 0.5], [5.4, 0.25, 0.3]]);
+      }
+      return o;
+    },
+    drill(dest, t) {
+      const p = panned(dest, rnd(-0.6, 0.6)), d = rnd(0.6, 1.4), f = rnd(170, 210);
+      const o = ac.createOscillator(); o.type = 'sawtooth';
+      o.frequency.setValueAtTime(f * 0.6, t); o.frequency.linearRampToValueAtTime(f, t + 0.15); o.frequency.setValueAtTime(f, t + d - 0.1); o.frequency.linearRampToValueAtTime(f * 0.5, t + d + 0.1);
+      const g = gainNode(0, filter('bandpass', 1300, 1.2, p)); g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.06, t + 0.12); g.gain.setValueAtTime(0.06, t + d - 0.1); g.gain.linearRampToValueAtTime(0, t + d + 0.1);
+      o.connect(g); o.start(t); o.stop(t + d + 0.15);
+      return o;
+    },
+    // café: talk, cups on saucers, the milk steamer
+    cafeTalk(dest, t) { return murmur(panned(dest, rnd(-0.6, 0.6)), t, 0.11, { f0: rnd(110, 240), wall: 2000 }); },
+    cup(dest, t) {
+      const p = panned(dest, rnd(-0.6, 0.6)), f = rnd(1500, 2300);
+      const o = bell(p, f, t, rnd(0.015, 0.03), rnd(0.1, 0.18), [[1, 1, 1], [2.7, 0.45, 0.5]]);
+      if (Math.random() < 0.4) bell(p, f * rnd(1.1, 1.25), t + rnd(0.04, 0.09), 0.015, 0.12, [[1, 1, 1], [2.7, 0.4, 0.5]]);
+      return o;
+    },
+    steam(dest, t) {
+      const d = rnd(1.2, 1.7), b = burst(panned(dest, rnd(-0.5, 0.5)), t, 0.2, d, 0.03, 'bandpass', 3200, 0.9);
+      b.flt.frequency.setValueAtTime(3200, t); b.flt.frequency.linearRampToValueAtTime(5200, t + d);
+      return b.s;
+    },
+    // daycare: children playing, a toy xylophone
+    kidsPlay(dest, t) {
+      return murmur(panned(dest, rnd(-0.7, 0.7)), t, 0.12, { f0: rnd(300, 440), wall: 1900, vowels: KID_VOWELS, n: 2 + ((Math.random() * 5) | 0), syl: [0.05, 0.11], gap: [0.03, 0.1], fall: Math.random() < 0.5 });
+    },
+    toy(dest, t) {
+      const p = panned(dest, rnd(-0.6, 0.6)), n = 1 + ((Math.random() * 3) | 0);
+      let o = null;
+      for (let i = 0; i < n; i++) o = tone(p, NOTE(pick([84, 86, 88, 91, 93])), t + i * rnd(0.18, 0.3), 0.002, 0.22, 0.025, 'triangle');
+      return o;
+    },
+    // supermarket: scanner beeps at the till, trolleys, quiet talk
+    scan(dest, t) { return tone(filter('lowpass', 3000, 0.7, panned(dest, rnd(-0.5, 0.5))), 1760, t, 0.003, 0.07, 0.018, 'square'); },
+    trolley(dest, t) {
+      const d = rnd(1, 2), p = panned(dest, rnd(-0.7, 0.7));
+      const b = burst(p, t, 0.15, d, 0.035, 'bandpass', rnd(700, 1100), 1.5, brown);
+      const am = ac.createOscillator(); am.frequency.value = rnd(14, 20);
+      const depth = gainNode(0.025, b.g.gain); am.connect(depth); am.start(t); am.stop(t + d + 0.2);
+      return b.s;
+    },
+    shopTalk(dest, t) { return murmur(panned(dest, rnd(-0.7, 0.7)), t, 0.08, { f0: rnd(100, 230), wall: 1800 }); },
+    // gym: steady footfalls on a treadmill, weights set down
+    treadmill(dest, t) {
+      const p = panned(dest, rnd(-0.5, 0.5)), n = 5 + ((Math.random() * 4) | 0), gap = rnd(0.36, 0.42);
+      let s = null;
+      for (let i = 0; i < n; i++) s = burst(p, t + i * gap, 0.002, 0.06, 0.22, 'lowpass', 220, 0.8, brown).s;
+      return s;
+    },
+    clank(dest, t) {
+      const p = panned(dest, rnd(-0.6, 0.6));
+      burst(p, t, 0.002, 0.08, 0.15, 'lowpass', 180, 0.7, brown);
+      return bell(p, rnd(480, 620), t, 0.05, 0.3, [[1, 1, 1], [2.76, 0.6, 0.5], [5.4, 0.3, 0.3]]);
+    },
   };
   // grain -> which output and which level drives its rate
   const GRAIN_SRC = {
     bird: 'carpet', cricket: 'carpet', traffic: 'carpet',
     typing: 'office', phone: 'office', tv: 'condo', kids: 'condo',
     chatter: 'restaurant', clink: 'restaurant', cutlery: 'restaurant', steps: 'lobby', lobbyTalk: 'lobby',
+    hammer: 'workshop', drill: 'workshop', cafeTalk: 'cafe', cup: 'cafe', steam: 'cafe', kidsPlay: 'daycare', toy: 'daycare',
+    scan: 'supermarket', trolley: 'supermarket', shopTalk: 'supermarket', treadmill: 'gym', clank: 'gym',
   };
   // per second at full level
-  const LAYER_RATE = { typing: 2.4, phone: 0.05, tv: 0.9, kids: 0.07, chatter: 3.2, clink: 2.2, cutlery: 1.5, steps: 1.3, lobbyTalk: 0.5 };
+  const LAYER_RATE = { typing: 2.4, phone: 0.05, tv: 0.9, kids: 0.07, chatter: 3.2, clink: 2.2, cutlery: 1.5, steps: 1.3, lobbyTalk: 0.5,
+    hammer: 0.7, drill: 0.07, cafeTalk: 1.8, cup: 1.2, steam: 0.05, kidsPlay: 1.4, toy: 0.25,
+    scan: 0.6, trolley: 0.15, shopTalk: 0.9, treadmill: 0.3, clank: 0.35 };
 
   function spawn(name, t) {
     if (!claim(true)) return;
@@ -335,7 +409,7 @@
   const mixW = (w, key) => TODS.reduce((a, k) => a + w[k] * CARPET[k][key], 0);
 
   function computeLayers(game) {
-    const out = { office: 0, condo: 0, restaurant: 0, lobby: 0 };
+    const out = zeroLayers();
     if (!rect) return out;
     const fh = rect.fh, CFG = Engine.CFG || { W: 24, rooms: {} };
     const visFloors = (rect.y1 - rect.y0) / fh;
@@ -351,7 +425,7 @@
     for (const f in busy) busyHold[f] = Math.max(busy[f], busyHold[f] || 0);
     for (const f in busyHold) { if (!busy[f]) busyHold[f] *= 0.97; if (busyHold[f] < 0.3) delete busyHold[f]; }
     const lobbyAct = f => busyHold[f] ? 0.3 + 0.7 * Math.min(1, busyHold[f] / 10) : 0;
-    const acc = { office: 0, condo: 0, restaurant: 0, lobby: 0 };
+    const acc = zeroLayers();
     for (const r of game.rooms || []) {
       const a = visF(r.f) * visX(r.x, r.w); if (!a) continue;
       if (r.type === 'skylobby') { acc.lobby += a * lobbyAct(r.f); continue; }
@@ -370,7 +444,7 @@
     if (preview && ac.currentTime > preview.until) preview = null;
     if (preview) {
       w = { morning: 0, day: 0, evening: 0, night: 0 };
-      layers = { office: 0, condo: 0, restaurant: 0, lobby: 0 };
+      layers = zeroLayers();
       if (preview.kind === 'carpet') { w[preview.name] = 1; carpet = 1; }
       else { w.day = 1; layers[preview.name] = 1; carpet = 0.3; }
     } else {
@@ -447,6 +521,65 @@
     click(t) { return sample('ui_click', busSfx, t, 0.35, 1) || tone(busSfx, 1800, t, 0.001, 0.03, 0.08); },
     toggle(t) { return sample('ui_toggle', busSfx, t, 0.3, 1) || tone(busSfx, 1200, t, 0.001, 0.05, 0.08); },
     error(t) { return sample('ui_error', busSfx, t, 0.35, 1) || tone(busSfx, 220, t, 0.005, 0.18, 0.15, 'square', 180); },
+    // ----- depth run: maintenance and tiers -----
+    breakdown(t, o) {   // power dies (falling whine), a clunk, a few sparks crackle
+      const p = panned(busSfx, o.pan);
+      const s = tone(filter('lowpass', 900, 0.7, p), 220, t, 0.01, 0.7, 0.09, 'sawtooth', 50);
+      burst(p, t + 0.05, 0.002, 0.25, 0.4, 'lowpass', 300, 0.7, brown);
+      for (let i = 0; i < 6; i++) burst(p, t + 0.1 + Math.random() * 0.5, 0.001, rnd(0.008, 0.02), rnd(0.08, 0.16), 'highpass', 4000, 0.8);
+      return s;
+    },
+    emergency(t, o) {   // a distant two-tone horn: help is on the way
+      const p = filter('lowpass', 1800, 0.7, panned(busSfx, o.pan)); let s = null;
+      for (let i = 0; i < 4; i++) s = tone(p, i % 2 ? 659 : 880, t + i * 0.34, 0.03, 0.29, 0.07, 'triangle');
+      return s;
+    },
+    upgrade(t, o) {     // quick rising sparkle over a soft upward swoosh
+      const p = panned(busSfx, o.pan); let s = null;
+      const sw = burst(p, t, 0.15, 0.3, 0.05, 'bandpass', 500, 1.2);
+      sw.flt.frequency.setValueAtTime(500, t); sw.flt.frequency.exponentialRampToValueAtTime(3200, t + 0.45);
+      [79, 83, 86, 91, 95].forEach((n, i) => { s = bell(p, NOTE(n), t + 0.05 + i * 0.06, 0.05, 0.6, [[1, 1, 1], [3, 0.1, 0.3]]); });
+      return s;
+    },
+    downgrade(t, o) {   // warning begins: two low falling notes, soft
+      const p = filter('lowpass', 1100, 0.7, panned(busSfx, o.pan)); let s = null;
+      [[64, 0], [61, 0.24]].forEach(([n, d]) => { s = tone(p, NOTE(n), t + d, 0.03, 0.4, 0.09, 'triangle'); });
+      return s;
+    },
+    repairStart(t, o) { // ratchet wrench, then a tap on metal
+      const p = panned(busSfx, o.pan);
+      for (let i = 0; i < 7; i++) burst(p, t + i * 0.045, 0.001, 0.012, 0.22, 'bandpass', 3200, 3);
+      return bell(p, 1400, t + 0.4, 0.04, 0.25, [[1, 1, 1], [2.76, 0.5, 0.5]]);
+    },
+    repairDone(t, o) {  // tool set down, then a short rising fifth
+      const p = panned(busSfx, o.pan);
+      bell(p, 2300, t, 0.03, 0.15, [[1, 1, 1], [2.76, 0.5, 0.5]]);
+      tone(p, NOTE(76), t + 0.14, 0.01, 0.25, 0.07, 'triangle');
+      return tone(p, NOTE(83), t + 0.28, 0.01, 0.45, 0.07, 'triangle');
+    },
+    // ----- depth run: arrivals at a provider (quiet, only in view) -----
+    visit_cafe(t, o) {   // cup on a saucer, a puff of steam
+      const p = panned(busSfx, o.pan);
+      bell(p, 2600, t, 0.055, 0.14, [[1, 1, 1], [2.7, 0.5, 0.5]]);
+      bell(p, 2950, t + 0.06, 0.05, 0.16, [[1, 1, 1], [2.7, 0.5, 0.5]]);
+      return burst(p, t + 0.1, 0.05, 0.25, 0.02, 'bandpass', 5000, 1).s;
+    },
+    visit_daycare(t, o) { // two toy xylophone notes
+      const p = panned(busSfx, o.pan);
+      tone(p, NOTE(84), t, 0.002, 0.2, 0.05, 'triangle');
+      return tone(p, NOTE(88), t + 0.13, 0.002, 0.28, 0.05, 'triangle');
+    },
+    visit_supermarket(t, o) { return tone(filter('lowpass', 3000, 0.7, panned(busSfx, o.pan)), 1760, t, 0.003, 0.09, 0.11, 'square'); },   // scanner beep
+    visit_gym(t, o) {    // a dumbbell set down
+      const p = panned(busSfx, o.pan);
+      burst(p, t, 0.002, 0.1, 0.25, 'lowpass', 160, 0.7, brown);
+      return bell(p, 540, t + 0.01, 0.06, 0.35, [[1, 1, 1], [2.76, 0.6, 0.5], [5.4, 0.3, 0.3]]);
+    },
+    visit_restaurant(t, o) { // plate set on the table, a fork
+      const p = panned(busSfx, o.pan);
+      burst(p, t, 0.001, 0.05, 0.3, 'bandpass', 1100, 2);
+      return bell(p, 4200, t + 0.07, 0.05, 0.12, [[1, 1, 1], [2.3, 0.4, 0.4]]);
+    },
   };
   function play(name, o) {
     if (!running() || !SFX[name]) return false;
@@ -475,6 +608,29 @@
       last[type] = now;
       if (play(type, { pan })) stats[type + 'Played']++;
     } else if (type === 'star' || type === 'day') play(type);
+    else if (type === 'breakdown' || type === 'emergency' || type === 'upgrade') {
+      // always audible (panned if in view); bursts like a whole floor upgraded play once
+      if (now - (last[type] ?? -1e9) < 0.6) return;
+      last[type] = now;
+      const pos = where(d), pan = pos ? inView(pos.x, pos.f) : null;
+      if (play(type, { pan: pan || 0 })) stats[type + 'Played']++;
+    } else if (type === 'repairStart' || type === 'repairDone' || type === 'downgrade' || type === 'visit') {
+      const key = type === 'visit' ? 'visit_' + (d && d.kind) : type;
+      if (!SFX[key]) return;
+      const pos = where(d); if (!pos) return;
+      const pan = inView(pos.x, pos.f); if (pan == null) return;
+      if (now - (last[key] ?? -1e9) < 0.6) return;
+      if (type === 'visit' && now - (last.visit ?? -1e9) < 0.25) return;   // several providers in view: still sparse
+      last[key] = now; if (type === 'visit') last.visit = now;
+      if (play(key, { pan })) stats[type + 'Played']++;
+    }
+  }
+  // where an event happens: a room ({room}) or a car ({shaft, car}); null if unknown
+  function where(d) {
+    if (!d) return null;
+    if (d.room && typeof d.room.f === 'number') return { x: d.room.x + (d.room.w || 1) / 2, f: d.room.f };
+    if (d.shaft && typeof d.shaft.c === 'number') return { x: d.shaft.c + 0.5, f: d.car && typeof d.car.y === 'number' ? Math.round(d.car.y) : d.shaft.f0 };
+    return null;
   }
 
   function attach(game) {
@@ -526,8 +682,12 @@
   }
   const CATALOG = [
     ['Grundteppich (folgt der Uhrzeit)', [['carpet:morning', '🌅 Morgen'], ['carpet:day', '🏙️ Tag'], ['carpet:evening', '🌇 Abend'], ['carpet:night', '🌙 Nacht']]],
-    ['Räume (nur was im Bild ist, nur belegte)', [['layer:office', '💼 Büro'], ['layer:condo', '🏠 Wohnung'], ['layer:restaurant', '🍽️ Restaurant'], ['layer:lobby', '🛋️ Lobby']]],
+    ['Räume (nur was im Bild ist, nur belegte)', [['layer:office', '💼 Büro'], ['layer:condo', '🏠 Wohnung'], ['layer:restaurant', '🍽️ Restaurant'], ['layer:lobby', '🛋️ Lobby'],
+      ['layer:workshop', '🔧 Werkstatt'], ['layer:cafe', '☕ Café'], ['layer:daycare', '🧸 Kita'], ['layer:supermarket', '🛒 Supermarkt'], ['layer:gym', '🏋️ Fitness']]],
     ['Ereignisse (nur im Bild)', [['sfx:door', '🛗 Aufzugstür'], ['sfx:movein', '🙂 Neue Mieter'], ['sfx:moveout', '🚚 Auszug'], ['sfx:star', '★ Neuer Stern'], ['sfx:day', '💰 Tagesabrechnung']]],
+    ['Wartung und Stufen (Panne, Notdienst, Aufwertung immer hörbar)', [['sfx:breakdown', '⚠️ Panne'], ['sfx:emergency', '🚨 Notdienst gerufen'], ['sfx:repairStart', '🔧 Reparatur beginnt'],
+      ['sfx:repairDone', '✅ Reparatur fertig'], ['sfx:upgrade', '▲ Aufwertung'], ['sfx:downgrade', '▼ Warnung beginnt']]],
+    ['Besuche (nur im Bild)', [['sfx:visit_cafe', '☕ Café'], ['sfx:visit_daycare', '🧸 Kita'], ['sfx:visit_supermarket', '🛒 Supermarkt'], ['sfx:visit_gym', '🏋️ Fitness'], ['sfx:visit_restaurant', '🍽️ Restaurant']]],
     ['Bauen und Menü', [['sfx:build', '🔨 Bauen'], ['sfx:buildShaft', '🛗 Aufzug / Kabine'], ['sfx:demolish', '🧨 Abriss'], ['sfx:demolishSmall', '➖ Kabine weg'], ['sfx:click', '👆 Klick'], ['sfx:toggle', '🔁 Umschalter'], ['sfx:error', '⛔ Fehler']]],
   ];
   function listHtml() {

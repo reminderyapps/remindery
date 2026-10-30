@@ -46,7 +46,7 @@
     },
     room(rc, r, st) {
       const s = rc.s, y0 = rc.floorTop(r.f) + 0.08, h = rc.FH - 0.08;
-      let fill = TYPE_COL[r.type];
+      let fill = TYPE_COL[r.type] || '#b8b8b8';
       if (rc.heat) fill = HEAT_COL[st] || fill;
       else if (st === 'vacant' || st === 'unreachable') fill = '#9aa3ad';
       rc.rect(r.x + 0.04, y0, r.w - 0.08, h, fill);
@@ -60,7 +60,7 @@
       if (s * rc.FH >= 15) {
         const ctx = rc.ctx;
         ctx.font = Math.round(s * 0.7) + 'px system-ui';
-        ctx.fillText(st === 'unreachable' ? '⚠️' : ICON[r.type], rc.sx(r.x + 0.2), rc.sy(y0 + h * 0.72));
+        ctx.fillText(st === 'unreachable' ? '⚠️' : ICON[r.type] || '', rc.sx(r.x + 0.2), rc.sy(y0 + h * 0.72));
         if (st === 'vacant') { ctx.fillStyle = '#2b2f36'; ctx.fillText('frei', rc.sx(r.x + 1.2), rc.sy(y0 + h * 0.72)); }
         if (r.type === 'skylobby') { ctx.fillStyle = '#5d4a35'; ctx.fillText('Sky-Lobby', rc.sx(r.x + 1.2), rc.sy(y0 + h * 0.72)); }
       }
