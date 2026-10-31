@@ -22,12 +22,21 @@
   header { padding: 6px 10px 4px; background: var(--panel); border-bottom: 1px solid var(--line); }
   .row { display: flex; align-items: center; gap: 8px; }
   .row + .row { margin-top: 4px; }
-  #clock { font-weight: 600; min-width: 92px; }
+  #clock { font-weight: 600; min-width: 92px; white-space: nowrap; }
   #money { font-weight: 700; color: var(--accent); flex: 1; text-align: center; font-variant-numeric: tabular-nums; cursor: pointer; }
   #money .loan { font-weight: 400; font-size: 11px; color: var(--muted); }
   #money.neg { color: var(--bad); }
-  #stars { font-size: 16px; letter-spacing: 1px; color: var(--accent); }
+  #stars { font-size: 16px; letter-spacing: 1px; color: var(--accent); cursor: pointer; }
+  /* star overlay and diary (TOWER-a0010 P2) */
+  .crit { display: grid; grid-template-columns: 1.4em 1fr auto; gap: 2px 8px; margin: 6px 0; }
+  .crit .ok { color: var(--good); } .crit .no { color: var(--bad); }
+  .crit .lb { color: var(--text); } .crit .vl { color: var(--muted); font-variant-numeric: tabular-nums; }
+  #panel details { border-top: 1px solid var(--line); padding: 4px 0; }
+  #panel details summary { cursor: pointer; color: var(--text); }
+  #panel details ul { margin: 4px 0 2px; padding-left: 18px; color: var(--muted); }
+  .diary div { padding: 3px 0; border-bottom: 1px solid var(--line); font-size: 12.5px; }
   #stats { flex: 1; color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #stats .pop { filter: brightness(0) invert(0.85); }   /* 👥 is a dark silhouette, invisible on the dark header */
   .seg { display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
   .seg button, .iconbtn { background: var(--panel2); color: var(--text); border: 0; padding: 4px 9px; font-size: 13px; cursor: pointer; }
   .seg button + button { border-left: 1px solid var(--line); }
@@ -95,7 +104,8 @@
   input[type=range] { width: 100%; accent-color: var(--accent); }
   .pos { color: #7ee0a8; } .neg { color: var(--bad); }
   .log div { padding: 3px 0; border-bottom: 1px solid var(--line); font-size: 12.5px; }
-  .help li { margin: 4px 0; }
+  .help li { margin: 4px 0; overflow-wrap: anywhere; }
+  .help li.hh { margin-top: 12px; font-weight: bold; border-bottom: 1px solid #8884; list-style: none; }
   /* save slots (menu panel and start screen) */
   .slots { display: flex; flex-direction: column; gap: 5px; margin: 6px 0; }
   .slot { display: flex; align-items: center; gap: 8px; padding: 7px 9px; border-radius: 9px; border: 1px solid var(--line);
@@ -131,12 +141,12 @@
 <div id="app">
   <header>
     <div class="row">
-      <span id="clock">Tag 1 · 06:00</span>
+      <span id="clock">Mo · Tag 1 · Frühling · 06:00</span>
       <span id="money">0 €</span>
-      <span id="stars">☆☆☆</span>
+      <span id="stars" title="Sterne: Was fehlt für den nächsten?">☆☆☆</span>
     </div>
     <div class="row">
-      <span id="stats"></span>
+      <span id="stats" title="👥 Bewohner und Büroleute · 🚶 Besucher von außen, gerade im Turm · 😊 Zufriedenheit"></span>
       <div class="seg" id="speed">
         <button data-sp="pause" title="Pause">⏸</button>
         <button data-sp="slower" title="Langsamer">‹</button>
@@ -156,12 +166,12 @@
   <nav id="tools"></nav>
   <div id="start" hidden><div class="box"></div></div>
 </div>
-<script src="engine.js?v=2fb3f226e9"></script>
-<script src="dev-saves.js?v=22fbd16725"></script>
+<script src="engine.js?v=928aa539f2"></script>
+<script src="dev-saves.js?v=6856d324b1"></script>
 <script src="sounds.js?v=80df8bb98d"></script>
-<script src="audio.js?v=21cdb59ebf"></script>
-<script src="styles/render.js?v=81c3aa2a12"></script>
-<script src="styles/pixel.js?v=54ab2d48c9"></script>
+<script src="audio.js?v=d27cf9dea8"></script>
+<script src="styles/render.js?v=3b68970173"></script>
+<script src="styles/pixel.js?v=ead63f98a8"></script>
 <script>
 'use strict';
 const { CFG, Game, floorName, fmtTime } = window.TowerEngine;
@@ -170,7 +180,8 @@ const BASE_RATE = 60;            // game seconds per real second at 1× (PO 30.1
 const FH = 1.6;                  // floor height in tiles
 const MARGIN_L = 1.7, MARGIN_R = 0.5;
 const SCROLL_BELOW = 240;        // screen px the view may scroll below the ground (menus float over the stage)
-const W = CFG.W;
+// E40/E69: drawn world width – tower A alone (CFG.TW), the whole width (CFG.W) once tower B may be built or stands
+const W = () => game ? game.worldW : CFG.TW;
 
 // ---------- state ----------
 let curSlot = null;              // save slot the running game came from or was last saved to (preselected in „Speichern“)
@@ -183,7 +194,7 @@ let selInfo = null;              // selected office/flat: provider shares and pe
 let ghost = null;                // {kind:'room'|'shaft'|'demolish', ...}
 let anchor = null;               // first tap for shafts
 let selected = null;             // inspected room/shaft
-let panelMode = null;            // 'obj' | 'menu' | 'log' | 'help' | 'money'
+let panelMode = null;            // 'obj' | 'menu' | 'log' | 'help' | 'money' | 'stars' | 'diary'
 
 function loadGame() {
   const saved = readAutosave();
@@ -196,7 +207,8 @@ function loadGame() {
 function hook(g) {
   g.onMessage = m => { toast(m.text, m.kind); if (m.kind === 'star' && openGroup) showGroup(openGroup); };   // unlocked chips
   g.onDayEnd = () => save(g);
-  g.W = W; g.entranceX = CFG.ENTRANCE_X;   // world fields TowerRender expects (not saved)
+  g.entranceX = CFG.ENTRANCE_X;   // world fields TowerRender expects (not saved); g.W is the engine's getter (worldW, E40)
+  g.maxFloors = CFG.MAX_FLOOR; g.minFloors = CFG.MIN_FLOOR; g.floorName = floorName;   // drawn height and depth (TOWER-a0010 P1)
 }
 // autosave (= „Fortsetzen“): every morning and when the page is left (mid-day: the day restarts at 06:00)
 function save(g, rewind) {
@@ -210,7 +222,7 @@ function readAutosave() {
   try { const s = localStorage.getItem(SAVE_KEY); const d = s && JSON.parse(s); return d && d.v === 1 ? d : null; } catch (e) { return null; }
 }
 const euro = n => Math.round(n).toLocaleString('de-DE') + ' €';
-const kEuro = n => n >= 1000 ? (n / 1000).toLocaleString('de-DE') + 'k' : String(n);
+const kEuro = n => n >= 1e6 ? (n / 1e6).toLocaleString('de-DE') + ' Mio.' : n >= 1000 ? (n / 1000).toLocaleString('de-DE') + 'k' : String(n);
 
 // ---------- tools ----------
 // two levels: groups in the bottom row, a group's items in a second row above it
@@ -218,7 +230,7 @@ const roomItem = id => ({ id, ic: CFG.rooms[id].icon, lb: CFG.rooms[id].label, c
 const GROUPS = [
   { id: 'inspect', ic: '🔍', lb: 'Ansehen' },
   { id: 'rooms', ic: '🏢', lb: 'Räume', items: [
-    ...['office', 'condo', 'restaurant', 'skylobby', 'workshop', 'cafe', 'daycare', 'supermarket', 'gym'].map(roomItem),
+    ...['office', 'condo', 'restaurant', 'skylobby', 'workshop', 'cafe', 'daycare', 'supermarket', 'gym', 'spa', 'rooftop', 'hotel', 'garage', 'lockers', 'tech', 'damper', 'cinema', 'pool', 'library', 'district', 'logistics', 'station', 'passage', 'clinic', 'school', 'townhall', 'heliport', 'checkpoint', 'gondola', 'server', 'storage', 'bridge', 'airship', 'geothermal', 'wind', 'skygarden', 'antenna', 'spacestation'].map(roomItem),
     { id: 'shell', ic: CFG.shell.icon, lb: CFG.shell.label, ct: kEuro(CFG.shell.cost) + '/Feld' },
   ] },
   { id: 'ways', ic: '🛗', lb: 'Wege', items: [
@@ -226,6 +238,12 @@ const GROUPS = [
     { id: 'escalator', ic: '↗️', lb: 'Rolltreppe', ct: kEuro(CFG.links.escalator.cost) },
     { id: 'normal', ic: '🛗', lb: 'Aufzug', ct: 'ab ' + kEuro(CFG.shafts.normal.base) },
     { id: 'express', ic: '⚡', lb: 'Express', ct: 'ab ' + kEuro(CFG.shafts.express.base), star: CFG.shafts.express.star || 0 },
+    { id: 'double', ic: '🚡', lb: 'Doppeldecker', ct: 'ab ' + kEuro(CFG.shafts.double.base), star: CFG.shafts.double.star || 0 },
+    { id: 'fire', ic: '🚒', lb: 'Feuerwehr', ct: 'ab ' + kEuro(CFG.shafts.fire.base), star: CFG.shafts.fire.star || 0 },
+    { id: 'service', ic: '🧹', lb: 'Dienstaufzug', ct: 'ab ' + kEuro(CFG.shafts.service.base), star: CFG.shafts.service.star || 0 },
+    { id: 'twin', ic: '⇅', lb: 'TWIN', ct: 'ab ' + kEuro(CFG.shafts.twin.base + CFG.shafts.twin.car), star: CFG.shafts.twin.star || 0 },
+    { id: 'multi', ic: '🔁', lb: 'MULTI', ct: 'ab ' + kEuro(CFG.shafts.multi.base), star: CFG.shafts.multi.star || 0 },
+    { id: 'maglev', ic: '🧲', lb: 'Maglev', ct: 'ab ' + kEuro(CFG.shafts.maglev.base), star: CFG.shafts.maglev.star || 0 },
   ] },
   { id: 'demolish', ic: '🧨', lb: 'Abriss' },
   // heatmaps: entries of their own group; tapping the active one again switches it off, the tool stays
@@ -251,15 +269,50 @@ const HINTS = {
   office: 'Büro: 6 Leute, 5.000 € Miete/Tag. Stelle antippen, nochmal tippen = bauen.',
   condo: 'Wohnung: 3 Leute, 3.000 € Miete/Tag. Stelle antippen, nochmal tippen = bauen.',
   restaurant: 'Restaurant: Gäste von außen + Mittagessen der Büros. Antippen, nochmal = bauen.',
-  skylobby: 'Sky-Lobby (nur 15./30./45. OG): hier darf man umsteigen, Express hält hier.',
+  skylobby: 'Sky-Lobby (nur alle ' + CFG.SKY_EVERY + ' Etagen: ' + [1, 2, 3].map(i => i * CFG.SKY_EVERY + '.').join('/') + ' … OG): hier darf man umsteigen, Express hält hier.',
+  damper: 'Schwingungsdämpfer: schützt bei Erdbeben die ' + CFG.rooms.damper.reach + ' Etagen darunter und seine eigene (' + euro(CFG.rooms.damper.upkeep) + '/Tag). Im Panel in drei Stufen aufwerten bis zur Isolierten Gründung. Ab ' + '★'.repeat(CFG.weather.storm.star) + ' schützt er auch bei Sturm: Luxus-Räume über dem ' + CFG.weather.storm.line + '. OG ohne Dämpfer verlieren dann ' + Math.round(CFG.weather.storm.drop * 100) + ' % Erfüllung. Antippen, nochmal = bauen.',
+  tech: 'Technikebene: Lüftung, Pumpen, Strom für die Etagen darüber (' + euro(CFG.rooms.tech.upkeep) + '/Tag, laut). Über dem ' + CFG.techFloors.map(f => f + '.').join(' und ') + ' OG geht es erst weiter, wenn dort eine steht. Antippen, nochmal = bauen.',
   workshop: 'Werkstatt: 2 Handwerker warten die Aufzüge (' + euro(CFG.rooms.workshop.upkeep) + '/Tag), nah an den Schächten = kurze Wege. Laut. Antippen, nochmal = bauen.',
   cafe: 'Café: Kaffee für gehobene Büros, reicht für ~10 (' + euro(CFG.rooms.cafe.price) + ' je Besuch, ' + euro(CFG.rooms.cafe.upkeep) + '/Tag). Antippen, nochmal = bauen.',
   daycare: 'Kita: für gehobene Büros (' + euro(CFG.rooms.daycare.price) + ' je Kind, ' + euro(CFG.rooms.daycare.upkeep) + '/Tag), nah am Eingang. Laut. Antippen, nochmal = bauen.',
   supermarket: 'Supermarkt: für gehobene Wohnungen (' + euro(CFG.rooms.supermarket.price) + ' je Besuch, ' + euro(CFG.rooms.supermarket.upkeep) + '/Tag), nah am Eingang. Laut. Antippen, nochmal = bauen.',
-  gym: 'Fitness: Sport für gehobene Wohnungen (' + euro(CFG.rooms.gym.price) + ' je Besuch, ' + euro(CFG.rooms.gym.upkeep) + '/Tag). Etwas laut. Antippen, nochmal = bauen.',
-  shell: 'Rohbau: antippen = ein Feld, drücken und waagerecht ziehen = mehrere; nochmal tippen = bauen (' + euro(CFG.shell.cost) + ' je Feld).',
+  gym: 'Fitness: Sport für gehobene Wohnungen und Luxus-Büros (' + euro(CFG.rooms.gym.price) + ' je Besuch, ' + euro(CFG.rooms.gym.upkeep) + '/Tag). Etwas laut. Antippen, nochmal = bauen.',
+  spa: 'Spa: für Luxus-Wohnungen am Abend (' + euro(CFG.rooms.spa.price) + ' je Besuch, ' + euro(CFG.rooms.spa.upkeep) + '/Tag). Ruhig, geht auch im Keller. Antippen, nochmal = bauen.',
+  rooftop: 'Rooftop-Bar: Abend für Luxus-Büros, Luxus-Wohnungen und Hotelgäste, dazu Gäste von außen (' + euro(CFG.rooms.rooftop.price) + ' je Besuch, ' + euro(CFG.rooms.rooftop.upkeep) + '/Tag). Nur unter freiem Himmel – wird sie überbaut, kommt nur die Hälfte. Etwas laut. Antippen, nochmal = bauen.',
+  hotel: 'Hotel: ' + CFG.rooms.hotel.suites + ' Luxus-Zimmer, Gäste kommen abends, bleiben 1–3 Nächte (' + euro(CFG.rooms.hotel.night) + ' je Gast und Nacht, ' + euro(CFG.rooms.hotel.upkeep) + '/Tag). Sie wollen abends essen und in die Bar. Antippen, nochmal = bauen.',
+  garage: 'Tiefgarage (nur unter dem Erdgeschoss): ' + CFG.rooms.garage.spaces + ' Plätze. Jeder dritte gehobene Mieter und jeder zehnte einfache kommt und geht mit dem Auto hier statt über die Straße (' + euro(CFG.rooms.garage.perUser) + ' je Nutzer und Tag, ' + euro(CFG.rooms.garage.upkeep) + '/Tag). Entlastet die Lobby – ein Aufzug muss bis hierher fahren. Laut. Antippen, nochmal = bauen.',
+  lockers: 'Paketschrank: ab ★★ bringen Kuriere werktags (Mo–Sa, 9–17 Uhr) Pakete für die Luxus-Mieter – sonst fahren sie bis vor die Tür. Steht ein erreichbarer Schrank, liefern sie hier ab (' + CFG.rooms.lockers.parcels + ' Pakete am Tag, ' + euro(CFG.rooms.lockers.fee) + ' je Paket, ' + euro(CFG.rooms.lockers.upkeep) + '/Tag). Nah am EG bauen, gern im Keller. Antippen, nochmal = bauen.',
+  cinema: 'Kino: der Abend für Luxus-Wohnungen, Luxus-Büros und Hotelgäste – wie die Rooftop-Bar, aber ohne freien Himmel, auch im Keller. Dazu ~' + CFG.rooms.cinema.guests + ' Gäste von außen am Abend (' + euro(CFG.rooms.cinema.price) + ' je Besuch, ' + euro(CFG.rooms.cinema.upkeep) + '/Tag). Etwas laut. Antippen, nochmal = bauen.',
+  pool: 'Pool: Sport und Spa in einem – entlastet Fitness und Spa (' + euro(CFG.rooms.pool.price) + ' je Besuch, ' + euro(CFG.rooms.pool.upkeep) + '/Tag). Ruhig, geht auch im Keller. Antippen, nochmal = bauen.',
+  library: 'Bibliothek: großes ruhiges Lesecafé – Kaffee für gehobene Büros wie das Café, dazu Laufkundschaft werktags ' + CFG.rooms.library.walkInHours.map(t => t / 3600).join('–') + ' Uhr (' + euro(CFG.rooms.library.price) + ' je Besuch, ' + euro(CFG.rooms.library.upkeep) + '/Tag). Antippen, nochmal = bauen.',
+  district: 'Stadtviertel-Lobby (nur im ' + [50, 100, 150, 200].map(f => f + '.').join(', ').replace(/, (?=200)/, ' oder ') + ' OG): eine Lobby zum Umsteigen, der Express hält hier – dazu Kaffee und Einkauf gleich am Umstieg (' + euro(CFG.rooms.district.prices.coffee) + ' je Kaffee, ' + euro(CFG.rooms.district.prices.shopping) + ' je Einkauf, ' + euro(CFG.rooms.district.upkeep) + '/Tag). Eine Express-Kette 0–50–100–150 spart Umstiege. Antippen, nochmal = bauen.',
+  logistics: 'Logistikzentrale: ab ★★★★ wird jeder gehobene und Luxus-Raum täglich gereinigt. Ohne Zentrale kommen die Reinigungskräfte über die Straße – morgens ' + CFG.cleaning.street[0].map(t => t / 3600).join('–') + ' und abends ' + CFG.cleaning.street[1].map(t => t / 3600).join('–') + ' Uhr, mitten in den Wellen. Mit Zentrale starten sie hier und arbeiten ' + CFG.cleaning.center.map(t => fmtTime(t)).join('–') + ' Uhr (bis ' + CFG.rooms.logistics.rooms + ' Räume je Zentrale, ' + euro(CFG.rooms.logistics.upkeep) + '/Tag, kein Erlös). Mit einem Dienstaufzug bleiben sie aus den Mieter-Aufzügen. Geht auch im Keller. Antippen, nochmal = bauen.',
+  station: 'Tiefbahnhof (erst ab dem ' + -CFG.rooms.station.minDepth + '. UG abwärts): ein dritter Eingang – seine Etage zählt als Lobby, der Express hält hier. Ein Teil der Mieter (' + CFG.entries.station.share.map(v => Math.round(v * 100) + ' %').join(' / ') + ' aus Standard, Gehoben, Luxus) kommt und geht mit der Bahn statt über die Straße (' + CFG.rooms.station.spaces + ' Plätze), dazu ' + Math.round(CFG.publicVisits.fromStation * 100) + ' % der Besucher von Passage, Ärztehaus, Schule und Bürgeramt. Jeder Nutzer bringt ' + euro(CFG.rooms.station.perUser) + ', Betrieb ' + euro(CFG.rooms.station.upkeep) + '/Tag. Antippen, nochmal = bauen.',
+  passage: 'Einkaufspassage: keine Mieter, aber ~' + CFG.rooms.passage.visitors + ' Besucher am Tag (' + CFG.rooms.passage.visitWhen.map(w => w.map(t => fmtTime(t)).join('–')).join(', ') + ' Uhr, Mo–Sa, samstags doppelt) – von der Straße oder mit der Bahn (' + euro(CFG.rooms.passage.price) + ' je Besuch, ' + euro(CFG.rooms.passage.upkeep) + '/Tag). Lange Wege = weniger Besucher. Etwas laut. Antippen, nochmal = bauen.',
+  clinic: 'Ärztehaus: ~' + CFG.rooms.clinic.visitors + ' Patienten werktags (' + CFG.rooms.clinic.visitWhen.map(w => w.map(t => fmtTime(t)).join('–')).join(' und ') + ' Uhr), von der Straße oder mit der Bahn (' + euro(CFG.rooms.clinic.price) + ' je Besuch, ' + euro(CFG.rooms.clinic.upkeep) + '/Tag). Etwas laut. Antippen, nochmal = bauen.',
+  school: 'Schule: ' + CFG.rooms.school.visitors + ' Schüler kommen werktags ' + CFG.rooms.school.visitWhen[0].map(t => fmtTime(t)).join('–') + ' Uhr – mitten in die Morgenwelle – und gehen ab ' + fmtTime(CFG.rooms.school.until) + ' Uhr (' + euro(CFG.rooms.school.price) + ' je Schüler und Tag, ' + euro(CFG.rooms.school.upkeep) + '/Tag). Etwas laut. Antippen, nochmal = bauen.',
+  townhall: 'Bürgeramt: ~' + CFG.rooms.townhall.visitors + ' Besucher werktags ' + CFG.rooms.townhall.visitWhen[0].map(t => fmtTime(t)).join('–') + ' Uhr, von der Straße oder mit der Bahn (' + euro(CFG.rooms.townhall.price) + ' je Besuch, ' + euro(CFG.rooms.townhall.upkeep) + '/Tag). Etwas laut. Antippen, nochmal = bauen.',
+  heliport: 'Heliport (nur ab dem ' + CFG.rooms.heliport.fromFloor + '. OG an der Außenkante): ein Eingang mitten im Turm – ' + Math.round(CFG.entries.heliport.share[2] * 100) + ' % der Luxus-Büro-Leute ab dem ' + CFG.entries.heliport.fromFloor + '. OG kommen und gehen per Hubschrauber statt über die Straße und die lange Express-Kette (' + CFG.rooms.heliport.spaces + ' Plätze, ' + euro(CFG.rooms.heliport.perUser) + ' je Nutzer und Tag, ' + euro(CFG.rooms.heliport.upkeep) + '/Tag). Antippen, nochmal = bauen.',
+  checkpoint: 'Schleuse: sichert ihre Etage – jeder Weg zu einem Büro oder einer Wohnung dort dauert gefühlt ' + String(CFG.checkpoint.extraSec / 60).replace('.', ',') + ' Min. länger (Kontrolle), dafür zahlen Luxus-Büros auf der Etage × ' + String(CFG.checkpoint.rentK).replace('.', ',') + ' Miete (' + euro(CFG.rooms.checkpoint.upkeep) + '/Tag). Antippen, nochmal = bauen.',
+  server: 'Serverraum: ein Mieter ohne Menschen – keine Wege, keine Bedürfnisse, immer vermietet: ' + euro(CFG.rooms.server.rent) + ' Miete am Tag, aber nur mit Kühlung (eine Technikebene höchstens ' + CFG.rooms.server.cool + ' Etagen entfernt), sonst die Hälfte. Laut für die Nachbarn. Trägt die teuren Etagen über dem 100. OG (' + euro(CFG.rooms.server.upkeep) + '/Tag). Antippen, nochmal = bauen.',
+  storage: 'Self-Storage: Lagerabteile ohne Bewohner, auch im Keller – immer vermietet (' + euro(CFG.rooms.storage.rent) + ' am Tag), dazu ~' + CFG.rooms.storage.walkIn + ' Kunden Mo–Sa ' + CFG.rooms.storage.walkInHours.map(t => t / 3600).join('–') + ' Uhr (' + euro(CFG.rooms.storage.price) + ' je Besuch, samstags doppelt) – ' + euro(CFG.rooms.storage.upkeep) + '/Tag. Antippen, nochmal = bauen.',
+  bridge: 'Brücke (ab ' + '★'.repeat(CFG.rooms.bridge.star) + ', nur im 50., 100., 150. oder 200. OG zwischen beiden Türmen, Boden auf beiden Seiten): verbindet Turm A und Turm B – die Etage wird in beiden Türmen zur Lobby, man steigt dort um, und Versorger auf der anderen Seite sind zu Fuß erreichbar. Wer hinübergeht, macht Lärm bis ' + Math.round(CFG.noise.bridge.r * 6) + ' Felder neben der Brücke. ' + euro(CFG.rooms.bridge.upkeep) + ' Betrieb am Tag, kein Erlös. Bei Sturm ist sie gesperrt. Turm B (rechts der Lücke) baut man ab ' + '★'.repeat(CFG.TWIN_STAR) + ' vom gemeinsamen EG aus.',
+  airship: 'Luftschiffhafen (ab ' + '★'.repeat(CFG.rooms.airship.star) + ', nur ab dem ' + CFG.rooms.airship.fromFloor + '. OG an der Außenkante): ein Eingang ganz oben – ' + Math.round(CFG.entries.airship.share[2] * 100) + ' % der Leute aus Luxus-Wohnungen ab dem ' + CFG.entries.airship.fromFloor + '. OG kommen und gehen mit dem Luftschiff statt ' + CFG.entries.airship.fromFloor + ' Etagen hinunter (' + CFG.rooms.airship.spaces + ' Plätze, ' + euro(CFG.rooms.airship.perUser) + ' je Nutzer und Tag, ' + euro(CFG.rooms.airship.upkeep) + '/Tag). Bei Sturm geschlossen. Antippen, nochmal = bauen.',
+  geothermal: 'Geothermie (ab ' + '★'.repeat(CFG.rooms.geothermal.star) + ', nur im ' + floorName(CFG.rooms.geothermal.onlyFloor) + '): Strom aus der Tiefe – ' + CFG.rooms.geothermal.power + ' MW. Ab ' + '★'.repeat(CFG.power.star) + ' brauchen Etagen und vor allem Aufzüge Strom; das Netz liefert ' + CFG.power.grid + ' MW, reicht es nicht, fahren alle Kabinen langsamer (Geld-Panel ⚡). Sie bohrt sich selbst hinunter – kein Keller darüber nötig, nur ihre Etage kostet Betrieb (' + euro(CFG.rooms.geothermal.upkeep) + '/Tag, kein Erlös). Antippen, nochmal = bauen.',
+  wind: 'Windrad (ab ' + '★'.repeat(CFG.rooms.wind.star) + ', ab dem ' + CFG.rooms.wind.fromFloor + '. OG unter freiem Himmel): ' + CFG.rooms.wind.power + ' MW Strom für die Aufzüge – bei Sturm und überbaut nichts (' + euro(CFG.rooms.wind.upkeep) + '/Tag, kein Erlös). Antippen, nochmal = bauen.',
+  skygarden: 'Wolkengarten (ab ' + '★'.repeat(CFG.rooms.skygarden.star) + ', ab dem ' + CFG.rooms.skygarden.fromFloor + '. OG unter freiem Himmel): Abend und Sport über den Wolken – die Luxus-Mieter dort müssen dafür nicht hinunterfahren (' + euro(CFG.rooms.skygarden.price) + ' je Besuch, ' + euro(CFG.rooms.skygarden.upkeep) + '/Tag). Bei Nebel geschlossen. Überbaut kommt nur die Hälfte. Antippen, nochmal = bauen.',
+  antenna: 'Antenne (ab ' + '★'.repeat(CFG.rooms.antenna.star) + ', ab dem ' + CFG.rooms.antenna.fromFloor + '. OG): Funkmast ohne Menschen – ' + euro(CFG.rooms.antenna.rent) + ' Pacht am Tag, solange in ihren Spalten nichts darüber gebaut ist (' + euro(CFG.rooms.antenna.upkeep) + '/Tag). Ein Fernsehstudio (ganze Büroetage) will eine. Antippen, nochmal = bauen.',
+  spacestation: 'Weltraumstation (ab ' + '★'.repeat(CFG.rooms.spacestation.star) + ', nur im ' + floorName(CFG.rooms.spacestation.onlyFloor) + '): Touristen kommen jeden Tag ' + CFG.rooms.spacestation.visitWhen.map(w => w.map(t => t / 3600).join('–')).join(', ') + ' Uhr von der Straße, mit der Bahn oder dem Luftschiff hinauf (~' + CFG.rooms.spacestation.tourists + ', ' + euro(CFG.rooms.spacestation.price) + ' je Besuch, ' + euro(CFG.rooms.spacestation.upkeep) + '/Tag) – bei langen Wegen kommen weniger: Maglev oder MULTI bringen sie schnell nach oben. Im Feld der Station: 🚀 Plattform bauen – das Ziel. Eine ganze Luxus-Büroetage ab dem ' + CFG.merge.whole.agencyFrom + '. OG im selben Turm wird zur ' + CFG.tenants.spaceagency.icon + ' ' + CFG.tenants.spaceagency.label + ' (Miete × ' + String(CFG.tenants.spaceagency.rent).replace('.', ',') + '). Antippen, nochmal = bauen.',
+  gondola: 'Fassadengondel (nur ab dem ' + CFG.rooms.gondola.fromFloor + '. OG): über der Wolkengrenze (' + CFG.weather.line + '. OG) gibt es ab ★★★★ Wetter – an Eistagen verlieren Büros und Wohnungen dort ' + Math.round(CFG.weather.iceDrop * 100) + ' % Erfüllung, die Gondel hält ihre Etage und die ' + CFG.rooms.gondola.reach + ' darunter eisfrei (' + euro(CFG.rooms.gondola.upkeep) + '/Tag). Nebel kostet Luxus-Räumen dort den Höhenzuschlag. Antippen, nochmal = bauen.',
+  shell: 'Rohbau: antippen = ein Feld, drücken und waagerecht ziehen = mehrere; nochmal tippen = bauen (' + euro(CFG.shell.cost) + ' je Feld, im Keller ' + euro(CFG.economy.basementShell) + ').',
   normal: 'Aufzug: erste Etage antippen, dann die zweite (höchstens 15 Etagen).',
   express: 'Express: hält nur in Lobbys, fährt schnell und beliebig weit.',
+  double: 'Doppeldecker: zwei Kabinen übereinander, doppelt so viele Plätze. Hält nur auf jeder zweiten Etage – das Unterdeck im EG, 2., 4. … OG, das Oberdeck eine Etage höher (bis ' + CFG.shafts.double.maxSpan + ' Etagen). Zum Oberdeck braucht es eine Rolltreppe EG–1. OG. Erste Etage antippen, dann die zweite.',
+  fire: 'Feuerwehraufzug: fährt keine Fahrgäste, ist aber Pflicht – über dem ' + CFG.fireLift.from + '. OG baut man nur, wenn einer ab dem EG bis ' + CFG.fireLift.gap + ' Etagen unter die neue Etage reicht. Erste Etage antippen, dann die zweite.',
+  service: 'Dienstaufzug: wie ein Aufzug (höchstens ' + CFG.shafts.service.maxSpan + ' Etagen), aber nur für Reinigung und Handwerker – Mieter und Besucher fahren nie mit. Führt ein Weg über Dienstaufzüge und Treppen ans Ziel, nehmen sie ihn und lassen die Mieter-Aufzüge frei. Erste Etage antippen, dann die zweite.',
+  multi: 'MULTI: Kabinen ohne Seil – bis zu ' + CFG.shafts.multi.maxCars + ' in einem Schacht, schnell und so weit man will (bis ' + CFG.shafts.multi.maxSpan + ' Etagen). Hält nur in Lobbys wie der Express. Teuer: ' + euro(CFG.shafts.multi.car) + ' je Kabine, ' + euro(CFG.shafts.multi.upkeep) + ' Betrieb je Kabine und Tag. Erste Etage antippen, dann die zweite.',
+  maglev: 'Maglev: Magnetbahn senkrecht – 100 Etagen in rund ' + Math.round(100 / CFG.shafts.maglev.speed / 60) + ' Min., ' + CFG.shafts.maglev.cap + ' Plätze je Kabine, höchstens ' + CFG.shafts.maglev.maxCars + ' Kabinen. Hält nur im EG, am Tiefbahnhof und im ' + [50, 100, 150, 200].map(f => f + '.').join(', ').replace(/, (?=200)/, ' oder ') + ' OG, wenn dort eine Lobby ist (Stadtviertel-Lobby, Brücke). Sehr teuer: ' + euro(CFG.shafts.maglev.car) + ' je Kabine, ' + euro(CFG.shafts.maglev.upkeep) + ' Betrieb je Kabine und Tag. Erste Etage antippen, dann die zweite.',
+  twin: 'TWIN: zwei Kabinen übereinander in einem Schacht (bis ' + CFG.shafts.twin.maxSpan + ' Etagen) – die untere fährt bis zur Teilungsetage, die obere ab dort. An der Teilung steigt man um wie in einer Lobby, ganz ohne Lobby-Raum. Die Teilung (anfangs in der Mitte) im Panel mit ▲/▼ verschieben. Erste Etage antippen, dann die zweite.',
   demolish: 'Abriss: antippen, nochmal tippen = weg. Kein Geld zurück.',
 };
 
@@ -354,6 +407,7 @@ speedEl.onclick = e => {
 };
 document.getElementById('menuBtn').onclick = () => openMenu();
 document.getElementById('money').onclick = () => openMoney();
+document.getElementById('stars').onclick = () => { if (panelMode === 'stars') closePanel(); else openStars(); };
 
 // wide mode: PC-only test option, stage fills the window, menus stay phone-sized
 const WIDE_KEY = 'tower-game-wide-v1';
@@ -367,10 +421,10 @@ function setWide(on) {
 }
 document.body.classList.toggle('wide', wide);
 
-const SEASONS = [['🌷', 'Der Frühling'], ['☀️', 'Der Sommer'], ['🍂', 'Der Herbst'], ['❄️', 'Der Winter']];
+const SEASONS = [['🌷', 'Der Frühling', 'Frühling'], ['☀️', 'Der Sommer', 'Sommer'], ['🍂', 'Der Herbst', 'Herbst'], ['❄️', 'Der Winter', 'Winter']];
 let lastSeason = null;
 function updateHeader() {
-  document.getElementById('clock').textContent = 'Tag ' + game.day + ' ' + SEASONS[game.season][0] + ' · ' + fmtTime(game.t);
+  document.getElementById('clock').textContent = game.weekdayName + ' · Tag ' + game.day + ' · ' + SEASONS[game.season][2] + ' · ' + fmtTime(game.t);
   if (lastSeason !== game.season) {
     if (lastSeason != null) toast(SEASONS[game.season][0] + ' ' + SEASONS[game.season][1] + ' beginnt', 'good');
     lastSeason = game.season;
@@ -381,10 +435,15 @@ function updateHeader() {
   m.classList.toggle('neg', game.money < 0);
   document.getElementById('stars').textContent = '★'.repeat(game.stars) + '☆'.repeat(CFG.stars.length - 1 - game.stars);
   const req = game.nextStarReq();
-  let s = '👥 ' + game.population + ' · 😊 ' + Math.round(game.sat * 100) + ' %';
-  if (req) s += ' · nächster ★: ' + req.pop + ' 👥, ' + Math.round(req.sat * 100) + ' %' + (req.restaurants ? ', 🍽️' : '') + (req.upgraded ? ', ' + game.upgradedRooms() + '/' + req.upgraded + ' ▲' : '');
-  else s += ' · Ziel erreicht 🏆';
-  document.getElementById('stats').textContent = s;
+  const pop = '<span class="pop">👥</span>';
+  let s = pop + ' ' + game.population + ' · 🚶 ' + game.visitorsInside + ' · 😊 ' + Math.round(game.sat * 100) + ' %';
+  if (req) s += ' · nächster ★: ' + req.pop.toLocaleString('de-DE') + ' ' + pop + ', ' + Math.round(req.sat * 100) + ' %' + (req.restaurants ? ', 🍽️' : '') + (req.upgraded ? ', ' + game.upgradedRooms() + '/' + req.upgraded + ' ▲' : '');
+  else {   // P9 (E55): after the last star the goal – the space elevator
+    const gi = game.goalInfo();
+    s += ' · ★★★★★ – ' + (gi.launched != null ? '🚀 die erste Kabine ist gestartet' : gi.done != null ? '🎯 Ziel erreicht – Start um ' + fmtTime(CFG.goal.launchAt) + ' Uhr' : gi.platform ? '🚀 ' + gi.streak + ' / ' + gi.days + ' Tage ' + Math.round(gi.sat * 100) + ' %' : 'ganz oben wartet der Weltraumfahrstuhl');
+  }
+  const st = document.getElementById('stats');
+  if (st.innerHTML !== s) st.innerHTML = s;
 }
 
 // ---------- toast ----------
@@ -400,12 +459,26 @@ function toast(text, kind) {
 
 // ---------- panel ----------
 const panelEl = document.getElementById('panel');
-function closePanel() { panelEl.hidden = true; panelMode = null; selected = null; selInfo = null; }
+let mergePrev = null;   // P6: { room, dir } after the first tap on „⇔ mit links/rechts“ (preview); the second tap merges
+function closePanel() { panelEl.hidden = true; panelMode = null; selected = null; selInfo = null; mergePrev = null; }
 function openPanel(html, mode) { panelEl.innerHTML = html; panelEl.hidden = false; panelMode = mode; panelEl.dataset.key = ''; }
 panelEl.addEventListener('click', e => {
   const b = e.target.closest('[data-act]'); if (!b) return;
   const act = b.dataset.act;
   if (act === 'close') { closePanel(); return; }
+  if (act === 'priv') {   // TOWER-a0011 E21: private stop on/off
+    if (b.classList.contains('dis')) { setHint(b.title, 'err'); return; }
+    const r = game.togglePriv(selected, +b.dataset.f);
+    if (!r.ok) setHint(r.reason, 'err'); else setHint(r.on ? `⭐ Privathalt ${floorName(r.f)} (−${euro(r.cost)}): der Express hält jetzt auch dort` : '⭐ Privathalt aufgehoben', 'go');
+    renderObjPanel(); return;
+  }
+  if (act === 'dispatch') {   // TOWER-a0011 E12: destination dispatch on/off
+    if (b.classList.contains('dis')) { setHint(b.title, 'err'); return; }
+    const r = game.toggleDispatch(selected);
+    if (!r.ok) setHint(r.reason, 'err'); else setHint(selected.dd ? `🎯 Zielwahl an (−${euro(r.cost)}): die Kabinen teilen die Ziele unter sich auf` : '🎯 Zielwahl aus', 'go');
+    renderObjPanel(); return;
+  }
+  if (act === 'split') { if (b.classList.contains('dis')) { setHint(b.title, 'err'); return; } const r = game.moveSplit(selected, +b.dataset.dir); setHint(r.ok ? 'Teilung jetzt im ' + floorName(r.f) : r.reason, r.ok ? 'go' : 'err'); renderObjPanel(); return; }   // TOWER-a0011 E25: TWIN split
   if (act === 'addcar') { const r = game.addCar(selected); if (!r.ok) setHint(r.reason, 'err'); renderObjPanel(); return; }
   if (act === 'delcar') { const r = game.removeCar(selected); if (!r.ok) setHint(r.reason, 'err'); renderObjPanel(); return; }
   if (act === 'extend') { if (b.classList.contains('dis')) { setHint(b.title, 'err'); return; } const r = game.extendShaft(selected, +b.dataset.dir); if (!r.ok) setHint(r.reason, 'err'); renderObjPanel(); return; }
@@ -415,6 +488,34 @@ panelEl.addEventListener('click', e => {
     if (b.classList.contains('dis')) { setHint(b.title, 'err'); return; }
     const r = game.callEmergency(selected.cars[+b.dataset.car]);
     if (!r.ok) setHint(r.reason, 'err');
+    renderObjPanel(); return;
+  }
+  if (act === 'upg') {   // P3 (E19): plant-floor upgrade backup power / leak warning
+    if (b.classList.contains('dis') || b.classList.contains('on')) { setHint(b.title, b.classList.contains('on') ? 'go' : 'err'); return; }
+    const r = game.buyUpg(selected, b.dataset.key);
+    setHint(r.ok ? CFG.incidents.upg[r.key].label + ' eingebaut (−' + euro(r.cost) + ')' : r.reason, r.ok ? 'go' : 'err');
+    renderObjPanel(); return;
+  }
+  if (act === 'platform') {   // P9 (E55): the space station's platform – the goal
+    if (b.classList.contains('dis')) { setHint(b.title, 'err'); return; }
+    const r = game.buildPlatform(selected);
+    setHint(r.ok ? '🚀 Plattform gebaut (−' + euro(r.cost) + ')' : r.reason, r.ok ? 'go' : 'err');
+    renderObjPanel(); return;
+  }
+  if (act === 'damperUp' || act === 'repair') {
+    if (b.classList.contains('dis')) { setHint(b.title, 'err'); return; }
+    const r = act === 'repair' ? game.repairRoom(selected) : game.upgradeDamper(selected);
+    setHint(r.ok ? (act === 'repair' ? (r.emergency ? 'Notdienst kommt' : 'Bezahlt – ein Handwerker kommt') : 'Aufgewertet') + ' (−' + euro(r.cost) + ')' : r.reason, r.ok ? 'go' : 'err');
+    renderObjPanel(); return;
+  }
+  if (act === 'merge') {   // P6 (E12/E34): first tap = preview, second tap on the same button = merge
+    if (b.classList.contains('dis')) { setHint(b.title, 'err'); return; }
+    const dir = b.dataset.dir === 'up' || b.dataset.dir === 'whole' ? b.dataset.dir : +b.dataset.dir;   // E37: „⇕ mit oben“ = the block of four, E51 „⇔ ganze Etage“
+    if (mergePrev && mergePrev.room === selected && mergePrev.dir === dir) {
+      const r = dir === 'up' ? game.mergeUp(selected) : dir === 'whole' ? game.mergeWhole(selected) : game.merge(selected, dir);
+      mergePrev = null;
+      setHint(r.ok ? 'Zusammengelegt: ' + r.label + ' (−' + euro(r.cost) + ')' : r.reason, r.ok ? 'go' : 'err');
+    } else mergePrev = { room: selected, dir };
     renderObjPanel(); return;
   }
   if (act === 'upgrade' || act === 'upgradeFloor') {
@@ -448,6 +549,14 @@ panelEl.addEventListener('click', e => {
     return;
   }
   if (act === 'log') { openLog(); return; }
+  if (act === 'diary') { openDiary(); return; }
+  if (act === 'looks') { openLooks(); return; }
+  if (act === 'setLook') {
+    if (b.classList.contains('dis')) { setHint(b.title, 'err'); return; }
+    const r = game.setLook(b.dataset.kind, b.dataset.key);
+    if (!r.ok) setHint(r.reason, 'err');
+    openLooks(); return;
+  }
   if (act === 'new') { closePanel(); openStart('new', true); }
 });
 
@@ -470,14 +579,15 @@ function energyText(e) {
 }
 
 const COND = { ok: 'fährt', slow: '<span class="st-ok">langsam – verschlissen</span>', waiting: '<span class="st-ok">wartet auf Handwerker</span>',
-  repair: '<span class="st-ok">🔧 in Reparatur</span>', broken: '<span class="st-bad">⚠ Panne</span>' };
+  repair: '<span class="st-ok">🔧 in Reparatur</span>', broken: '<span class="st-bad">⚠ Panne</span>',
+  inspect: '<span class="st-ok">⏸ Prüfung nach dem Beben</span>' };
 function wearBar(w) {
   const cls = w >= 100 ? 'bad' : w >= CFG.wear.slowAt || w >= game.serviceAt ? 'ok' : '';
   return `<span class="bar" title="Verschleiß ${Math.round(w)} %"><i class="${cls}" style="width:${Math.min(100, w).toFixed(0)}%"></i></span>`;
 }
 function signedEuro(n) { return `<span class="${n < 0 ? 'neg' : 'pos'}">${n < 0 ? '−' : '+'}${euro(Math.abs(n))}</span>`; }
 function floorNetRow(f) {
-  return game.floorNet ? `<span>Etage netto gestern</span><span>${signedEuro(game.floorNet[f])}</span>` : '';
+  return game.floorNet ? `<span>Etage netto gestern</span><span>${signedEuro(game.floorNetAt(f))}</span>` : '';
 }
 
 // one row per car: wear bar, condition, emergency button when it is broken and nobody comes
@@ -536,9 +646,9 @@ const isTenant = o => o.type === 'office' || o.type === 'condo';
 
 // list of needs: provider with felt minutes, forecast, yesterday's measurement; penalty; warning
 function needsHtml(o) {
-  const fc = game.forecast(o, o.tier), measured = o.occupied && o.fulfil != null;
+  const fc = game.forecast(o, o.tier), measured = (o.occupied || o.type === 'hotel') && o.fulfil != null;
   const v = measured ? o.fulfil : fc.fulfil;
-  let h = `<p>Bedürfnisse ${CFG.tiers[o.tier].label}: Erfüllung <b class="${shareCls(v)}">${pct(v)}</b>${measured ? '' : ' (Vorhersage)'}</p>`;
+  let h = `<p>Bedürfnisse ${o.merged > 1 ? game.roomLabel(o) : CFG.tiers[o.tier].label}: Erfüllung <b class="${shareCls(v)}">${pct(v)}</b>${measured ? '' : ' (Vorhersage)'}</p>`;
   if (fc.needs.length) {
     h += '<div class="needs"><span class="hd">Bedürfnis</span><span class="hd">Versorger, gefühlt</span><span class="hd">Vorhersage</span><span class="hd">gestern</span>';
     for (const e of fc.needs) {
@@ -551,6 +661,7 @@ function needsHtml(o) {
   } else h += '<p class="fc">Keine Bedürfnisse auf dieser Stufe – nur Lärm zählt.</p>';
   const src = game.penaltySources(o)[0];
   if (o.pen > 0 && src) h += `<p class="fc">Lärm: <span class="st-bad">−${pct(o.pen)}</span> von ${CFG.rooms[src.room.type].label} ${floorName(src.room.f)} (die stärkste Quelle zählt)</p>`;
+  if (o.type === 'hotel') return h;
   if (!o.occupied && o.needOut) h += `<div class="warnbox">Ausgezogen wegen Bedürfnissen. Neue Mieter erst nach einer Bauänderung und ab ${pct(CFG.moveInMin)} Vorhersage.</div>`;
   else if (!o.occupied && fc.fulfil < CFG.moveInMin) h += `<p class="fc">Neue Mieter erst ab ${pct(CFG.moveInMin)} Vorhersage.</p>`;
   return h;
@@ -562,8 +673,10 @@ function warnHtml(o) {
   if (!lv) return '';
   const why = game.warnReason(o).replace(/\.$/, '');   // "… 18 Min." ends with a dot already
   if (lv === 1) return `<div class="warnbox">⚠ Knapp vor der Schwelle: ${why}. Noch kein Auszug – die Schwelle ist Ø über ${CFG.okMin} Min. pro Weg oder höchstens ${pct(CFG.warnBelow)} Erfüllung.</div>`;
-  const d = o.warnDays, [a, b] = CFG.moveOutHours;
-  return `<div class="warnbox red">⚠ Unter der Schwelle, ${d}. Tag: ${why}. Heute ziehen die Mieter mit <b>${pct(game.moveOutChance(o))}</b> Wahrscheinlichkeit aus (jede Stunde ${a}–${b} Uhr ein Teil davon); ab morgen mehr. Ein guter Tag nimmt die Warnung weg.</div>`;
+  const d = o.warnDays, [a, b] = CFG.moveOutHours, P = game.moveOutChance(o);
+  // offices: only a good full day (Tu–Th) takes the warning away (TOWER-a0009); closed rooms are not checked
+  const out = P > 0 ? ` Heute ziehen die Mieter mit <b>${pct(P)}</b> Wahrscheinlichkeit aus (jede Stunde ${a}–${b} Uhr ein Teil davon); ab morgen mehr.` : '';
+  return `<div class="warnbox red">⚠ Unter der Schwelle, ${d}. Tag: ${why}.${out} ${o.type === 'office' ? 'Ein guter voller Bürotag (Di–Do)' : 'Ein guter Tag'} nimmt die Warnung weg.</div>`;
 }
 
 // forecast text for a tier: "voraussichtlich 35 %: Supermarkt 14 Min., kein Fitness erreichbar"
@@ -590,16 +703,85 @@ function upgradeHtml(o) {
   return h;
 }
 
+// merging side by side (★★★, TOWER-a0010 P6, E12/E34): „⇔ mit links“ / „⇔ mit rechts“ when the direct neighbour fits
+// (same kind, both luxury, no warning, at most CFG.merge.max rooms); first tap = preview, second tap = merge
+function mergeHtml(o) {
+  let btns = '', prev = '';
+  for (const dir of [-1, 1, 'up', 'whole']) {   // E37: „⇕ mit oben“ (★★★★) – the 2er directly above; E51: „⇔ ganze Etage“ (★★★★★) from a 3er
+    const c = dir === 'up' ? game.checkMergeUp(o) : dir === 'whole' ? game.checkWhole(o) : game.checkMerge(o, dir);
+    if (!c.ok && c.reason !== 'Zu wenig Geld') continue;
+    const armed = mergePrev && mergePrev.room === o && mergePrev.dir === dir;
+    const side = dir === 'up' ? 'oben' : dir === 'whole' ? 'der ganzen Etage' : dir < 0 ? 'links' : 'rechts', sym = dir === 'up' ? '⇕' : '⇔';
+    btns += `<button class="btn ${c.ok ? '' : 'dis'} ${armed ? 'on' : ''}" data-act="merge" data-dir="${dir}" title="${c.ok ? 'Zusammenlegen mit ' + side : c.reason}">${armed ? sym + ' Jetzt zusammenlegen (' + euro(c.cost) + ')' : dir === 'whole' ? '⇔ ganze Etage' : sym + ' mit ' + side}</button>`;
+    if (!armed) continue;
+    const T = c.tenantType && CFG.tenants[c.tenantType];
+    prev = `<p class="fc">${sym} ${c.n} Räume${dir === 'up' ? ' über zwei Etagen (Viererblock)' : dir === 'whole' ? ' – die ganze Etage' : ''} → <b>${T ? T.icon + ' ' + T.label : c.label}</b> (${c.why}) · ${c.people} Personen · Bedürfnisse: ${c.needs.map(n => CFG.needs[n].label).join(', ') || 'keine'}`
+      + ` · Miete bis ${euro(c.rent)} statt ${euro(c.rentBefore)} pro Tag · ${forecastText(c.forecast)} · Kosten ${euro(c.cost)} (${dir === 'up' ? Math.round(CFG.merge.vertShare * 100) + ' % der vier Baupreise' : dir === 'whole' ? Math.round(CFG.merge.whole.share * 100) + ' % der Baupreise der noch nicht zusammengelegten Räume' : Math.round(CFG.merge.share * 100) + ' % des Baupreises je neu dazukommendem Raum'}).</p>`
+      + (c.tenantType === 'callcenter' ? `<div class="warnbox red">⚠ Falle: Lärm im Umfeld – es käme ein Callcenter: Miete × ${String(T.rent).replace('.', ',')}, doppelt so viele Leute, viel Verkehr.</div>` : '')
+      + `<p class="fc">Die jetzigen Mieter ziehen aus, neue ziehen danach ein. Nochmal tippen = zusammenlegen. Kein Zurück außer Abriss.</p>`;
+  }
+  return btns ? `<div class="btnrow">${btns}</div>${prev}` : '';
+}
+
+// P3 (E21): private stop of an express – a button per floor with a merged room (≥ 3), the one set to take it away
+function privHtml(s) {
+  const P = CFG.priv, fs = game.privFloorsFor(s);
+  if (s.priv != null && !fs.includes(s.priv)) fs.unshift(s.priv);
+  const info = `Prestige-Mieter mit eigenem Halt: der Express hält zusätzlich auf einer Etage mit einem zusammengelegten Raum (≥ ${P.minMerged}) – kein Umsteigen, keine Lobby. Kanzlei und Penthouse zahlen dort ${String(P.rentK).replace('.', ',')}-fache Miete. ${euro(P.cost)} + ${euro(P.upkeep)}/Tag, einer je Express. Jeder Privathalt bremst den Express für alle.`;
+  if (!fs.length) return `<p class="fc">⭐ ${info}</p>`;
+  return `<div class="btnrow">${fs.slice(0, 6).map(f => {
+    const c = game.checkPriv(s, f), on = s.priv === f;
+    return `<button class="btn ${on ? 'on' : ''} ${c.ok ? '' : 'dis'}" data-act="priv" data-f="${f}" title="${c.ok ? (on ? 'Privathalt aufheben' : 'Privathalt hier (' + euro(c.cost) + ')') : c.reason}">⭐ Privathalt ${floorName(f)}${on ? ' an' : ''}</button>`;
+  }).join('')}</div><p class="fc">${info}</p>`;
+}
+
 // rows for a provider (café, Kita, supermarket, fitness) and for disturbers
 function providerRows(o) {
   const def = CFG.rooms[o.type];
   let rows = '';
   if (def.seats && o.type !== 'restaurant') {
     rows += `<span>Plätze</span><span>${o.inside} von ${def.seats} belegt${o.queue.length ? ', <span class="st-ok">' + o.queue.length + ' warten</span>' : ''}</span>
-      <span>Pro ${o.type === 'daycare' ? 'Kind und Tag' : 'Besuch'}</span><span>${euro(def.price)}</span>
+      <span>Pro ${o.type === 'daycare' ? 'Kind und Tag' : 'Besuch'}</span><span>${def.prices ? Object.keys(def.prices).map(k => CFG.needs[k].label + ' ' + euro(def.prices[k])).join(', ') : euro(def.price)}</span>
       <span>Betrieb</span><span>${euro(def.upkeep)} pro Tag</span>
       <span>Besuche</span><span>heute ${o.vN}${o.lastVisits != null ? ', gestern ' + o.lastVisits : ''}</span>`;
     if (o.lastQ || o.lastGU) rows += `<span>Schlange gestern</span><span>Ø ${o.lastQ.toFixed(1).replace('.', ',')} Min.${o.lastGU ? ', <span class="st-bad">' + pct(o.lastGU) + ' aufgegeben</span>' : ''}</span>`;
+  }
+  if (def.provides) rows += `<span>Deckt ab</span><span>${def.provides.map(k => CFG.needs[k].label).join(', ')} – wie ${def.provides.map(k => CFG.rooms[CFG.needs[k].provider].label).join(' und ')}</span>`;
+  if (def.guestWhen) rows += `<span>Gäste von außen</span><span>~${def.guests} je Abend ${def.guestWhen.map(t => t / 3600).join('–')} Uhr (Wochenende doppelt)</span>`;
+  if (def.public) {   // E29 public rooms
+    const days = def.visitDays.length === 6 ? 'Mo–Sa' : 'werktags';
+    rows += `<span>Besucher</span><span>~${def.visitors} ${days} ${def.visitWhen.map(w => w.map(t => fmtTime(t)).join('–')).join(' und ')} Uhr${def.visitK ? ' (samstags doppelt)' : ''}${def.until ? ', bleiben bis ' + fmtTime(def.until) : ''} – weniger bei langen Wegen</span>`;
+  }
+  if (o.type === 'spacestation') {   // P9 (E54): tourists every day, by street, train or airship
+    const L = game.lastDay;
+    rows += `<span>Touristen</span><span>~${def.tourists} täglich ${def.visitWhen.map(w => w.map(t => fmtTime(t)).join('–')).join(', ')} Uhr, von der Straße, mit der Bahn oder dem Luftschiff – weniger bei langen Wegen${L && L.tourists ? ' · gestern ' + L.tourists + (L.touristsVia ? ', davon ' + L.touristsVia + ' über Bahnhof/Luftschiff' : '') : ''}</span>`;
+  }
+  if (def.walkInHours) rows += `<span>Laufkundschaft</span><span>~${def.walkIn} ${def.walkInDays && def.walkInDays.length === 6 ? 'Mo–Sa (samstags doppelt)' : 'werktags'} ${def.walkInHours.map(t => t / 3600).join('–')} Uhr</span>`;
+  if (def.noPeople) {   // E36: server, self-storage – tenants without people
+    const cool = game.coolingFor(o);
+    rows += `<span>Miete</span><span>${euro(game.rentOf(o))} pro Tag, immer vermietet, keine Leute${def.skyAll && o.roofed ? ' – <span class="st-bad">überbaut: keine Pacht</span>' : ''}</span>`
+      + (def.cool != null ? `<span>Kühlung</span><span>${cool ? 'Technikebene ' + floorName(cool.f) + ' (' + Math.abs(cool.f - o.f) + ' Etagen) – volle Miete' : '<span class="st-bad">keine Technikebene höchstens ' + def.cool + ' Etagen entfernt – halbe Miete</span>'}</span>` : '')
+      + (def.seats ? '' : `<span>Betrieb</span><span>${euro(def.upkeep)} pro Tag</span>`);
+  }
+  if (def.open) rows += `<span>Himmel</span><span>${o.roofed ? '<span class="st-bad">überbaut – ' + (def.guests ? 'nur halb so viele Gäste, halber Beitrag' : def.seats ? 'halber Beitrag' : def.power ? 'kein Strom' : def.rent ? 'keine Pacht' : 'wirkt nicht') + '</span>' : 'frei'}</span>`
+    + (def.guests ? `<span>Gäste von außen</span><span>~${Math.round(def.guests * (o.roofed ? 0.5 : 1))} je Abend (Wochenende doppelt)</span>` : '');
+  if (def.power) {   // P8 (E52): geothermal, wind turbine
+    const off = def.open && (o.roofed || game.weatherToday.storm), P = game.powerInfo();
+    rows += `<span>Strom</span><span>${off ? '<span class="st-bad">liefert heute nichts' + (game.weatherToday.storm && !o.roofed ? ' (Sturm)' : '') + '</span>' : def.power + ' MW'}${game.stars >= CFG.power.star ? ' · Turm ' + game.powerText() : ' (Strom zählt erst ab ' + '★'.repeat(CFG.power.star) + ')'}</span><span>Betrieb</span><span>${euro(def.upkeep)} pro Tag, kein Erlös</span>`;
+  }
+  if (o.type === 'hotel') {
+    const occ = o.lastOcc;
+    rows += `<span>Zimmer belegt</span><span>${o.guests.length} von ${def.suites}</span>
+      <span>Auslastung gestern</span><span>${occ == null ? '–' : pct(occ)}${occ ? ' · zählt ' + Math.round(occ * 2) + ' Luxus belegt' : ''}</span>
+      <span>Gäste</span><span>${o.people.filter(p => p.state !== 'out').length} im Haus${o.req ? ', heute ' + o.req + ' Anfragen' : ''}${o.checkins ? ', ' + o.checkins + ' eingecheckt' : ''}</span>
+      <span>Pro Gast und Nacht</span><span>${euro(def.night)}</span>
+      <span>Betrieb</span><span>${euro(def.upkeep)} pro Tag</span>`;
+  }
+  if (def.spaces) {   // garage, station, heliport (E27)
+    rows += `<span>Plätze</span><span>${o.parked} belegt von ${def.spaces}, ${o.assigned} Mieter vorgesehen</span>
+      <span>Nutzer</span><span>heute ${o.users}, gestern ${o.lastUsers}${o.type === 'station' ? ' (Mieter und Besucher)' : ''}</span>
+      <span>Erlös</span><span>${euro(def.perUser)} je Nutzer und Tag · gestern ${euro(o.lastUsers * def.perUser)}</span>
+      <span>Betrieb</span><span>${euro(def.upkeep)} pro Tag</span>`;
   }
   const N = CFG.noise[o.type];
   if (N) rows += `<span>Lärm</span><span>bis −${pct(N.s)} für Nachbarn (Radius ${String(N.r).replace('.', ',')} Etagen)</span>`;
@@ -620,30 +802,37 @@ function renderObjPanel() {
     const avg = o.waitN ? (o.waitSum / o.waitN / 60).toFixed(1).replace('.', ',') + ' Min.' : '–';
     let chips = '';
     for (let f = o.f1; f >= o.f0; f--) {
-      const possible = o.kind === 'normal' || game.isLobby(f);
+      const possible = game.stopAllowed(o, f);
       const on = o.stops[f - o.f0] && possible;
-      chips += `<span class="chip ${on ? 'on' : ''} ${possible ? '' : 'dis'}" data-act="stop" data-f="${f}">${f === 0 ? 'EG' : f}</span>`;
+      chips += `<span class="chip ${on ? 'on' : ''} ${possible ? '' : 'dis'}" data-act="stop" data-f="${f}">${f > 0 ? f : floorName(f)}</span>`;
     }
     const up = game.checkExtend(o, 1), down = game.checkExtend(o, -1);
     const extBtn = (chk, dir, lb) => `<button class="btn ${chk.ok ? '' : 'dis'}" data-act="extend" data-dir="${dir}" title="${chk.ok ? lb + ' (' + euro(chk.cost) + ')' : chk.reason}">${lb}</button>`;
     openPanel(`<h3>${def.label} ${o.name}<button class="close" data-act="close">✕</button></h3>
-      <div class="kv"><span>Etagen</span><span>${floorName(o.f0)} – ${floorName(o.f1)} · ${o.f1 - o.f0} von höchstens ${def.maxSpan} Etagen hoch</span>
+      <div class="kv"><span>Etagen</span><span>${floorName(o.f0)} – ${floorName(o.f1)} · ${o.f1 - o.f0} von höchstens ${def.maxSpan} Etagen hoch${o.priv != null ? ' · ⭐ Privathalt ' + floorName(o.priv) : ''}</span>
       <span>Wartende jetzt</span><span>${waiting}</span>
       <span>Ø Wartezeit heute</span><span>${avg}</span>
       <span>Kabinen</span><span>${o.cars.length} von ${def.maxCars} · je ${def.cap} Personen</span>
-      <span>Betrieb</span><span>${euro(def.upkeep * o.cars.length)} pro Tag (${euro(def.upkeep)} je Kabine)</span>
+      <span>Betrieb</span><span>${euro(game.shaftUpkeep(o))} pro Tag (${euro(def.upkeep)} je Kabine${o.dd ? ' + ' + euro(CFG.dispatch.upkeep) + ' Zielwahl' : ''}${o.priv != null ? ' + ' + euro(CFG.priv.upkeep) + ' Privathalt' : ''})</span>
       <span>Wartung</span><span>${o.svc == null ? '<span class="st-bad">nicht möglich – keine Halte-Etage mit Boden</span>' : 'im ' + floorName(o.svc) + ' ab ' + game.serviceAt + ' % Verschleiß' + (game.rooms.some(r => r.type === 'workshop') ? '' : ' – <span class="st-ok">keine Werkstatt gebaut</span>')}</span></div>
+      ${def.decks ? `<p class="fc">🚡 Hält nur auf jeder zweiten Etage: Unterdeck im ${floorName(o.f0)}, ${floorName(o.f0 + 2)}, …, Oberdeck eine Etage höher – beide gleichzeitig. Wer auf einer Etage des Oberdecks einsteigt, kommt nur auf Etagen des Oberdecks (Rolltreppe ${floorName(o.f0)}–${floorName(o.f0 + 1)}).</p>` : ''}
+      ${def.twin ? (() => { const u = game.checkSplit(o, 1), d = game.checkSplit(o, -1); return `<p class="fc">⇅ Kabine 1 fährt ${floorName(o.f0)}–${floorName(o.split)}, Kabine 2 ${floorName(o.split)}–${floorName(o.f1)}. Im ${floorName(o.split)} steigt man um wie in einer Lobby: unten fährt dort nur abwärts los, oben nur aufwärts.</p>
+      <div class="btnrow"><button class="btn ${u.ok ? '' : 'dis'}" data-act="split" data-dir="1" title="${u.ok ? 'Teilung ins ' + floorName(u.f) : u.reason}">▲ Teilung höher</button><button class="btn ${d.ok ? '' : 'dis'}" data-act="split" data-dir="-1" title="${d.ok ? 'Teilung ins ' + floorName(d.f) : d.reason}">▼ Teilung tiefer</button><span style="color:var(--muted);font-size:12px">Teilung im ${floorName(o.split)}, kostenlos</span></div>`; })() : ''}
+      ${def.svcOnly ? `<p class="fc">🧹 Nur für Reinigung und Handwerker – Mieter und Besucher fahren nie mit. Reinigung und Handwerker nehmen ihn, wenn ein Weg über Dienstaufzüge und Treppen ans Ziel führt.</p>` : ''}
+      ${def.noRiders ? `<p class="fc">🚒 Fährt keine Fahrgäste. Über dem ${CFG.fireLift.from}. OG wird nur gebaut, wenn ein Feuerwehraufzug ab dem EG bis ${CFG.fireLift.gap} Etagen unter die neue Etage reicht – zum Höherbauen ▲ verlängern.</p>` : ''}
       <p>Verschleiß und Zustand (ab ${CFG.wear.slowAt} % langsamer, bei 100 % Panne):</p>
       <div class="cars">${carRows(o)}</div>
-      <div class="btnrow"><button class="btn" data-act="delcar">− Kabine</button><button class="btn" data-act="addcar">+ Kabine (${euro(def.car)})</button></div>
+      ${CFG.dispatch.kinds.includes(o.kind) ? (() => { const c = game.checkDispatch(o); return `<div class="btnrow"><button class="btn ${o.dd ? 'on' : ''} ${c.ok ? '' : 'dis'}" data-act="dispatch" title="${c.ok ? (o.dd ? 'Zielwahl ausschalten' : 'Zielwahl einbauen (' + euro(c.cost) + ')') : c.reason}">🎯 Zielwahl ${o.dd ? 'an' : 'aus'}</button><span style="color:var(--muted);font-size:12px">${o.dd ? 'Die Kabinen teilen die Ziele unter sich auf – weniger Halte, schnellere Runden.' : euro(CFG.dispatch.cost) + ' + ' + euro(CFG.dispatch.upkeep) + '/Tag: die Kabinen teilen die Ziele unter sich auf'}</span></div>`; })() : ''}
+      ${def.lobbyOnly && !def.stopEvery ? privHtml(o) : ''}
+      ${def.cars ? '' : `<div class="btnrow"><button class="btn" data-act="delcar">− Kabine</button><button class="btn" data-act="addcar">+ Kabine (${euro(def.car)})</button></div>`}
       <div class="btnrow">${extBtn(up, 1, '▲ Oben +1')}${extBtn(down, -1, '▼ Unten +1')}<span style="color:var(--muted);font-size:12px">je ${euro(def.perFloor)}</span></div>
-      <p>Halte (antippen = an/aus)${o.kind === 'express' ? ' – Express hält nur in Lobbys' : ''}:</p>
+      <p>Halte (antippen = an/aus)${def.stopEvery ? ' – ' + def.label + ' hält nur im EG, am Tiefbahnhof und auf Lobbys im ' + def.stopEvery + '., ' + 2 * def.stopEvery + '. … OG' : def.lobbyOnly ? ' – ' + def.label + ' hält nur in Lobbys' : ''}:</p>
       <div class="chips">${chips}</div>`, 'obj');
   } else if (o.isShell) {
     openPanel(`<h3>${CFG.shell.icon} ${CFG.shell.label}<button class="close" data-act="close">✕</button></h3>
       <div class="kv"><span>Etage</span><span>${floorName(o.f)}</span><span>Breite</span><span>${o.w} Felder</span>
-      <span>Etage kostet</span><span>${o.f > 0 ? euro(game.floorUpkeep(o.f)) + ' pro Tag' : 'nichts (Lobby)'}</span>${floorNetRow(o.f)}</div>
-      <p>Boden ohne Mieter: hier kann man laufen und am Aufzug anstehen. Räume lassen sich direkt darauf bauen; wird ein Raum abgerissen, bleibt der Rohbau stehen. Jede Etage mit Boden kostet Betrieb, oben mehr.</p>`, 'obj');
+      <span>Etage kostet</span><span>${o.f !== 0 ? euro(game.floorUpkeep(o.f)) + ' pro Tag' : 'nichts (Lobby)'}</span>${floorNetRow(o.f)}</div>
+      <p>Boden ohne Mieter: hier kann man laufen und am Aufzug anstehen. Räume lassen sich direkt darauf bauen; wird ein Raum abgerissen, bleibt der Rohbau stehen. Jede Etage mit Boden kostet Betrieb, oben mehr, im Keller je tiefer, desto mehr.</p>`, 'obj');
   } else if (o.isLink) {
     const def = CFG.links[o.kind];
     openPanel(`<h3>${def.icon} ${def.label}<button class="close" data-act="close">✕</button></h3>
@@ -656,18 +845,74 @@ function renderObjPanel() {
     const def = CFG.rooms[o.type];
     const st = game.roomStatus(o);
     const live = game.liveAvg(o);
-    let rows = `<span>Etage</span><span>${floorName(o.f)}</span><span>Zustand</span><span>${statusText(st)}</span>`;
+    let rows = `<span>Etage</span><span>${floorName(o.f)}${o.h === 2 ? ' – ' + floorName(o.f + 1) : ''}</span><span>Zustand</span><span>${statusText(st)}</span>`;
     let more = '';
     if (isTenant(o)) {
       rows += `<span>Stufe</span><span>${CFG.tiers[o.tier].label}</span>
         <span>Mieter</span><span>${o.occupied ? o.people.length + ' Personen, ' + o.inside + ' drin' : '–'}</span>
         <span>Miete</span><span>${o.occupied ? euro(game.rentOf(o)) + ' pro Tag' + (o.fulfil != null && o.fulfil < 1 ? ' (' + pct(o.fulfil) + ' von ' + euro(game.potentialRent(o)) + ')' : '') : 'bis ' + euro(game.potentialRent(o)) + ' pro Tag'}</span>`;
       if (o.tier) rows += `<span>Betrieb Stufe</span><span>${euro(game.tierUpkeep(o))} pro Tag, auch leer</span>`;
-      more = warnHtml(o) + needsHtml(o) + upgradeHtml(o);
+      if (o.merged > 1) {   // P6: tenant type (fixed when the tenants moved in; vacant: who would come now)
+        const T = o.tenantType && CFG.tenants[o.tenantType];
+        rows += `<span>Mietertyp</span><span>${T ? T.icon + ' ' + T.label : '–'}${o.occupied ? '' : ' (käme jetzt)'}${game.staysForever(o) ? ' · kündigt nie' : ''}</span>
+          ${T && T.visitors ? `<span>Besucher</span><span>~${T.visitors} ${T.visitDays.length === 7 ? 'täglich' : 'werktags'} ${T.visitWhen.map(w => w.map(t => fmtTime(t)).join('–')).join(', ')} Uhr, von der Straße oder mit der Bahn – ihre Wege zählen in der Bewertung${T.couriers ? '; doppelt so viele Kuriere' : ''}</span>` : ''}
+          <span>Zusammengelegt</span><span>${o.merged} Räume, ${o.h === 2 ? '2 × ' + o.w + ' Felder über zwei Etagen (Viererblock, Eingang unten)' : o.w + ' Felder breit' + (o.whole ? ' – die ganze Etage' : '')} · Miete × ${String(T ? T.rent : 1).replace('.', ',')}${game.privK(o) > 1 ? ' · ⭐ Privathalt × ' + String(CFG.priv.rentK).replace('.', ',') : ''}</span>`;
+      }
+      more = warnHtml(o) + needsHtml(o) + upgradeHtml(o) + mergeHtml(o);
     }
+    if (o.type === 'logistics') rows += `<span>Reinigung heute</span><span>${o.cleanings || 0} von höchstens ${def.rooms} Räumen, ${CFG.cleaning.center.map(t => fmtTime(t)).join('–')} Uhr${game.stars < CFG.cleaning.star ? ' (erst ab ' + '★'.repeat(CFG.cleaning.star) + ')' : ''}</span><span>Betrieb</span><span>${euro(def.upkeep)} pro Tag, kein Erlös</span>`;
+    if (o.type === 'checkpoint') rows += `<span>Gesichert</span><span>${floorName(o.f)}: +${String(CFG.checkpoint.extraSec / 60).replace('.', ',')} Min. je Weg zu Büro oder Wohnung, Luxus-Büros × ${String(CFG.checkpoint.rentK).replace('.', ',')} Miete</span>`;   // E31
+    if (o.type === 'gondola') {   // P6 (E34): protects f − reach … f from the ice above the cloud line
+      const W = CFG.weather, wt = game.weatherToday;
+      rows += `<span>Schützt</span><span>${floorName(Math.max(1, o.f - def.reach))} – ${floorName(o.f)} vor Eis (über dem ${floorName(W.line)} −${pct(W.iceDrop)} Erfüllung an Eistagen)</span>
+        <span>Wetter heute</span><span>${game.stars < W.star ? 'erst ab ' + '★'.repeat(W.star) : [wt.fog && '🌫️ Nebel', wt.ice && '🧊 Eis', wt.storm && '🌪️ Sturm'].filter(Boolean).join(', ') || 'klar'}</span>
+        <span>Betrieb</span><span>${euro(def.upkeep)} pro Tag, kein Erlös</span>`;
+    }
+    if (o.type === 'bridge') rows += `<span>Heute</span><span>${game.today.crossings || 0} Leute über die Brücke${game.lastDay && game.lastDay.crossings != null ? ' (gestern ' + game.lastDay.crossings + ')' : ''}</span><span>Lobby</span><span>${floorName(o.f)} in Turm A und B – hier steigt man um</span><span>Betrieb</span><span>${euro(def.upkeep)} pro Tag, kein Erlös</span>`;   // E43
+    if (o.type === 'lockers') rows += `<span>Pakete heute</span><span>${o.parcels} abgegeben, ${o.booked} angekündigt, Platz für ${def.parcels}</span><span>Pro Paket</span><span>${euro(def.fee)}</span>`;
     if (o.type === 'restaurant') rows += `<span>Gäste drin</span><span>${o.inside} von ${def.seats}</span><span>Pro Gast</span><span>${euro(def.price)}</span>`;
+    if (o.type === 'hotel') more = needsHtml(o) + `<p class="fc">Anfragen je Tag: ${def.suites} × Erfüllung gestern × Wegzeit, Fr/Sa doppelt so viele. Fest Luxus, kein Aufwerten.</p>`;
     rows += providerRows(o);
-    if (o.type !== 'skylobby') {
+    if (o.type === 'spacestation') {   // P9 (E55): the platform and the goal
+      const c = game.checkPlatform(o), G = game.goalInfo();
+      rows += `<span>Plattform</span><span>${o.platform ? '🚀 gebaut · ' + G.text : 'noch nicht gebaut'}</span>`;
+      if (!o.platform) more += `<div class="btnrow"><button class="btn ${c.ok ? '' : 'dis'}" data-act="platform" title="${c.ok ? 'Plattform bauen' : c.reason}">🚀 Plattform bauen (${euro(c.cost)})</button></div>`
+        + `<p class="fc">${c.ok || /Geld/.test(c.reason) ? 'Das Ziel: steht die Plattform und sind ' + G.days + ' Abende in Folge mindestens ' + Math.round(G.sat * 100) + ' % zufrieden, fährt am nächsten Mittag die erste Kabine am Seil ins All. Danach läuft der Turm weiter.' : c.reason}</p>`;
+    }
+    if (o.damaged) {   // P3 (E20): the repair is a mechanic's way – pay, then a mechanic (or the emergency service) comes
+      const c = game.checkRepair(o), m = o.mech;
+      const state = o.repairEnd ? '🔧 Handwerker repariert – fertig gegen ' + fmtTime(o.repairEnd)
+        : o.repairPaid ? (m ? (m.emergency ? '🚨 Notdienst' : '🔧 Handwerker') + ' ist unterwegs' : '🔧 bezahlt – wartet auf einen freien Handwerker (Werkstatt)')
+        : '⚠ beschädigt – keine Miete, keine neuen Mieter';
+      rows += `<span>Schaden</span><span class="st-bad">${state}</span>`;
+      more = (o.repairPaid ? '' : `<div class="btnrow"><button class="btn warn ${c.ok ? '' : 'dis'}" data-act="repair" title="${c.ok ? 'Reparieren' : c.reason}">${c.emergency ? '🚨 Notdienst' : '🔧 Reparieren'} (${euro(c.cost)})</button></div>`
+        + `<p class="fc">${c.ok ? (c.emergency ? 'Keine Werkstatt offen: der Notdienst kommt in ' + Math.round(CFG.emergency.delaySec / 60) + ' Min. durch den Eingang (+' + euro(CFG.emergency.cost) + ') und arbeitet ' + Math.round(CFG.quake.repairSec / 60) + ' Min.'
+          : 'Ein Handwerker der Werkstatt läuft hin und arbeitet ' + Math.round(CFG.quake.repairSec / 60) + ' Min. (' + Math.round(CFG.quake.repairShare * 100) + ' % des Baupreises). Bis zum Abend unfertig: morgen geht es weiter.') : c.reason}</p>`) + more;
+    } else if (o.shaken > 0) rows += `<span>Beben</span><span class="st-ok">Schreck: −${pct(CFG.quake.satDrop)} Erfüllung, noch ${o.shaken} ${o.shaken > 1 ? 'Abende' : 'Abend'}</span>`;
+    // P6 weather above the cloud line (E33/E76): ice tonight, fog today
+    if (o.wxDrop > 0 || (isTenant(o) && game.fogged(o))) rows += `<span>Wetter</span><span class="st-ok">${[o.wxDrop > 0 && (o.wxKind === 'storm' ? '🌪️ Sturm' : o.wxKind === 'both' ? '🧊 Eis + 🌪️ Sturm' : '🧊 Eis') + ': −' + pct(o.wxDrop) + ' Erfüllung heute (' + (o.wxKind === 'storm' ? '🌀 Schwingungsdämpfer hilft' : o.wxKind === 'both' ? '🚡 Fassadengondel und 🌀 Dämpfer helfen' : '🚡 Fassadengondel hilft') + ')', game.fogged(o) && '🌫️ Nebel: heute ohne Höhenzuschlag'].filter(Boolean).join(' · ')}</span>`;
+    if (o.closed) rows += `<span>Wetter</span><span class="st-bad">${game.weatherToday.storm ? '🌪️ Sturm' : '🌫️ Nebel'} – heute geschlossen</span>`;   // E49/E50
+    if (o.type === 'damper') {
+      const L = CFG.rooms.damper.levels, lv = o.damperLevel, c = game.checkDamperUp(o), nx = L[lv];
+      const cut = ['leicht', 'mittel', 'schwer'].map((nm, i) => nm + ' → ' + (i + 1 - lv > 0 ? CFG.quake.names[i + 1 - lv] : 'weg')).join(', ');
+      rows += `<span>Stufe</span><span>${lv} von ${L.length}: ${L[lv - 1].label}</span>
+        <span>Schützt</span><span>${floorName(Math.max(CFG.MIN_FLOOR, o.f - CFG.rooms.damper.reach))} – ${floorName(o.f)}</span>
+        <span>Wirkung</span><span>${cut}</span>
+        <span>Betrieb</span><span>${euro(game.roomUpkeep(o))} pro Tag</span>`;
+      more += nx ? `<p class="fc">▲ ${nx.label}: Betrieb ${euro(nx.upkeep)} statt ${euro(L[lv - 1].upkeep)} pro Tag</p><div class="btnrow"><button class="btn ${c.ok ? '' : 'dis'}" data-act="damperUp" title="${c.ok ? 'Aufwerten' : c.reason}">▲ Aufwerten (${euro(c.cost)})</button></div>${c.ok ? '' : '<p class="fc">' + c.reason + '</p>'}`
+        : '<p class="fc">Höchste Stufe: Beben spürt man hier nicht mehr.</p>';
+    }
+    if (o.type === 'tech') {
+      rows += `<span>Betrieb</span><span>${euro(game.roomUpkeep(o))} pro Tag</span>`;
+      more = `<p class="fc">Pflicht im ${CFG.techFloors.map(f => f + '.').join(' und ')} OG: darüber wird erst gebaut, wenn auf dieser Etage eine Technikebene steht.${CFG.techFloors.includes(o.f) ? ' Diese hier trägt alles über dem ' + floorName(o.f) + '.' : ''}</p>`;
+      // P3 (E19): upgrades against incidents – one in the tower is enough
+      const U = CFG.incidents.upg;
+      more += `<div class="btnrow">${Object.keys(U).map(k => {
+        const c = game.checkUpg(o, k), on = !!(o.upg && o.upg[k]);
+        return `<button class="btn ${on ? 'on' : ''} ${c.ok || on ? '' : 'dis'}" data-act="upg" data-key="${k}" title="${on ? 'eingebaut' : c.ok ? U[k].label + ' einbauen (' + euro(c.cost) + ')' : c.reason}">${U[k].icon} ${U[k].label} ${on ? 'eingebaut' : '(' + euro(U[k].cost) + ')'}</button>`;
+      }).join('')}</div><p class="fc">Ab ${'★'.repeat(CFG.incidents.star)} gibt es Zwischenfälle. ${U.backup.icon} ${U.backup.label}: beim Stromausfall stehen die Aufzüge nur ${Math.round(CFG.incidents.backupSec / 60)} statt ${Math.round(CFG.incidents.outageSec / 60)} Min. (+${euro(U.backup.upkeep)}/Tag). ${U.leak.icon} ${U.leak.label}: ein Wasserschaden kostet keine Miete (+${euro(U.leak.upkeep)}/Tag). ${U.early.icon} ${U.early.label} (ab ${'★'.repeat(U.early.star)}): beim Erdbeben halten die Kabinen rechtzeitig – keine Prüfung, kein Verschleiß, kein Schacht defekt; die Räume trifft es wie sonst (+${euro(U.early.upkeep)}/Tag). Einer im Turm genügt.</p>`;
+    }
+    if (o.type !== 'skylobby' && !def.spaces && o.type !== 'tech' && o.type !== 'damper' && o.type !== 'server' && o.type !== 'gondola' && o.type !== 'bridge') {
       rows += `<span>Ø Weg heute</span><span>${live == null ? '–' : live.toFixed(1).replace('.', ',') + ' Min.'}</span>
         <span>Bewertung</span><span>${o.score == null ? '–' : o.score.toFixed(1).replace('.', ',') + ' Min. (gut ≤ ' + CFG.goodMin + ', schlecht > ' + CFG.okMin + ')'}</span>`;
       const en = game.liveEnergy(o);
@@ -675,7 +920,10 @@ function renderObjPanel() {
       if (o.failN) rows += `<span>Aufgegeben heute</span><span class="st-bad">${o.failN}× – Weg zu lang oder zu anstrengend</span>`;
     }
     rows += floorNetRow(o.f);
-    openPanel(`<h3>${def.icon} ${def.label}${o.tier ? ' · ' + CFG.tiers[o.tier].label : ''}<button class="close" data-act="close">✕</button></h3><div class="kv">${rows}</div>${more}`, 'obj');
+    const TT = o.merged > 1 && o.tenantType && CFG.tenants[o.tenantType];
+    const title = o.merged > 1 ? (TT ? TT.icon + ' ' + TT.label + ' · ' : def.icon + ' ') + CFG.tiers[o.tier].label + (o.whole ? '-Etage (' + o.merged + ' ' + (o.type === 'office' ? 'Büros' : 'Wohnungen') + ')' : '-' + def.label + ' ×' + o.merged)
+      : def.icon + ' ' + def.label + (o.tier ? ' · ' + CFG.tiers[o.tier].label : '');
+    openPanel(`<h3>${title}<button class="close" data-act="close">✕</button></h3><div class="kv">${rows}</div>${more}`, 'obj');
   }
 }
 
@@ -685,8 +933,8 @@ function openMoney() {
   const E = CFG.economy, L = game.lastDay;
   const item = (lb, v) => `<span>${lb}</span><span>${signedEuro(v)}</span>`;
   const rows = L && L.net != null
-    ? item('Miete', L.rent) + item('Umsatz (Restaurant, Café, Kita, Supermarkt, Fitness)', L.sales) + item('Betrieb Etagen', -L.upkeepFloors) + item('Betrieb Räume (Werkstatt, Versorger, Stufen)', -L.upkeepRooms)
-      + item('Betrieb Aufzüge, Rolltreppen', -L.upkeepShafts) + item('Wartung (Teile, Notdienst)', -L.repairs) + item('Zins', -L.interest)
+    ? item('Miete', L.rent) + item('Umsatz (Restaurant, Café, Kita, Supermarkt, Fitness, Spa, Bar, Hotel, Garage)', L.sales) + (L.hotel ? item('davon Hotel (' + L.hotelGuests + ' Gäste)', L.hotel) : '') + (L.garage ? item('davon Garage (' + L.garageUsers + ' Nutzer)', L.garage) : '') + (L.entries ? Object.keys(L.entries).map(t => item('davon ' + CFG.rooms[t].label + ' (' + L.entries[t].users + ' Nutzer)', L.entries[t].income)).join('') : '') + item('Betrieb Etagen', -L.upkeepFloors) + item('Betrieb Räume (Werkstatt, Versorger, Stufen)', -L.upkeepRooms)
+      + item('Betrieb Aufzüge, Rolltreppen', -L.upkeepShafts) + (L.baseCost ? item('Grundkosten (Verwaltung, Versicherung, Sicherheit)', -L.baseCost) : '') + item('Wartung (Teile, Notdienst)', -L.repairs) + item('Zins', -L.interest)
       + `<span><b>Netto</b></span><span><b>${signedEuro(L.net)}</b></span>`
     : '<span>Noch kein Tagesabschluss</span><span></span>';
   const loanBtn = game.canLoan()
@@ -702,15 +950,65 @@ function openMoney() {
     <span>Kredit</span><span>${euro(game.loan)}${game.loan ? ' · Zins ' + euro(Math.round(E.loanRate * game.loan)) + ' pro Tag' : ''}</span></div>
     <p>Gestern${L && L.day ? ' (Tag ' + L.day + ')' : ''}:</p>
     <div class="kv">${rows}</div>
+    ${game.stars >= CFG.power.star && !game.off.power ? `<p class="${game.powerK < 1 ? 'st-bad' : ''}">⚡ Strom ${game.powerText()}${game.powerK < 1 ? ' – mehr Strom: 🌋 Geothermie im ' + floorName(CFG.rooms.geothermal.onlyFloor) + ' (' + CFG.rooms.geothermal.power + ' MW) oder 🌬️ Windräder ab dem ' + CFG.rooms.wind.fromFloor + '. OG (' + CFG.rooms.wind.power + ' MW)' : ''}. Bedarf: ${String(CFG.power.floor).replace('.', ',')} MW je Etage, Aufzüge je Kabine (Maglev ${CFG.power.car.maglev} MW), Serverraum ${CFG.power.server} MW; das Netz liefert ${CFG.power.grid} MW.</p>` : ''}
     <div class="btnrow">${loanBtn}${repay}</div>
     <p>${note}</p>
-    <p>Jede Etage mit Boden kostet Betrieb (EG frei), je 5 Etagen höher ${Math.round(E.floorUpkeepStep * 100)} % mehr. 🌡️ Heatmap „Geld“ zeigt, welche Etage sich trägt.</p>`, 'money');
+    ${CFG.stars[game.stars].baseCost ? `<p>Grundkosten: ${euro(CFG.stars[game.stars].baseCost)} pro Tag (${game.stars ? '★'.repeat(game.stars) : '☆'}), mit jedem Stern mehr – sie fallen an, egal wie viel gebaut ist.</p>` : ''}
+    <p>Jede Etage mit Boden kostet Betrieb (EG frei), je 5 Etagen höher ${Math.round(E.floorUpkeepStep * 100)} % mehr, über dem ${E.heightRent.from}. OG nicht mehr teurer (${euro(E.floorUpkeepCap)}), dort bringen Büros und Wohnungen je Etage ${Math.round(E.heightRent.per * 100)} % mehr Miete; Keller ${String(E.basementUpkeep.base + E.basementUpkeep.perFloor).replace(".", ",")}-fach im 1. UG, je Etage tiefer +${Math.round(E.basementUpkeep.perFloor * 100)} % (Lüftung, Pumpen, Licht). 🌡️ Heatmap „Geld“ zeigt, welche Etage sich trägt.</p>`, 'money');
+}
+
+// star overlay (tap on the stars in the header): the next star with every criterion and its current value,
+// what it unlocks, and the stars reached (fold open: what they brought, on which day). Nothing of it stays on screen.
+function openStars() {
+  selected = null;
+  const info = game.starInfo(), star = n => n ? '★'.repeat(n) : '☆ Start';
+  const open = panelMode === 'stars' ? [...panelEl.querySelectorAll('details[open]')].map(d => d.dataset.star) : [];   // keep folds open on refresh
+  const fmt = (v, c) => (typeof v === 'number' ? v.toLocaleString('de-DE') : v) + (c.unit ? ' ' + c.unit : '');
+  let h = `<h3>${game.stars ? '★'.repeat(game.stars) : '☆'}${info.next ? ' → ' + star(info.next.star) : ''}<button class="close" data-act="close">✕</button></h3>`;
+  if (info.next) {
+    const n = info.next;
+    h += `<p><b>Nächster Stern ${star(n.star)}</b>: ${n.goal}</p><div class="crit">`
+      + n.criteria.map(c => `<span class="${c.ok ? 'ok' : 'no'}">${c.ok ? '✓' : '✗'}</span><span class="lb">${c.label}</span><span class="vl">${fmt(c.have, c)} / ${fmt(c.need, c)}</span>`).join('') + '</div>'
+      + `<p><b>Schaltet frei:</b></p><ul class="unl">${n.unlocks.map(t => `<li>${t}</li>`).join('')}</ul>`;
+  } else {   // P9 (E55): the goal instead of a next star
+    const G = info.goal, pc = Math.round(G.sat * 100);
+    h += `<p><b>${G.text}</b></p>`;
+    if (G.launched == null) h += `<div class="crit"><span class="${G.platform ? 'ok' : 'no'}">${G.platform ? '✓' : '✗'}</span><span class="lb">Plattform gebaut</span><span class="vl">${G.platform ? 'ja' : 'nein'}</span>`
+      + `<span class="${G.done != null ? 'ok' : 'no'}">${G.done != null ? '✓' : '✗'}</span><span class="lb">${G.days} Tage ${pc} % in Folge</span><span class="vl">${G.streak} / ${G.days}</span></div>`
+      + `<p>${CFG.rooms.spacestation.icon} ${CFG.rooms.spacestation.label} im ${floorName(CFG.rooms.spacestation.onlyFloor)}, in ihrem Feld 🚀 Plattform bauen (${euro(CFG.goal.cost)}). Steht sie und sind ${G.days} Abende in Folge mindestens ${pc} % zufrieden, fährt am nächsten Mittag die erste Kabine am Seil ins All. Danach läuft der Turm weiter.</p>`;
+  }
+  h += '<p><b>Erreicht</b></p>' + info.reached.slice().reverse().map(r => `<details data-star="${r.star}"${open.includes(String(r.star)) ? ' open' : ''}><summary>${star(r.star)} · ${r.star && r.day ? 'Tag ' + r.day : r.star ? '–' : 'Beginn'}</summary><ul>`
+    + `${r.unlocks.length ? '<li>Brachte:</li>' : ''}${r.unlocks.map(t => `<li>${t}</li>`).join('')}</ul></details>`).join('');
+  const top = panelMode === 'stars' ? panelEl.scrollTop : 0;
+  openPanel(h, 'stars');
+  panelEl.scrollTop = top;
+}
+
+// looks (menu → 🎨, TOWER-a0011 P1, E10): rewards of the milestones; unlocked ones can be chosen, locked ones are grey
+// with the milestone that brings them. Nothing is switched automatically.
+function openLooks() {
+  let h = '<h3>🎨 Aussehen<button class="close" data-act="close">✕</button></h3><p>Belohnungen für Meilensteine – du entscheidest, was dein Turm trägt.</p>';
+  for (const kind of Object.keys(CFG.looks)) {
+    h += `<p><b>${CFG.lookNames[kind]}</b></p><div class="btnrow">` + CFG.looks[kind].map(e => {
+      const un = game.lookUnlocked(kind, e.key), on = game.look[kind] === e.key, m = e.from && CFG.milestones.find(x => x.key === e.from);
+      const why = m ? 'ab Meilenstein „' + m.text + '“' : '';
+      return `<button class="btn${on ? ' on' : ''}${un ? '' : ' dis'}" data-act="setLook" data-kind="${kind}" data-key="${e.key}"${un ? '' : ` title="${esc(why)}"`}>${e.label}${un ? '' : `<small style="display:block;color:var(--muted)">${why}</small>`}</button>`;
+    }).join('') + '</div>';
+  }
+  openPanel(h, 'looks');
+}
+
+// diary (menu → 📖): newest first
+function openDiary() {
+  const kind = { milestone: '🎯', star: '★', moveout: '🚪', breakdown: '🔧', quake: '🌋', merge: '⇔', incident: '·', goal: '🎯', launch: '🚀' };
+  const items = game.diary.slice().reverse().map(d => `<div>Tag ${d.day} · ${kind[d.kind] || '•'} ${esc(d.text)}</div>`).join('') || '<p>Noch nichts passiert.</p>';
+  openPanel(`<h3>📖 Tagebuch<button class="close" data-act="close">✕</button></h3><div class="diary">${items}</div>`, 'diary');
 }
 
 function openMenu() {
   selected = null;
   openPanel(`<h3>${curName ? '🏢 ' + esc(curName) : 'Menü'}<button class="close" data-act="close">✕</button></h3>
-    <div class="btnrow"><button class="btn" data-act="help">❓ Hilfe</button><button class="btn" data-act="log">📜 Meldungen</button></div>
+    <div class="btnrow"><button class="btn" data-act="help">❓ Hilfe</button><button class="btn" data-act="log">📜 Meldungen</button><button class="btn" data-act="diary">📖 Tagebuch</button><button class="btn" data-act="looks">🎨 Aussehen</button></div>
     ${window.TowerAudio ? TowerAudio.menuHtml() : ''}
     <div class="btnrow"><button class="btn ${wide ? 'on' : ''}" data-act="wide">↔ Breit${wide ? ' (an)' : ''}</button><span style="color:var(--muted);font-size:12px">nur zum Testen am PC: das Spiel füllt das Fenster</span></div>
     ${window.TOWER_DEV_SAVES ? '<div class="btnrow"><button class="btn" data-act="dev">🛠 Entwickler</button><span style="color:var(--muted);font-size:12px">fertige Test-Türme laden (☆, ★, ★+)</span></div>' : ''}
@@ -783,7 +1081,7 @@ function openLoad() {
     + (rows ? `<div class="slots">${rows}</div><p>Antippen, dann nochmal = laden. Der Tag beginnt um 06:00.</p>` : '<p>Noch nichts gespeichert – im Menü über 💾 Speichern.</p>'), 'load');
 }
 // developer towers (dev-saves.js, built by tool/dev_towers.js): load like a slot, but into no slot
-const devPop = d => d.rooms.reduce((n, r) => n + (r.occupied ? CFG.rooms[r.type].cap || 0 : 0), 0);
+const devPop = d => d.rooms.reduce((n, r) => n + (r.occupied ? TowerEngine.capOf(r) : 0), 0);
 function openDev() {
   const rows = window.TOWER_DEV_SAVES.map((t, i) => `<button class="slot" data-act="devLoad" data-dev="${i}"><span class="nr">🛠</span>`
     + `<span class="nm"><b>${esc(t.name)}</b><small>${esc(t.sub)} · ${gameLine({ day: t.data.day, money: t.data.money, stars: t.data.stars, starsFrom: t.data.starsFrom, pop: devPop(t.data) })}</small></span></button>`).join('');
@@ -815,7 +1113,7 @@ function openStart(view, fromMenu) {
   const slots = readSlots(), n = slots.filter(Boolean).length;
   let h;
   if (view === 'new') {
-    h = `<h1>Neuer Turm</h1><p class="sub">Leeres Grundstück, ${CFG.stars.length - 1} Sterne als Ziel</p>`
+    h = `<h1>Neuer Turm</h1><p class="sub">Leeres Grundstück. Ziel: ${CFG.stars.length - 1} Sterne – und ganz oben wartet der Weltraumfahrstuhl</p>`
       + `<label for="towerName">Wie heißt dein Turm?</label><input class="nameIn" id="towerName" maxlength="40" value="Mein Turm">`
       + `<button class="big main" data-sa="go">🏗️ Los geht's<small>${auto ? 'Ersetzt den Fortsetzen-Stand, Speicherplätze bleiben' : 'Der Name ist auch der Name des Spielstands'}</small></button>`
       + `<button class="btn back" data-sa="${startFromMenu ? 'resume' : 'home'}">‹ Zurück</button>`;
@@ -858,19 +1156,58 @@ function openLog() {
 function openHelp() {
   openPanel(`<h3>Hilfe<button class="close" data-act="close">✕</button></h3>
   <ul class="help">
-    <li><b>Ziel:</b> ${CFG.stars.length - 1} Sterne. Du startest ohne Stern. Sterne gibt es für Bewohner und zufriedene Mieter, und jeder Stern erlaubt höher zu bauen: ohne Stern bis 15. OG, ★ bis 30., ★★ bis 50. ★ schaltet Sky-Lobby, Express, ☕ Café, 🧸 Kita, 🛒 Supermarkt, 🏋️ Fitness und die Stufe Gehoben frei; für ★★ braucht es auch ${CFG.stars[2].upgraded} gehobene Räume. Gesperrtes steht grau mit „ab ★“ im Menü.</li>
+    <li><b>Ziel:</b> ${CFG.stars.length - 1} Sterne – und ganz oben ${game && game.goal.launched != null ? 'ist die erste Kabine des Weltraumfahrstuhls gestartet; der Turm läuft weiter' : 'wartet der Weltraumfahrstuhl: ab ' + '★'.repeat(CFG.rooms.spacestation.star) + ' die ' + CFG.rooms.spacestation.icon + ' ' + CFG.rooms.spacestation.label + ' im ' + floorName(CFG.rooms.spacestation.onlyFloor) + ' bauen, in ihrem Feld 🚀 Plattform bauen, dann ' + CFG.goal.days + ' Abende in Folge ' + Math.round(CFG.goal.sat * 100) + ' % zufrieden – am nächsten Mittag fährt die erste Kabine am Seil ins All'}. Du startest ohne Stern. Sterne gibt es für Bewohner und zufriedene Mieter, und jeder Stern erlaubt höher zu bauen: ohne Stern bis 15. OG, ★ bis 30., ★★ bis 50., ★★★ bis 100., ★★★★ bis 150., ★★★★★ bis 200. ★ schaltet Sky-Lobby, Express, ☕ Café, 🧸 Kita, 🛒 Supermarkt, 🏋️ Fitness und die Stufe Gehoben frei; für ★★ braucht es auch ${CFG.stars[2].upgraded} gehobene Räume. Gesperrtes steht grau mit „ab ★“ im Menü. Tippe oben auf die Sterne: dort steht, was für den nächsten Stern noch fehlt und was er freischaltet; im Menü 📖 Tagebuch steht, was bisher geschah. Jeder Stern bringt Grundkosten pro Tag (★ ${euro(CFG.stars[1].baseCost)}, ★★ ${euro(CFG.stars[2].baseCost)}, ★★★ ${euro(CFG.stars[3].baseCost)}, ★★★★ ${euro(CFG.stars[4].baseCost)}, ★★★★★ ${euro(CFG.stars[5].baseCost)}).</li>
     <li><b>Bauen:</b> Werkzeug wählen, Stelle antippen, nochmal antippen = bauen. Räume brauchen etwas darunter.</li>
     <li><b>Wege</b> (🛗-Menü): 🪜 Treppe → ↗️ Rolltreppe → 🛗 Aufzug → ⚡ Express, jeweils schneller und bequemer. Treppen und Rolltreppen verbinden zwei Etagen und brauchen unten und oben Boden, ohne Warten, aber langsamer und unbequemer.</li>
-    <li><b>Energie:</b> Jeder hat eigene Kraft (${CFG.energy.min}–${CFG.energy.max}). Jeder Teil des Wegs kostet: Flur ${String(CFG.energy.corridor * CFG.W).replace('.', ',')} für die ganze Etagenbreite, Treppe hoch ${CFG.links.stairs.energyUp} / runter ${CFG.links.stairs.energyDown} je Etage, Rolltreppe ${CFG.links.escalator.energyUp}, Warten ${CFG.energy.waitPerMin} je Minute, Aufzugfahren nichts. Reicht die Kraft nicht, ist der Weg unmöglich – die Person gibt auf. Wer müde ist, empfindet jede Minute länger. Im Raum erholt man sich, im Restaurant schneller, nachts ganz. Darum zählt, <i>wo</i> der Aufzug steht: lange Flure kosten Zeit und Kraft.</li>
-    <li><b>Aufzüge:</b> erste Etage antippen, dann die zweite. Ein Aufzug schafft höchstens 15 Etagen und darf durch Räume gebaut werden. Wächst der Turm, lässt er sich mit 🔍 nachträglich oben oder unten um je eine Etage verlängern (bis zur Grenze seines Typs).</li>
+    <li><b>Energie:</b> Jeder hat eigene Kraft (${CFG.energy.min}–${CFG.energy.max}). Jeder Teil des Wegs kostet: Flur ${String(CFG.energy.corridor * CFG.TW).replace('.', ',')} für die ganze Etagenbreite, Treppe hoch ${CFG.links.stairs.energyUp} / runter ${CFG.links.stairs.energyDown} je Etage, Rolltreppe ${CFG.links.escalator.energyUp}, Warten ${CFG.energy.waitPerMin} je Minute, Aufzugfahren nichts. Reicht die Kraft nicht, ist der Weg unmöglich – die Person gibt auf. Wer müde ist, empfindet jede Minute länger. Im Raum erholt man sich, im Restaurant schneller, nachts ganz. Darum zählt, <i>wo</i> der Aufzug steht: lange Flure kosten Zeit und Kraft.</li>
+    <li><b>Aufzüge:</b> erste Etage antippen, dann die zweite. Ein Aufzug schafft höchstens 15 Etagen und darf durch Räume gebaut werden, aber nicht durch eine Treppe oder einen anderen Aufzug – Wege teilen sich kein Feld. Wächst der Turm, lässt er sich mit 🔍 nachträglich oben oder unten um je eine Etage verlängern (bis zur Grenze seines Typs).</li>
     <li><b>Boden:</b> Gelaufen und am Aufzug angestanden wird nur auf Boden (Räume, Lobby, 🧱 Rohbau). Lücken zwischen Räumen schließt der Rohbau unter 🏢 Räume: antippen = ein Feld, auf einem freien Feld drücken und waagerecht ziehen = so viele Felder, wie du willst; nochmal tippen = bauen. Wird ein Raum abgerissen, bleibt der Rohbau stehen.</li>
     <li><b>Umsteigen</b> geht nur in einer Lobby: im EG oder in einer Sky-Lobby (15./30./45. OG). Express-Aufzüge halten nur dort, fahren dafür schnell und weit.</li>
     <li><b>Mieter</b> messen jeden Weg (Ø gefühlte Minuten) und ihre Bedürfnisse (unten). <b>Schwelle:</b> Ø über ${CFG.okMin} Min. pro Weg oder höchstens ${Math.round(CFG.warnBelow * 100)} % Erfüllung. <span class="st-ok">Gelbes ⚠</span> = knapp davor (über ${Math.round(CFG.warnNearWait * CFG.okMin)} Min. oder höchstens ${Math.round(CFG.warnNearNeed * 100)} %), noch nichts passiert. <span class="st-bad">Rotes ⚠</span> mit Meldung = am Abend unter der Schwelle gemessen: Ab dann können die Mieter jede Stunde ${CFG.moveOutHours[0]}–${CFG.moveOutHours[1]} Uhr ausziehen, am 1. Tag mit ${Math.round(CFG.moveOutP[0] * 100)} %, dann ${CFG.moveOutP.slice(1).map(p => Math.round(p * 100) + ' %').join(', ')} je Tag – der Turm <b>bröckelt</b>, du hast ein paar Tage Zeit. Ein guter Tag nimmt Rot wieder weg. <b>Nachfrage:</b> Neue Mieter kommen ${CFG.demandHours[0]}–${CFG.demandHours[1]} Uhr, je Stunde höchstens einer pro angefangene ${CFG.demandPer} belegte Räume (mindestens einer), in einen zufälligen freien Raum – sicher erst ab ${Math.round((CFG.moveInMin + CFG.moveInRamp) * 100)} % Vorhersage, ab ${Math.round(CFG.moveInMin * 100)} % zögernd. 🌡️ Heatmap (Einträge der Gruppe, nochmal tippen = aus): Wegzeit – blau gut, gelb geht so, rot schlecht · Energie bei Ankunft – blau frisch, gelb müde, rot erschöpft · Geld – Netto je Etage · Bedürfnisse – Erfüllung je Raum · Lärm – Abzug je Raum. Müde Leute tragen Senfgelb, erschöpfte Rostrot und gehen gebückt. Wer lange wartet, wird rosa, dann rot.</li>
     <li><b>Bedürfnisse:</b> Büros wollen Mittagessen (🍽️ Restaurant oder die Straße), gehobene Büros dazu ☕ Kaffee und 🧸 Kinderbetreuung (morgens vom Eingang), gehobene Wohnungen 🛒 Einkauf (auf dem Heimweg) und 🏋️ Sport. Die Leute gehen wirklich hin; zählt die gefühlte Zeit bis dorthin (mit Warten): bis ${CFG.needCurve.t0} Min. voll, ab ${CFG.needCurve.t1} Min. nichts, dazwischen erst langsam, dann schnell weniger. Ist ein Versorger voll, wartet man davor – nach ${Math.round(CFG.visitGiveUp / 60)} Min. gibt man auf. Erfüllung = Mittel der Bedürfnisse × (1 − Lärm), Miete = Miete der Stufe × Erfüllung. Bei höchstens ${Math.round(CFG.warnBelow * 100)} % gibt es das rote ⚠ mit Grund (siehe Mieter); wer deshalb auszieht, lässt die Stufe stehen – neue Mieter kommen erst nach einer Bauänderung und ab ${Math.round(CFG.moveInMin * 100)} % Vorhersage. Raum antippen: Liste mit Versorger, Minuten, Vorhersage und gestern gemessen; alle Versorger werden nach ihrem Beitrag eingefärbt, Lärmquellen rot umrandet.</li>
     <li><b>Lärm:</b> 🔧 Werkstatt, 🧸 Kita, 🛒 Supermarkt, 🏋️ Fitness und 🍽️ Restaurant stören durch Wände und Decken, nur ganz in der Nähe (eine Etage, wenige Felder); die stärkste Quelle zählt. Büros stört es halb so sehr, gehobene Räume mehr. Beim Bauen zeigt das Geisterbild den Radius und die betroffenen Räume.</li>
-    <li><b>Stufen:</b> Büro oder Wohnung antippen → ▲ Aufwerten (oder die ganze Etage), ${Math.round(CFG.upgradeShare * 100)} % des Baupreises. Gehoben bringt ${String(CFG.tiers[1].rent).replace('.', ',')}× Miete, kostet aber ${Math.round(CFG.tiers[1].upkeep * 100)} % der Standard-Miete Betrieb je Tag, auch leer, und hat mehr Bedürfnisse. Das Panel zeigt vorher die Vorhersage. Zurück geht es nicht (nur Abriss) – Aufwerten ist eine Wette. Luxus kommt später.</li>
-    <li><b>Geld:</b> Miete und Umsatz (Restaurant, Café, Kita, Supermarkt, Fitness) kommen herein, jede Etage mit Boden kostet Betrieb (EG frei, je 5 Etagen höher ${Math.round(CFG.economy.floorUpkeepStep * 100)} % mehr), dazu Aufzüge, Rolltreppen, Werkstatt, Versorger und gehobene Räume. Halb leere oder hohe Etagen tragen sich nicht. Kontostand antippen = Posten von gestern und Kredit (Stufen zu ${euro(CFG.economy.loanStep)}, ${Math.round(CFG.economy.loanRate * 100)} % Zins je Tag, gesperrt nach ${CFG.economy.loanBlockDays} Verlusttagen in Folge). 🌡️ Heatmap „Geld“: rot Verlust, grün Gewinn je Etage.</li>
+    <li><b>Stufen:</b> Büro oder Wohnung antippen → ▲ Aufwerten (oder die ganze Etage), ${Math.round(CFG.upgradeShare * 100)} % des Baupreises. Gehoben bringt ${String(CFG.tiers[1].rent).replace('.', ',')}× Miete, kostet aber ${Math.round(CFG.tiers[1].upkeep * 100)} % der Standard-Miete Betrieb je Tag, auch leer, und hat mehr Bedürfnisse. Das Panel zeigt vorher die Vorhersage. Zurück geht es nicht (nur Abriss) – Aufwerten ist eine Wette. Ab ★★ gibt es Luxus (${CFG.tiers[2].rent}× Miete, noch mehr Bedürfnisse: Spa, Rooftop-Bar, Sport).</li>
+    <li><b>Untergeschosse:</b> Mit 🧱 Rohbau unter dem EG nach unten graben, immer von oben nach unten, ein Stockwerk nach dem anderen. Wie tief, bestimmen die Sterne (ohne Stern 1 UG, ★ 2, ★★ 3, ★★★ 5). Unten stehen Werkstatt, Supermarkt, Fitness, Restaurant, Spa und die Tiefgarage; Mieter-Räume gehen nicht. Ein Keller kostet mehr als ein Stockwerk oben.</li>
+    <li><b>Luxus und Versorger:</b> Luxus-Räume verlangen Spa (💆 für Wohnungen) und Rooftop-Bar (🍸 abends für Büros und Wohnungen). Die Bar muss ganz oben stehen: Wird später über ihr gebaut, steht „überbaut“ im Panel und sie bringt nur noch die Hälfte. Raum antippen zeigt, was ihm fehlt. Für ★★★ zählen 10 belegte Luxus-Räume.</li>
+    <li><b>Hotel:</b> 🛎️ Gäste kommen abends von der Straße und zahlen ${euro(CFG.rooms.hotel.night)} je Nacht. Es füllt sich nur, wenn es eine Rooftop-Bar gibt, denn abends wollen die Gäste ausgehen. Je voller es ist, desto mehr zählt es für die Luxus-Räume (voll = 2).</li>
+    <li><b>Tiefgarage:</b> 🚗 nur im Keller. Ein Teil der Mieter (10 % aus Standard, 30 % aus Gehoben und Luxus) kommt und geht darüber statt über die Straße und bringt 200 € je Nutzer. Das entlastet die Aufzüge im EG, aber nur, wenn genug davon unten ankommen.</li>
+    <li><b>Zusammenlegen</b> (ab ★★★): Ein Luxus-Büro oder eine Luxus-Wohnung antippen, ⇔ mit links/rechts: erst Vorschau, nochmal tippen = zusammenlegen. Bis zu 3 Räume, der Preis ist die Hälfte der Baupreise der Räume, die noch nicht zusammengelegt waren (ein 3er also die Hälfte aller drei). Wer einzieht, entscheidet die Umgebung beim Einzug, danach ist es fest: Agentur (Café nah), Startup, Callcenter, Kanzlei (ruhig, ab 20. OG, Restaurant nah), Familienwohnung (Kita nah), WG, Penthouse (ganz oben, Spa), Senioren-Residenz (Supermarkt nah; Termine nur 10–16 Uhr). <b>Vorsicht Callcenter:</b> Lärm ruft es herbei, es zahlt wenig, bringt doppelt so viele Leute und lässt sich nur durch Abriss wieder loswerden – übrig bleibt Rohbau in voller Breite.</li>
+    <li><b>Technikebene:</b> ⚙️ Ab ★★★ geht es bis 100 Etagen (★★★★ 150, ★★★★★ 200), aber über dem ${CFG.techFloors.map(f => f + '.').join(', ').replace(/, ([^,]*)$/, ' und $1')} OG darf erst gebaut werden, wenn dort eine Technikebene steht. Sie hat keine Mieter und ist laut.</li>
+    <li><b>Erdbeben:</b> Ab ★★★ bebt es manchmal (leicht, mittel, schwer): leicht = Aufzüge stehen eine Stunde zur Prüfung, mittel = oben gehen Räume kaputt (Miete 0, im Panel 🔧 Reparieren), schwer = noch mehr und ein Schacht fällt aus. 🌀 Schwingungsdämpfer schützen die 60 Etagen unter sich und lassen sich in 3 Stufen aufwerten; Stufe 3 hält alles ab.</li>
+    <li><b>Geld:</b> Miete und Umsatz (Restaurant, Café, Kita, Supermarkt, Fitness) kommen herein, jede Etage mit Boden kostet Betrieb (EG frei, je 5 Etagen höher ${Math.round(CFG.economy.floorUpkeepStep * 100)} % mehr, über dem ${CFG.economy.heightRent.from}. OG nicht mehr teurer), dazu Aufzüge, Rolltreppen, Werkstatt, Versorger und gehobene Räume. Halb leere oder hohe Etagen tragen sich nicht – erst über dem ${CFG.economy.heightRent.from}. OG zahlt die Höhe: Büros und Wohnungen bringen je Etage darüber ${Math.round(CFG.economy.heightRent.per * 100)} % mehr Miete (150. OG das 1,5-Fache). Kontostand antippen = Posten von gestern und Kredit (Stufen zu ${euro(CFG.economy.loanStep)}, ${Math.round(CFG.economy.loanRate * 100)} % Zins je Tag, gesperrt nach ${CFG.economy.loanBlockDays} Verlusttagen in Folge). 🌡️ Heatmap „Geld“: rot Verlust, grün Gewinn je Etage.</li>
     <li><b>Wartung:</b> Kabinen verschleißen mit jedem Halt und jeder Etage. Ab ${CFG.wear.slowAt} % fahren sie langsamer, bei 100 % ist Panne. Eine 🔧 Werkstatt (unter 🏢 Räume) schickt 2 Handwerker, die selbst Aufzug fahren: ab dem eingestellten Verschleiß (Werkstatt antippen, ${CFG.serviceMin}–${CFG.serviceMax} %) parkt die Kabine im untersten Halt und wird ${Math.round(CFG.repair.sec / 60)} Min. repariert (Teile ${euro(CFG.repair.parts)}). Ohne Werkstatt hilft bei einer Panne nur der 🚨 Notdienst im Aufzug-Panel (${euro(CFG.emergency.cost)}, kommt nach ${Math.round(CFG.emergency.delaySec / 60)} Min.).</li>
+    <li class="hh">Neue Systeme ab ★★ (Menüpunkte und Panels, sobald freigeschaltet)</li>
+    <li><b>Höhe und Blockansicht:</b> Mit ★★★★ darfst du bis zum 150. OG bauen, mit ★★★★★ bis zum 200. – und bis zu 12 Stockwerke tief. Alle 25 Etagen braucht es eine Technikebene. Zoomst du weit heraus, zeigt der Turm Blöcke statt Räume (ein Block = 5 oder 10 Etagen, rot oder gelb gerandet bei Ärger); antippen zoomt hinein, gebaut wird nur im Nahbild.</li>
+    <li><b>🎨 Aussehen:</b> Im Menü schaltest du Fassade, Kabinenfarbe und Fenster-Look frei und wählst selbst. Freigeschaltet wird durch Meilensteine: 500, 1.000 und 2.000 Leute im Turm, eine ruhige Woche, ein Upgrade, Luxus und Zusammenlegen. Das ist nur Optik und ändert nichts an den Zahlen.</li>
+    <li><b>Zielwahl:</b> Lange Warteschlangen am EG werden kürzer, wenn die Kabinen ihre Ziele untereinander aufteilen: jede Kabine bedient ein Stück des Turms, Wartende steigen in die passende. Du kaufst sie im Aufzug-Panel (🔍) einmal je Schacht; sie kostet auch Betrieb.</li>
+    <li><b>Doppeldecker:</b> Eine Kabine mit zwei Decks nimmt doppelt so viele Leute mit und hält nur auf Etagenpaaren. Das Oberdeck erreicht man vom EG nur über eine Rolltreppe zum 1. OG – ohne sie fährt dort niemand mit. Gut gegen Staus in der Morgenwelle.</li>
+    <li><b>Feuerwehraufzug:</b> Über dem 50. OG darfst du neu nur bauen, wenn ein Feuerwehraufzug vom EG bis kurz unter die neue Etage reicht. Er nimmt keine Mieter mit, hilft aber bei einem Brand; Beben treffen ihn nicht. Steht „Erst den Feuerwehraufzug verlängern“, ist er zu kurz.</li>
+    <li><b>Kuriere und 📦 Paketschrank:</b> Werktags kommen Kuriere zu Luxus-Räumen und laufen durch den Turm. Ein Paketschrank in der Lobby fängt sie ab: Der Kurier geht nur dorthin, die Aufzüge werden entlastet, und der Schrank bringt etwas Geld.</li>
+    <li><b>🎬 Kino, 🏊 Pool, 📚 Bibliothek (ab ★★★):</b> Räume, die mehrere Bedürfnisse zugleich decken (Abend, Sport und Wellness, Kaffee und Ruhe) und Gäste von außen anziehen. Ein Raum statt zwei, dafür wird er voll – sie stehen im Menü unter Räumen und dürfen teils in den Keller.</li>
+    <li><b>Zwischenfälle (ab ★★★):</b> Selten gibt es Brand, Stromausfall, Wasserschaden oder einen Aufzugsausfall; nach einem Ereignis ist ein paar Tage Ruhe. Die Technikebene bietet Gegenmittel: Notstrom (Stromausfall dauert Minuten statt einer halben Stunde) und Leckwarnung (Wasserschaden wird nur noch eine Meldung). Eins je Turm genügt.</li>
+    <li><b>Reparatur durch Handwerker:</b> „🔧 Reparieren“ im Panel eines kaputten Raums bezahlt sofort; ein freier Handwerker läuft hin und arbeitet eine Stunde. Ohne offene Werkstatt kommt ein teurer Notdienst. Was abends unfertig ist, bleibt offen.</li>
+    <li><b>⭐ Privathalt:</b> Im Panel eines Express-Aufzugs: Er hält extra auf einer Etage mit einem zusammengelegten Raum, damit Kanzlei, Penthouse und Co. ohne Umsteigen ankommen – und mehr Miete zahlen. Dafür wird der Express für alle langsamer.</li>
+    <li class="hh">★★★★</li>
+    <li><b>🏘️ Stadtviertel-Lobby:</b> Eine große Lobby auf dem 50., 100., 150. oder 200. OG mit Café und Einkauf gleich am Umstieg. Sie spart nicht unbedingt Zeit, aber Mieter weit oben müssen für Kaffee und Einkauf nicht mehr nach unten.</li>
+    <li><b>Reinigung, 🧺 Logistikzentrale, Dienstaufzug:</b> Jede Wohnung und jedes Büro ab Stufe Gehoben wird täglich gereinigt, und das Personal verstopft sonst die Aufzüge in den Stoßzeiten. Die Zentrale verschiebt die Reinigung in den späten Abend, ein Dienstaufzug trennt Personal und Handwerker von den Mietern.</li>
+    <li><b>TWIN:</b> Ein Schacht mit zwei Kabinen übereinander: die eine fährt unter, die andere über einer Teilungsetage (im Panel einstellbar), dort steigt man um. So bedient ein Schacht 30 Etagen, ohne eine Lobby zu opfern.</li>
+    <li><b>🚇 Tiefbahnhof und Publikumsräume:</b> Ein Bahnhof tief im Keller bringt Fahrgäste direkt in den Turm; die Etage zählt als Lobby. Passage, Ärztehaus, Schule und Bürgeramt ziehen Gäste von außen an, am besten mit Bahn – die Schule füllt die Morgenwelle.</li>
+    <li><b>🚁 Heliport:</b> Ganz oben an der Kante landen Luxus-Gäste und sparen sich den Weg vom EG. Ein Teil der Ankünfte kommt nun von dort, das entlastet die Aufzüge.</li>
+    <li><b>🚪 Schleuse:</b> Wer ankommt, wird auf dieser Etage kurz kontrolliert (etwa 90 Sekunden mehr). Bank, Botschaft und Ministerium verlangen sie; Luxus-Büros dort zahlen mehr Miete.</li>
+    <li><b>Wolken, Wetter und 🚡 Fassadengondel:</b> Hoch über dem 120. OG gibt es Nebel (Luxus verliert den Höhenzuschlag) und Eis (die Leute sind unzufriedener). Die Fassadengondel schützt die 60 Etagen unter ihr. Darunter spielt das Wetter keine Rolle.</li>
+    <li><b>📳 Frühwarnung:</b> Ein Technik-Upgrade gegen Beben: Aufzüge müssen nicht geprüft werden, nichts verschleißt, kein Schacht fällt aus.</li>
+    <li><b>🖥️ Serverraum und 🗄️ Self-Storage:</b> Mieter ohne Menschen: sie zahlen gut, belasten keinen Aufzug und füllen tote Etagen. Server wollen eine Technikebene in der Nähe (sonst nur halbe Miete), Self-Storage darf in den Keller.</li>
+    <li><b>⇕ Viererblock und neue Mieter:</b> Zwei zusammengelegte Luxus-Räume lassen sich mit dem Paar darüber zu einem Raum über zwei Etagen verbinden („⇕ mit oben“). Es ziehen Behörde, Botschaft, Konzernzentrale, Maisonette oder Künstlerloft ein, mit eigenen Wünschen und teils Besuchern.</li>
+    <li class="hh">★★★★★</li>
+    <li><b>Zwillingsturm und 🌉 Brücke:</b> Mit ★★★★★ darf ein zweiter Turm neben den ersten, mit gemeinsamem EG. Eine Brücke (nur 50./100./150./200. OG) verbindet beide Seiten – sonst müssen Leute für jeden Weg zum anderen Turm bis ins EG.</li>
+    <li><b>MULTI:</b> Mehrere Kabinen in einem Schacht, die nur in Lobbys halten – für 200 Etagen eine lange Fahrt am Stück. Er ist teuer und fährt senkrecht; waagerecht über die Brücke geht noch nicht.</li>
+    <li><b>🧲 Maglev:</b> Ein Superaufzug, der nur im EG, am Bahnhof und alle 50 Etagen in Lobbys hält. Er schafft 100 Etagen in wenigen Minuten und verkürzt den Weg ganz nach oben stark.</li>
+    <li><b>🛩️ Luftschiffhafen:</b> Hoch oben an der Kante legen Luftschiffe für Luxus-Bewohner an. Bei Sturm bleiben sie am Boden.</li>
+    <li><b>Sturm:</b> Neben Nebel und Eis kommt manchmal ein Sturm: Brücken, Heliport und Luftschiff schließen, Windräder stehen, hohe Luxus-Räume ohne Dämpfer verlieren Miete. Es gibt eine Meldung, wenn dich das betrifft.</li>
+    <li><b>Strom, 🌋 Geothermie, 🌬️ Windrad:</b> Der Turm verbraucht Strom (Etagen, Kabinen, Server). Reicht das Netz nicht, fahren die Aufzüge langsamer; im Geld-Panel steht die Auslastung. Geothermie im tiefsten Keller und Windräder weit oben liefern mehr.</li>
+    <li><b>🌿 Wolkengarten und 📡 Antenne:</b> Der Garten über den Wolken gibt Abend und Sport ohne Aufzug (bei Nebel zu). Die Antenne ganz oben zahlt Pacht, solange nichts über ihr steht, und macht ein Fernsehstudio möglich.</li>
+    <li><b>⇔ Ganze Etage:</b> Passen alle Luxus-Räume einer Etage zusammen, lassen sie sich zu einem Mieter verschmelzen (Fernsehstudio, Ministerium, Clan-Residenz …) – teuer, aber mit viel Miete.</li>
+    <li><b>Weltraumstation und das Ziel:</b> Ganz oben im 200. OG steht die Weltraumstation. Mit gebauter 🚀 Plattform und genug zufriedenen Abenden in Folge fährt die erste Kabine am Seil ins All. Danach geht der Turm weiter, die Raumfahrtagentur zieht ein.</li>
     <li><b>Stoßzeiten:</b> morgens 7:30–9, mittags 12–13, abends 17–18:30.</li>
     <li><b>Tipp:</b> Mit 🔍 einen Aufzug antippen: Kabinen nachkaufen, Halte abschalten (ein Aufzug, der nur jede zweite Etage anfährt, ist schneller).</li>
   </ul>`, 'help');
@@ -881,7 +1218,7 @@ const cv = document.getElementById('cv');
 const ctx = cv.getContext('2d');
 let cssW = 0, cssH = 0, dpr = 1;
 const view = { s: 16, x: -MARGIN_L, y: 0 };
-function defaultScale() { return cssW / (W + MARGIN_L + MARGIN_R); }
+function defaultScale() { return cssW / (W() + MARGIN_L + MARGIN_R); }
 function resize() {
   const r = cv.getBoundingClientRect();
   dpr = window.devicePixelRatio || 1;
@@ -894,15 +1231,24 @@ function resize() {
 // (TowerRender.snapScale), otherwise art px come out unevenly 2 and 3 px wide. Only when even
 // one device px per art px is too big to show the whole tower (PC at 100 %) there is one step
 // below, which draws the flat whole-tower look and keeps every floor whole device px high.
+// TOWER-a0011 P1 (E6/E71): below the art grid also floor heights fp = 8, 5, 3 css px (whole device px per floor, only
+// down to the whole-tower step) – fp < 8 is block mode (TowerRender.blockOf: 5 floors per block, 10 below fp 2).
 function zoomLevels() {
   const unit = TowerRender.snapScale(1e-9, STYLE.grid, dpr);   // css px per tile at 1 art px = 1 device px
-  const sMin = Math.min(defaultScale(), cssH / ((CFG.MAX_FLOOR + 3) * FH));
+  const sMin = Math.min(defaultScale(), cssH / ((game.maxFloor - game.minFloor + 3) * FH));   // E22: allowed height + depth
   const sMax = Math.max(defaultScale() * 3, unit * 2);
   const out = [];
   for (let k = Math.max(1, Math.floor(sMin / unit)); k * unit <= sMax + 1e-9; k++) out.push(k * unit);
+  const far = [];
+  for (const fp of [3, 5, 8]) {
+    const s = Math.max(1, Math.round(fp * dpr)) / (FH * dpr);
+    if (s >= sMin - 1e-9 && s < out[0] - 1e-9 && !far.some(v => Math.abs(v - s) < 1e-9)) far.push(s);
+  }
+  out.unshift(...far);
   if (out[0] > sMin * 1.15) out.unshift(Math.max(1, Math.floor(sMin * FH * dpr)) / (FH * dpr));
   return out;
 }
+const blockMode = () => TowerRender.blockOf(view.s) > 0;   // far out: no building, no hover, a tap zooms in (E7)
 function nearestLevel(s) {
   let best = null;
   for (const l of zoomLevels()) if (best == null || Math.abs(Math.log(l / s)) < Math.abs(Math.log(best / s))) best = l;
@@ -914,9 +1260,9 @@ function resetView() {
   while (i + 1 < lv.length && lv[i + 1] <= fit + 1e-9) i++;          // the largest step at which the tower fits the width
   // a step that only shows the flat whole-tower look (< 11 px per tile) is too small for the phone
   // default: take the next one if the tower is at most 25 % wider than the screen (scroll sideways)
-  if (lv[i] < 11 && lv[i + 1] && lv[i + 1] * W <= cssW * 1.25) i++;
+  if (lv[i] < 11 && lv[i + 1] && lv[i + 1] * W() <= cssW * 1.25) i++;
   if (wide) {                                                       // wide: the whole allowed height fits
-    const hFit = cssH / ((game.maxFloor + 3) * FH);
+    const hFit = cssH / ((game.maxFloor - game.minFloor + 3) * FH);
     while (i > 0 && lv[i] > hFit + 1e-9) i--;
   }
   view.s = lv[i];
@@ -926,14 +1272,19 @@ function resetView() {
 }
 function clampView() {
   view.s = nearestLevel(view.s);
-  const worldW = W + MARGIN_L + MARGIN_R, visW = cssW / view.s;
+  const worldW = W() + MARGIN_L + MARGIN_R, visW = cssW / view.s;
   if (visW >= worldW) view.x = -MARGIN_L - (visW - worldW) / 2;
-  else view.x = Math.max(-MARGIN_L, Math.min(W + MARGIN_R - visW, view.x));
-  // below the ground there is room for SCROLL_BELOW screen px more, so the lower floors can be pushed
-  // above the floating menu bars (PO 30.10.2026); a view that shows the whole height stays on the ground
-  const top = -(CFG.MAX_FLOOR + 2) * FH, ground = 2.2, bottom = ground + SCROLL_BELOW / view.s;
+  else view.x = Math.max(-MARGIN_L, Math.min(W() + MARGIN_R - visW, view.x));
+  // below the ground (or the deepest basement: built, or allowed by the stars) there is room for
+  // SCROLL_BELOW screen px more, so the lower floors can be pushed above the floating menu bars (PO
+  // 30.10.2026); a view that shows the whole height stays on the ground / under the deepest built basement
+  const built = deepestBuilt(), deep = Math.min(game.minFloor, built);
+  // up to the height of the stars (P5: else 100 floors of empty sky at ☆); a view that shows everything from there down
+  // to the deepest allowed basement (plus SCROLL_BELOW) stays on the ground, else scrolling stays free
+  const top = -(game.maxFloor + 2) * FH, ground = Math.max(2.2, -built * FH + 0.6);
+  const bottom = Math.max(2.2, -deep * FH + 0.6) + SCROLL_BELOW / view.s;
   const visH = cssH / view.s;
-  if (visH >= ground - top) view.y = ground - visH;
+  if (visH >= bottom - top) view.y = ground - visH;
   else view.y = Math.max(top, Math.min(bottom - visH, view.y));
   // scrolling stays free, but on whole device px, so the art grid never shifts by a fraction
   const q = view.s * dpr;
@@ -945,6 +1296,13 @@ const sy = y => (y - view.y) * view.s;
 const wx = px => px / view.s + view.x;
 const wy = py => py / view.s + view.y;
 const floorTop = f => -(f + 1) * FH;
+// deepest floor with something built on it (rooms, shell, stairs, shafts); 0 without a basement
+function deepestBuilt() {
+  let d = 0;
+  for (const a of [game.rooms, game.shells || [], game.links]) for (const o of a) if (o.f < d) d = o.f;
+  for (const sh of game.shafts) if (sh.f0 < d) d = sh.f0;
+  return d;
+}
 
 // ---------- input ----------
 const ptrs = new Map();
@@ -956,7 +1314,7 @@ cv.addEventListener('pointerdown', e => {
     drag = { x: e.offsetX, y: e.offsetY, vx: view.x, vy: view.y, moved: false, t: performance.now() };
     // shell: a drag that starts on a buildable tile marks a piece instead of scrolling
     const c = cellAt(e.offsetX, e.offsetY);
-    if (tool === 'shell' && c.inside && game.checkShell(c.f, c.x, c.x).ok) drag.shell = { f: c.f, x: c.x };
+    if (tool === 'shell' && !blockMode() && c.inside && game.checkShell(c.f, c.x, c.x).ok) drag.shell = { f: c.f, x: c.x };
   }
   if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; pinch = { d: Math.hypot(a.x - b.x, a.y - b.y), s: view.s }; drag = null; }
 });
@@ -1024,7 +1382,7 @@ function zoomStep(px, py, dir) {
 function cellAt(px, py) {
   const x = Math.floor(wx(px)), y = wy(py);
   const f = Math.floor(-y / FH);
-  return { x, f, inside: x >= 0 && x < W && f >= 0 && f <= CFG.MAX_FLOOR };
+  return { x, f, inside: x >= 0 && x < W() && f >= CFG.MIN_FLOOR && f <= CFG.MAX_FLOOR };
 }
 
 // x2: shell only, the other end of a dragged piece (a tap = one tile)
@@ -1036,13 +1394,13 @@ function makeGhost(c, x2) {
   }
   if (CFG.rooms[tool]) {
     const w = CFG.rooms[tool].w;
-    const x0 = Math.max(0, Math.min(W - w, c.x - Math.floor(w / 2)));
+    const x0 = Math.max(0, Math.min(W() - w, c.x - Math.floor(w / 2)));   // the engine clamps it into its tower (E60)
     const chk = game.checkRoom(tool, c.f, x0);
     return { kind: 'room', type: tool, f: c.f, x: chk.x, w, chk };
   }
   if (CFG.links[tool]) {
     const w = CFG.links[tool].w;
-    const x0 = Math.max(0, Math.min(W - w, c.x - Math.floor(w / 2)));
+    const x0 = Math.max(0, Math.min(W() - w, c.x - Math.floor(w / 2)));
     const chk = game.checkLink(tool, c.f, x0);
     return { kind: 'link', type: tool, f: c.f, x: chk.x, w, chk };
   }
@@ -1091,6 +1449,7 @@ function ghostHint(g) {
 const inShell = (g, c) => g && g.kind === 'shell' && g.chk.ok && c.f === g.f && c.x >= g.x && c.x < g.x + g.w;
 function hover(px, py) {
   if (tool === 'inspect') return;
+  if (blockMode()) { if (ghost) { ghost = null; setHint('Zum Bauen hineinzoomen'); } return; }
   const c = cellAt(px, py);
   if (inShell(ghost, c)) return;            // a dragged piece stays while the mouse goes to tap it
   const g = makeGhost(c);
@@ -1098,9 +1457,14 @@ function hover(px, py) {
 }
 
 function tap(px, py, isMouse) {
+  if (blockMode()) {                         // E7: block mode – zoom in around the point (smallest step with fp ≥ 11)
+    const lv = zoomLevels();
+    zoomAt(px, py, lv.find(l => l * FH >= 11 - 1e-9) || lv[lv.length - 1]);
+    ghost = null;
+    if (tool !== 'inspect') setHint('Zum Bauen hineinzoomen');
+    return;
+  }
   const c = cellAt(px, py);
-  // easter egg: a tap on a cloud (not on the tower in front of it) makes it rain for a moment
-  if (STYLE.rainAt && !(c.inside && game.objectAt(c.f, c.x))) STYLE.rainAt(px, py, performance.now() / 1000);
   // easter egg: a tap on a cloud (not on the tower in front of it) makes it rain for a moment
   if (STYLE.rainAt && !(c.inside && game.objectAt(c.f, c.x))) STYLE.rainAt(px, py, performance.now() / 1000);
   if (tool === 'inspect') {
@@ -1131,7 +1495,7 @@ function tap(px, py, isMouse) {
     else setHint(r.reason, 'err');
   } else if (g.kind === 'shaft') {
     const r = game.buildShaft(tool, g.c, g.f0, g.f1);
-    if (r.ok) { setHint(`Gebaut: ${CFG.shafts[tool].label} ${floorName(r.f0)}–${floorName(r.f1)} (−${euro(r.cost)})`, 'go'); anchor = null; ghost = null; }
+    if (r.ok) { setHint(`Gebaut: ${CFG.shafts[tool].label} ${floorName(r.f0)}–${floorName(r.f1)} (−${euro(r.cost)})` + (CFG.shafts[tool].decks ? ` – Doppeldecker: das Oberdeck hält im ${floorName(r.f0 + 1)} – Rolltreppe nicht vergessen` : ''), 'go'); anchor = null; ghost = null; }
     else setHint(r.reason, 'err');
   } else if (g.kind === 'demolish') {
     const r = game.demolishAt(c.f, c.x);
@@ -1150,16 +1514,24 @@ const BASE_STYLE = TowerStyles.pixel_calm;
 const STYLE_TYPES = new Set(BASE_STYLE.roomTypes || ['office', 'condo', 'restaurant', 'skylobby']);
 const PH_HEAT = { good: '#4a8cff', ok: '#ffc94d', bad: '#ff4d5e', unreachable: '#7a2633', vacant: '#8e959e', none: '#c3c8d0', lobby: '#d9c9a8',
   loss: '#c8323c', lossLow: '#e08a80', even: '#8e959e', gainLow: '#8ccf98', gain: '#3a9a50' };
+// merged rooms (TOWER-a0010 P6): until the look track draws the tenant sign itself (it reads r.tenantType in its room
+// drawing), they get the placeholder too – one box over the full width with the tenant type's icon and name
+const STYLE_TENANTS = !!BASE_STYLE.tenantSigns || /tenantType/.test(String(BASE_STYLE.room));
 const STYLE = Object.assign({}, BASE_STYLE, {
   room(rc, r, st, hs) {
-    if (STYLE_TYPES.has(r.type)) { BASE_STYLE.room(rc, r, st, hs); return; }
-    const def = CFG.rooms[r.type], c = rc.ctx, y = rc.floorTop(r.f);
-    const fill = rc.heat ? PH_HEAT[hs || st] || '#c3c8d0' : st === 'unreachable' ? '#5a3a40' : rc.night && !r.inside ? '#2a3048' : '#8a7a62';
+    const merged = r.merged > 1 && !STYLE_TENANTS;
+    if (STYLE_TYPES.has(r.type) && !merged) { BASE_STYLE.room(rc, r, st, hs); return; }
+    const def = CFG.rooms[r.type], c = rc.ctx, y = rc.floorTop(r.f), T = r.tenantType && CFG.tenants[r.tenantType];
+    const fill = rc.heat ? PH_HEAT[hs || st] || '#c3c8d0' : st === 'unreachable' ? '#5a3a40' : rc.night && !r.inside ? '#2a3048' : merged && st !== 'vacant' ? '#9a7a40' : '#8a7a62';
     rc.rect(r.x + 0.06, y + 0.12, r.w - 0.12, rc.FH - 0.12, fill);
     rc.rect(r.x + 0.06, y + rc.FH - 0.3, r.w - 0.12, 0.18, 'rgba(0,0,0,.25)');
+    if (merged && !rc.heat) rc.rect(r.x + 0.06, y + 0.12, r.w - 0.12, 0.16, '#b8862e');   // gold ceiling line like luxury
+    if (merged && r.warn) rc.rect(r.x + r.w - 0.5, y + 0.3, 0.36, 0.6, r.warn > 1 ? '#ff4d5e' : '#ffc94d');   // warning sign
     if (rc.s * rc.FH >= 14) {
       c.font = Math.round(rc.s * rc.FH * 0.5) + 'px system-ui'; c.textAlign = 'center'; c.textBaseline = 'middle';
-      c.fillText(def.icon, rc.sx(r.x + r.w / 2), rc.sy(y + 0.06 + rc.FH / 2));
+      const label = merged ? (T ? T.icon + ' ' + T.label : def.icon + ' ' + game.roomLabel(r)) + (st === 'vacant' ? ' · frei' : '') : def.icon;
+      if (merged) { c.font = Math.round(rc.s * rc.FH * 0.36) + 'px system-ui'; c.fillStyle = '#fff8e6'; }
+      c.fillText(label, rc.sx(r.x + r.w / 2), rc.sy(y + 0.06 + rc.FH / 2));
       c.textAlign = 'left';
     }
   },
@@ -1183,10 +1555,10 @@ const drawOpt = {
 function draw() {
   rview.s = view.s; rview.x = view.x; rview.y = view.y; rview.w = cssW; rview.h = cssH; rview.dpr = dpr;
   drawOpt.heat = heat; drawOpt.time = performance.now() / 1000;
+  if (typeof TowerRender.quakeOffset === 'function') { const q = TowerRender.quakeOffset(game, drawOpt.time); rview.x = view.x - q.dx; rview.y = view.y - q.dy; }   // quake shake (E38, comes with the look branch)
   const rc = TowerRender.draw(ctx, STYLE, game, rview, drawOpt);
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  drawVisitQueues(rc);
-  drawNeedsOverlay(rc);
+  if (!rc.block) { drawVisitQueues(rc); drawNeedsOverlay(rc); }   // block mode (E7/E71): no people, no overlays
 
   // height limit text (the style draws the line)
   const lim = floorTop(game.maxFloor);
@@ -1200,14 +1572,15 @@ function draw() {
   if (view.s * FH >= 11) {
     ctx.font = Math.round(view.s * 0.9) + 'px system-ui'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     for (const s of game.shafts) for (const car of s.cars) {
-      if (car.cond !== 'broken' && car.cond !== 'repair') continue;
-      ctx.fillText(car.cond === 'broken' ? '⚠' : '🔧', sx(s.c + 0.5), sy(floorTop(car.y) + 0.45));
+      if (car.cond !== 'broken' && car.cond !== 'repair' && car.cond !== 'inspect') continue;
+      ctx.fillText(car.cond === 'broken' ? '⚠' : car.cond === 'inspect' ? '⏸' : '🔧', sx(s.c + 0.5), sy(floorTop(car.y) + 0.45));
+
     }
     ctx.textAlign = 'left';
   }
 
   // selection
-  if (selected) {
+  if (selected && !rc.block) {   // block mode (qa-P1 F1): no selection outline
     const o = selected;
     if (o.cars) outlineRect(o.c, floorTop(o.f1), 1, (o.f1 - o.f0 + 1) * FH, '#ffd23f');
     else if (o.kind === 'stairs' || o.kind === 'escalator') drawLinkOutline(o.f, o.x, o.w, '#ffd23f');
@@ -1215,7 +1588,7 @@ function draw() {
   }
 
   // ghost
-  if (ghost) drawGhost(ghost, rc);
+  if (ghost && !rc.block) drawGhost(ghost, rc);
 }
 
 // people waiting at a full provider stand on its tiles (render.js only draws elevator queues)
@@ -1320,6 +1693,7 @@ function frame(now) {
   panelTick += dt;
   if (panelTick > 0.5 && panelMode === 'obj' && selected) { panelTick = 0; renderObjPanel(); }
   else if (panelTick > 0.5 && panelMode === 'money') { panelTick = 0; openMoney(); }
+  else if (panelTick > 0.5 && panelMode === 'stars') { panelTick = 0; openStars(); }
   requestAnimationFrame(frame);
 }
 resize();

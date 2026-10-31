@@ -7,6 +7,12 @@
 //   Depth run (TOWER-a0006): layers for workshop, café, daycare, supermarket, gym; events breakdown,
 //   emergency, upgrade (always audible), repairStart, repairDone, downgrade, visit {kind} (only in view,
 //   at least 0.6 s apart per type). All synthesized, no new sample files.
+//   Stars run (TOWER-a0010): quake {level 1..3} and milestone always audible, hotel {room} (guest checks in,
+//   alias 'checkin') only in view. Sources: game.onEvent('quake'|'milestone'|'hotel', d), the engine hooks
+//   game.onQuake(level) / game.onMilestone(key) (chained, the UI may set its own too), or TowerAudio.event(type, d).
+//   Stars run part 2 (TOWER-a0011): incident {kind fire|outage|water|lift, f} and weather {kind storm|fog|ice}, launch,
+//   goal always audible (one sound per kind in 2 s; also via the hooks game.onIncident(kind, f), game.onWeather(kind),
+//   game.onLaunch()); heli, train, delivery {room} only in view, at most every 0.6 s per kind.
 // Hooks into the game: game.onEvent (engine.js), TowerAudio.frame(...) once per frame and
 // TowerAudio.menuHtml() in the menu (index.html). Build, demolish and their errors are picked up by
 // wrapping Game.prototype methods below, so tap() in index.html needs no changes.
@@ -48,9 +54,12 @@
   const busyHold = {};               // floor -> smoothed number of people walking/waiting
   const lvl = Object.assign({ carpet: 1 }, zeroLayers());
   const last = { door: 0, movein: 0, moveout: 0 };   // event key -> audio time it last played (more keys added on the fly)
-  const stats = { door: 0, doorPlayed: 0, movein: 0, moveinPlayed: 0, moveout: 0, moveoutPlayed: 0, star: 0, day: 0, build: 0, demolish: 0, error: 0, click: 0, dropped: 0 };
+  const stats = { door: 0, doorPlayed: 0, movein: 0, moveinPlayed: 0, moveout: 0, moveoutPlayed: 0, star: 0, day: 0, build: 0, demolish: 0, error: 0, click: 0, dropped: 0,
+    quake: 0, quakePlayed: 0, milestone: 0, milestonePlayed: 0, hotel: 0, hotelPlayed: 0 };
   const DEPTH_EVENTS = ['breakdown', 'emergency', 'upgrade', 'downgrade', 'repairStart', 'repairDone', 'visit'];
   for (const k of DEPTH_EVENTS) { stats[k] = 0; stats[k + 'Played'] = 0; }
+  const SKY_EVENTS = ['incident', 'weather', 'launch', 'goal', 'heli', 'train', 'delivery'];
+  for (const k of SKY_EVENTS) { stats[k] = 0; stats[k + 'Played'] = 0; }
 
   // ---------- graph ----------
   function gainNode(v, dest) { const g = ac.createGain(); g.gain.value = v; if (dest) g.connect(dest); return g; }
@@ -489,6 +498,107 @@
       [76, 72].forEach((n, i) => { s = tone(p, NOTE(n), t + i * 0.17, 0.01, 0.5, 0.12, 'triangle'); });
       return s;
     },
+    // stars run (TOWER-a0010): earthquake rumble by strength, milestone (a quieter star), hotel check-in
+    quake(t, o) {     // low rumble swelling and dying away, trembling; 2+: windows rattle; 3: a crack and a thud
+      const lv = clamp(Math.round(+o.level || 2), 1, 3), d = [0, 1.8, 3, 4.5][lv], peak = [0, 0.32, 0.46, 0.6][lv];
+      const s = ac.createBufferSource(); s.buffer = brown; s.loop = true;
+      const g = gainNode(0, busSfx), lp = filter('lowpass', 80 + 30 * lv, 0.8, g);
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(peak, t + 0.35);
+      g.gain.setValueAtTime(peak, t + 0.35 + d * 0.25); g.gain.exponentialRampToValueAtTime(0.001, t + d);
+      const am = ac.createOscillator(); am.frequency.value = 6 + lv;
+      const depth = gainNode(peak * 0.35, g.gain); am.connect(depth); am.start(t); am.stop(t + d + 0.1);
+      s.connect(lp); s.start(t, rnd(0, 2)); s.stop(t + d + 0.1);
+      if (lv >= 2) for (let i = 0; i < 4 * lv; i++) burst(panned(busSfx, rnd(-0.8, 0.8)), t + rnd(0.3, d * 0.7), 0.002, rnd(0.03, 0.07), 0.025 * lv, 'bandpass', rnd(2400, 4200), 3);
+      if (lv === 3) {
+        sample('demolish_rubble', busSfx, t + rnd(0.9, 1.4), 0.3, 0.6);
+        tone(busSfx, 70, t + 0.6, 0.01, 0.8, 0.3, 'sine', 40);
+      }
+      return s;
+    },
+    quake_1(t, o) { return SFX.quake(t, Object.assign({}, o, { level: 1 })); },
+    quake_2(t, o) { return SFX.quake(t, Object.assign({}, o, { level: 2 })); },
+    quake_3(t, o) { return SFX.quake(t, Object.assign({}, o, { level: 3 })); },
+    milestone(t) {    // two soft chimes, well below the star fanfare
+      let s = null;
+      [79, 84].forEach((n, i) => { s = bell(busSfx, NOTE(n), t + i * 0.13, 0.035, 0.9); });
+      return s;
+    },
+    hotel(t, o) {     // the bell on the reception desk, one light strike
+      return bell(panned(busSfx, o.pan), 2350 * Math.pow(2, rnd(-0.3, 0.3) / 12), t, 0.04, 0.9, [[1, 1, 1], [2.76, 0.35, 0.4], [5.4, 0.12, 0.2]]);
+    },
+    // stars run part 2 (TOWER-a0011): incidents, weather, anchors, the train, deliveries and the launch
+    fire(t, o) {      // the building's fire alarm: two tones through a small speaker, a few cycles
+      const p = filter('bandpass', 1400, 1.2, panned(busSfx, o.pan || 0)); let s = null;
+      for (let i = 0; i < 6; i++) s = tone(p, i % 2 ? 960 : 1280, t + i * 0.32, 0.01, 0.28, 0.08, 'square');
+      return s;
+    },
+    outage(t) {       // the hum of the building drops away, a relay clacks
+      burst(busSfx, t + 0.02, 0.001, 0.04, 0.3, 'bandpass', 1800, 2);
+      tone(busSfx, 240, t, 0.05, 1.2, 0.04, 'sine', 70);
+      return tone(filter('lowpass', 500, 0.7, busSfx), 120, t, 0.05, 1.6, 0.14, 'sawtooth', 35);
+    },
+    water(t, o) {     // drops falling into a puddle
+      const p = panned(busSfx, o.pan || 0); let s = null, tt = t;
+      for (let i = 0; i < 5; i++) { const f = rnd(900, 1500); s = tone(p, f, tt, 0.002, 0.09, 0.07, 'sine', f * 0.45); tt += rnd(0.18, 0.32); }
+      return s;
+    },
+    storm(t) {        // wind swelling and dying away, then a far roll of thunder
+      const w = ac.createBufferSource(); w.buffer = white; w.loop = true;
+      const g = gainNode(0, busSfx), bp = filter('bandpass', 500, 0.8, g);
+      bp.frequency.setValueAtTime(350, t); bp.frequency.linearRampToValueAtTime(900, t + 1.5); bp.frequency.linearRampToValueAtTime(400, t + 3.5);
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.12, t + 1.2); g.gain.linearRampToValueAtTime(0.0001, t + 3.8);
+      w.connect(bp); w.start(t, rnd(0, 0.5)); w.stop(t + 3.9);
+      const th = ac.createBufferSource(); th.buffer = brown; th.loop = true;
+      const g2 = gainNode(0, busSfx), lp = filter('lowpass', 140, 0.7, g2);
+      g2.gain.setValueAtTime(0, t + 1.6); g2.gain.linearRampToValueAtTime(0.3, t + 1.8); g2.gain.exponentialRampToValueAtTime(0.001, t + 4.2);
+      th.connect(lp); th.start(t + 1.6, rnd(0, 1)); th.stop(t + 4.3);
+      return th;
+    },
+    fog(t) {          // a soft, low foghorn far away
+      const p = filter('lowpass', 400, 0.7, busSfx);
+      tone(p, 110, t, 0.4, 1.4, 0.07, 'sawtooth');
+      return tone(p, 82.5, t, 0.4, 1.4, 0.05, 'sawtooth');
+    },
+    ice(t) {          // glassy tinkles
+      let s = null;
+      for (let i = 0; i < 5; i++) s = bell(busSfx, rnd(2600, 4200), t + i * rnd(0.07, 0.15), 0.022, 0.5, [[1, 1, 1], [2.7, 0.3, 0.4]]);
+      return s;
+    },
+    heli(t, o) {      // rotor thumps passing by, quiet
+      const s = ac.createBufferSource(); s.buffer = brown; s.loop = true;
+      const g = gainNode(0, panned(busSfx, o.pan || 0)), lp = filter('lowpass', 260, 0.8, g);
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.16, t + 0.4); g.gain.linearRampToValueAtTime(0.0001, t + 2.4);
+      const am = ac.createOscillator(); am.frequency.value = 11;
+      const depth = gainNode(0.14, g.gain); am.connect(depth); am.start(t); am.stop(t + 2.5);
+      s.connect(lp); s.start(t, rnd(0, 1)); s.stop(t + 2.5);
+      return s;
+    },
+    train(t, o) {     // rolling in, the brakes hiss, a two-tone chime
+      const p = panned(busSfx, o.pan || 0);
+      const s = ac.createBufferSource(); s.buffer = brown; s.loop = true;
+      const g = gainNode(0, p), lp = filter('lowpass', 180, 0.7, g);
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.2, t + 0.8); g.gain.exponentialRampToValueAtTime(0.001, t + 2.2);
+      s.connect(lp); s.start(t, rnd(0, 1)); s.stop(t + 2.3);
+      burst(p, t + 1.2, 0.05, 0.6, 0.05, 'highpass', 3500, 0.7);
+      bell(p, NOTE(76), t + 1.9, 0.05, 0.8);
+      return bell(p, NOTE(72), t + 2.2, 0.05, 1.0);
+    },
+    delivery(t, o) {  // a parcel scanner: two soft beeps
+      const p = filter('lowpass', 3000, 0.7, panned(busSfx, o.pan || 0));
+      tone(p, 2000, t, 0.003, 0.06, 0.05, 'square');
+      return tone(p, 2400, t + 0.1, 0.003, 0.07, 0.05, 'square');
+    },
+    launch(t) {       // the climb: a deep hum rising for seconds, a long whoosh, a bright chord at the end
+      const o = ac.createOscillator(); o.type = 'sawtooth';
+      o.frequency.setValueAtTime(60, t); o.frequency.exponentialRampToValueAtTime(700, t + 6);
+      const g = gainNode(0, busSfx), lp = filter('lowpass', 900, 0.8, g);
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.12, t + 1.5); g.gain.setValueAtTime(0.12, t + 4.5); g.gain.exponentialRampToValueAtTime(0.001, t + 7);
+      o.connect(lp); o.start(t); o.stop(t + 7.1);
+      burst(busSfx, t + 0.5, 1.5, 1.5, 0.05, 'bandpass', 1200, 0.6);
+      let s = o;
+      [72, 76, 79, 84].forEach((n, i) => { s = bell(busSfx, NOTE(n), t + 5.6 + i * 0.12, 0.04, 1.6); });
+      return s;
+    },
     star(t) {
       let s = null;
       [72, 76, 79, 84].forEach((n, i) => { s = bell(busSfx, NOTE(n), t + i * 0.11, 0.07, 1.1); });
@@ -592,10 +702,37 @@
   }
 
   function onGameEvent(type, d) {
+    if (type === 'checkin') type = 'hotel';
     if (stats[type] != null) stats[type]++;
     if (!running() || preview) return;
     const now = ac.currentTime;
-    if (type === 'door') {
+    if (type === 'quake' || type === 'milestone') {
+      // always audible; the engine may report a quake twice (onQuake and an event) – one sound
+      if (now - (last[type] ?? -1e9) < (type === 'quake' ? 2 : 1)) return;
+      last[type] = now;
+      const lv = d && typeof d === 'object' ? d.level : d;
+      if (play(type, { level: lv })) stats[type + 'Played']++;
+    } else if (type === 'hotel') {   // a guest checks in: only in view, at most every 0.6 s
+      const pos = where(d), pan = pos ? inView(pos.x, pos.f) : null;
+      if (pan == null || now - (last.hotel ?? -1e9) < 0.6) return;
+      last.hotel = now;
+      if (play('hotel', { pan })) stats.hotelPlayed++;
+    } else if (type === 'incident' || type === 'weather' || type === 'launch' || type === 'goal') {
+      // always audible (panned if in view); the hook and the event may both report it – one sound per kind in 2 s
+      let key = type === 'launch' ? 'launch' : type === 'goal' ? 'milestone' : d && typeof d === 'object' ? d.kind : d;
+      if (type === 'incident') key = key === 'lift' ? 'breakdown' : key === 'power' ? 'outage' : key;
+      if (!SFX[key]) return;
+      if (now - (last[key] ?? -1e9) < 2) return;
+      last[key] = now;
+      const pos = where(d), pan = pos ? inView(pos.x, pos.f) : null;
+      if (play(key, { pan: pan || 0 })) stats[type + 'Played']++;
+    } else if (type === 'heli' || type === 'train' || type === 'delivery') {   // only in view, at most every 0.6 s
+      const pos = where(d); if (!pos) return;
+      const pan = inView(pos.x, pos.f); if (pan == null) return;
+      if (now - (last[type] ?? -1e9) < 0.6) return;
+      last[type] = now;
+      if (play(type, { pan })) stats[type + 'Played']++;
+    } else if (type === 'door') {
       // PO 30.10.2026 („ich hör es nur noch plingen“): only when someone gets on or off, only close up
       // (like SimTower's close-up window), and rarer the faster the game runs
       const s = d && d.shaft; if (!s || !d.n) return;
@@ -634,6 +771,7 @@
     if (!d) return null;
     if (d.room && typeof d.room.f === 'number') return { x: d.room.x + (d.room.w || 1) / 2, f: d.room.f };
     if (d.shaft && typeof d.shaft.c === 'number') return { x: d.shaft.c + 0.5, f: d.car && typeof d.car.y === 'number' ? Math.round(d.car.y) : d.shaft.f0 };
+    if (typeof d.f === 'number') { const c = Engine.CFG || {}; return { x: (c.TW || c.W || 24) / 2, f: d.f }; }   // incident {kind, f}
     return null;
   }
 
@@ -642,6 +780,27 @@
     if (!game) return;
     const prev = game.onEvent;
     game.onEvent = (t, d) => { if (prev) { try { prev(t, d); } catch (e) { /* ignore */ } } onGameEvent(t, d); };
+    // engine hooks game.onQuake(level) / game.onMilestone(key) (TOWER-a0010): sound first, then whatever
+    // the UI sets – also if it sets its handler later (accessor keeps both, not saved: not enumerable)
+    hookProp(game, 'onQuake', lv => onGameEvent('quake', { level: lv }));
+    hookProp(game, 'onMilestone', key => onGameEvent('milestone', { key }));
+    hookProp(game, 'onIncident', (kind, f) => onGameEvent('incident', { kind, f }));   // TOWER-a0011
+    hookProp(game, 'onWeather', kind => onGameEvent('weather', { kind }));
+    hookProp(game, 'onLaunch', () => onGameEvent('launch'));
+  }
+  function hookProp(game, name, fn) {
+    try {
+      const desc = Object.getOwnPropertyDescriptor(game, name);
+      if (desc && desc.get && desc.get._towerAudio) return;
+      if (desc && !desc.configurable) return;
+      let user = game[name];
+      const both = function () {
+        try { fn.apply(this, arguments); } catch (e) { /* ignore */ }
+        if (typeof user === 'function') return user.apply(this, arguments);
+      };
+      const get = () => both; get._towerAudio = true;
+      Object.defineProperty(game, name, { configurable: true, enumerable: false, get, set(v) { user = v; } });
+    } catch (e) { /* frozen or odd object: events still come through onEvent */ }
   }
 
   // build / demolish / errors: wrap the engine's public actions (no change to tap() needed)
@@ -693,6 +852,11 @@
     ['Wartung und Stufen (Panne, Notdienst, Aufwertung immer hörbar)', [['sfx:breakdown', '⚠️ Panne'], ['sfx:emergency', '🚨 Notdienst gerufen'], ['sfx:repairStart', '🔧 Reparatur beginnt'],
       ['sfx:repairDone', '✅ Reparatur fertig'], ['sfx:upgrade', '▲ Aufwertung'], ['sfx:downgrade', '▼ Warnung beginnt']]],
     ['Besuche (nur im Bild)', [['sfx:visit_cafe', '☕ Café'], ['sfx:visit_daycare', '🧸 Kita'], ['sfx:visit_supermarket', '🛒 Supermarkt'], ['sfx:visit_gym', '🏋️ Fitness'], ['sfx:visit_restaurant', '🍽️ Restaurant']]],
+    ['Sterne-Ausbau (Beben und Meilenstein immer hörbar, Hotel nur im Bild)', [['sfx:quake_1', '🌍 Beben leicht'], ['sfx:quake_2', '🌍 Beben mittel'], ['sfx:quake_3', '🌍 Beben schwer'],
+      ['sfx:milestone', '🎖️ Meilenstein'], ['sfx:hotel', '🛎️ Hotelgast checkt ein']]],
+    ['Vertikale Stadt (Ereignisse, Wetter und Start immer hörbar, Anleger, Zug und Lieferung nur im Bild)', [['sfx:fire', '🔥 Brand'], ['sfx:outage', '⚡ Stromausfall'],
+      ['sfx:water', '💧 Wasserschaden'], ['sfx:storm', '🌪️ Sturm'], ['sfx:fog', '🌫️ Nebel'], ['sfx:ice', '🧊 Eis'], ['sfx:heli', '🚁 Hubschrauber'], ['sfx:train', '🚇 Zug'],
+      ['sfx:delivery', '📦 Lieferung'], ['sfx:launch', '🚀 Start']]],
     ['Bauen und Menü', [['sfx:build', '🔨 Bauen'], ['sfx:buildShaft', '🛗 Aufzug / Kabine'], ['sfx:demolish', '🧨 Abriss'], ['sfx:demolishSmall', '➖ Kabine weg'], ['sfx:click', '👆 Klick'], ['sfx:toggle', '🔁 Umschalter'], ['sfx:error', '⛔ Fehler']]],
   ];
   function listHtml() {
@@ -777,6 +941,7 @@
 
   window.TowerAudio = {
     frame, menuHtml, play, unlock,
+    event: (type, d) => onGameEvent(type, d),   // e.g. TowerAudio.event('quake', { level: 2 }) if the UI wants to trigger it itself
     debug: {
       state: () => ({ ctx: ac ? ac.state : 'none', voices, zoomF: Math.round(zoomF * 100) / 100, lvl: JSON.parse(JSON.stringify(lvl, (k, v) => typeof v === 'number' ? Math.round(v * 100) / 100 : v)), rates: Object.fromEntries(Object.entries(rates).map(([k, v]) => [k, Math.round(v * 100) / 100])), stats: Object.assign({}, stats), samples: Object.keys(samples).length, prefs: Object.assign({}, prefs) }),
       renderOffline, catalog: () => CATALOG.flatMap(c => c[1].map(i => i[0])),
