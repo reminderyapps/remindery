@@ -94,11 +94,40 @@ h1 #karteName { font-size: .9rem; color: var(--leise); text-shadow: none; }
   .modus button { font: 700 1rem Cinzel, Georgia, serif; padding: 10px 18px; border-radius: 999px; cursor: pointer;
     color: var(--text); background: var(--panel); border: 2px solid var(--linie); }
   .modus button.an { color: #2a1d00; background: linear-gradient(#f3d27a, var(--gold)); border-color: var(--gold); }
+  .spielstaende { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 14px; max-width: 760px; width: 100%; }
+  .spielstand { min-height: 96px; padding: 12px; border-radius: 14px; cursor: pointer; color: var(--text);
+    background: var(--panel2); border: 2px solid var(--linie); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+  .spielstand b { font: 700 1.15rem Cinzel, Georgia, serif; color: var(--gold); }
+  .spielstand small { color: var(--leise); }
+  .spielstand.leer { border-style: dashed; color: var(--leise); font-size: 1rem; }
+  .spielstand.besetzt { opacity: .4; cursor: default; }
+  .spielstand input { font: 700 1.05rem system-ui, sans-serif; width: 100%; padding: 8px; border-radius: 8px; border: 2px solid var(--gold); background: var(--grund); color: var(--text); text-align: center; }
+  .spielstand .knopf { padding: 6px 14px; margin-top: 4px; }
+  .anderer { display: block; margin: 10px auto 0; font: 700 .95rem Cinzel, Georgia, serif; padding: 8px 16px; border-radius: 999px; cursor: pointer;
+    color: var(--text); background: var(--panel2); border: 2px solid var(--linie); }
   .weltkarte .waehlzeile { margin-top: 10px; font-size: .85rem; font-weight: 700; text-align: center; padding: 8px; border-radius: 10px; background: var(--panel2); }
   .weltkarte .waehlzeile.frage { background: linear-gradient(#9dff9d, #3fbf5a); color: #062a0e; box-shadow: 0 3px 0 #1e7a32; animation: glimm 1s infinite; }
 
   /* ---------- Spiel ---------- */
   #spiel { display: none; }
+  /* ---------- Solo: große Welt im Nebel ---------- */
+  #solo { display: none; text-align: center; }
+  #soloBrett {
+    width: min(94vw, 660px); aspect-ratio: 1; margin: 10px auto; display: grid; border-radius: 10px; overflow: hidden;
+    grid-template-columns: repeat(11, 1fr); grid-template-rows: repeat(11, 1fr);
+    background: #3d5a2c url(bilder/boden.jpg) center / cover; box-shadow: 0 0 0 2px var(--linie), 0 8px 30px rgba(0,0,0,.6);
+  }
+  #soloBrett .feld { cursor: pointer; }
+  #soloBrett .feld.erinnert > * { filter: brightness(.45) saturate(.5); }
+  #soloBrett .feld.erinnert { background: rgba(0,0,0,.5); }
+  #soloBrett .feld.nebel { background: radial-gradient(circle at 40% 35%, #8a90a0, #4b505c 70%); box-shadow: none; }
+  #soloBrett .feld.nebel::after { content: ""; position: absolute; inset: -30%; background: radial-gradient(circle, rgba(200,205,215,.35), transparent 60%); }
+  #soloBrett .feld.rand { background: #0b0c10; box-shadow: none; }
+  #soloBrett .figur { position: absolute; inset: 6%; }
+  #soloInfo { color: var(--leise); }
+  #soloBrett .truhe { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: min(5vw, 34px); z-index: 2; filter: drop-shadow(0 2px 3px #000); }
+  #soloBrett .muenze { font-size: min(3.2vw, 22px); }
+  .feld.mauer { background: repeating-linear-gradient(0deg, #5a4a36 0 46%, #2c241a 46% 50%, #6b5940 50% 96%, #2c241a 96%); box-shadow: inset 0 0 0 2px #2c241a; }
   .kopf { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; padding-left: 62px; }
 
   /* ---------- Pokal-Weg ---------- */
@@ -106,6 +135,14 @@ h1 #karteName { font-size: .9rem; color: var(--leise); text-shadow: none; }
     position: fixed; top: 10px; left: 10px; z-index: 41; width: 54px; height: 54px; border-radius: 14px; cursor: pointer;
     font-size: 28px; line-height: 1; border: 2px solid var(--gold); background: var(--panel); box-shadow: 0 3px 0 var(--gold2), 0 0 0 1px #000;
   }
+  #pokalKnopf[hidden] { display: none; }
+  /* Zurück oben links; der Pokal-Knopf rückt dann ein Stück nach rechts */
+  #zurueckKnopf { position: fixed; top: 10px; left: 10px; z-index: 39; min-width: 54px; height: 54px; padding: 0 12px; border-radius: 14px; cursor: pointer;
+    font: 700 1.6rem system-ui, sans-serif; color: var(--text); border: 2px solid var(--linie); background: var(--panel); box-shadow: 0 3px 0 #000; }
+  #zurueckKnopf[hidden] { display: none; }
+  #zurueckKnopf.frage { font-size: 1rem; color: #062a0e; background: linear-gradient(#9dff9d, #3fbf5a); border-color: #3fbf5a; z-index: 42; }
+  body.mit-zurueck #pokalKnopf { left: 74px; }
+  body.mit-zurueck .kopf { padding-left: 128px; }
   #pokalKnopf small { position: absolute; right: -8px; bottom: -8px; min-width: 24px; padding: 2px 5px; border-radius: 999px;
     font: 800 .72rem system-ui, sans-serif; color: #2a1d00; background: var(--gold); border: 1px solid #000; }
   #pokalKnopf.geschenk small { animation: pochen 1s ease-in-out infinite; }
@@ -313,7 +350,8 @@ h1 #karteName { font-size: .9rem; color: var(--leise); text-shadow: none; }
 </style>
 </head>
 <body>
-<button id="pokalKnopf" onclick="pokalWegUmschalten()" title="Pokal-Weg">🏆<small id="pokalZahl">0</small></button>
+<button id="zurueckKnopf" hidden onclick="zurueck(this)" title="Zurück zur Spielauswahl">⬅</button>
+<button id="pokalKnopf"onclick="pokalWegUmschalten()" title="Pokal-Weg">🏆<small id="pokalZahl">0</small></button>
 <div id="pokalWeg"></div>
 <div id="geschenkAuf" onclick="this.classList.remove('an')"><div class="box" id="geschenkBox"></div></div>
 <div class="wrap">
@@ -324,6 +362,7 @@ h1 #karteName { font-size: .9rem; color: var(--leise); text-shadow: none; }
       <button id="modusZwei" onclick="setzeModus(false)">👥 Zu zweit</button>
       <button id="modusKI" onclick="setzeModus(true)">🤖 Gegen den Computer</button>
       <button id="modusOnline" onclick="setzeModus('online')">🌍 Online</button>
+      <button id="modusSolo" onclick="setzeModus('solo')">🧭 Solo</button>
     </div>
     <div class="modus" id="stufe"></div>
     <div id="kartenwahl"></div>
@@ -331,6 +370,13 @@ h1 #karteName { font-size: .9rem; color: var(--leise); text-shadow: none; }
     <p class="unter" id="auswahlUnter"></p>
     <div class="geldbeutel" id="geldbeutel"></div>
     <div class="karten" id="figurKarten"></div>
+  </section>
+
+  <section id="solo">
+    <h1>🧭 Solo <small id="soloName"></small></h1>
+    <p id="soloInfo"></p>
+    <div id="soloBrett"></div>
+    <p class="unter" style="color:var(--leise)">Tippe ein Feld oder benutze die Pfeiltasten. Je weiter du gehst, desto mehr siehst du.</p>
   </section>
 
   <section id="spiel">
@@ -360,7 +406,7 @@ h1 #karteName { font-size: .9rem; color: var(--leise); text-shadow: none; }
   <div class="bild" id="siegBild"></div>
   <h2 id="siegText"></h2>
   <p id="siegGeld"></p>
-  <button class="knopf" onclick="location.reload()">Nochmal spielen</button>
+  <button class="knopf" id="nochmal" onclick="location.reload()">Nochmal spielen</button>
 </div></div>
 
 <div id="cutin"></div>
@@ -483,6 +529,42 @@ const FIGUREN = {
     spezial: { name: "Albtraum", reichweite: 4, schaden: 4, heil: 2, text: "Albtraum aus 4 Feldern: 4 Schaden, heilt sich um 2." },
     faehigkeit: "<b>Geisterpferd:</b> Schwer zu treffen (Angriffe gehen bei 1–2 daneben), und jeder Treffer heilt es um 1.",
   },
+  // Zweite Reihe 150 € (Wunsch des Sohns, 27.10.2026): andere Paare bekannter Fähigkeiten
+  magmabueffel: {
+    name: "Magmabüffel", element: "Feuer", farbe: "var(--feuer)", emoji: "🐃", bild: "bilder/magmabueffel.jpg", preis: 150,
+    leben: 15, schritte: 2, angriff: 4, reichweite: 1, angriffName: "Glutansturm",
+    panzer: 1, stoss: true,
+    spezial: { name: "Magmawalze", reichweite: 3, schaden: 4, text: "Magmawalze bis 3 Felder weit: 4 Schaden." },
+    faehigkeit: "<b>Magmahaut:</b> Jeder Treffer gegen ihn macht 1 Schaden weniger, und sein Ansturm schleudert 1 Feld weg.",
+  },
+  eisskorpion: {
+    name: "Eisskorpion", element: "Eis", farbe: "var(--eis)", emoji: "🦂", bild: "bilder/eisskorpion.jpg", preis: 150,
+    leben: 12, schritte: 3, angriff: 3, reichweite: 1, angriffName: "Froststachel",
+    friert: true, gift: 2,
+    spezial: { name: "Eisstachel-Salve", reichweite: 3, schaden: 4, frost: true, text: "Eisstachel-Salve aus 3 Feldern: 4 Schaden und einfrieren." },
+    faehigkeit: "<b>Froststachel:</b> Sein Stachel friert ein und vergiftet 2 Runden lang.",
+  },
+  felsadler: {
+    name: "Felsadler", element: "Stein", farbe: "var(--stein)", emoji: "🦅", bild: "bilder/felsadler.jpg", preis: 150,
+    leben: 12, schritte: 4, angriff: 3, reichweite: 1, angriffName: "Steinkralle",
+    fliegt: true, anlauf: 1,
+    spezial: { name: "Steinsturz", reichweite: 4, schaden: 4, text: "Stürzt aus 4 Feldern herab: 4 Schaden." },
+    faehigkeit: "<b>Sturzflug:</b> Fliegt über Seen und Felsen. Ist er gelaufen, macht seine Kralle 1 Schaden mehr.",
+  },
+  dschungelgorilla: {
+    name: "Dschungelgorilla", element: "Dschungel", farbe: "var(--dschungel)", emoji: "🦍", bild: "bilder/dschungelgorilla.jpg", preis: 150,
+    leben: 15, schritte: 3, angriff: 4, reichweite: 1, angriffName: "Dornenfaust",
+    stoss: true, dornen: 1,
+    spezial: { name: "Brustschlag", reichweite: 3, schaden: 4, text: "Brustschlag-Druckwelle bis 3 Felder weit: 4 Schaden." },
+    faehigkeit: "<b>Dornenfell:</b> Wer ihn trifft, verliert 1 Leben, und seine Faust schleudert 1 Feld weg.",
+  },
+  schattenspinne: {
+    name: "Schattenspinne", element: "Schatten", farbe: "var(--schatten)", emoji: "🕷️", bild: "bilder/schattenspinne.jpg", preis: 150,
+    leben: 11, schritte: 3, angriff: 3, reichweite: 2, angriffName: "Giftfaden",
+    spuk: true, gift: 2,
+    spezial: { name: "Schattennetz", reichweite: 4, schaden: 4, gift: 2, text: "Schattennetz aus 4 Feldern: 4 Schaden und 2 Runden Gift." },
+    faehigkeit: "<b>Lauernd:</b> Schwer zu treffen (Angriffe gehen bei 1–2 daneben), und ihr Faden vergiftet 2 Runden lang.",
+  },
   // ---- Kaufmonster für 200 € (je zwei Fähigkeiten) und 300 € (je drei Fähigkeiten) ----
   glutphoenix: {
     name: "Glutphönix", element: "Feuer", farbe: "var(--feuer)", emoji: "🔥", bild: "bilder/glutphoenix.jpg", preis: 200,
@@ -553,6 +635,78 @@ const FIGUREN = {
     fliegt: true, spuk: true, saugt: 1,
     spezial: { name: "Seelensturm", reichweite: 4, schaden: 5, heil: 2, text: "Seelensturm aus 4 Feldern: 5 Schaden, heilt sich um 2." },
     faehigkeit: "<b>Geisterflügel:</b> Fliegt über Seen und Felsen, ist schwer zu treffen, und jeder Treffer heilt ihn um 1.",
+  },
+  // ---- Kleine Monster (Wunsch des Sohns, 26.10.2026): schwach, 100 €, kaufen erst ab 30 gesammelten Pokalen (abPokale) ----
+  funkenmaus: {
+    name: "Funkenmaus", element: "Feuer", farbe: "var(--feuer)", emoji: "🐭", bild: "bilder/funkenmaus.jpg", preis: 100, abPokale: 30,
+    leben: 7, schritte: 3, angriff: 2, reichweite: 1, angriffName: "Funkenbiss",
+    durchBusch: true,
+    spezial: { name: "Funkenregen", reichweite: 2, schaden: 2, text: "Funkenregen aus 2 Feldern: 2 Schaden." },
+    faehigkeit: "<b>Funken:</b> Ihr Biss brennt durch Büsche.",
+  },
+  schneehase: {
+    name: "Schneehase", element: "Eis", farbe: "var(--eis)", emoji: "🐇", bild: "bilder/schneehase.jpg", preis: 100, abPokale: 30,
+    leben: 7, schritte: 4, angriff: 1, reichweite: 1, angriffName: "Frosttritt",
+    friert: true,
+    spezial: { name: "Schneeball", reichweite: 3, schaden: 2, frost: true, text: "Schneeball aus 3 Feldern: 2 Schaden und einfrieren." },
+    faehigkeit: "<b>Frostpfoten:</b> Wer getroffen wird, friert ein und läuft im nächsten Zug nur 1 Feld.",
+  },
+  kieselkaefer: {
+    name: "Kieselkäfer", element: "Stein", farbe: "var(--stein)", emoji: "🪲", bild: "bilder/kieselkaefer.jpg", preis: 100, abPokale: 30,
+    leben: 9, schritte: 2, angriff: 2, reichweite: 1, angriffName: "Zangenkniff",
+    panzer: 1,
+    spezial: { name: "Kieselwurf", reichweite: 2, schaden: 2, text: "Wirft Kiesel aus 2 Feldern: 2 Schaden." },
+    faehigkeit: "<b>Kieselpanzer:</b> Jeder Treffer gegen ihn macht 1 Schaden weniger.",
+  },
+  stechmuecke: {
+    name: "Stechmücke", element: "Dschungel", farbe: "var(--dschungel)", emoji: "🦟", bild: "bilder/stechmuecke.jpg", preis: 100, abPokale: 30,
+    leben: 6, schritte: 3, angriff: 1, reichweite: 1, angriffName: "Stich",
+    gift: 1,
+    spezial: { name: "Mückenschwarm", reichweite: 2, schaden: 1, gift: 2, text: "Mückenschwarm aus 2 Feldern: 1 Schaden und 2 Runden Gift." },
+    faehigkeit: "<b>Giftstich:</b> Der Gegner verliert danach 1 Runde lang 1 Leben.",
+  },
+  schattenratte: {
+    name: "Schattenratte", element: "Schatten", farbe: "var(--schatten)", emoji: "🐀", bild: "bilder/schattenratte.jpg", preis: 100, abPokale: 30,
+    leben: 7, schritte: 3, angriff: 2, reichweite: 1, angriffName: "Nagezahn",
+    spuk: true,
+    spezial: { name: "Schattenbiss", reichweite: 2, schaden: 2, text: "Schattenbiss aus 2 Feldern: 2 Schaden." },
+    faehigkeit: "<b>Huschen:</b> Schwer zu treffen – Angriffe gegen sie gehen bei 1–2 daneben.",
+  },
+  // ---- Pokal-Monster (Wunsch des Sohns, 26.10.2026): kosten 100 🏆 statt Geld, je vier bekannte Fähigkeiten ----
+  sonnendrache: {
+    name: "Sonnendrache", element: "Feuer", farbe: "var(--feuer)", emoji: "☀️", bild: "bilder/sonnendrache.jpg", pokale: 100,
+    leben: 15, schritte: 4, angriff: 4, reichweite: 2, angriffName: "Sonnenatem",
+    fliegt: true, durchBusch: true, saugt: 1, anlauf: 1,
+    spezial: { name: "Sonnenglut", reichweite: 4, schaden: 6, heil: 2, text: "Sonnenglut aus 4 Feldern: 6 Schaden, heilt sich um 2." },
+    faehigkeit: "<b>Sonnenflügel:</b> Fliegt über Seen und Felsen, sein Feuer brennt durch Büsche, jeder Treffer heilt ihn um 1. Ist er gelaufen, macht er 1 Schaden mehr.",
+  },
+  gletscherkoenig: {
+    name: "Gletscherkönig", element: "Eis", farbe: "var(--eis)", emoji: "👑", bild: "bilder/gletscherkoenig.jpg", pokale: 100,
+    leben: 16, schritte: 3, angriff: 4, reichweite: 1, angriffName: "Gletscherfaust",
+    panzer: 1, friert: true, stoss: true, anlauf: 1,
+    spezial: { name: "Blizzard", reichweite: 4, schaden: 6, frost: true, text: "Blizzard aus 4 Feldern: 6 Schaden und einfrieren." },
+    faehigkeit: "<b>Eiskrone:</b> Treffer gegen ihn machen 1 Schaden weniger. Seine Faust friert ein und schleudert 1 Feld weg. Ist er gelaufen, macht er 1 Schaden mehr.",
+  },
+  bergkoloss: {
+    name: "Bergkoloss", element: "Stein", farbe: "var(--stein)", emoji: "⛰️", bild: "bilder/bergkoloss.jpg", pokale: 100,
+    leben: 16, schritte: 3, angriff: 4, reichweite: 1, angriffName: "Bergfaust",
+    panzer: 1, stoss: true, dornen: 1, durchBusch: true,
+    spezial: { name: "Erdbeben", reichweite: 4, schaden: 6, text: "Erdbeben bis 4 Felder weit: 6 Schaden." },
+    faehigkeit: "<b>Lebender Berg:</b> Treffer gegen ihn machen 1 Schaden weniger, wer ihn trifft, verliert 1 Leben. Seine Faust schleudert 1 Feld weg und trifft durch Büsche.",
+  },
+  dschungelhydra: {
+    name: "Dschungelhydra", element: "Dschungel", farbe: "var(--dschungel)", emoji: "🐲", bild: "bilder/dschungelhydra.jpg", pokale: 100,
+    leben: 15, schritte: 3, angriff: 4, reichweite: 2, angriffName: "Dreifachbiss",
+    gift: 3, dornen: 1, durchBusch: true, saugt: 1,
+    spezial: { name: "Hydrasturm", reichweite: 4, schaden: 5, gift: 3, text: "Hydrasturm aus 4 Feldern: 5 Schaden und 3 Runden Gift." },
+    faehigkeit: "<b>Drei Köpfe:</b> Ihr Biss vergiftet 3 Runden lang, trifft durch Büsche und heilt sie um 1. Wer sie trifft, verliert 1 Leben.",
+  },
+  schattenfuerst: {
+    name: "Schattenfürst", element: "Schatten", farbe: "var(--schatten)", emoji: "🌑", bild: "bilder/schattenfuerst.jpg", pokale: 100,
+    leben: 14, schritte: 4, angriff: 4, reichweite: 2, angriffName: "Schattenklinge",
+    fliegt: true, spuk: true, saugt: 1, anlauf: 1,
+    spezial: { name: "Ewige Nacht", reichweite: 4, schaden: 6, heil: 3, text: "Ewige Nacht aus 4 Feldern: 6 Schaden, heilt sich um 3." },
+    faehigkeit: "<b>Herr der Nacht:</b> Fliegt über Seen und Felsen, ist schwer zu treffen, jeder Treffer heilt ihn um 1. Ist er gelaufen, macht er 1 Schaden mehr.",
   },
 };
 const MAX = { leben: 16, schritte: 4, angriff: 4, reichweite: 2 };
@@ -644,6 +798,7 @@ const GELAENDE = {
   P: { name: "Schattenportal", bild: "portal", form: "rund", klasse: "portal",
        info: "Die zwei Portale sind verbunden: hinein und am anderen heraus. Schatten-Monster springen ohne Schritt." },
   Q: { name: "Lebensquelle", bild: "quelle", form: "rund", klasse: "quelle", info: "Wer hier seinen Zug beginnt, bekommt +2 Leben." },
+  M: { name: "Festungsmauer", klasse: "mauer", info: "Nur in der Solo-Dschungelwelt: kann niemand betreten, auch Flieger nicht." },
 };
 const HEIMAT = {
   Feuer: "Lavaspalten heilen dich (+1).",
@@ -695,14 +850,13 @@ const N = 8;
 
 // ---------- Geldbeutel: jeder Sieg bringt Spielgeld, bleibt über „Nochmal spielen“ hinaus gespeichert ----------
 const SIEGPRAEMIE = 20;
+// geld, gekauft, level, pokal, heimwelt gelten je Platz (Spieler 1/2) und kommen aus dem gewählten Spielstand (siehe „Spielstände“)
 const GELD_KEY = "monster-arena-geld";
 let geld = [0, 0];
-try { const g = JSON.parse(localStorage.getItem(GELD_KEY)); if (Array.isArray(g) && g.length === 2) geld = g.map(n => Number(n) || 0); } catch (e) { /* ohne Speicher weiter */ }
-function speichereGeld() { try { localStorage.setItem(GELD_KEY, JSON.stringify(geld)); } catch (e) { /* ohne Speicher weiter */ } }
+function speichereGeld() { speichereSpielstaende(); }
 const GEKAUFT_KEY = "monster-arena-gekauft";
 let gekauft = [[], []];      // je Spieler die Ids der gekauften Monster
-try { const g = JSON.parse(localStorage.getItem(GEKAUFT_KEY)); if (Array.isArray(g) && g.length === 2) gekauft = g.map(l => Array.isArray(l) ? l : []); } catch (e) { /* ohne Speicher weiter */ }
-function speichereGekauft() { try { localStorage.setItem(GEKAUFT_KEY, JSON.stringify(gekauft)); } catch (e) { /* ohne Speicher weiter */ } }
+function speichereGekauft() { speichereSpielstaende(); }
 // Aufleveln: Level 1–5 je Spieler und Monster, abwechselnd mit Geld und Pokalen bezahlt:
 // Level 2 = 50 €, Level 3 = 10 🏆, Level 4 = 150 €, Level 5 = 20 🏆.
 // Jedes Level +1 Leben, ab Level 3 +1 Angriff, auf Level 5 +1 Schritt.
@@ -710,25 +864,29 @@ const LEVEL_KEY = "monster-arena-level", MAX_LEVEL = 5;
 const levelPreis = n => n % 2 === 0 ? { geld: 50 * (n - 1) } : { pokale: 5 * (n - 1) };
 const preisText = k => k.geld ? `${k.geld} €` : `${k.pokale} 🏆`;
 let level = [{}, {}];
-try { const l = JSON.parse(localStorage.getItem(LEVEL_KEY)); if (Array.isArray(l) && l.length === 2) level = l.map(o => o && typeof o === "object" ? o : {}); } catch (e) { /* ohne Speicher weiter */ }
-function speichereLevel() { try { localStorage.setItem(LEVEL_KEY, JSON.stringify(level)); } catch (e) { /* ohne Speicher weiter */ } }
+function speichereLevel() { speichereSpielstaende(); }
 const gueltigesLevel = n => Math.min(MAX_LEVEL, Math.max(1, Math.floor(Number(n)) || 1));
 const levelVon = (sp, id) => gueltigesLevel(level[sp][id]);
 function mitLevel(id, n) {
   const f = FIGUREN[id];
   return { ...f, level: n, leben: f.leben + (n - 1), angriff: f.angriff + (n >= 3 ? 1 : 0), schritte: f.schritte + (n >= 5 ? 1 : 0) };
 }
-const besitzt = (i, id) => !FIGUREN[id].preis || gekauft[i].includes(id);
+// Kaufmonster kosten Geld (preis). Pokal-Monster (pokale) kauft man nicht: sie gehören einem, sobald man so viele
+// Pokale gesammelt hat (alle je gesammelten, fürs Aufleveln ausgegebene zählen mit).
+const istKauf = f => !!(f.preis || f.pokale);
+const besitzt = (i, id) => { const f = FIGUREN[id]; return f.pokale ? pokal[i].pokale >= f.pokale : !f.preis || gekauft[i].includes(id); };
 // Gegen den Computer: Spieler 2 ist der Computer (Modus bleibt über „Nochmal spielen“ gespeichert)
 // Online: jedes Gerät ist ein Spieler; dessen Geld, Käufe, Welt und Pokale stehen immer auf Platz 0 (Spieler 1)
 const MODUS_KEY = "monster-arena-computer";
-let computer = false, online = false;
-try { const m = localStorage.getItem(MODUS_KEY); computer = m === "1"; online = m === "2"; } catch (e) { /* ohne Speicher weiter */ }
+// Solo: allein durch eine große Welt im Nebel laufen (siehe „Solo“)
+let computer = false, online = false, soloModus = false;
+try { const m = localStorage.getItem(MODUS_KEY); computer = m === "1"; online = m === "2"; soloModus = m === "3"; } catch (e) { /* ohne Speicher weiter */ }
 function setzeModus(an) {
   if (wahl.length) return;
   computer = an === true;
   online = an === "online";
-  try { localStorage.setItem(MODUS_KEY, online ? "2" : computer ? "1" : "0"); } catch (e) { /* ohne Speicher weiter */ }
+  soloModus = an === "solo";
+  try { localStorage.setItem(MODUS_KEY, soloModus ? "3" : online ? "2" : computer ? "1" : "0"); } catch (e) { /* ohne Speicher weiter */ }
   ton("klick");
   zeigeGeldbeutel();
   zeigeAuswahl();
@@ -737,7 +895,8 @@ function setzeModus(an) {
 // Schwer nimmt ein Kaufmonster mit mehr Leben und spielt ohne Zufall. Je schwerer, desto mehr Geld für den Sieg.
 const STUFEN = {
   leicht: { name: "🐣 Leicht", praemie: 10, leben: -2, zufall: 8, angriffQuote: 0.6, kaufmonster: false },
-  mittel: { name: "🐺 Mittel", praemie: 20, leben: 0, zufall: 0.5, angriffQuote: 1, kaufmonster: null },
+  // Mittel etwas leichter (Wunsch des Sohns, 27.10.2026): −1 Leben, zielt ungenauer, lässt 15 % der Angriffe aus
+  mittel: { name: "🐺 Mittel", praemie: 20, leben: -1, zufall: 2, angriffQuote: 0.85, kaufmonster: null },
   schwer: { name: "🔥 Schwer", praemie: 30, leben: 3, zufall: 0, angriffQuote: 1, kaufmonster: true },
 };
 const STUFE_KEY = "monster-arena-stufe";
@@ -751,22 +910,23 @@ function setzeStufe(s) {
   zeigeGeldbeutel();
 }
 const praemie = gewinner => computer && gewinner === 0 ? STUFEN[stufe].praemie : SIEGPRAEMIE;
-const nameVon = i => online ? `Spieler ${i + 1}${i === ich ? " (du)" : ""}` : computer && i === 1 ? "Computer" : `Spieler ${i + 1}`;
+const nameVon = i => online ? `${onlineBoni[i]?.name || `Spieler ${i + 1}`}${i === ich ? " (du)" : ""}` : computer && i === 1 ? "Computer" : spielstandName(i);
 const kiDran = () => computer && dran === 1 && spieler.length > 0;
 const fernDran = () => online && dran !== ich && spieler.length > 0;
 const nichtMeinZug = () => kiDran() || fernDran();
-const allein = () => computer || online;            // nur ein Spieler an diesem Gerät
+const allein = () => computer || online || soloModus;   // nur ein Spieler an diesem Gerät
 // Platz im Kampf → Profil auf diesem Gerät (Geld, Pokale); -1 = Computer oder Online-Gegner
 const profil = i => online ? (i === ich ? 0 : -1) : computer && i === 1 ? -1 : i;
 function zeigeGeldbeutel() {
   document.getElementById("modusZwei").className = allein() ? "" : "an";
   document.getElementById("modusKI").className = computer ? "an" : "";
   document.getElementById("modusOnline").className = online ? "an" : "";
+  document.getElementById("modusSolo").className = soloModus ? "an" : "";
   const st = document.getElementById("stufe");
   st.innerHTML = computer ? Object.entries(STUFEN).map(([k, s]) =>
     `<button class="${k === stufe ? "an" : ""}" onclick="setzeStufe('${k}')">${s.name}<br><small>Sieg: +${s.praemie} €</small></button>`).join("") : "";
-  document.getElementById("geldbeutel").innerHTML = geld.slice(0, allein() ? 1 : 2).map((g, i) =>
-    `<span><b style="color:${SPIELERFARBE[i]}">Spieler ${i + 1}</b> 💰 ${g} €</span>`).join("");
+  document.getElementById("geldbeutel").innerHTML = mitSpielstand().map(i =>
+    `<span><b style="color:${SPIELERFARBE[i]}">${spielstandName(i)}</b> 💰 ${geld[i]} €</span>`).join("");
   zeigePokalWeg();
 }
 
@@ -791,21 +951,27 @@ const geschenkNr = n => GESCHENKE[n % GESCHENKE.length];
 const leerPokal = () => ({ pokale: 0, abgeholt: 0, kugel: 0, leben: 0, ausgegeben: 0 });   // ausgegeben: fürs Aufleveln, der Pokal-Weg zählt weiter alle
 const freiePokale = sp => Math.max(0, pokal[sp].pokale - pokal[sp].ausgegeben);
 let pokal = [leerPokal(), leerPokal()];
-try { const p = JSON.parse(localStorage.getItem(POKAL_KEY)); if (Array.isArray(p) && p.length === 2) pokal = p.map(x => ({ ...leerPokal(), ...x })); } catch (e) { /* ohne Speicher weiter */ }
-function speicherePokale() { try { localStorage.setItem(POKAL_KEY, JSON.stringify(pokal)); } catch (e) { /* ohne Speicher weiter */ } }
+function speicherePokale() { speichereSpielstaende(); }
 const offeneGeschenke = i => Math.floor(pokal[i].pokale / POKALE_PRO_GESCHENK) - pokal[i].abgeholt;
 let wegSpieler = 0;
 function gibPokale(i, n, p) {
   const k = profil(i);
   if (k < 0) return;
+  const vorher = pokal[k].pokale;
   pokal[k].pokale += n;
   speicherePokale();
   log(`🏆 ${nameVon(i)} bekommt ${n} ${n === 1 ? "Pokal" : "Pokale"}!`);
+  for (const f of Object.values(FIGUREN))
+    if (f.pokale && f.element === heimwelt[k] && vorher < f.pokale && pokal[k].pokale >= f.pokale)
+      log(`🎉 ${pokal[k].pokale} Pokale! ${f.name} gehört jetzt ${nameVon(i)}!`);
   if (p) setTimeout(() => zahl(p, `🏆 +${n}`, false, false, "blitz"), 450);
   zeigePokalWeg();
 }
+// Plätze an diesem Gerät, die schon einen Spielstand haben (vorher gibt es kein Geld und keinen Pokal-Weg)
+const mitSpielstand = () => (allein() ? [0] : [0, 1]).filter(i => sitz[i] !== null);
 function zeigePokalKnopf() {
-  const wer = allein() ? [0] : [0, 1];
+  const wer = mitSpielstand();
+  document.getElementById("pokalKnopf").hidden = !wer.length;
   const offen = wer.some(i => offeneGeschenke(i) > 0);
   document.getElementById("pokalKnopf").className = (offen ? "geschenk" : "") + (document.getElementById("pokalWeg").classList.contains("an") ? " offen" : "");
   document.getElementById("pokalZahl").textContent = offen ? "🎁" : wer.map(i => pokal[i].pokale).join(" | ");
@@ -820,11 +986,14 @@ function zeigePokalWeg() {
   zeigePokalKnopf();
   const w = document.getElementById("pokalWeg");
   if (!w.classList.contains("an")) return;
+  const wer = mitSpielstand();
+  if (!wer.length) { w.classList.remove("an"); return zeigePokalKnopf(); }
+  if (!wer.includes(wegSpieler)) wegSpieler = wer[0];
   const pk = pokal[wegSpieler];
   const erreicht = Math.floor(pk.pokale / POKALE_PRO_GESCHENK);
   const anzahl = Math.max(15, erreicht + 8);
-  const reiter = allein() ? "" : `<div class="modus">${[0, 1].map(i =>
-    `<button class="${i === wegSpieler ? "an" : ""}" onclick="wegSpieler=${i};ton('klick');zeigePokalWeg()">Spieler ${i + 1} · 🏆 ${pokal[i].pokale}${offeneGeschenke(i) > 0 ? " 🎁" : ""}</button>`).join("")}</div>`;
+  const reiter = wer.length < 2 ? "" : `<div class="modus">${wer.map(i =>
+    `<button class="${i === wegSpieler ? "an" : ""}" onclick="wegSpieler=${i};ton('klick');zeigePokalWeg()">${spielstandName(i)} · 🏆 ${pokal[i].pokale}${offeneGeschenke(i) > 0 ? " 🎁" : ""}</button>`).join("")}</div>`;
   let punkte = `<div class="punkt erreicht"><b>🏁</b><span>Start</span></div>`;
   for (let n = 0; n < anzahl; n++) {
     const g = geschenkNr(n), ziel = (n + 1) * POKALE_PRO_GESCHENK;
@@ -837,7 +1006,7 @@ function zeigePokalWeg() {
   const fuell = Math.min(pk.pokale / POKALE_PRO_GESCHENK, anzahl);
   w.innerHTML = `<h2>🏆 Pokal-Weg</h2>
     <p class="unter">Sieg: +2 🏆 · Eine 6 gewürfelt: +1 🏆 · Alle ${POKALE_PRO_GESCHENK} 🏆 gibt es ein Geschenk<br>
-    ${online ? "Du hast" : `Spieler ${wegSpieler + 1} hat`} <b style="color:#ffd75e">${pk.pokale} 🏆</b> · nächstes Geschenk bei ${(erreicht + 1) * POKALE_PRO_GESCHENK} 🏆</p>${reiter}
+    ${online ? "Du hast" : `${spielstandName(wegSpieler)} hat`} <b style="color:#ffd75e">${pk.pokale} 🏆</b> · nächstes Geschenk bei ${(erreicht + 1) * POKALE_PRO_GESCHENK} 🏆</p>${reiter}
     <div class="weg"><div class="linie" style="height:${anzahl}cm"><i style="height:${fuell}cm"></i></div>
     <div class="stand" style="top:calc(8px + ${0.5 + fuell}cm)">${pk.pokale} 🏆</div>${punkte}</div>`;
 }
@@ -850,7 +1019,7 @@ function oeffneGeschenk(i) {
   speicherePokale();
   ton("sieg");
   document.getElementById("geschenkBox").innerHTML = `<div class="gross">${g.icon}</div><h2 style="color:var(--gold)">${g.text}</h2>
-    <p class="unter" style="color:var(--leise)">${g.bonus ? "Gilt automatisch im nächsten Kampf." : `${online ? "Du hast" : `Spieler ${i + 1} hat`} jetzt ${geld[i]} €.`}<br>Antippen zum Schließen</p>`;
+    <p class="unter" style="color:var(--leise)">${g.bonus ? "Gilt automatisch im nächsten Kampf." : `${online ? "Du hast" : `${spielstandName(i)} hat`} jetzt ${geld[i]} €.`}<br>Antippen zum Schließen</p>`;
   document.getElementById("geschenkAuf").classList.add("an");
   zeigePokalWeg();
 }
@@ -977,10 +1146,10 @@ function verbunden(c, gastgeber) {
   // Der Gast schickt zuerst seine Wahl, der Gastgeber antwortet mit seiner Wahl und dem Startwert für den Zufall
   if (!gastgeber) c.send({ typ: "wahl", ...meineWahl() });
 }
-const meineWahl = () => ({ id: wahl[0], kugel: pokal[0].kugel > 0, leben: pokal[0].leben > 0, level: levelVon(0, wahl[0]) });
+const meineWahl = () => ({ id: wahl[0], kugel: pokal[0].kugel > 0, leben: pokal[0].leben > 0, level: levelVon(0, wahl[0]), name: spielstandName(0) });
 function empfange(d) {
   if (d.typ === "wahl" && !spieler.length) {
-    const ihre = { id: d.id, kugel: !!d.kugel, leben: !!d.leben, level: gueltigesLevel(d.level) };   // ältere Geräte schicken kein Level → 1
+    const ihre = { id: d.id, kugel: !!d.kugel, leben: !!d.leben, level: gueltigesLevel(d.level), name: sauberName(d.name) };   // ältere Geräte schicken kein Level (→ 1) und keinen Namen
     if (!FIGUREN[ihre.id]) return;
     let start, karte;
     if (ich === 0) {                                   // der Wartende bestimmt Zufall und Karte
@@ -1025,6 +1194,33 @@ function meinZug(art, r, c) {
   if (art === "feld") klickFeld(r, c);
   else if (art === "spezial") spezialAngriff();
   else zugEnde();
+}
+// Zurück-Knopf oben links → Startseite mit Modus, Schwierigkeit und Kampf-Karte.
+// Im Kampf bricht er ab (wie beim Kaufen: erstes Tippen fragt, zweites geht); zu zweit bei Spieler 2 geht es zu Spieler 1.
+function zeigeZurueck() {
+  const sichtbar = spieler.length > 0 || !!solo || (wahl.length === 1 && !allein()) || (wahl.length === 0 && sitz[0] !== null);
+  const knopf = document.getElementById("zurueckKnopf");
+  knopf.hidden = !sichtbar;
+  knopf.title = spieler.length || wahl.length ? "Zurück zur Spielauswahl" : "Zurück zu den Spielständen";
+  document.body.classList.toggle("mit-zurueck", sichtbar);
+}
+// Ein Schritt zurück: Kampf → Spielauswahl, Spieler 2 → Spieler 1, Startseite → Spielstände
+function zurueck(knopf) {
+  if (solo) { soloSpeichern(); return location.reload(); }   // Solo: Stand ist gespeichert, ohne Nachfrage zurück
+  if (!spieler.length) {
+    if (!wahl.length) return gibSitzFrei(0);
+    wahl.length = 0;
+    ton("klick");
+    return zeigeAuswahl();
+  }
+  if (!knopf.classList.contains("frage")) {
+    ton("klick");
+    knopf.classList.add("frage");
+    knopf.textContent = "⬅ Kampf abbrechen? Nochmal tippen = Ja!";
+    setTimeout(() => { knopf.classList.remove("frage"); knopf.textContent = "⬅"; }, 4000);
+    return;
+  }
+  location.reload();
 }
 function gegnerWeg() {
   if (!online || vorbei || !verbindung) return;
@@ -1092,27 +1288,140 @@ const wahl = [];
 // Heimatwelt: jeder Spieler wählt EINMAL seine Welt, danach spielt und kauft er nur Monster daraus
 const WELT_KEY = "monster-arena-welt";
 let heimwelt = [null, null];
-try { const w = JSON.parse(localStorage.getItem(WELT_KEY)); if (Array.isArray(w) && w.length === 2) heimwelt = w.map(e => WELTEN[e] ? e : null); } catch (e) { /* ohne Speicher weiter */ }
-function speichereWelt() { try { localStorage.setItem(WELT_KEY, JSON.stringify(heimwelt)); } catch (e) { /* ohne Speicher weiter */ } }
+function speichereWelt() { speichereSpielstaende(); }
 let offeneWelt = null;       // Heimatwelt dessen, der gerade wählt
+
+// ---------- Spielstände ----------
+// Am Anfang wählt jeder seinen Spielstand: freien Knopf antippen = Namen geben, benannten Knopf antippen = damit spielen.
+// Danach Welt (einmal für immer) und Monster. Ein Spielstand hält Name, Welt, Geld, Käufe, Level und Pokale.
+const SPIELSTAND_KEY = "monster-arena-spielstaende", SPIELSTAENDE = 6, NAME_MAX = 12;
+let spielstaende = [];
+let sitz = [null, null];     // Nummer des Spielstands je Platz in diesem Kampf
+let benennt = false, nameEntwurf = "";
+const leererSpielstand = name => ({ name, welt: null, geld: 0, gekauft: [], level: {}, pokal: leerPokal() });
+const sauberName = t => String(t ?? "").replace(/[<>&"'`]/g, "").trim().slice(0, NAME_MAX);
+const spielstandName = i => sitz[i] !== null ? spielstaende[sitz[i]].name : `Spieler ${i + 1}`;
+function ladeSpielstaende() {
+  try {
+    const s = JSON.parse(localStorage.getItem(SPIELSTAND_KEY));
+    if (Array.isArray(s)) {
+      spielstaende = s.filter(p => p && sauberName(p.name)).map(p => ({ ...leererSpielstand(sauberName(p.name)), ...p, name: sauberName(p.name),
+        welt: WELTEN[p.welt] ? p.welt : null, gekauft: Array.isArray(p.gekauft) ? p.gekauft : [], pokal: { ...leerPokal(), ...p.pokal } }));
+      return;
+    }
+  } catch (e) { return; }
+  // Umzug: der alte Stand von Spieler 1 und 2 (vor den Spielständen) wird zu zwei Spielständen
+  const alt = k => { try { const v = JSON.parse(localStorage.getItem(k)); return Array.isArray(v) && v.length === 2 ? v : null; } catch (e) { return null; } };
+  const [g, k, l, p, w] = [GELD_KEY, GEKAUFT_KEY, LEVEL_KEY, POKAL_KEY, WELT_KEY].map(alt);
+  for (const i of [0, 1]) {
+    const s = { ...leererSpielstand(`Spieler ${i + 1}`), geld: Number(g?.[i]) || 0, gekauft: Array.isArray(k?.[i]) ? k[i] : [],
+      level: l?.[i] && typeof l[i] === "object" ? l[i] : {}, pokal: { ...leerPokal(), ...p?.[i] }, welt: WELTEN[w?.[i]] ? w[i] : null };
+    if (s.welt || s.geld || s.gekauft.length || s.pokal.pokale) spielstaende.push(s);
+  }
+  speichereSpielstaende();
+}
+// Die Plätze rechnen mit geld[sp] usw.; beim Speichern wandert alles in den Spielstand des Platzes zurück
+function speichereSpielstaende() {
+  sitz.forEach((n, sp) => { if (n !== null) Object.assign(spielstaende[n], { welt: heimwelt[sp], geld: geld[sp], gekauft: gekauft[sp], level: level[sp], pokal: pokal[sp] }); });
+  try { localStorage.setItem(SPIELSTAND_KEY, JSON.stringify(spielstaende)); } catch (e) { /* ohne Speicher weiter */ }
+}
+// Die Wahl bleibt über „Nochmal spielen“ hinaus gespeichert: nach dem Kampf geht es gleich zu den Monstern der eigenen Welt.
+// Zurück zu den Spielständen nur über den Zurück-Knopf.
+const SITZ_KEY = "monster-arena-sitz";
+function leereSitz(sp) {
+  sitz[sp] = null;
+  heimwelt[sp] = null; geld[sp] = 0; gekauft[sp] = []; level[sp] = {}; pokal[sp] = leerPokal();
+}
+function setzeSitz(sp, n) {
+  sitz.forEach((x, i) => { if (x === n && i !== sp) leereSitz(i); });   // nie zwei Plätze mit demselben Spielstand (sonst überschreibt einer den anderen)
+  const s = spielstaende[n];
+  sitz[sp] = n;
+  heimwelt[sp] = s.welt; geld[sp] = s.geld; gekauft[sp] = s.gekauft; level[sp] = s.level; pokal[sp] = s.pokal;
+}
+const speichereSitze = () => { try { localStorage.setItem(SITZ_KEY, JSON.stringify(sitz)); } catch (e) { /* ohne Speicher weiter */ } };
+function ladeSitze() {
+  try {
+    const s = JSON.parse(localStorage.getItem(SITZ_KEY));
+    if (Array.isArray(s)) s.slice(0, 2).forEach((n, sp) => { if (Number.isInteger(n) && spielstaende[n] && !sitz.includes(n)) setzeSitz(sp, n); });
+  } catch (e) { /* ohne Speicher weiter */ }
+}
+function nimmSpielstand(sp, n) {
+  setzeSitz(sp, n);
+  speichereSitze();
+  ton("klick");
+  zeigeGeldbeutel();
+  zeigeAuswahl();
+}
+function gibSitzFrei(sp) {
+  leereSitz(sp);
+  speichereSitze();
+  ton("klick");
+  zeigeGeldbeutel();
+  zeigeAuswahl();
+}
+function benenne() {
+  const name = sauberName(nameEntwurf);
+  if (!name) { ton("daneben"); return; }
+  spielstaende.push(leererSpielstand(name));
+  benennt = false; nameEntwurf = "";
+  speichereSpielstaende();
+  ton("sieg");
+  zeigeAuswahl();
+}
+function zeigeSpielstaende(k, sp) {
+  const d = document.createElement("div");
+  d.className = "spielstaende";
+  for (let n = 0; n < Math.max(SPIELSTAENDE, spielstaende.length); n++) {
+    const s = spielstaende[n], b = document.createElement("div");
+    if (!s && benennt && n === spielstaende.length) {
+      // Der Name steht in nameEntwurf, damit ein Neuzeichnen (z. B. wenn ein Bild fertig lädt) nichts löscht
+      b.className = "spielstand";
+      b.innerHTML = `<input maxlength="${NAME_MAX}" placeholder="Dein Name"><button class="knopf">✓ Fertig</button>`;
+      const feld = b.querySelector("input");
+      feld.value = nameEntwurf;
+      feld.oninput = () => (nameEntwurf = feld.value);
+      feld.onkeydown = e => { if (e.key === "Enter") benenne(); };
+      b.querySelector("button").onclick = benenne;
+      setTimeout(() => feld.focus());
+    } else if (!s) {
+      b.className = "spielstand leer";
+      b.innerHTML = "＋<br>Neuer Spielstand";
+      b.onclick = () => { if (benennt) return; benennt = true; ton("klick"); zeigeAuswahl(); };
+    } else {
+      const besetzt = !allein() && sitz.some((x, i) => x === n && i !== sp);   // zu zweit nicht beide mit demselben Spielstand
+      b.className = "spielstand" + (besetzt ? " besetzt" : "");
+      b.innerHTML = `<b>${s.name}</b><small>${s.welt ? WELTEN[s.welt].name : "noch keine Welt"}</small><small>💰 ${s.geld} € · 🏆 ${s.pokal.pokale}</small>`;
+      if (!besetzt) b.onclick = () => nimmSpielstand(sp, n);
+    }
+    d.appendChild(b);
+  }
+  k.appendChild(d);
+}
 function pips(wert, max) { return '<span class="pips">' + Array.from({ length: max }, (_, i) => `<i class="${i < wert ? "an" : ""}"></i>`).join("") + "</span>"; }
 function zeigeAuswahl() {
   const k = document.getElementById("figurKarten");
   k.innerHTML = "";
   const sp = wahl.length;                    // wer gerade wählt
+  zeigeZurueck();
   document.getElementById("modus").hidden = sp > 0;
   document.getElementById("stufe").hidden = sp > 0;
-  document.getElementById("kartenwahl").hidden = sp > 0;
+  document.getElementById("kartenwahl").hidden = sp > 0 || soloModus;
   zeigeKartenwahl();
   offeneWelt = heimwelt[sp];
-  document.getElementById("auswahlTitel").textContent = `Spieler ${sp + 1} – ` +
-    (offeneWelt ? `wähle dein Monster aus der ${WELTEN[offeneWelt].name}` : "wähle deine Welt");
-  const unter = document.getElementById("auswahlUnter");
+  const titel = document.getElementById("auswahlTitel"), unter = document.getElementById("auswahlUnter");
+  if (sitz[sp] === null) {
+    titel.textContent = allein() ? "Wer spielt?" : `Spieler ${sp + 1} – wer bist du?`;
+    unter.textContent = spielstaende.length ? "Tipp auf deinen Namen – oder mach einen neuen Spielstand." : "Tipp auf einen Knopf und gib ihm deinen Namen.";
+    return zeigeSpielstaende(k, sp);
+  }
+  titel.textContent = `${spielstandName(sp)} – ` + (offeneWelt ? `wähle dein Monster aus der ${WELTEN[offeneWelt].name}` : "wähle deine Welt");
+  // Spieler 1 kommt über den Zurück-Knopf oben links zu den Spielständen, Spieler 2 (dort führt er zu Spieler 1) über diesen
+  const anderer = sp === 1 ? ` <button class="anderer" onclick="gibSitzFrei(1)">Anderer Spielstand</button>` : "";
   if (!offeneWelt) {
-    unter.textContent = "Achtung: Die Welt gehört dir für immer! Du spielst und kaufst nur Monster aus deiner Welt.";
+    unter.innerHTML = "Achtung: Die Welt gehört dir für immer! Du spielst und kaufst nur Monster aus deiner Welt." + anderer;
     return zeigeWelten(k, sp);
   }
-  unter.textContent = sp === 1 ? `Spieler 1 hat ${FIGUREN[wahl[0]].name} genommen.` : "";
+  unter.innerHTML = (sp === 1 ? `${spielstandName(0)} hat ${FIGUREN[wahl[0]].name} genommen.` : "") + anderer;
   for (const [id, f] of Object.entries(FIGUREN)) {
     if (f.element !== offeneWelt) continue;
     const vergeben = false;                  // gleiche Monster dürfen gegeneinander kämpfen
@@ -1124,7 +1433,7 @@ function zeigeAuswahl() {
     const lv = gesperrt ? 1 : levelVon(sp, id);
     const w = mitLevel(id, lv);
     d.innerHTML = `<div class="portrait" style="${portraitStil(id, lv)}"><span class="ersatz">${ersatz(id)}</span>
-        <span class="element">${f.element}</span></div>${gesperrt ? `<span class="schloss">🔒 ${f.preis} €</span>` : ""}
+        <span class="element">${f.element}</span></div>${gesperrt ? `<span class="schloss">🔒 ${f.pokale ? `ab ${f.pokale} 🏆` : `${f.preis} €${f.abPokale ? ` · ab ${f.abPokale} 🏆` : ""}`}</span>` : ""}
       <div class="kartentext"><h3>${f.name}</h3>
         ${gesperrt ? "" : `<div class="sterne">${"⭐".repeat(lv)}${"☆".repeat(MAX_LEVEL - lv)} <small>Level ${lv}</small></div>`}
         <div class="wert"><span>❤️</span><span>Leben ${w.leben}</span>${pips(Math.round(w.leben / 2), MAX.leben / 2)}</div>
@@ -1132,7 +1441,7 @@ function zeigeAuswahl() {
         <div class="wert"><span>⚔️</span><span>Angriff ${w.angriff}</span>${pips(w.angriff, MAX.angriff)}</div>
         <div class="wert"><span>🎯</span><span>Reichweite ${f.reichweite}</span>${pips(f.reichweite, MAX.reichweite)}</div>
         <div class="faehig">${f.faehigkeit}<br>⚡ <b>${f.spezial.name}:</b> ${f.spezial.text}<br>🏠 <b>Heimvorteil:</b> ${HEIMAT[f.element]}</div>${gesperrt ? kaufzeile(sp, f) : levelzeile(sp, lv)}</div>`;
-    if (gesperrt) d.onclick = () => kaufen(sp, id, d);
+    if (gesperrt) d.onclick = () => f.pokale ? ton("daneben") : kaufen(sp, id, d);
     else {
       d.onclick = () => waehle(id);
       d.querySelector(".levelzeile").onclick = e => { e.stopPropagation(); levelKaufen(sp, id, d); };   // Level-Knopf wählt nicht aus
@@ -1142,6 +1451,10 @@ function zeigeAuswahl() {
 }
 // Kaufen in zwei Schritten (erstes Tippen fragt, zweites kauft), damit nichts aus Versehen weg ist
 function kaufzeile(sp, f) {
+  if (f.pokale) return `<div class="kaufzeile">🏆 Gehört dir ab ${f.pokale} Pokalen – dir fehlen noch ${f.pokale - pokal[sp].pokale} 🏆<br>` +
+    `<small>Pokale gibt's für Siege (+2) und Sechser (+1)</small></div>`;
+  if (f.abPokale && pokal[sp].pokale < f.abPokale) return `<div class="kaufzeile">🔒 Kaufen erst ab ${f.abPokale} Pokalen – dir fehlen noch ` +
+    `${f.abPokale - pokal[sp].pokale} 🏆<br><small>Pokale gibt's für Siege (+2) und Sechser (+1)</small></div>`;
   const fehlt = f.preis - geld[sp];
   return fehlt > 0 ? `<div class="kaufzeile">🔒 Dir fehlen noch ${fehlt} €<br><small>Gewinne Kämpfe: +${SIEGPRAEMIE} € pro Sieg</small></div>`
                    : `<div class="kaufzeile kann">💰 Kaufen für ${f.preis} €</div>`;
@@ -1176,7 +1489,7 @@ function levelKaufen(sp, id, karte) {
 }
 function kaufen(sp, id, karte) {
   const f = FIGUREN[id];
-  if (geld[sp] < f.preis) { ton("daneben"); return; }
+  if (geld[sp] < f.preis || pokal[sp].pokale < (f.abPokale || 0)) { ton("daneben"); return; }
   const zeile = karte.querySelector(".kaufzeile");
   if (!zeile.classList.contains("frage")) {
     ton("klick");
@@ -1227,9 +1540,11 @@ function waehle(id) {
   wahl.push(id);
   if (wahl.length === 1 && computer) {
     const km = STUFEN[stufe].kaufmonster;
-    const alle = Object.keys(FIGUREN).filter(id => km === null || !!FIGUREN[id].preis === km);
+    const alle = Object.keys(FIGUREN).filter(id => km === null || istKauf(FIGUREN[id]) === km);
     wahl.push(alle[Math.floor(Math.random() * alle.length)]);
     starte();
+  } else if (wahl.length === 1 && soloModus) {
+    starteSolo(id);
   } else if (wahl.length === 1 && online) {
     sucheGegner();
   } else if (wahl.length === 1) {
@@ -1251,6 +1566,7 @@ function starte() {
   loeseBoniEin();
   document.getElementById("auswahl").style.display = "none";
   document.getElementById("spiel").style.display = "block";
+  zeigeZurueck();
   document.getElementById("zugEnde").onclick = () => meinZug("ende");
   document.getElementById("spezialKnopf").onclick = () => meinZug("spezial");
   legende();
@@ -1261,6 +1577,7 @@ function starte() {
   zeichne();
   sperre = true;
   cutin(spieler.map(p => ({ id: p.id, sit: "kampf" })), "Kampf!", null, 2800).then(() => { sperre = false; zugStart(); });
+  kampfAnsage();
 }
 
 const feldTyp = (r, c) => KARTE[r][c];
@@ -1489,16 +1806,21 @@ async function spezialAngriff() {
   if (sp.heil) setTimeout(() => aendereLeben(a, sp.heil, `💜 ${a.fig.name} raubt Kraft: +${sp.heil} Leben.`), 400);
   sperre = false;
   if (pruefeSieg()) return;
-  setTimeout(weiterOderEnde, 500);
+  const zug = zuege;
+  setTimeout(() => zug === zuege && weiterOderEnde(), 500);
 }
 
+// Automatisches Zugende höchstens einmal je Zug: Läuft der Computer in den 500 ms nach einem Spezialangriff,
+// prüfen zwei Stellen – ohne die Zugnummer endeten zwei Züge und der Spieler wurde übersprungen.
+let endeGeplant = -1;
 function weiterOderEnde() {
   zeichne();
   const s = spieler[dran];
   const nochZiehen = !bewegt && erreichbar(s).size > 0;
-  if (!nochZiehen && !kannAngreifen() && !kannSpezial()) {
+  if (!nochZiehen && !kannAngreifen() && !kannSpezial() && endeGeplant !== zuege) {
+    const zug = endeGeplant = zuege;
     sperre = true;
-    setTimeout(() => { sperre = false; zugEnde(); }, 800);
+    setTimeout(() => { if (zug !== zuege) return; sperre = false; zugEnde(); }, 800);
   }
 }
 
@@ -1515,6 +1837,7 @@ function pruefeSieg() {
   b.setAttribute("style", bildDa[sieger.id + "_kampf"] ? `background-image:url(${szene(sieger.id, "kampf")})` : portraitStil(sieger.id, sieger.fig.level));
   b.textContent = ersatz(sieger.id);
   const gewinner = 1 - tot;
+  soloKampfEnde(gewinner);
   const k = profil(gewinner);
   document.getElementById("siegText").textContent = online
     ? (gewinner === ich ? `Du gewinnst mit ${sieger.fig.name}!` : `Dein Gegner gewinnt mit ${sieger.fig.name}!`)
@@ -1524,6 +1847,7 @@ function pruefeSieg() {
   } else {
     geld[k] += praemie(gewinner);
     speichereGeld();
+    setTimeout(() => ton("geld"), 850);                  // nach der Sieg-Fanfare
     log(`💰 ${nameVon(gewinner)} bekommt ${praemie(gewinner)} €!`);
     gibPokale(gewinner, 2);
     document.getElementById("siegGeld").innerHTML = `💰 +${praemie(gewinner)} € · 🏆 +2<small>${online ? "Du hast" : `${nameVon(gewinner)} hat`} jetzt ${geld[k]} € und ${pokal[k].pokale} 🏆${offeneGeschenke(k) > 0 ? " – 🎁 ein Geschenk wartet!" : ""}</small>`;
@@ -1726,25 +2050,394 @@ function ton(art) {
       klick: [[660, .06]], schritt: [[520, .05], [700, .05]], wuerfel: [[300, .04], [340, .04], [380, .04]],
       treffer: [[220, .12], [160, .15]], volltreffer: [[880, .08], [660, .08], [220, .2]],
       daneben: [[400, .1], [300, .15]], kugel: [[900, .05], [1200, .05], [1600, .12]], cutin: [[180, .04], [360, .04], [720, .04], [1100, .14]], sieg: [[523, .15], [659, .15], [784, .15], [1046, .35]],
+      // Geld beim Sieg: zwei Münzen klimpern (0 = kurze Pause), dann „Kaching“
+      geld: [[1976, .05], [2637, .09], [0, .05], [1976, .05], [2637, .09], [0, .06], [1568, .07], [3136, .4]],
+      muenze: [[1976, .05], [2637, .18]],   // eine einzelne Münze in der Solo-Welt
+
     }[art] || [];
     let t = ctx.currentTime;
     for (const [f, d] of folgen) {
-      const o = ctx.createOscillator(), g = ctx.createGain();
-      o.type = "triangle"; o.frequency.value = f;
-      g.gain.setValueAtTime(.12, t); g.gain.exponentialRampToValueAtTime(.001, t + d);
-      o.connect(g).connect(ctx.destination); o.start(t); o.stop(t + d);
+      if (f) {
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = art === "geld" ? "sine" : "triangle"; o.frequency.value = f;
+        g.gain.setValueAtTime(.12, t); g.gain.exponentialRampToValueAtTime(.001, t + d);
+        o.connect(g).connect(ctx.destination); o.start(t); o.stop(t + d);
+      }
       t += d;
     }
   } catch (e) { /* ohne Ton weiter */ }
 }
 
+// ---------- Solo: große Welt im Nebel ----------
+// Man läuft allein durch eine große Welt. Man sieht nur SOLO_SICHT Felder weit, alles andere liegt im Nebel.
+// Schon gesehene Felder bleiben dunkel sichtbar. Alle Spieler (auch auf anderen Geräten) haben DIESELBE Welt (SOLO_SEED);
+// je Spielstand gespeichert (st.solo): Welt, Ort, Gesehenes, besiegte wilde Monster, geöffnete Truhen, gesammelte Münzen.
+// Wilde Monster: wer SOLO_ANGRIFF Felder nahe kommt, muss gegen den Computer kämpfen (Stufe der Startseite), Sieg = Monster weg + Siegprämie.
+// Truhen (selten): drauflaufen = +2 €. Einzelne Münzen (häufig): drauflaufen = +1 € (Wunsch des Sohns, 29.10.2026).
+// Ein Portal (🌀) führt in die Dschungelwelt mit der Dschungelfestung (Wunsch des Sohns, 30.10.2026) und wieder zurück.
+// 30.10.2026 von 48 auf 64 vergrößert (Wunsch des Sohns); neuer Startwert, damit alte Stände sauber neu anfangen
+const SOLO_N = 64, SOLO_SICHT = 3, SOLO_AUSSCHNITT = 11, SOLO_SEED = 20261030;
+// Wer einem wilden Monster auf SOLO_ANGRIFF Felder nahe kommt (geradeaus gezählt), muss kämpfen – auch wenn es noch im Nebel steht.
+// Nach jedem Kampf SOLO_SCHONZEIT Schritte Ruhe, damit man weglaufen kann. Deshalb weniger Monster als zuerst (28).
+const SOLO_MONSTER = 28, SOLO_TRUHEN = 18, TRUHE_GELD = 2, SOLO_ANGRIFF = 4, SOLO_SCHONZEIT = 4;
+const SOLO_MUENZEN = 60, MUENZE_GELD = 1;
+// Dschungelwelt: kleiner, dicht bewachsen, in der Mitte die Festung voller Dschungel-Monster.
+// Dort greifen Monster erst ab DSCHUNGEL_ANGRIFF Feldern an, sonst käme man vor lauter Kämpfen nicht voran.
+const DSCHUNGEL_N = 40, DSCHUNGEL_SEED = 20261031, DSCHUNGEL_ANGRIFF = 2, SCHATZ_GELD = 10;
+const SOLO_KAMPF_KEY = "monster-arena-solo-kampf";   // sessionStorage: nach dem Kampf zurück in die Solo-Welt
+let solo = null;             // { id, fig, ort, n, r, c, welt, gesehen, wilde, truhen, muenzen, portal, ankunft, besiegt:Set, offen:Set, gesammelt:Set }
+let soloKampf = null;        // wildes Monster, gegen das gerade gekämpft wird
+function soloZufall(seed) {
+  let x = seed >>> 0;
+  return () => (x = (Math.imul(x, 1664525) + 1013904223) >>> 0) / 4294967296;
+}
+// Flecken aus Gelände: je Art Anzahl × Länge eines zufälligen Wegs
+function soloFlecken(feld, n, zz, arten) {
+  for (const [t, anzahl, laenge] of arten) {
+    for (let k = 0; k < anzahl; k++) {
+      let r = Math.floor(zz() * n), c = Math.floor(zz() * n);
+      for (let s = 0; s < laenge; s++) {
+        if (r >= 0 && c >= 0 && r < n && c < n) feld[r][c] = t;
+        r += Math.floor(zz() * 3) - 1; c += Math.floor(zz() * 3) - 1;
+      }
+    }
+  }
+}
+// Häufig Grundmonster, seltener Kaufmonster; Pokal-Monster laufen nicht wild herum
+const soloTopf = (passt = () => true) => Object.entries(FIGUREN).filter(([, f]) => !f.pokale && passt(f))
+  .flatMap(([id, f]) => Array(!f.preis ? 4 : f.preis <= 150 ? 2 : 1).fill(id));
+function soloWelt() {
+  const zz = soloZufall(SOLO_SEED);
+  const feld = Array.from({ length: SOLO_N }, () => Array(SOLO_N).fill("."));
+  soloFlecken(feld, SOLO_N, zz, [["B", 80, 6], ["S", 28, 9], ["F", 46, 4], ["L", 21, 5], ["E", 21, 6], ["Q", 14, 1]]);
+  const m = SOLO_N >> 1;
+  for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) feld[m + dr][m + dc] = ".";   // Start frei
+  // Wilde Monster und Truhen nur auf Moosboden, nicht in Startnähe, nicht aufeinander
+  const belegt = new Set(), wilde = [], truhen = [];
+  const platz = () => {
+    for (;;) {
+      const r = Math.floor(zz() * SOLO_N), c = Math.floor(zz() * SOLO_N);
+      if (feld[r][c] === "." && Math.max(Math.abs(r - m), Math.abs(c - m)) > 4 && !belegt.has(r + "," + c)) { belegt.add(r + "," + c); return { r, c }; }
+    }
+  };
+  const topf = soloTopf();
+  for (let n = 0; n < SOLO_MONSTER; n++) { const p = platz(); wilde.push({ ...p, k: p.r + "," + p.c, id: topf[Math.floor(zz() * topf.length)] }); }
+  for (let n = 0; n < SOLO_TRUHEN; n++) truhen.push(platz());
+  // Münzen zuletzt ziehen: so bleiben Monster und Truhen dort, wo sie vorher schon lagen
+  const muenzen = [];
+  for (let n = 0; n < SOLO_MUENZEN; n++) muenzen.push(platz());
+  // Portal danach: 6–12 Felder vom Start, darunter ein freies Feld zum Ankommen
+  let portal, ankunft;
+  for (;;) {
+    const r = Math.floor(zz() * SOLO_N), c = Math.floor(zz() * SOLO_N), d = Math.max(Math.abs(r - m), Math.abs(c - m));
+    if (d >= 6 && d <= 12 && r + 1 < SOLO_N && feld[r][c] === "." && feld[r + 1][c] === "." && !belegt.has(r + "," + c) && !belegt.has(r + 1 + "," + c)) {
+      portal = { r, c }; ankunft = { r: r + 1, c }; feld[r][c] = "P"; break;
+    }
+  }
+  return { ort: "haupt", n: SOLO_N, welt: feld.map(z => z.join("")), wilde, truhen, muenzen, portal, ankunft, start: { r: m, c: m } };
+}
+// Dschungelwelt: Festung mit zwei Mauerringen. Tor der Außenmauer unten, Tor des Burgfrieds oben –
+// man muss einmal durch den Burghof voller Monster herum. Im Burgfried wartet die Dschungelhydra vor dem Schatz.
+function dschungelWelt() {
+  const n = DSCHUNGEL_N, m = n >> 1, zz = soloZufall(DSCHUNGEL_SEED);
+  const feld = Array.from({ length: n }, () => Array(n).fill("."));
+  soloFlecken(feld, n, zz, [["B", 110, 7], ["S", 8, 6], ["Q", 5, 1]]);
+  const a = 12, b = 27, ia = 17, ib = 22;                       // Außenmauer a..b, Burgfried ia..ib
+  for (let r = a - 1; r <= b + 1; r++) for (let c = a - 1; c <= b + 1; c++) feld[r][c] = ".";   // kein Gestrüpp in der Festung
+  const ring = (lo, hi) => { for (let i = lo; i <= hi; i++) feld[lo][i] = feld[hi][i] = feld[i][lo] = feld[i][hi] = "M"; };
+  ring(a, b); ring(ia, ib);
+  feld[b][m - 1] = feld[b][m] = ".";                            // Tor unten
+  feld[ia][m - 1] = feld[ia][m] = ".";                          // Tor des Burgfrieds oben
+  // Portal zurück unten außerhalb der Festung
+  const portal = { r: n - 4, c: m }, ankunft = { r: n - 5, c: m };
+  for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) feld[portal.r + dr][portal.c + dc] = ".";
+  feld[portal.r][portal.c] = "P";
+  const belegt = [{ ...portal }, { ...ankunft }];
+  const platz = (bereich, abstand) => {
+    for (let v = 0; v < 5000; v++) {
+      const r = Math.floor(zz() * n), c = Math.floor(zz() * n);
+      if (feld[r][c] === "." && bereich(r, c) && !belegt.some(p => Math.max(Math.abs(p.r - r), Math.abs(p.c - c)) < abstand)) {
+        belegt.push({ r, c }); return { r, c };
+      }
+    }
+    return null;
+  };
+  const draussen = (r, c) => (r < a - 1 || r > b + 1 || c < a - 1 || c > b + 1) && Math.abs(r - ankunft.r) + Math.abs(c - ankunft.c) > 6;
+  const hof = (r, c) => r > a && r < b && c > a && c < b && !(r >= ia && r <= ib && c >= ia && c <= ib);
+  const topf = soloTopf(f => f.element === "Dschungel");
+  const wilde = [], truhen = [], muenzen = [];
+  const dazu = (liste, anzahl, bereich, abstand, mehr = () => ({})) => {
+    for (let k = 0; k < anzahl; k++) { const p = platz(bereich, abstand); if (p) liste.push({ ...p, k: "d" + p.r + "," + p.c, ...mehr() }); }
+  };
+  const wild = () => ({ id: topf[Math.floor(zz() * topf.length)] });
+  dazu(wilde, 8, draussen, 5, wild);
+  dazu(wilde, 14, hof, 3, wild);
+  // Endgegner und Schatz im Burgfried
+  wilde.push({ r: m - 1, c: m - 1, k: `d${m - 1},${m - 1}`, id: "dschungelhydra", boss: true });
+  truhen.push({ r: m, c: m, k: `d${m},${m}`, geld: SCHATZ_GELD, schatz: true });
+  dazu(truhen, 5, draussen, 2);
+  dazu(truhen, 4, hof, 2);
+  dazu(muenzen, 25, draussen, 1);
+  dazu(muenzen, 15, hof, 1);
+  return { ort: "dschungel", n, welt: feld.map(z => z.join("")), wilde, truhen, muenzen, portal, ankunft, start: ankunft };
+}
+let soloWelten = null;
+const soloWeltVon = ort => (soloWelten ||= { haupt: soloWelt(), dschungel: dschungelWelt() })[ort === "dschungel" ? "dschungel" : "haupt"];
+// Welt wechseln: Gelände, Monster usw. aus der Welt, Gesehenes je Welt getrennt
+function soloBetrete(ort) {
+  Object.assign(solo, soloWeltVon(ort));
+  solo.gesehen = solo.karten[solo.ort] ||= new Uint8Array(solo.n * solo.n);
+}
+const soloImFeld = (r, c) => r >= 0 && c >= 0 && r < solo.n && c < solo.n;
+// Schlüssel: Hauptwelt „r,c“, Dschungelwelt „dr,c“ – bei Monstern der Startplatz, damit der Schlüssel beim Wandern bleibt
+const soloSchluessel = p => p.k || p.r + "," + p.c;
+const soloWilder = (r, c) => solo.wilde.find(w => w.r === r && w.c === c && !solo.besiegt.has(soloSchluessel(w)));
+const soloTruhe = (r, c) => solo.truhen.find(t => t.r === r && t.c === c && !solo.offen.has(soloSchluessel(t)));
+const soloMuenze = (r, c) => solo.muenzen.find(m => m.r === r && m.c === c && !solo.gesammelt.has(soloSchluessel(m)));
+// Wie im Kampf: Seen sperren alle, Felsen alle außer Stein-Monster; Flieger kommen überall hin – nur nicht über Festungsmauern
+function soloGesperrt(r, c) {
+  const t = solo.welt[r][c];
+  return t === "M" || !solo.fig.fliegt && (t === "S" || (t === "F" && solo.fig.element !== "Stein"));
+}
+const soloSichtbar = (r, c) => (r - solo.r) ** 2 + (c - solo.c) ** 2 <= (SOLO_SICHT + 0.5) ** 2;
+function soloSehen() {
+  for (let r = solo.r - SOLO_SICHT; r <= solo.r + SOLO_SICHT; r++)
+    for (let c = solo.c - SOLO_SICHT; c <= solo.c + SOLO_SICHT; c++)
+      if (soloImFeld(r, c) && soloSichtbar(r, c)) solo.gesehen[r * solo.n + c] = 1;
+}
+function soloSpeichern() {
+  if (!solo || sitz[0] === null) return;
+  const g = ort => solo.karten[ort] ? Array.from(solo.karten[ort]).join("") : "";
+  spielstaende[sitz[0]].solo = { seed: SOLO_SEED, id: solo.id, ort: solo.ort, r: solo.r, c: solo.c, schutz: solo.schutz, g: g("haupt"), gd: g("dschungel"),
+                                 besiegt: [...solo.besiegt], offen: [...solo.offen], gesammelt: [...solo.gesammelt],
+                                 wo: Object.fromEntries(["haupt", "dschungel"].flatMap(o => soloWeltVon(o).wilde.map(w => [w.k, [w.r, w.c]]))) };
+  speichereSpielstaende();
+}
+// Solo fängt immer von vorne an (Wunsch des Sohns, 30.10.2026): Start, Nebel, Monster, Truhen und Münzen wie neu – das Geld bleibt.
+// Nur nach einem Kampf (weiter = true) geht es an derselben Stelle weiter.
+function starteSolo(id, weiter = false) {
+  const st = spielstaende[sitz[0]], alt = st?.solo;
+  const ok = weiter && alt && alt.seed === SOLO_SEED;
+  soloWelten = null;                                           // frisch erzeugen, Monster stehen wieder auf ihren Startplätzen
+  if (ok && alt.wo) for (const o of ["haupt", "dschungel"]) for (const w of soloWeltVon(o).wilde) {
+    const p = alt.wo[w.k];
+    if (Array.isArray(p)) { w.r = p[0]; w.c = p[1]; }
+  }
+  solo = { id, fig: mitLevel(id, levelVon(0, id)), karten: {}, schutz: ok ? Number(alt.schutz) || 0 : 0,
+           besiegt: new Set(ok && Array.isArray(alt.besiegt) ? alt.besiegt : []), offen: new Set(ok && Array.isArray(alt.offen) ? alt.offen : []),
+           gesammelt: new Set(ok && Array.isArray(alt.gesammelt) ? alt.gesammelt : []) };
+  for (const [ort, feld] of [["haupt", "g"], ["dschungel", "gd"]]) {
+    if (!ok || typeof alt[feld] !== "string" || !alt[feld]) continue;
+    const n = soloWeltVon(ort).n, k = solo.karten[ort] = new Uint8Array(n * n);
+    [...alt[feld]].forEach((z, i) => { if (z === "1" && i < k.length) k[i] = 1; });
+  }
+  soloBetrete(ok ? alt.ort : "haupt");
+  solo.r = solo.start.r; solo.c = solo.start.c;
+  if (ok && soloImFeld(alt.r, alt.c)) { solo.r = alt.r; solo.c = alt.c; }
+  if (soloGesperrt(solo.r, solo.c)) { solo.r = solo.start.r; solo.c = solo.start.c; }   // z. B. Flieger stand auf einem See, jetzt ein Läufer
+  soloSehen();
+  soloSpeichern();
+  document.getElementById("auswahl").style.display = "none";
+  document.getElementById("solo").style.display = "block";
+  zeigeZurueck();
+  zeichneSolo();
+}
+let soloMeldung = "";
+function zeichneSolo() {
+  const brett = document.getElementById("soloBrett");
+  brett.innerHTML = "";
+  const h = SOLO_AUSSCHNITT >> 1;
+  const r0 = solo.r - h, c0 = solo.c - h;          // Ausschnitt: die Figur steht immer in der Mitte
+  for (let vr = 0; vr < SOLO_AUSSCHNITT; vr++) for (let vc = 0; vc < SOLO_AUSSCHNITT; vc++) {
+    const r = r0 + vr, c = c0 + vc, f = document.createElement("div");
+    if (!soloImFeld(r, c)) { f.className = "feld rand"; brett.appendChild(f); continue; }
+    const sicht = soloSichtbar(r, c), gesehen = solo.gesehen[r * solo.n + c];
+    if (!sicht && !gesehen) {
+      f.className = "feld nebel";
+    } else {
+      const gl = GELAENDE[solo.welt[r][c]];
+      f.className = "feld" + ((r + c) % 2 ? " dunkel" : "") + (gl.klasse ? " " + gl.klasse : "") + (sicht ? "" : " erinnert");
+      f.title = solo.welt[r][c] === "P" ? (solo.ort === "dschungel" ? "Portal zurück in die große Welt" : "Portal in die Dschungelwelt") : gl.name;
+      if (gl.bild) f.innerHTML = `<div class="boden-${gl.form}" style="background-image:url(bilder/${gl.bild}.jpg)"></div>`;
+      const t = soloTruhe(r, c);
+      if (t) { f.insertAdjacentHTML("beforeend", `<div class="truhe">${t.schatz ? "👑" : "🧰"}</div>`); f.title = `${t.schatz ? "Schatz der Festung" : "Truhe"}: +${t.geld || TRUHE_GELD} €`; }
+      else if (soloMuenze(r, c)) { f.insertAdjacentHTML("beforeend", '<div class="truhe muenze">🪙</div>'); f.title = "Münze: +1 €"; }
+      const w = (sicht || soloAngreifer?.r === r && soloAngreifer?.c === c) && soloWilder(r, c);   // sonst nur in Sichtweite
+      if (w) {
+        const fig = document.createElement("div");
+        fig.className = "figur p1";
+        fig.setAttribute("style", portraitStil(w.id));
+        fig.innerHTML = ersatz(w.id);
+        f.title = `${w.boss ? "Endgegner" : "Wildes Monster"}: ${FIGUREN[w.id].name} – drauflaufen zum Kämpfen`;
+        f.appendChild(fig);
+      }
+    }
+    if (r === solo.r && c === solo.c) {
+      const fig = document.createElement("div");
+      fig.className = "figur p0 aktiv";
+      fig.setAttribute("style", portraitStil(solo.id, solo.fig.level));
+      fig.innerHTML = ersatz(solo.id);
+      f.appendChild(fig);
+    }
+    f.onclick = () => soloZiel(r, c);
+    brett.appendChild(f);
+  }
+  const erkundet = solo.gesehen.reduce((a, b) => a + b, 0);
+  const zaehle = (liste, menge) => liste.filter(p => menge.has(soloSchluessel(p))).length;   // nur diese Welt
+  document.getElementById("soloName").textContent = `– ${spielstandName(0)} mit ${solo.fig.name}` + (solo.ort === "dschungel" ? " · 🌴 Dschungelwelt" : "");
+  document.getElementById("soloInfo").innerHTML = `🗺️ Erkundet: ${Math.round(100 * erkundet / solo.gesehen.length)} % · 💰 ${geld[0]} € · ` +
+    `🧰 ${zaehle(solo.truhen, solo.offen)}/${solo.truhen.length} Truhen · 🪙 ${zaehle(solo.muenzen, solo.gesammelt)}/${solo.muenzen.length} Münzen · ` +
+    `⚔️ ${zaehle(solo.wilde, solo.besiegt)}/${solo.wilde.length} Monster besiegt` +
+    (soloMeldung ? `<br><b style="color:var(--gold)">${soloMeldung}</b>` : "");
+}
+// Ein Feld antippen: einen Schritt in diese Richtung (schräg, sonst gerade)
+function soloZiel(r, c) {
+  const dr = Math.sign(r - solo.r), dc = Math.sign(c - solo.c);
+  if (!dr && !dc) return;
+  for (const [a, b] of [[dr, dc], [dr, 0], [0, dc]]) if ((a || b) && soloSchritt(a, b)) return;
+  ton("daneben");
+}
+let sperreSolo = false, soloAngreifer = null;     // kurz gesperrt, während ein Monster angreift (auch aus dem Nebel)
+function soloSchritt(dr, dc) {
+  if (sperreSolo) return true;
+  const r = solo.r + dr, c = solo.c + dc;
+  if (!soloImFeld(r, c) || soloGesperrt(r, c)) return false;
+  const w = soloWilder(r, c);
+  if (w) { soloKaempfe(w); return true; }
+  solo.r = r; solo.c = c;
+  soloMeldung = "";
+  if (solo.welt[r][c] === "P") {                    // Portal: hinüber in die andere Welt, neben deren Portal heraus
+    soloBetrete(solo.ort === "dschungel" ? "haupt" : "dschungel");
+    solo.r = solo.ankunft.r; solo.c = solo.ankunft.c;
+    solo.schutz = SOLO_SCHONZEIT;                   // erst mal umsehen dürfen
+    soloMeldung = solo.ort === "dschungel" ? "🌀 Durchs Portal! Willkommen in der Dschungelwelt – irgendwo steht die Dschungelfestung …"
+                                           : "🌀 Durchs Portal zurück in die große Welt.";
+    ton("kugel");
+    soloSehen();
+    soloSpeichern();
+    zeichneSolo();
+    return true;
+  }
+  const t = soloTruhe(r, c);
+  if (t) {
+    const betrag = t.geld || TRUHE_GELD;
+    solo.offen.add(soloSchluessel(t));
+    geld[0] += betrag;
+    speichereGeld();
+    soloMeldung = t.schatz ? `👑 Der Schatz der Dschungelfestung! +${betrag} €` : `🧰 Eine Truhe! +${betrag} €`;
+    ton("geld");
+  } else if (soloMuenze(r, c)) {
+    solo.gesammelt.add(soloSchluessel(soloMuenze(r, c)));
+    geld[0] += MUENZE_GELD;
+    speichereGeld();
+    soloMeldung = `🪙 Eine Münze! +${MUENZE_GELD} €`;
+    ton("muenze");
+  } else ton("schritt");
+  soloMonsterZiehen();
+  soloSehen();
+  if (solo.schutz > 0) solo.schutz--;
+  const nah = !solo.schutz && solo.wilde.find(m => !solo.besiegt.has(soloSchluessel(m)) && Math.abs(m.r - r) + Math.abs(m.c - c) <= (solo.ort === "dschungel" ? DSCHUNGEL_ANGRIFF : SOLO_ANGRIFF));
+  if (nah) {                                        // erst zeigen, wer da kommt, dann kämpfen
+    soloMeldung = nah.boss ? `⚠️ Der Wächter der Festung: ${FIGUREN[nah.id].name} greift dich an!` : `⚠️ Achtung! Wildes Monster: ${FIGUREN[nah.id].name} greift dich an!`;
+    soloAngreifer = nah;
+    solo.gesehen[nah.r * solo.n + nah.c] = 1;
+    soloSpeichern();
+    zeichneSolo();
+    ton("cutin");
+    sperreSolo = true;
+    setTimeout(() => { sperreSolo = false; soloKaempfe(nah); }, 1200);
+    return true;
+  }
+  soloSpeichern();
+  zeichneSolo();
+  return true;
+}
+// Wilde Monster wandern (Wunsch des Sohns, 30.10.2026): nach jedem Schritt geht jedes zweite im Schnitt ein Feld weit.
+// Sie halten sich ans Gelände wie im Kampf, laufen nicht auf Portal, Truhen, andere Monster oder die eigene Figur.
+// Der Endgegner bleibt in seinem Burgfried stehen.
+function soloMonsterZiehen() {
+  const besetzt = new Set(solo.wilde.filter(w => !solo.besiegt.has(soloSchluessel(w))).map(w => w.r + "," + w.c));
+  for (const w of solo.wilde) {
+    if (w.boss || solo.besiegt.has(soloSchluessel(w)) || Math.random() < 0.5) continue;
+    const [dr, dc] = [[-1, 0], [1, 0], [0, -1], [0, 1]][Math.floor(Math.random() * 4)];
+    const r = w.r + dr, c = w.c + dc, f = FIGUREN[w.id];
+    if (!soloImFeld(r, c) || besetzt.has(r + "," + c) || (r === solo.r && c === solo.c) || soloTruhe(r, c)) continue;
+    const t = solo.welt[r][c];
+    if (t === "M" || t === "P" || !f.fliegt && (t === "S" || (t === "F" && f.element !== "Stein"))) continue;
+    besetzt.delete(w.r + "," + w.c); besetzt.add(r + "," + c);
+    w.r = r; w.c = c;
+  }
+}
+// Kampf gegen ein wildes Monster: ganz normaler Kampf gegen den Computer; danach geht es zurück in die Solo-Welt
+function soloKaempfe(w) {
+  solo.schutz = SOLO_SCHONZEIT;
+  soloSpeichern();
+  try { sessionStorage.setItem(SOLO_KAMPF_KEY, "1"); } catch (e) { /* ohne Speicher weiter */ }
+  soloKampf = w;
+  if (solo.ort === "dschungel") karteWahl = "dornendschungel";   // nur für diesen Kampf, gespeichert bleibt die Wahl der Startseite
+  const meins = solo.id;
+  solo = null;
+  document.getElementById("solo").style.display = "none";
+  computer = true; soloModus = false;              // nur für diesen Kampf; gespeichert bleibt Solo
+  document.getElementById("nochmal").textContent = "🧭 Weiter erkunden";
+  wahl.length = 0;
+  wahl.push(meins, w.id);
+  starte();
+}
+// Ende eines Solo-Kampfs (aus dem Sieg-Bildschirm): Sieg = das wilde Monster ist weg
+function soloKampfEnde(gewinner) {
+  if (!soloKampf || gewinner !== 0 || sitz[0] === null) return;
+  const st = spielstaende[sitz[0]].solo;
+  st.besiegt = [...new Set([...(st.besiegt || []), soloSchluessel(soloKampf)])];
+  speichereSpielstaende();
+}
+// Nach dem Neuladen (Weiter erkunden / Zurück im Kampf) direkt wieder in die Solo-Welt
+function soloFortsetzen() {
+  let weiter = false;
+  try { weiter = sessionStorage.getItem(SOLO_KAMPF_KEY) === "1"; sessionStorage.removeItem(SOLO_KAMPF_KEY); } catch (e) { /* ohne Speicher weiter */ }
+  const id = sitz[0] !== null && spielstaende[sitz[0]].solo?.id;
+  if (!weiter || !soloModus || !id || !FIGUREN[id] || !besitzt(0, id)) return;
+  wahl.push(id);
+  starteSolo(id, true);
+}
+document.addEventListener("keydown", e => {
+  if (!solo) return;
+  const d = { ArrowUp: [-1, 0], ArrowDown: [1, 0], ArrowLeft: [0, -1], ArrowRight: [0, 1], w: [-1, 0], s: [1, 0], a: [0, -1], d: [0, 1] }[e.key];
+  if (!d) return;
+  e.preventDefault();
+  if (!soloSchritt(...d)) ton("daneben");
+});
+
+// „Kampf, los!“ beim Kampfbeginn: aufgenommene Stimme toene/kampf_go.mp3, wenn es sie gibt, sonst die Stimme des Browsers
+function kampfAnsage() {
+  const sprich = () => {
+    try {
+      // Männliche deutsche Stimme: Edge hat Conrad/Killian/Florian, Windows Stefan; sonst irgendeine deutsche, tief gestellt
+      const de = speechSynthesis.getVoices().filter(v => v.lang.startsWith("de"));
+      const stimme = ["Conrad", "Killian", "Florian", "Stefan"].map(n => de.find(v => v.name.includes(n))).find(Boolean) || de[0];
+      // „Kampf, los!“ schnell und tief (Wahl des Sohns aus entwuerfe/kampf-go.html; „Go“ las die Stimme als „G-oh“/„Gojo“)
+      const s = new SpeechSynthesisUtterance("Kampf, los!");
+      s.lang = "de-DE"; s.rate = 1.4; s.pitch = 0.6; s.volume = 1;
+      if (stimme) s.voice = stimme;
+      speechSynthesis.speak(s);
+    } catch (e) { /* ohne Ansage weiter */ }
+  };
+  const a = new Audio("toene/kampf_go.mp3");
+  a.onerror = sprich;
+  a.play().catch(() => {});
+}
+
 // Zum Testen (kein Knopf): index.html?neu startet ganz von vorne
 if (new URLSearchParams(location.search).has("neu")) {
-  try { [GELD_KEY, GEKAUFT_KEY, WELT_KEY, POKAL_KEY, LEVEL_KEY].forEach(k => localStorage.removeItem(k)); } catch (e) { /* ohne Speicher weiter */ }
+  try { [GELD_KEY, GEKAUFT_KEY, WELT_KEY, POKAL_KEY, LEVEL_KEY, SPIELSTAND_KEY, SITZ_KEY].forEach(k => localStorage.removeItem(k)); } catch (e) { /* ohne Speicher weiter */ }
   location.replace(location.pathname);
 }
+try { speechSynthesis.getVoices(); } catch (e) { /* ohne Ansage weiter */ }   // Stimmenliste lädt im Browser verzögert, früh anstoßen
+ladeSpielstaende();
+ladeSitze();
 zeigeGeldbeutel();
 zeigeAuswahl();
+soloFortsetzen();
 </script>
 </body>
 </html>
