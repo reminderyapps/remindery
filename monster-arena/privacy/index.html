@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Datenschutzerklärung – Monster-Kampf-Arena</title>
+  <meta name="description" content="Datenschutzerklärung für das Spiel Monster-Kampf-Arena – kein Konto, keine Werbung, keine Analyse; der Spielstand bleibt auf dem Gerät.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=k1">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<!--
+  Quelle des App-Teils: apps/monster-arena (prototyp/index.html, app/android/app/src/main/AndroidManifest.xml).
+  Stand 01.11.2026, Fassung 1.0.0 (1): nur Berechtigung INTERNET, allowBackup="true",
+  Netz nur für das Online-Spiel: PeerJS-Vermittlung 0.peerjs.com, STUN stun.l.google.com:19302,
+  TURN eu-0/us-0.turn.peerjs.com:3478, danach WebRTC direkt zwischen den Geräten.
+  Ändert sich das im Spiel, zuerst hier nachziehen und die Datensicherheit in der Play Console anpassen.
+-->
+<body>
+  <header class="site-head">
+    <div class="head-in">
+      <a class="site-brand" href="/"><img src="/favicon.svg?v=k1" width="34" height="34" alt=""><span>Remindery Apps</span></a>
+      <nav class="site-nav" aria-label="Hauptnavigation">
+        <a href="/">Apps</a>
+        <a href="/lernmaterial/">Lernmaterial</a>
+        <a href="/method/">Methode</a>
+        <a href="/about/">Über uns</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <header class="page-header">
+      <span class="brand">Monster-Kampf-Arena</span>
+    </header>
+
+    <article>
+      <h1>Datenschutzerklärung</h1>
+      <p class="updated">Stand: November 2026</p>
+
+      <p>Diese Erklärung betrifft das Spiel <strong>Monster-Kampf-Arena</strong> und
+      – soweit Sie diese Seite im Browser lesen – den Betrieb dieser Website.</p>
+
+      <h2>Verantwortlicher</h2>
+      <p>Verantwortlich im Sinne der Datenschutz-Grundverordnung (DSGVO):</p>
+      <blockquote>
+        Patrick Steinborn<br>
+        Remindery Apps<br>
+        Wulfsdorfer Weg 85b<br>
+        22926 Ahrensburg, Deutschland<br>
+        Telefon: +49&nbsp;156&nbsp;79823172<br>
+        E-Mail: kontakt@remindery.de
+      </blockquote>
+
+      <h2 class="part">Das Spiel Monster-Kampf-Arena</h2>
+
+      <h3>Kurz gesagt</h3>
+      <p><strong>Monster-Kampf-Arena sammelt nichts über Sie oder Ihr Kind.</strong>
+      Es gibt kein Konto, keine Werbung, keine Käufe und keine Statistik- oder
+      Analyse-Dienste. Der Spielstand bleibt auf dem Gerät. Nur wer
+      <strong>online</strong> gegen einen anderen Spieler antritt, baut eine
+      Verbindung zu dessen Gerät auf – was dabei passiert, steht unten.</p>
+
+      <h3>Was auf dem Gerät gespeichert wird</h3>
+      <p>Das Spiel speichert auf dem Gerät: Kristalle, Pokale, gekaufte und
+      aufgelevelte Monster, die gewählte Heimatwelt, angefangene Spiele und den
+      Namen, den man fürs Online-Spiel eintippt. Diese Daten verlassen das Gerät
+      nicht in Richtung Remindery – wir haben keinen Server, der sie empfängt.</p>
+      <p>Android kann App-Daten in die <strong>Geräte-Sicherung</strong> übernehmen,
+      wenn Sie diese in Ihrem Google-Konto eingerichtet haben. Diese Sicherung liegt
+      in Ihrem Google-Konto, nicht bei uns; wir haben keinen Zugriff darauf.</p>
+
+      <h3>Berechtigungen</h3>
+      <p>Das Spiel nutzt nur eine Berechtigung: <strong>Internet</strong>. Sie wird
+      ausschließlich für das Online-Spiel gebraucht. Kamera, Mikrofon, Standort,
+      Kontakte oder Fotos verwendet das Spiel nicht.</p>
+
+      <h3>Online gegen andere spielen</h3>
+      <p>Das Online-Spiel startet nur, wenn man es im Spiel ausdrücklich wählt.
+      Dann laufen drei Schritte:</p>
+      <ol>
+        <li><strong>Vermittlung:</strong> Damit sich zwei Geräte finden, meldet sich
+        das Spiel beim Vermittlungsdienst des Open-Source-Projekts PeerJS
+        (<code>0.peerjs.com</code>). Der Dienst sieht dabei die
+        <strong>IP-Adresse</strong> des Geräts und eine technische Raumkennung, aber
+        keinen Namen und keine Spieldaten.</li>
+        <li><strong>Verbindung herstellen:</strong> Um eine direkte Verbindung
+        aufzubauen, fragt das Gerät einen Server von Google
+        (<code>stun.l.google.com</code>), unter welcher öffentlichen IP-Adresse es
+        erreichbar ist. Klappt die direkte Verbindung nicht, laufen die Spieldaten
+        verschlüsselt über einen Weiterleitungsserver von PeerJS
+        (<code>eu-0.turn.peerjs.com</code> oder <code>us-0.turn.peerjs.com</code>).</li>
+        <li><strong>Spielen:</strong> Danach tauschen die beiden Geräte direkt und
+        verschlüsselt aus: den eingetippten <strong>Namen</strong>, die Monsterwahl
+        und die Spielzüge. Dabei erfährt das Gerät des Mitspielers technisch bedingt
+        auch die IP-Adresse des anderen Geräts.</li>
+      </ol>
+      <p>Wir selbst empfangen und speichern dabei nichts. Zweck ist allein, das
+      gewünschte Online-Spiel zu ermöglichen (Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;b
+      und lit.&nbsp;f DSGVO). Die genannten Server können außerhalb der EU stehen,
+      insbesondere in den USA; Google LLC ist nach dem EU-US Data Privacy Framework
+      zertifiziert.</p>
+      <p><strong>Tipp für Eltern:</strong> Als Namen für das Online-Spiel am besten
+      einen Spitznamen statt des echten Namens verwenden. Es gibt keinen Chat; der
+      Mitspieler sieht nur diesen Namen.</p>
+
+      <h3>Der App-Store</h3>
+      <p>Wenn Sie das Spiel über einen App-Store geladen haben, erhebt dessen
+      Betreiber eigene Daten zum Download und zur Installation. Dafür ist der
+      Store-Betreiber verantwortlich, nicht wir – wir bekommen von dort keine
+      personenbezogenen Daten.</p>
+
+      <h3>Daten löschen</h3>
+      <p>Weil alles nur auf dem Gerät liegt, löschen Sie sämtliche Daten des
+      Spiels, indem Sie es deinstallieren oder in den Android-Einstellungen seine
+      Daten löschen. Bei uns liegt nichts, was wir löschen müssten.</p>
+
+      <h2 class="part">Diese Website</h2>
+
+      <h3>Hosting (GitHub Pages)</h3>
+      <p>Diese Seite wird bei GitHub&nbsp;Inc., 88 Colin P. Kelly Jr. St.,
+      San Francisco, CA 94107, USA, als „GitHub Pages" gehostet. Beim Aufruf
+      verarbeitet GitHub technisch notwendige Daten, insbesondere die
+      <strong>IP-Adresse</strong> Ihres Geräts, in Server-Logs. Zweck ist die
+      Auslieferung der Seite sowie die Stabilität und Sicherheit des Betriebs.
+      <strong>Wir selbst haben keinen Zugriff auf diese Logs.</strong>
+      Rechtsgrundlage ist Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;f DSGVO. GitHub ist
+      nach dem EU-US Data Privacy Framework zertifiziert; Einzelheiten in
+      GitHubs Datenschutzerklärung:
+      <a href="https://docs.github.com/privacy">https://docs.github.com/privacy</a></p>
+
+      <h3>Keine Cookies</h3>
+      <p>Diese Seite setzt <strong>keine Cookies</strong> und bindet keine
+      externen Schriften, Skripte oder Tracker ein.</p>
+
+      <h3>Kontaktaufnahme</h3>
+      <p>Wenn Sie uns per E-Mail schreiben, verarbeiten wir Ihre E-Mail-Adresse
+      und den Inhalt Ihrer Nachricht ausschließlich, um Ihre Anfrage zu
+      bearbeiten (Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;b bzw. lit.&nbsp;f DSGVO).
+      Wir löschen Ihre Nachricht, sobald die Anfrage erledigt ist und keine
+      gesetzlichen Aufbewahrungspflichten entgegenstehen. Anbieter unseres
+      E-Mail-Postfachs ist die Hetzner Online GmbH, Gunzenhausen
+      (Deutschland); mit ihr besteht ein Vertrag zur Auftragsverarbeitung.</p>
+
+      <h2>Ihre Rechte als betroffene Person</h2>
+      <p>Die DSGVO gewährt Ihnen unter anderem Rechte auf Auskunft
+      (Art.&nbsp;15), Berichtigung (Art.&nbsp;16), Löschung (Art.&nbsp;17),
+      Einschränkung der Verarbeitung (Art.&nbsp;18), Datenübertragbarkeit
+      (Art.&nbsp;20) und Widerspruch (Art.&nbsp;21) sowie ein Beschwerderecht
+      bei einer Datenschutz-Aufsichtsbehörde (Art.&nbsp;77).</p>
+      <p><strong>Zum Spiel:</strong> Da das Spiel keine personenbezogenen Daten
+      an uns übermittelt, liegen bei uns keine Daten, die wir jemandem zuordnen
+      könnten. Für die Vermittlungs- und Verbindungsserver sind PeerJS bzw.
+      Google die richtigen Adressaten.</p>
+
+      <p>Bei Fragen zum Datenschutz erreichen Sie uns jederzeit unter:
+      <strong>kontakt@remindery.de</strong></p>
+
+      <h2>Änderungen dieser Datenschutzerklärung</h2>
+      <p>Sollten künftige Funktionen des Spiels eine weitergehende Verarbeitung
+      erforderlich machen, passen wir diese Erklärung an. Es gilt jeweils die
+      hier veröffentlichte aktuelle Fassung.</p>
+    </article>
+  </main>
+  <footer>
+    <nav>
+      <a href="/legal-notice/">Impressum</a>
+      <a href="/">Alle Apps</a>
+    </nav>
+    &copy; 2026 Remindery Apps
+  </footer>
+</body>
+</html>
