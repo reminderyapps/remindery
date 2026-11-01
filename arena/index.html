@@ -493,7 +493,7 @@ const FIGUREN = {
     spezial: { name: "Schattenschrei", reichweite: 4, schaden: 4, text: "Schattenschrei aus 4 Feldern: 4 Schaden." },
     faehigkeit: "<b>Blutsauger:</b> Jeder Treffer mit dem Schattenbiss heilt sie um 1 Leben.",
   },
-  // ---- Große Kaufmonster (150 €): je zwei bekannte Fähigkeiten zusammen, etwas stärkere Werte ----
+  // ---- Große Kaufmonster (150 💎): je zwei bekannte Fähigkeiten zusammen, etwas stärkere Werte ----
   lavadrache: {
     name: "Magmadrache", element: "Feuer", farbe: "var(--feuer)", emoji: "🐉", bild: "bilder/lavadrache.jpg", preis: 150,
     leben: 12, schritte: 3, angriff: 4, reichweite: 2, angriffName: "Feueratem",
@@ -529,7 +529,7 @@ const FIGUREN = {
     spezial: { name: "Albtraum", reichweite: 4, schaden: 4, heil: 2, text: "Albtraum aus 4 Feldern: 4 Schaden, heilt sich um 2." },
     faehigkeit: "<b>Geisterpferd:</b> Schwer zu treffen (Angriffe gehen bei 1–2 daneben), und jeder Treffer heilt es um 1.",
   },
-  // Zweite Reihe 150 € (Wunsch des Sohns, 27.10.2026): andere Paare bekannter Fähigkeiten
+  // Zweite Reihe 150 💎 (Wunsch des Sohns, 27.10.2026): andere Paare bekannter Fähigkeiten
   magmabueffel: {
     name: "Magmabüffel", element: "Feuer", farbe: "var(--feuer)", emoji: "🐃", bild: "bilder/magmabueffel.jpg", preis: 150,
     leben: 15, schritte: 2, angriff: 4, reichweite: 1, angriffName: "Glutansturm",
@@ -565,7 +565,7 @@ const FIGUREN = {
     spezial: { name: "Schattennetz", reichweite: 4, schaden: 4, gift: 2, text: "Schattennetz aus 4 Feldern: 4 Schaden und 2 Runden Gift." },
     faehigkeit: "<b>Lauernd:</b> Schwer zu treffen (Angriffe gehen bei 1–2 daneben), und ihr Faden vergiftet 2 Runden lang.",
   },
-  // ---- Kaufmonster für 200 € (je zwei Fähigkeiten) und 300 € (je drei Fähigkeiten) ----
+  // ---- Kaufmonster für 200 💎 (je zwei Fähigkeiten) und 300 💎 (je drei Fähigkeiten) ----
   glutphoenix: {
     name: "Glutphönix", element: "Feuer", farbe: "var(--feuer)", emoji: "🔥", bild: "bilder/glutphoenix.jpg", preis: 200,
     leben: 11, schritte: 4, angriff: 3, reichweite: 2, angriffName: "Flammenkralle",
@@ -636,7 +636,7 @@ const FIGUREN = {
     spezial: { name: "Seelensturm", reichweite: 4, schaden: 5, heil: 2, text: "Seelensturm aus 4 Feldern: 5 Schaden, heilt sich um 2." },
     faehigkeit: "<b>Geisterflügel:</b> Fliegt über Seen und Felsen, ist schwer zu treffen, und jeder Treffer heilt ihn um 1.",
   },
-  // ---- Kleine Monster (Wunsch des Sohns, 26.10.2026): schwach, 100 €, kaufen erst ab 30 gesammelten Pokalen (abPokale) ----
+  // ---- Kleine Monster (Wunsch des Sohns, 26.10.2026): schwach, 100 💎, kaufen erst ab 30 gesammelten Pokalen (abPokale) ----
   funkenmaus: {
     name: "Funkenmaus", element: "Feuer", farbe: "var(--feuer)", emoji: "🐭", bild: "bilder/funkenmaus.jpg", preis: 100, abPokale: 30,
     leben: 7, schritte: 3, angriff: 2, reichweite: 1, angriffName: "Funkenbiss",
@@ -858,11 +858,11 @@ const GEKAUFT_KEY = "monster-arena-gekauft";
 let gekauft = [[], []];      // je Spieler die Ids der gekauften Monster
 function speichereGekauft() { speichereSpielstaende(); }
 // Aufleveln: Level 1–5 je Spieler und Monster, abwechselnd mit Geld und Pokalen bezahlt:
-// Level 2 = 50 €, Level 3 = 10 🏆, Level 4 = 150 €, Level 5 = 20 🏆.
+// Level 2 = 50 💎, Level 3 = 10 🏆, Level 4 = 150 💎, Level 5 = 20 🏆.
 // Jedes Level +1 Leben, ab Level 3 +1 Angriff, auf Level 5 +1 Schritt.
 const LEVEL_KEY = "monster-arena-level", MAX_LEVEL = 5;
 const levelPreis = n => n % 2 === 0 ? { geld: 50 * (n - 1) } : { pokale: 5 * (n - 1) };
-const preisText = k => k.geld ? `${k.geld} €` : `${k.pokale} 🏆`;
+const preisText = k => k.geld ? `${k.geld} 💎` : `${k.pokale} 🏆`;
 let level = [{}, {}];
 function speichereLevel() { speichereSpielstaende(); }
 const gueltigesLevel = n => Math.min(MAX_LEVEL, Math.max(1, Math.floor(Number(n)) || 1));
@@ -924,9 +924,9 @@ function zeigeGeldbeutel() {
   document.getElementById("modusSolo").className = soloModus ? "an" : "";
   const st = document.getElementById("stufe");
   st.innerHTML = computer ? Object.entries(STUFEN).map(([k, s]) =>
-    `<button class="${k === stufe ? "an" : ""}" onclick="setzeStufe('${k}')">${s.name}<br><small>Sieg: +${s.praemie} €</small></button>`).join("") : "";
+    `<button class="${k === stufe ? "an" : ""}" onclick="setzeStufe('${k}')">${s.name}<br><small>Sieg: +${s.praemie} 💎</small></button>`).join("") : "";
   document.getElementById("geldbeutel").innerHTML = mitSpielstand().map(i =>
-    `<span><b style="color:${SPIELERFARBE[i]}">${spielstandName(i)}</b> 💰 ${geld[i]} €</span>`).join("");
+    `<span><b style="color:${SPIELERFARBE[i]}">${spielstandName(i)}</b> ${geld[i]} 💎</span>`).join("");
   zeigePokalWeg();
 }
 
@@ -936,16 +936,16 @@ function zeigeGeldbeutel() {
 const POKAL_KEY = "monster-arena-pokale";
 const POKALE_PRO_GESCHENK = 20;
 const GESCHENKE = [
-  { icon: "💰", text: "5 €", geld: 5 },
+  { icon: "💎", text: "5 Kristalle", geld: 5 },
   { icon: "⚡", text: "Blitzkugel im nächsten Kampf", bonus: "kugel" },
-  { icon: "💰", text: "10 €", geld: 10 },
+  { icon: "💎", text: "10 Kristalle", geld: 10 },
   { icon: "❤️", text: "+1 Leben im nächsten Kampf", bonus: "leben" },
-  { icon: "💰", text: "5 €", geld: 5 },
+  { icon: "💎", text: "5 Kristalle", geld: 5 },
   { icon: "⚡", text: "Blitzkugel im nächsten Kampf", bonus: "kugel" },
-  { icon: "💰", text: "15 €", geld: 15 },
+  { icon: "💎", text: "15 Kristalle", geld: 15 },
   { icon: "❤️", text: "+1 Leben im nächsten Kampf", bonus: "leben" },
-  { icon: "💰", text: "10 €", geld: 10 },
-  { icon: "💰", text: "20 €", geld: 20 },
+  { icon: "💎", text: "10 Kristalle", geld: 10 },
+  { icon: "💎", text: "20 Kristalle", geld: 20 },
 ];
 const geschenkNr = n => GESCHENKE[n % GESCHENKE.length];
 const leerPokal = () => ({ pokale: 0, abgeholt: 0, kugel: 0, leben: 0, ausgegeben: 0 });   // ausgegeben: fürs Aufleveln, der Pokal-Weg zählt weiter alle
@@ -1019,7 +1019,7 @@ function oeffneGeschenk(i) {
   speicherePokale();
   ton("sieg");
   document.getElementById("geschenkBox").innerHTML = `<div class="gross">${g.icon}</div><h2 style="color:var(--gold)">${g.text}</h2>
-    <p class="unter" style="color:var(--leise)">${g.bonus ? "Gilt automatisch im nächsten Kampf." : `${online ? "Du hast" : `${spielstandName(i)} hat`} jetzt ${geld[i]} €.`}<br>Antippen zum Schließen</p>`;
+    <p class="unter" style="color:var(--leise)">${g.bonus ? "Gilt automatisch im nächsten Kampf." : `${online ? "Du hast" : `${spielstandName(i)} hat`} jetzt ${geld[i]} 💎.`}<br>Antippen zum Schließen</p>`;
   document.getElementById("geschenkAuf").classList.add("an");
   zeigePokalWeg();
 }
@@ -1390,7 +1390,7 @@ function zeigeSpielstaende(k, sp) {
     } else {
       const besetzt = !allein() && sitz.some((x, i) => x === n && i !== sp);   // zu zweit nicht beide mit demselben Spielstand
       b.className = "spielstand" + (besetzt ? " besetzt" : "");
-      b.innerHTML = `<b>${s.name}</b><small>${s.welt ? WELTEN[s.welt].name : "noch keine Welt"}</small><small>💰 ${s.geld} € · 🏆 ${s.pokal.pokale}</small>`;
+      b.innerHTML = `<b>${s.name}</b><small>${s.welt ? WELTEN[s.welt].name : "noch keine Welt"}</small><small>${s.geld} 💎 · 🏆 ${s.pokal.pokale}</small>`;
       if (!besetzt) b.onclick = () => nimmSpielstand(sp, n);
     }
     d.appendChild(b);
@@ -1433,7 +1433,7 @@ function zeigeAuswahl() {
     const lv = gesperrt ? 1 : levelVon(sp, id);
     const w = mitLevel(id, lv);
     d.innerHTML = `<div class="portrait" style="${portraitStil(id, lv)}"><span class="ersatz">${ersatz(id)}</span>
-        <span class="element">${f.element}</span></div>${gesperrt ? `<span class="schloss">🔒 ${f.pokale ? `ab ${f.pokale} 🏆` : `${f.preis} €${f.abPokale ? ` · ab ${f.abPokale} 🏆` : ""}`}</span>` : ""}
+        <span class="element">${f.element}</span></div>${gesperrt ? `<span class="schloss">🔒 ${f.pokale ? `ab ${f.pokale} 🏆` : `${f.preis} 💎${f.abPokale ? ` · ab ${f.abPokale} 🏆` : ""}`}</span>` : ""}
       <div class="kartentext"><h3>${f.name}</h3>
         ${gesperrt ? "" : `<div class="sterne">${"⭐".repeat(lv)}${"☆".repeat(MAX_LEVEL - lv)} <small>Level ${lv}</small></div>`}
         <div class="wert"><span>❤️</span><span>Leben ${w.leben}</span>${pips(Math.round(w.leben / 2), MAX.leben / 2)}</div>
@@ -1456,14 +1456,14 @@ function kaufzeile(sp, f) {
   if (f.abPokale && pokal[sp].pokale < f.abPokale) return `<div class="kaufzeile">🔒 Kaufen erst ab ${f.abPokale} Pokalen – dir fehlen noch ` +
     `${f.abPokale - pokal[sp].pokale} 🏆<br><small>Pokale gibt's für Siege (+2) und Sechser (+1)</small></div>`;
   const fehlt = f.preis - geld[sp];
-  return fehlt > 0 ? `<div class="kaufzeile">🔒 Dir fehlen noch ${fehlt} €<br><small>Gewinne Kämpfe: +${SIEGPRAEMIE} € pro Sieg</small></div>`
-                   : `<div class="kaufzeile kann">💰 Kaufen für ${f.preis} €</div>`;
+  return fehlt > 0 ? `<div class="kaufzeile">🔒 Dir fehlen noch ${fehlt} 💎<br><small>Gewinne Kämpfe: +${SIEGPRAEMIE} 💎 pro Sieg</small></div>`
+                   : `<div class="kaufzeile kann">Kaufen für ${f.preis} 💎</div>`;
 }
 function levelzeile(sp, lv) {
   if (lv >= MAX_LEVEL) return `<div class="kaufzeile levelzeile">🏆 Höchstes Level erreicht!</div>`;
   const k = levelPreis(lv + 1);
   const fehlt = k.geld ? k.geld - geld[sp] : k.pokale - freiePokale(sp);
-  const fehltText = k.geld ? `${fehlt} €` : `${fehlt} 🏆 <small>(Pokale gibt's für Siege und Sechser)</small>`;
+  const fehltText = k.geld ? `${fehlt} 💎` : `${fehlt} 🏆 <small>(Pokale gibt's für Siege und Sechser)</small>`;
   return fehlt > 0 ? `<div class="kaufzeile levelzeile">⬆️ Level ${lv + 1} für ${preisText(k)}<br><small>Dir fehlen noch ${fehltText}</small></div>`
                    : `<div class="kaufzeile levelzeile kann">⬆️ Level ${lv + 1} für ${preisText(k)}</div>`;
 }
@@ -1494,7 +1494,7 @@ function kaufen(sp, id, karte) {
   if (!zeile.classList.contains("frage")) {
     ton("klick");
     zeile.className = "kaufzeile frage";
-    zeile.innerHTML = `Wirklich ${f.name} für ${f.preis} € kaufen?<br>Nochmal tippen = Ja!`;
+    zeile.innerHTML = `Wirklich ${f.name} für ${f.preis} 💎 kaufen?<br>Nochmal tippen = Ja!`;
     return;
   }
   geld[sp] -= f.preis;
@@ -1843,14 +1843,14 @@ function pruefeSieg() {
     ? (gewinner === ich ? `Du gewinnst mit ${sieger.fig.name}!` : `Dein Gegner gewinnt mit ${sieger.fig.name}!`)
     : computer && gewinner === 1 ? `Der Computer gewinnt mit ${sieger.fig.name}!` : `${nameVon(gewinner)} gewinnt mit ${sieger.fig.name}!`;
   if (k < 0) {
-    document.getElementById("siegGeld").innerHTML = `<small>Diesmal kein Geld – versuch es nochmal!</small>`;
+    document.getElementById("siegGeld").innerHTML = `<small>Diesmal keine Kristalle – versuch es nochmal!</small>`;
   } else {
     geld[k] += praemie(gewinner);
     speichereGeld();
     setTimeout(() => ton("geld"), 850);                  // nach der Sieg-Fanfare
-    log(`💰 ${nameVon(gewinner)} bekommt ${praemie(gewinner)} €!`);
+    log(`💎 ${nameVon(gewinner)} bekommt ${praemie(gewinner)} Kristalle!`);
     gibPokale(gewinner, 2);
-    document.getElementById("siegGeld").innerHTML = `💰 +${praemie(gewinner)} € · 🏆 +2<small>${online ? "Du hast" : `${nameVon(gewinner)} hat`} jetzt ${geld[k]} € und ${pokal[k].pokale} 🏆${offeneGeschenke(k) > 0 ? " – 🎁 ein Geschenk wartet!" : ""}</small>`;
+    document.getElementById("siegGeld").innerHTML = `+${praemie(gewinner)} 💎 · 🏆 +2<small>${online ? "Du hast" : `${nameVon(gewinner)} hat`} jetzt ${geld[k]} 💎 und ${pokal[k].pokale} 🏆${offeneGeschenke(k) > 0 ? " – 🎁 ein Geschenk wartet!" : ""}</small>`;
   }
   if (online) { const v = verbindung; verbindung = null; setTimeout(() => { v?.close(); peer?.destroy(); }, 1500); }   // Kampf vorbei: Leitung frei
   const verlierer = spieler[tot];
@@ -1897,7 +1897,7 @@ function zeichne() {
     const zust = [p.ladung ? "⚡ " + p.fig.spezial.name + " bereit" : "", p.gift ? "☠️ vergiftet" : "", p.frost ? "❄️ eingefroren" : ""].filter(Boolean).join(" · ");
     b.innerHTML = `<div class="zeile"><div class="mini" style="${portraitStil(p.id, p.fig.level)};box-shadow:0 0 0 3px ${SPIELERFARBE[i]}">${ersatz(p.id)}</div>
       <div style="flex:1"><div class="name">${p.fig.name}</div>
-      <div class="status"><b style="color:${SPIELERFARBE[i]}">${nameVon(i)}</b>${computer && i === 1 ? "" : ` · 💰 ${geld[i]} €`} · ${p.fig.element} · ❤️ ${p.leben}/${p.max}${zust ? " · " + zust : ""}${computer && i === 1 ? ` · ${STUFEN[stufe].name}` : ""}</div>
+      <div class="status"><b style="color:${SPIELERFARBE[i]}">${nameVon(i)}</b>${computer && i === 1 ? "" : ` · ${geld[i]} 💎`} · ${p.fig.element} · ❤️ ${p.leben}/${p.max}${zust ? " · " + zust : ""}${computer && i === 1 ? ` · ${STUFEN[stufe].name}` : ""}</div>
       <div class="balken"><div style="width:${100 * p.leben / p.max}%"></div></div></div></div>`;
   });
   const z = document.getElementById("zuganzeige");
@@ -2073,7 +2073,7 @@ function ton(art) {
 // Schon gesehene Felder bleiben dunkel sichtbar. Alle Spieler (auch auf anderen Geräten) haben DIESELBE Welt (SOLO_SEED);
 // je Spielstand gespeichert (st.solo): Welt, Ort, Gesehenes, besiegte wilde Monster, geöffnete Truhen, gesammelte Münzen.
 // Wilde Monster: wer SOLO_ANGRIFF Felder nahe kommt, muss gegen den Computer kämpfen (Stufe der Startseite), Sieg = Monster weg + Siegprämie.
-// Truhen (selten): drauflaufen = +2 €. Einzelne Münzen (häufig): drauflaufen = +1 € (Wunsch des Sohns, 29.10.2026).
+// Truhen (selten): drauflaufen = +2 💎. Einzelne Münzen (häufig): drauflaufen = +1 💎 (Wunsch des Sohns, 29.10.2026).
 // Ein Portal (🌀) führt in die Dschungelwelt mit der Dschungelfestung (Wunsch des Sohns, 30.10.2026) und wieder zurück.
 // 30.10.2026 von 48 auf 64 vergrößert (Wunsch des Sohns); neuer Startwert, damit alte Stände sauber neu anfangen
 const SOLO_N = 64, SOLO_SICHT = 3, SOLO_AUSSCHNITT = 11, SOLO_SEED = 20261030;
@@ -2260,8 +2260,8 @@ function zeichneSolo() {
       f.title = solo.welt[r][c] === "P" ? (solo.ort === "dschungel" ? "Portal zurück in die große Welt" : "Portal in die Dschungelwelt") : gl.name;
       if (gl.bild) f.innerHTML = `<div class="boden-${gl.form}" style="background-image:url(bilder/${gl.bild}.jpg)"></div>`;
       const t = soloTruhe(r, c);
-      if (t) { f.insertAdjacentHTML("beforeend", `<div class="truhe">${t.schatz ? "👑" : "🧰"}</div>`); f.title = `${t.schatz ? "Schatz der Festung" : "Truhe"}: +${t.geld || TRUHE_GELD} €`; }
-      else if (soloMuenze(r, c)) { f.insertAdjacentHTML("beforeend", '<div class="truhe muenze">🪙</div>'); f.title = "Münze: +1 €"; }
+      if (t) { f.insertAdjacentHTML("beforeend", `<div class="truhe">${t.schatz ? "👑" : "🧰"}</div>`); f.title = `${t.schatz ? "Schatz der Festung" : "Truhe"}: +${t.geld || TRUHE_GELD} 💎`; }
+      else if (soloMuenze(r, c)) { f.insertAdjacentHTML("beforeend", '<div class="truhe muenze">💎</div>'); f.title = "Kristall: +1 💎"; }
       const w = (sicht || soloAngreifer?.r === r && soloAngreifer?.c === c) && soloWilder(r, c);   // sonst nur in Sichtweite
       if (w) {
         const fig = document.createElement("div");
@@ -2285,8 +2285,8 @@ function zeichneSolo() {
   const erkundet = solo.gesehen.reduce((a, b) => a + b, 0);
   const zaehle = (liste, menge) => liste.filter(p => menge.has(soloSchluessel(p))).length;   // nur diese Welt
   document.getElementById("soloName").textContent = `– ${spielstandName(0)} mit ${solo.fig.name}` + (solo.ort === "dschungel" ? " · 🌴 Dschungelwelt" : "");
-  document.getElementById("soloInfo").innerHTML = `🗺️ Erkundet: ${Math.round(100 * erkundet / solo.gesehen.length)} % · 💰 ${geld[0]} € · ` +
-    `🧰 ${zaehle(solo.truhen, solo.offen)}/${solo.truhen.length} Truhen · 🪙 ${zaehle(solo.muenzen, solo.gesammelt)}/${solo.muenzen.length} Münzen · ` +
+  document.getElementById("soloInfo").innerHTML = `🗺️ Erkundet: ${Math.round(100 * erkundet / solo.gesehen.length)} % · ${geld[0]} 💎 · ` +
+    `🧰 ${zaehle(solo.truhen, solo.offen)}/${solo.truhen.length} Truhen · 💎 ${zaehle(solo.muenzen, solo.gesammelt)}/${solo.muenzen.length} Kristalle · ` +
     `⚔️ ${zaehle(solo.wilde, solo.besiegt)}/${solo.wilde.length} Monster besiegt` +
     (soloMeldung ? `<br><b style="color:var(--gold)">${soloMeldung}</b>` : "");
 }
@@ -2324,13 +2324,13 @@ function soloSchritt(dr, dc) {
     solo.offen.add(soloSchluessel(t));
     geld[0] += betrag;
     speichereGeld();
-    soloMeldung = t.schatz ? `👑 Der Schatz der Dschungelfestung! +${betrag} €` : `🧰 Eine Truhe! +${betrag} €`;
+    soloMeldung = t.schatz ? `👑 Der Schatz der Dschungelfestung! +${betrag} 💎` : `🧰 Eine Truhe! +${betrag} 💎`;
     ton("geld");
   } else if (soloMuenze(r, c)) {
     solo.gesammelt.add(soloSchluessel(soloMuenze(r, c)));
     geld[0] += MUENZE_GELD;
     speichereGeld();
-    soloMeldung = `🪙 Eine Münze! +${MUENZE_GELD} €`;
+    soloMeldung = `💎 Ein Kristall! +${MUENZE_GELD} 💎`;
     ton("muenze");
   } else ton("schritt");
   soloMonsterZiehen();
