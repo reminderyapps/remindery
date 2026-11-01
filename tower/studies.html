@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tower · Design-Studien</title>
+<style>
+  :root { --bg:#14161c; --panel:#1d2029; --line:#2c303c; --text:#e6e8ee; --muted:#8c93a5; --accent:#f2b84b; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:var(--bg); color:var(--text);
+    font:15px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { position:sticky; top:0; z-index:1; padding:14px 16px 10px; border-bottom:1px solid var(--line); background:var(--panel); }
+  h1 { margin:0 0 10px; font-size:18px; font-weight:650; }
+  h1 span { color:var(--muted); font-weight:400; font-size:14px; margin-left:8px; }
+  ol { list-style:none; margin:0; padding:0 0 4px; display:flex; gap:6px; overflow-x:auto; }
+  li button { all:unset; cursor:pointer; display:block; white-space:nowrap; padding:7px 11px;
+    border:1px solid var(--line); border-radius:8px; background:var(--bg); }
+  li button:hover { border-color:var(--muted); }
+  li button[aria-current="true"] { border-color:var(--accent); background:#2a2416; }
+  li .n { color:var(--accent); font-weight:650; margin-right:6px; }
+  li .d { display:block; color:var(--muted); font-size:12px; }
+  #desc { margin:8px 0 0; color:var(--muted); font-size:13px; }
+  main { max-width:1280px; margin:0 auto; }
+  main img { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Tower · Design-Studien <span>chronologisch, 29.–31.10.2026</span></h1>
+  <ol id="list"></ol>
+  <p id="desc"></p>
+</header>
+<main><img id="view" alt=""></main>
+<script>
+  const STUDIES = [
+    { img: "01-graphics-study",  date: "29.10. 22:32", title: "Grafik-Studie",                   desc: "Drei Stilrichtungen auf denselben Szenen, alles prozedural im Canvas gezeichnet." },
+    { img: "02-depth",           date: "30.10. 10:35", title: "Spieltiefe: Grafik & Klang",      desc: "Was Lauf TOWER-a0006 neu zeichnet und vertont, im Stil A2 „Pixel ruhig“." },
+    { img: "03-stars",           date: "31.10. 00:29", title: "Sterne-Ausbau",                   desc: "Was Lauf TOWER-a0010 neu zeichnet und vertont." },
+    { img: "04-stars-part2",     date: "31.10. 08:30", title: "Sterne-Ausbau Teil 2",            desc: "Was Lauf TOWER-a0011 neu zeichnet und vertont." },
+    { img: "05-look-comparison", date: "31.10. 08:31", title: "Look-Studie: Vergleich",          desc: "Dieselben Szenen in allen Läufen nebeneinander." },
+    { img: "06-look-today",      date: "31.10. 08:31", title: "Look-Studie: Heute",              desc: "Referenz: der heutige Stil A2 „Pixel ruhig“." },
+    { img: "07-look-opus",       date: "31.10. 09:16", title: "Look-Studie: Lauf Opus",          desc: "Drei Richtungen aus dem Opus-Lauf." },
+    { img: "08-look-fable",      date: "31.10. 09:16", title: "Look-Studie: Lauf Fable",         desc: "Drei Richtungen aus dem Fable-Lauf." },
+    { img: "09-look-game",       date: "31.10. 17:19", title: "Look-Studie: Spiel gegen Studie", desc: "Beleg für TOWER-a0013: dieselben Szenen im echten Spiel." },
+  ];
+  const list = document.getElementById("list"), view = document.getElementById("view"), desc = document.getElementById("desc");
+  const buttons = STUDIES.map((s, i) => {
+    const li = document.createElement("li"), b = document.createElement("button");
+    b.innerHTML = `<span class="n">${i + 1}</span>${s.title}<span class="d">${s.date}</span>`;
+    b.onclick = () => show(i);
+    li.appendChild(b); list.appendChild(li);
+    return b;
+  });
+  function show(i) {
+    const s = STUDIES[i];
+    buttons.forEach((b, j) => b.setAttribute("aria-current", j === i));
+    view.src = "studies/" + s.img + ".jpg"; view.alt = s.title; desc.textContent = s.desc;
+    history.replaceState(null, "", "#" + (i + 1));
+    window.scrollTo(0, 0);
+  }
+  const start = parseInt(location.hash.slice(1), 10);
+  show(start >= 1 && start <= STUDIES.length ? start - 1 : 0);
+</script>
+</body>
+</html>
