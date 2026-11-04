@@ -172,6 +172,24 @@ h1 #karteName { font-size: .9rem; color: var(--leise); text-shadow: none; }
   #suche h2 { color: var(--gold); margin: 8px 0; }
   #suche p { color: var(--leise); margin: 0 0 18px; }
   #suche .globus { font-size: 64px; animation: dreh 4s linear infinite; display: inline-block; }
+  /* Glücksrad */
+  #rad { display: none; position: fixed; inset: 0; z-index: 36; background: rgba(10,12,16,.94); align-items: center; justify-content: center; padding: 16px; }
+  #rad.an { display: flex; }
+  #rad .box { background: var(--panel); border: 2px solid var(--gold); border-radius: 20px; padding: 18px 20px 24px; text-align: center; max-width: 380px; width: 100%; }
+  #rad h2 { color: var(--gold); margin: 14px 0 6px; font-family: Cinzel, serif; }
+  #rad p { color: var(--leise); margin: 0 0 16px; }
+  #rad .zeiger { font-size: 34px; color: var(--gold); line-height: 1; margin-bottom: -6px; position: relative; z-index: 1; text-shadow: 0 2px 0 #000; }
+  #rad .scheibe { width: 300px; height: 300px; max-width: 80vw; max-height: 80vw; margin: 0 auto; border-radius: 50%; position: relative;
+    border: 6px solid var(--gold); box-shadow: 0 0 30px rgba(255,215,94,.35); transition: transform 5s cubic-bezier(.12,.7,.1,1); }
+  #rad .feld { position: absolute; left: 50%; top: 50%; width: 64px; height: 64px; margin: -32px 0 0 -32px; }
+  #rad .bildchen { width: 64px; height: 64px; border-radius: 50%; background: #000 center / cover no-repeat; border: 2px solid var(--linie);
+    display: flex; align-items: center; justify-content: center; font-size: 34px; transition: box-shadow .3s, border-color .3s; }
+  #rad .bildchen.gewinn { border-color: var(--gold); box-shadow: 0 0 22px 6px rgba(255,215,94,.8); }
+  .radkarte .portrait { background: radial-gradient(circle, #6a4c00, #14161c 70%); }
+  .radkarte .portrait .ersatz { font-size: 96px; animation: dreh 6s linear infinite; }
+  .figurkarte.doppelt { border-color: var(--gold); box-shadow: 0 0 16px rgba(255,215,94,.35); }
+  .kraft { position: absolute; right: 8px; top: 8px; font-size: .78rem; font-weight: 800; padding: 3px 9px; border-radius: 999px; background: var(--gold); color: #2a1d00; }
+  .starkzeile { margin-top: 6px; }
   #geschenkAuf { display: none; position: fixed; inset: 0; z-index: 42; background: rgba(0,0,0,.7); align-items: center; justify-content: center; padding: 16px; cursor: pointer; }
   #geschenkAuf.an { display: flex; }
   #geschenkAuf .box { background: var(--panel); border: 2px solid var(--gold); border-radius: 20px; padding: 24px 32px; text-align: center; max-width: 360px; }
@@ -410,6 +428,8 @@ h1 #karteName { font-size: .9rem; color: var(--leise); text-shadow: none; }
 </div></div>
 
 <div id="cutin"></div>
+
+<div id="rad"></div>
 
 <div id="suche"><div class="box">
   <div class="globus">🌍</div>
@@ -867,14 +887,23 @@ let level = [{}, {}];
 function speichereLevel() { speichereSpielstaende(); }
 const gueltigesLevel = n => Math.min(MAX_LEVEL, Math.max(1, Math.floor(Number(n)) || 1));
 const levelVon = (sp, id) => gueltigesLevel(level[sp][id]);
-function mitLevel(id, n) {
+function mitLevel(id, n, doppelt = false) {
   const f = FIGUREN[id];
-  return { ...f, level: n, leben: f.leben + (n - 1), angriff: f.angriff + (n >= 3 ? 1 : 0), schritte: f.schritte + (n >= 5 ? 1 : 0) };
+  const w = { ...f, level: n, leben: f.leben + (n - 1), angriff: f.angriff + (n >= 3 ? 1 : 0), schritte: f.schritte + (n >= 5 ? 1 : 0) };
+  // Doppelte Kraft (Glücksrad): Leben, Angriff und Spezial-Schaden zählen doppelt
+  return doppelt ? { ...w, doppelt, leben: 2 * w.leben, angriff: 2 * w.angriff, spezial: { ...f.spezial, schaden: 2 * f.spezial.schaden } } : w;
 }
+// Glücksrad (Wunsch des Sohns, 04.11.2026): Wer alle Monster seiner Welt hat, darf einmal drehen. Danach fängt der
+// Spielstand von vorne an (Kristalle, Käufe, Level, Pokale weg; die Welt bleibt). Das gedrehte Monster steht in
+// glueck und kann man ab dann mit doppelter Kraft kaufen (stark); das gilt auch nach späteren Neuanfängen.
+let glueck = [[], []], stark = [[], []];
+const starkVon = (sp, id) => stark[sp].includes(id);
+const starkPreis = f => f.preis ? 2 * f.preis : f.pokale ? 400 : 100;
 // Kaufmonster kosten Geld (preis). Pokal-Monster (pokale) kauft man nicht: sie gehören einem, sobald man so viele
 // Pokale gesammelt hat (alle je gesammelten, fürs Aufleveln ausgegebene zählen mit).
 const istKauf = f => !!(f.preis || f.pokale);
-const besitzt = (i, id) => { const f = FIGUREN[id]; return f.pokale ? pokal[i].pokale >= f.pokale : !f.preis || gekauft[i].includes(id); };
+const besitzt = (i, id) => { const f = FIGUREN[id]; return starkVon(i, id) || (f.pokale ? pokal[i].pokale >= f.pokale : !f.preis || gekauft[i].includes(id)); };
+const hatAlle = (sp, el) => Object.keys(FIGUREN).every(id => FIGUREN[id].element !== el || besitzt(sp, id));
 // Gegen den Computer: Spieler 2 ist der Computer (Modus bleibt über „Nochmal spielen“ gespeichert)
 // Online: jedes Gerät ist ein Spieler; dessen Geld, Käufe, Welt und Pokale stehen immer auf Platz 0 (Spieler 1)
 const MODUS_KEY = "monster-arena-computer";
@@ -1146,10 +1175,10 @@ function verbunden(c, gastgeber) {
   // Der Gast schickt zuerst seine Wahl, der Gastgeber antwortet mit seiner Wahl und dem Startwert für den Zufall
   if (!gastgeber) c.send({ typ: "wahl", ...meineWahl() });
 }
-const meineWahl = () => ({ id: wahl[0], kugel: pokal[0].kugel > 0, leben: pokal[0].leben > 0, level: levelVon(0, wahl[0]), name: spielstandName(0) });
+const meineWahl = () => ({ id: wahl[0], kugel: pokal[0].kugel > 0, leben: pokal[0].leben > 0, level: levelVon(0, wahl[0]), stark: starkVon(0, wahl[0]), name: spielstandName(0) });
 function empfange(d) {
   if (d.typ === "wahl" && !spieler.length) {
-    const ihre = { id: d.id, kugel: !!d.kugel, leben: !!d.leben, level: gueltigesLevel(d.level), name: sauberName(d.name) };   // ältere Geräte schicken kein Level (→ 1) und keinen Namen
+    const ihre = { id: d.id, kugel: !!d.kugel, leben: !!d.leben, level: gueltigesLevel(d.level), stark: !!d.stark, name: sauberName(d.name) };   // ältere Geräte schicken kein Level (→ 1), kein stark und keinen Namen
     if (!FIGUREN[ihre.id]) return;
     let start, karte;
     if (ich === 0) {                                   // der Wartende bestimmt Zufall und Karte
@@ -1298,7 +1327,7 @@ const SPIELSTAND_KEY = "monster-arena-spielstaende", SPIELSTAENDE = 6, NAME_MAX 
 let spielstaende = [];
 let sitz = [null, null];     // Nummer des Spielstands je Platz in diesem Kampf
 let benennt = false, nameEntwurf = "";
-const leererSpielstand = name => ({ name, welt: null, geld: 0, gekauft: [], level: {}, pokal: leerPokal() });
+const leererSpielstand = name => ({ name, welt: null, geld: 0, gekauft: [], level: {}, pokal: leerPokal(), glueck: [], stark: [] });
 const sauberName = t => String(t ?? "").replace(/[<>&"'`]/g, "").trim().slice(0, NAME_MAX);
 const spielstandName = i => sitz[i] !== null ? spielstaende[sitz[i]].name : `Spieler ${i + 1}`;
 function ladeSpielstaende() {
@@ -1306,7 +1335,8 @@ function ladeSpielstaende() {
     const s = JSON.parse(localStorage.getItem(SPIELSTAND_KEY));
     if (Array.isArray(s)) {
       spielstaende = s.filter(p => p && sauberName(p.name)).map(p => ({ ...leererSpielstand(sauberName(p.name)), ...p, name: sauberName(p.name),
-        welt: WELTEN[p.welt] ? p.welt : null, gekauft: Array.isArray(p.gekauft) ? p.gekauft : [], pokal: { ...leerPokal(), ...p.pokal } }));
+        welt: WELTEN[p.welt] ? p.welt : null, gekauft: Array.isArray(p.gekauft) ? p.gekauft : [], pokal: { ...leerPokal(), ...p.pokal },
+        glueck: Array.isArray(p.glueck) ? p.glueck.filter(id => FIGUREN[id]) : [], stark: Array.isArray(p.stark) ? p.stark.filter(id => FIGUREN[id]) : [] }));
       return;
     }
   } catch (e) { return; }
@@ -1322,7 +1352,7 @@ function ladeSpielstaende() {
 }
 // Die Plätze rechnen mit geld[sp] usw.; beim Speichern wandert alles in den Spielstand des Platzes zurück
 function speichereSpielstaende() {
-  sitz.forEach((n, sp) => { if (n !== null) Object.assign(spielstaende[n], { welt: heimwelt[sp], geld: geld[sp], gekauft: gekauft[sp], level: level[sp], pokal: pokal[sp] }); });
+  sitz.forEach((n, sp) => { if (n !== null) Object.assign(spielstaende[n], { welt: heimwelt[sp], geld: geld[sp], gekauft: gekauft[sp], level: level[sp], pokal: pokal[sp], glueck: glueck[sp], stark: stark[sp] }); });
   try { localStorage.setItem(SPIELSTAND_KEY, JSON.stringify(spielstaende)); } catch (e) { /* ohne Speicher weiter */ }
 }
 // Die Wahl bleibt über „Nochmal spielen“ hinaus gespeichert: nach dem Kampf geht es gleich zu den Monstern der eigenen Welt.
@@ -1330,13 +1360,14 @@ function speichereSpielstaende() {
 const SITZ_KEY = "monster-arena-sitz";
 function leereSitz(sp) {
   sitz[sp] = null;
-  heimwelt[sp] = null; geld[sp] = 0; gekauft[sp] = []; level[sp] = {}; pokal[sp] = leerPokal();
+  heimwelt[sp] = null; geld[sp] = 0; gekauft[sp] = []; level[sp] = {}; pokal[sp] = leerPokal(); glueck[sp] = []; stark[sp] = [];
 }
 function setzeSitz(sp, n) {
   sitz.forEach((x, i) => { if (x === n && i !== sp) leereSitz(i); });   // nie zwei Plätze mit demselben Spielstand (sonst überschreibt einer den anderen)
   const s = spielstaende[n];
   sitz[sp] = n;
   heimwelt[sp] = s.welt; geld[sp] = s.geld; gekauft[sp] = s.gekauft; level[sp] = s.level; pokal[sp] = s.pokal;
+  glueck[sp] = s.glueck || []; stark[sp] = s.stark || [];
 }
 const speichereSitze = () => { try { localStorage.setItem(SITZ_KEY, JSON.stringify(sitz)); } catch (e) { /* ohne Speicher weiter */ } };
 function ladeSitze() {
@@ -1422,29 +1453,32 @@ function zeigeAuswahl() {
     return zeigeWelten(k, sp);
   }
   unter.innerHTML = (sp === 1 ? `${spielstandName(0)} hat ${FIGUREN[wahl[0]].name} genommen.` : "") + anderer;
+  if (hatAlle(sp, offeneWelt)) k.appendChild(radKarte(sp));
   for (const [id, f] of Object.entries(FIGUREN)) {
     if (f.element !== offeneWelt) continue;
     const vergeben = false;                  // gleiche Monster dürfen gegeneinander kämpfen
     const gesperrt = !vergeben && !besitzt(sp, id);
+    const gedreht = glueck[sp].includes(id) && !starkVon(sp, id);   // darf mit doppelter Kraft gekauft werden
     const d = document.createElement("div");
-    d.className = "figurkarte" + (vergeben ? " vergeben" : "") + (gesperrt ? " gesperrt" : "");
+    d.className = "figurkarte" + (vergeben ? " vergeben" : "") + (gesperrt ? " gesperrt" : "") + (starkVon(sp, id) ? " doppelt" : "");
     d.dataset.vergeben = "Spieler " + (wahl.indexOf(id) + 1);
     d.style.setProperty("--el", f.farbe);
     const lv = gesperrt ? 1 : levelVon(sp, id);
-    const w = mitLevel(id, lv);
+    const w = mitLevel(id, lv, starkVon(sp, id));
     d.innerHTML = `<div class="portrait" style="${portraitStil(id, lv)}"><span class="ersatz">${ersatz(id)}</span>
-        <span class="element">${f.element}</span></div>${gesperrt ? `<span class="schloss">🔒 ${f.pokale ? `ab ${f.pokale} 🏆` : `${f.preis} 💎${f.abPokale ? ` · ab ${f.abPokale} 🏆` : ""}`}</span>` : ""}
+        <span class="element">${f.element}</span>${starkVon(sp, id) ? '<span class="kraft">💪 Doppelte Kraft</span>' : ""}</div>${gesperrt ? `<span class="schloss">${gedreht ? `💪 ${starkPreis(f)} 💎` : `🔒 ${f.pokale ? `ab ${f.pokale} 🏆` : `${f.preis} 💎${f.abPokale ? ` · ab ${f.abPokale} 🏆` : ""}`}`}</span>` : ""}
       <div class="kartentext"><h3>${f.name}</h3>
         ${gesperrt ? "" : `<div class="sterne">${"⭐".repeat(lv)}${"☆".repeat(MAX_LEVEL - lv)} <small>Level ${lv}</small></div>`}
         <div class="wert"><span>❤️</span><span>Leben ${w.leben}</span>${pips(Math.round(w.leben / 2), MAX.leben / 2)}</div>
         <div class="wert"><span>👣</span><span>Schritte ${w.schritte}</span>${pips(w.schritte, MAX.schritte)}</div>
         <div class="wert"><span>⚔️</span><span>Angriff ${w.angriff}</span>${pips(w.angriff, MAX.angriff)}</div>
         <div class="wert"><span>🎯</span><span>Reichweite ${f.reichweite}</span>${pips(f.reichweite, MAX.reichweite)}</div>
-        <div class="faehig">${f.faehigkeit}<br>⚡ <b>${f.spezial.name}:</b> ${f.spezial.text}<br>🏠 <b>Heimvorteil:</b> ${HEIMAT[f.element]}</div>${gesperrt ? kaufzeile(sp, f) : levelzeile(sp, lv)}</div>`;
-    if (gesperrt) d.onclick = () => f.pokale ? ton("daneben") : kaufen(sp, id, d);
+        <div class="faehig">${f.faehigkeit}<br>⚡ <b>${f.spezial.name}:</b> ${f.spezial.text}<br>🏠 <b>Heimvorteil:</b> ${HEIMAT[f.element]}</div>${gesperrt ? (gedreht ? starkzeile(sp, f) : kaufzeile(sp, f)) : levelzeile(sp, lv) + (gedreht ? starkzeile(sp, f) : "")}</div>`;
+    if (gesperrt) d.onclick = () => gedreht ? starkKaufen(sp, id, d) : f.pokale ? ton("daneben") : kaufen(sp, id, d);
     else {
       d.onclick = () => waehle(id);
       d.querySelector(".levelzeile").onclick = e => { e.stopPropagation(); levelKaufen(sp, id, d); };   // Level-Knopf wählt nicht aus
+      if (gedreht) d.querySelector(".starkzeile").onclick = e => { e.stopPropagation(); starkKaufen(sp, id, d); };
     }
     k.appendChild(d);
   }
@@ -1505,6 +1539,82 @@ function kaufen(sp, id, karte) {
   zeigeGeldbeutel();
   zeigeAuswahl();
 }
+// ---------- Glücksrad (Wunsch des Sohns, 04.11.2026) ----------
+function starkzeile(sp, f) {
+  const fehlt = starkPreis(f) - geld[sp];
+  return fehlt > 0 ? `<div class="kaufzeile starkzeile">💪 Doppelte Kraft für ${starkPreis(f)} 💎<br><small>Dir fehlen noch ${fehlt} 💎</small></div>`
+                   : `<div class="kaufzeile starkzeile kann">💪 Doppelte Kraft für ${starkPreis(f)} 💎</div>`;
+}
+// Wie Kaufen in zwei Schritten: erstes Tippen fragt, zweites kauft
+function starkKaufen(sp, id, karte) {
+  const f = FIGUREN[id];
+  if (geld[sp] < starkPreis(f)) { ton("daneben"); return; }
+  const zeile = karte.querySelector(".starkzeile");
+  if (!zeile.classList.contains("frage")) {
+    ton("klick");
+    zeile.className = "kaufzeile starkzeile frage";
+    zeile.innerHTML = `${f.name} mit doppelter Kraft für ${starkPreis(f)} 💎?<br>Nochmal tippen = Ja!`;
+    return;
+  }
+  geld[sp] -= starkPreis(f);
+  stark[sp].push(id);
+  speichereSpielstaende();
+  ton("sieg");
+  zeigeGeldbeutel();
+  zeigeAuswahl();
+}
+function radKarte(sp) {
+  const d = document.createElement("div");
+  d.className = "figurkarte radkarte";
+  d.innerHTML = `<div class="portrait"><span class="ersatz">🎡</span></div>
+    <div class="kartentext"><h3>Glücksrad</h3>
+      <div class="faehig">Du hast alle Monster deiner Welt! Dreh einmal am Glücksrad. Das Monster, auf dem es stehen bleibt,
+        kannst du danach mit <b>doppelter Kraft</b> kaufen.<br><b>Aber:</b> Danach fängst du von vorne an – alle Kristalle,
+        Monster, Level und Pokale sind weg.</div>
+      <div class="kaufzeile radzeile kann">🎡 Drehen</div></div>`;
+  d.onclick = () => {
+    const zeile = d.querySelector(".radzeile");
+    if (!zeile.classList.contains("frage")) {
+      ton("klick");
+      zeile.className = "kaufzeile radzeile frage";
+      zeile.innerHTML = "Wirklich drehen und von vorne anfangen?<br>Nochmal tippen = Ja!";
+      return;
+    }
+    dreheRad(sp);
+  };
+  return d;
+}
+function dreheRad(sp) {
+  const el = heimwelt[sp];
+  const ids = Object.keys(FIGUREN).filter(id => FIGUREN[id].element === el);
+  const n = ids.length, seg = 360 / n, nr = Math.floor(Math.random() * n), id = ids[nr];
+  // Gleich speichern: wer während des Drehens die App schließt, hat trotzdem gedreht und fängt von vorne an
+  geld[sp] = 0; gekauft[sp] = []; level[sp] = {}; pokal[sp] = leerPokal(); stark[sp] = [];
+  if (!glueck[sp].includes(id)) glueck[sp].push(id);
+  speichereSpielstaende();
+  const farben = ids.map((_, i) => `${i % 2 ? "#2a2f3a" : "#3a4150"} ${i * seg}deg ${(i + 1) * seg}deg`).join(", ");
+  const o = document.getElementById("rad");
+  o.innerHTML = `<div class="box"><div class="zeiger">▼</div>
+      <div class="scheibe" style="--el:${FIGUREN[id].farbe};background:conic-gradient(${farben})">${ids.map((m, i) =>
+        `<div class="feld" style="transform:rotate(${(i + .5) * seg}deg) translateY(-112px)">
+          <div class="bildchen" style="${portraitStil(m)}">${ersatz(m)}</div></div>`).join("")}</div>
+      <h2 id="radText">Das Rad dreht sich …</h2><p id="radUnter"></p>
+      <button class="knopf" id="radWeiter" hidden>Weiter</button></div>`;
+  o.classList.add("an");
+  ton("kugel");
+  const scheibe = o.querySelector(".scheibe");
+  requestAnimationFrame(() => requestAnimationFrame(() => { scheibe.style.transform = `rotate(${5 * 360 - (nr + .5) * seg}deg)`; }));
+  setTimeout(() => {
+    ton("sieg");
+    o.querySelector(".feld:nth-child(" + (nr + 1) + ") .bildchen").classList.add("gewinn");
+    document.getElementById("radText").textContent = `🎉 ${FIGUREN[id].name}!`;
+    document.getElementById("radUnter").innerHTML = `Du fängst jetzt von vorne an. ${FIGUREN[id].name} kannst du ab jetzt mit ` +
+      `<b>doppelter Kraft</b> kaufen – für ${starkPreis(FIGUREN[id])} 💎.`;
+    const w = document.getElementById("radWeiter");
+    w.hidden = false;
+    w.onclick = () => { o.classList.remove("an"); ton("klick"); zeigeGeldbeutel(); zeigeAuswahl(); };
+  }, 5200);
+}
 function zeigeWelten(k, sp) {
   for (const [el, w] of Object.entries(WELTEN)) {
     const monster = Object.keys(FIGUREN).filter(id => FIGUREN[id].element === el);
@@ -1559,7 +1669,7 @@ function starte() {
   if (!online) setzeKarte(geloesteKarte());           // online schon vom Gastgeber gesetzt
   spieler = wahl.map((id, i) => {
     const lv = online ? onlineBoni[i].level : profil(i) >= 0 ? levelVon(profil(i), id) : levelVon(0, wahl[0]);
-    const fig = mitLevel(id, gueltigesLevel(lv));
+    const fig = mitLevel(id, gueltigesLevel(lv), online ? onlineBoni[i].stark : profil(i) >= 0 && starkVon(profil(i), id));
     const max = fig.leben + (computer && i === 1 ? STUFEN[stufe].leben : 0);
     return { id, fig, r: START[i][0], c: START[i][1], leben: max, max, gift: 0, frost: false };
   });
@@ -1571,7 +1681,7 @@ function starte() {
   document.getElementById("spezialKnopf").onclick = () => meinZug("spezial");
   legende();
   ambiente();
-  log(`Der Kampf beginnt: ${spieler.map(p => `${p.fig.name} (Level ${p.fig.level})`).join(" gegen ")}!`);
+  log(`Der Kampf beginnt: ${spieler.map(p => `${p.fig.name} (Level ${p.fig.level}${p.fig.doppelt ? ", 💪 doppelte Kraft" : ""})`).join(" gegen ")}!`);
   log(`🗺️ Kampf-Karte: ${KARTEN[karteId].icon} ${KARTEN[karteId].name} – ${KARTEN[karteId].text}`);
   document.getElementById("karteName").textContent = `${KARTEN[karteId].icon} ${KARTEN[karteId].name}`;
   zeichne();
@@ -2223,7 +2333,7 @@ function starteSolo(id, weiter = false) {
     const p = alt.wo[w.k];
     if (Array.isArray(p)) { w.r = p[0]; w.c = p[1]; }
   }
-  solo = { id, fig: mitLevel(id, levelVon(0, id)), karten: {}, schutz: ok ? Number(alt.schutz) || 0 : 0,
+  solo = { id, fig: mitLevel(id, levelVon(0, id), starkVon(0, id)), karten: {}, schutz: ok ? Number(alt.schutz) || 0 : 0,
            besiegt: new Set(ok && Array.isArray(alt.besiegt) ? alt.besiegt : []), offen: new Set(ok && Array.isArray(alt.offen) ? alt.offen : []),
            gesammelt: new Set(ok && Array.isArray(alt.gesammelt) ? alt.gesammelt : []) };
   for (const [ort, feld] of [["haupt", "g"], ["dschungel", "gd"]]) {
