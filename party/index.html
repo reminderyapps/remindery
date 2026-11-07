@@ -1,0 +1,887 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Experimente-Kindergeburtstag: 20 Experimente, Story & Labor-Essen | Remindery</title>
+<meta name="description" content="Forscher-Geburtstag für Kinder ab 8: 20 Experimente mit Anleitung und Materialliste, Rätsel-Story mit Zahlenschloss, Trockeneis-Show, Labor-Essen und automatische Einkaufsliste. Kostenlos, ohne Anmeldung.">
+<link rel="canonical" href="https://remindery.de/party/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=k1">
+<link rel="stylesheet" href="/styles.css">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Start", "item": "https://remindery.de/"}, {"@type": "ListItem", "position": 2, "name": "Experimente-Geburtstag", "item": "https://remindery.de/party/"}]}
+</script>
+<style>
+.lab{
+  --ink:var(--text); --muted:var(--text-soft);
+  --teal:#0f766e; --teal-soft:#d9f0ec; --orange:#c2410c; --orange-soft:#fde8d9;
+  --violet:#6d4ac9; --violet-soft:#ebe4fb; --yellow-soft:#fff6d6;
+  max-width:1100px;margin:0 auto;padding:0 var(--gutter) 40px;
+}
+@media (prefers-color-scheme: dark){
+  .lab{--teal:#3fc1b2;--teal-soft:#16302d;--orange:#ff9554;--orange-soft:#3a2416;
+  --violet:#a991f0;--violet-soft:#2a2340;--yellow-soft:#332d17}
+}
+.lab h1,.lab h2,.lab h3{line-height:1.2;margin:0 0 .4em}
+.lab h1{font-size:clamp(1.8rem,4vw,2.5rem)}
+.lab h2{font-size:1.6rem;margin-top:.2em}
+.lab h3{font-size:1.1rem;font-family:var(--sans)}
+.lab a{color:var(--teal)}
+.lab-hero{background:linear-gradient(135deg,#0f766e 0%,#115e59 60%,#6d4ac9 130%);color:#fff;border-radius:20px;padding:30px 24px 24px;margin-top:10px}
+.lab-hero p{margin:.3em 0;opacity:.94;max-width:720px}
+.lab-hero .crumbs,.lab-hero .crumbs a{color:#fff;opacity:.85}
+.countdown{display:inline-block;margin-top:12px;background:rgba(255,255,255,.16);padding:6px 14px;border-radius:999px;font-weight:600}
+.lab-toc{display:flex;flex-wrap:wrap;gap:4px;margin:14px 0 0}
+.lab-toc a{white-space:nowrap;text-decoration:none;color:var(--ink);padding:6px 10px;border-radius:8px;font-size:.92rem;background:var(--card);border:1px solid var(--line)}
+.lab-toc a:hover{border-color:var(--teal)}
+.lab section{padding:30px 0 6px}
+.lab .lead{color:var(--muted);max-width:760px}
+.lab .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow-soft)}
+.lab .grid{display:grid;gap:14px}
+.lab .g2{grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))}
+.lab .g3{grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr))}
+.lab label.f{display:block;font-size:.85rem;color:var(--muted);margin-bottom:4px}
+.lab input[type=text],.lab input[type=date],.lab input[type=time],.lab input[type=number],.lab textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.lab textarea{min-height:140px;resize:vertical}
+.lab .btn{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:7px 12px;border-radius:9px;cursor:pointer}
+.lab .btn:hover{border-color:var(--teal)}
+.lab .btn.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.lab .btn.small{padding:4px 10px;font-size:.88rem}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.summary-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0 14px;color:var(--muted)}
+.summary-bar b{color:var(--ink)}
+.exp{display:flex;flex-direction:column;gap:8px}
+.lab .exp.sel{border-color:var(--teal);box-shadow:0 0 0 2px var(--teal-soft)}
+.exp-head{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.exp-emoji{font-size:1.9rem;line-height:1}
+.exp-head h3{margin:0}
+.exp-head .grow{flex:1;min-width:150px}
+.badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.badge{font-size:.75rem;padding:2px 8px;border-radius:999px;background:var(--bg);border:1px solid var(--line);color:var(--muted)}
+.badge.t-Station{background:var(--teal-soft);color:var(--teal);border-color:transparent}
+.badge.t-Show{background:var(--orange-soft);color:var(--orange);border-color:transparent}
+.badge.t-Basteln{background:var(--violet-soft);color:var(--violet);border-color:transparent}
+.badge.t-Detektiv{background:var(--yellow-soft);color:var(--ink);border-color:transparent}
+.badge.new{background:var(--orange);color:#fff;border-color:transparent}
+.teaser{margin:0;color:var(--muted)}
+.lab details{border-top:1px dashed var(--line);padding-top:8px}
+.lab details summary{cursor:pointer;font-weight:600;color:var(--teal)}
+.lab details[open] summary{margin-bottom:8px}
+.box{border-radius:10px;padding:10px 12px;margin:10px 0;font-size:.95rem}
+.box.why{background:var(--teal-soft)}
+.box.safe{background:var(--orange-soft)}
+.box.story{background:var(--violet-soft)}
+.box.tip{background:var(--yellow-soft)}
+.box b{display:block;margin-bottom:2px}
+ul.mat{padding-left:18px;margin:6px 0}
+ul.mat li span{color:var(--muted);font-size:.88rem}
+ol.steps{padding-left:22px;margin:6px 0}
+ol.steps li{margin-bottom:4px}
+.tl{display:grid;grid-template-columns:110px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.tl:last-child{border-bottom:none}
+.tl .time{font-weight:700;color:var(--teal);font-size:1.05rem}
+.tl .what b{display:block}
+.tl .what span{color:var(--muted);font-size:.93rem}
+.check{display:flex;gap:10px;align-items:flex-start;padding:6px 0}
+.check input{margin-top:4px;width:18px;height:18px;accent-color:var(--teal);flex:none}
+.check.done span{text-decoration:line-through;color:var(--muted)}
+.shop-group h3{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.shop-group h3 small{font-weight:400;color:var(--muted);font-size:.85rem}
+.shop-item .for{display:block;font-size:.8rem;color:var(--muted)}
+.letter{background:var(--yellow-soft);border-radius:12px;padding:18px 20px;font-family:var(--serif);font-size:1.05rem;border:1px solid var(--line)}
+.code-table{width:100%;border-collapse:collapse}
+.code-table td,.code-table th{padding:6px 4px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+.code-table input{max-width:70px;text-align:center}
+.code-table select{font:inherit;width:100%;padding:6px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.code-big{font-size:2rem;font-weight:700;letter-spacing:.3em;color:var(--violet)}
+.quiz li{margin-bottom:8px}
+.lab .quiz details{border:none;padding:0;display:inline}
+.lab .quiz summary{display:inline;font-weight:400;font-size:.9rem}
+.lab .muted{color:var(--muted)}
+.lab-foot{margin-top:24px;color:var(--muted);font-size:.9rem}
+@media (max-width:560px){.tl{grid-template-columns:78px 1fr}}
+@media print{
+  .site-head,footer,.lab-toc,.filters,.btn,.noprint{display:none!important}
+  body{background:#fff;color:#000}
+  .lab-hero{background:none;color:#000;padding:0}
+  .lab .card{box-shadow:none;break-inside:avoid}
+}
+</style>
+
+</head>
+<body>
+
+<header class="site-head">
+  <div class="head-in">
+    <a class="site-brand" href="/"><img src="/favicon.svg?v=k1" width="34" height="34" alt=""><span>Remindery Apps</span></a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="/">Apps</a>
+      <a href="/lernmaterial/">Lernmaterial</a>
+      <a href="/method/">Methode</a>
+      <a href="/about/">Über uns</a>
+    </nav>
+  </div>
+</header>
+
+<main class="lab">
+<div class="lab-hero">
+  <nav class="crumbs" aria-label="Brotkrümelnavigation"><a href="/">Start</a><span class="sep" aria-hidden="true"> › </span><span aria-current="page">Experimente-Geburtstag</span></nav>
+  <h1>🧪 Experimente-Kindergeburtstag</h1>
+  <p>Experimentieren, basteln, staunen und gemeinsam ein Rätsel lösen. 20 Experimente mit Anleitung, eine fertige Story, Labor-Essen und ein Planer mit Einkaufsliste – für Kinder ab etwa 8 Jahren.</p>
+  <div class="countdown" id="countdown">Datum unten unter „Eckdaten“ eintragen</div>
+</div>
+<nav class="lab-toc" aria-label="Inhalt">
+  <a href="#eckdaten">📋 Eckdaten</a>
+  <a href="#story">📜 Story</a>
+  <a href="#ablauf">⏱️ Ablauf</a>
+  <a href="#vorbereitung">✅ Vorbereitung</a>
+  <a href="#experimente">🧪 Experimente</a>
+  <a href="#trockeneis">🌫️ Trockeneis</a>
+  <a href="#essen">🍕 Labor-Essen</a>
+  <a href="#extras">✨ Deko & mehr</a>
+  <a href="#einkauf">🛒 Einkauf</a>
+  <a href="#sicherheit">🦺 Sicherheit</a>
+  <a href="#notizen">📝 Notizen</a>
+</nav>
+
+
+<!-- ================= ECKDATEN ================= -->
+<section id="eckdaten">
+  <h2>📋 Eckdaten</h2>
+  <p class="lead">Alles, was du hier einträgst, anklickst oder abhakst, bleibt nur in deinem Browser gespeichert und wird nicht übertragen. Löschen geht jederzeit mit „Alles zurücksetzen“ ganz unten.</p>
+  <div class="card grid g3">
+    <div><label class="f">Datum</label><input type="date" data-field="datum"></div>
+    <div><label class="f">Beginn</label><input type="time" data-field="start" value="14:00"></div>
+    <div><label class="f">Ende / Abholung</label><input type="time" data-field="ende" value="17:00"></div>
+    <div><label class="f">Anzahl Kinder</label><input type="number" min="1" max="30" data-field="kinder" placeholder="z. B. 8"></div>
+    <div><label class="f">Ort</label><input type="text" data-field="ort" placeholder="bei uns zu Hause"></div>
+    <div><label class="f">Erwachsene Helfer</label><input type="text" data-field="helfer" placeholder="Namen"></div>
+    <div style="grid-column:1/-1"><label class="f">Gäste</label><input type="text" data-field="gaeste" placeholder="Namen, mit Komma getrennt"></div>
+    <div style="grid-column:1/-1"><label class="f">Allergien / Unverträglichkeiten</label><input type="text" data-field="allergien" placeholder="z. B. Nüsse, Laktose …"></div>
+  </div>
+</section>
+
+<!-- ================= STORY ================= -->
+<section id="story">
+  <h2>📜 Die Story: Das verschwundene Labor</h2>
+  <p class="lead">Die Geschichte macht aus einzelnen Experimenten <b>eine</b> Party. Jede Station liefert einen Hinweis, am Ende knacken alle gemeinsam die Kiste. Zehnjährige mögen es ein bisschen spannend. Gruselig muss es nicht sein.</p>
+
+  <div class="grid g2">
+    <div class="card">
+      <h3>Die Grundidee</h3>
+      <p><b>Professor Quark</b> hat die geheime Formel für den „Staun-Trank“ erfunden und in einer Kiste mit Zahlenschloss versteckt. Der Grund: Sein Erzrivale <b>Dr. Chaos</b> will sie stehlen. Jetzt ist der Professor verreist, und nur echte Forscher können die Kiste öffnen.</p>
+      <p>Bei jedem Experiment gibt es eine Ziffer. Nebenbei finden die Detektiv-Stationen heraus, wer von den drei Labor-Mitarbeitern in Wahrheit Dr. Chaos ist.</p>
+      <h3>Die Verdächtigen (Karten basteln)</h3>
+      <ul>
+        <li><b>Dr. Kolbe</b>, Assistentin, liebt Reagenzgläser</li>
+        <li><b>Herr Brösel</b>, Hausmeister, immer mit Keks in der Tasche</li>
+        <li><b>Paul Pipette</b>, Praktikant, ständig zu spät</li>
+      </ul>
+      <p class="muted">Jede Karte bekommt ein Bild (gemalt oder generiert), einen Fingerabdruck und den „Lieblingsstift“. Hinten steht eine Ziffer, aber nur die Täterkarte zählt.</p>
+    </div>
+    <div class="card">
+      <h3>Der Brief zum Vorlesen</h3>
+      <div class="letter">
+        Liebe Nachwuchs-Forscherinnen und -Forscher,<br><br>
+        wenn ihr diesen Brief lest, bin ich schon unterwegs. Ich musste meine wichtigste Erfindung in Sicherheit bringen: die Formel für den Staun-Trank. Sie liegt in der Kiste vor euch. Aber Vorsicht: <b>Dr. Chaos</b> ist mir auf den Fersen, und ich fürchte, er hat sich in mein Labor eingeschlichen!<br><br>
+        Die Kiste öffnet nur, wer meine Experimente besteht. Jedes verrät euch eine Ziffer. Arbeitet sorgfältig, tragt eure Schutzbrillen und schreibt alles ins Laborbuch.<br><br>
+        Ich zähle auf euch!<br>
+        <i>Euer Professor Quark</i><br>
+        <small>P.S.: Wärme bringt die Wahrheit ans Licht …</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h3>🔐 Code-Planer</h3>
+    <p class="muted">Lege fest, welche Station welche Ziffer verrät. Die Auswahlliste zeigt nur eingeplante Experimente. Der Code für das Zahlenschloss steht unten.</p>
+    <table class="code-table" id="codeTable"></table>
+    <p style="margin-top:12px">Code fürs Schloss: <span class="code-big" id="codeOut">– – – –</span></p>
+    <p class="muted">Tipp: Ein 4-stelliges Zahlenschloss gibt es im Baumarkt oder online (Kofferschloss oder Schloss mit Bügel). Die Kiste kann ein Schuhkarton mit Gürtelschlaufe sein, eine Werkzeugkiste oder eine Geldkassette.</p>
+  </div>
+
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card">
+      <h3>Das Finale</h3>
+      <ol class="steps">
+        <li>Alle Ziffern zusammentragen, die Reihenfolge steht im Laborbuch.</li>
+        <li>Den Täter enttarnen: Die Detektiv-Ergebnisse zeigen auf eine Verdächtigenkarte.</li>
+        <li>Kiste öffnen. Darin liegen die Mitgebsel, das Forscherdiplom und ein Zettel mit der „Formel“.</li>
+        <li>Die Formel ist das Rezept für den <b>Farbwechsel-Trank</b> (siehe Labor-Essen), den alle zusammen mischen.</li>
+        <li>Optionaler Gag: Professor Quark erscheint persönlich, also ein Erwachsener mit Kittel, wilder Perücke und Schutzbrille, und verleiht die Diplome.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Andere Rahmen, gleiche Experimente</h3>
+      <ul>
+        <li><b>Expedition ins Unbekannte:</b> Die Kinder sind Forscher auf einer fremden Insel. Jedes Experiment ist ein „Naturphänomen“, am Ende wartet die Schatztruhe.</li>
+        <li><b>Agenten-Akademie:</b> Geheimtinte, Fingerabdrücke und Stift-Analyse stehen im Mittelpunkt. Am Ende gibt es einen Agentenausweis.</li>
+        <li><b>Raumfahrt-Training:</b> Raketen, Rückstoß und Trockeneis-„Mondnebel“. Am Ende bekommt jeder ein Astronauten-Zertifikat.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ABLAUF ================= -->
+<section id="ablauf">
+  <h2>⏱️ Ablaufplan</h2>
+  <p class="lead">Die Uhrzeiten richten sich nach dem Beginn unter „Eckdaten“. Die Stationsrunde läuft im Kreis: Gruppen à 2–3 Kinder, alle 15 Minuten ertönt ein Pfiff, und alle wechseln. Die Show-Experimente machen alle zusammen.</p>
+  <div class="card"><div class="timeline" id="timeline"></div></div>
+</section>
+
+<!-- ================= VORBEREITUNG ================= -->
+<section id="vorbereitung">
+  <h2>✅ Vorbereitung</h2>
+  <div class="card" id="prepList"></div>
+</section>
+
+<!-- ================= EXPERIMENTE ================= -->
+<section id="experimente">
+  <h2>🧪 Experimente</h2>
+  <p class="lead">20 Experimente: die 5 aus dem ersten Vorschlag und 15 neue (markiert mit „neu“). Mit „Einplanen“ landet das Material automatisch auf der Einkaufsliste. Zum Vergleich: 4–5 Stationen plus 3–4 Shows füllen gut 3 Stunden.</p>
+  <div class="filters noprint" id="filters"></div>
+  <div class="summary-bar" id="expSummary"></div>
+  <div class="grid g2" id="expList"></div>
+</section>
+
+<!-- ================= TROCKENEIS ================= -->
+<section id="trockeneis">
+  <h2>🌫️ Trockeneis-Show</h2>
+  <p class="lead">Das ist der größte Wow-Moment für wenig Geld, also ideal fürs Finale. Trockeneis ist gefrorenes Kohlendioxid mit −78 °C. Es schmilzt nicht, sondern verdampft direkt zu Nebel.</p>
+  <div class="grid g2" id="iceBlock"></div>
+</section>
+
+<!-- ================= ESSEN ================= -->
+<section id="essen">
+  <h2>🍕 Labor-Essen & Getränke</h2>
+  <p class="lead">Essen, das selbst ein Experiment ist. Eingeplante Gerichte landen ebenfalls auf der Einkaufsliste.</p>
+  <div class="grid g2" id="foodList"></div>
+</section>
+
+<!-- ================= EXTRAS ================= -->
+<section id="extras">
+  <h2>✨ Deko, Einladung, Mitgebsel & mehr</h2>
+  <div class="grid g2">
+    <div class="card">
+      <h3>🏷️ Deko & Atmosphäre</h3>
+      <ul>
+        <li><b>Absperrband</b> „Achtung Labor“ an die Tür, dazu witzige Warnschilder: „Vorsicht: Explosive Kekse“, „Zutritt nur mit Schutzbrille“, „Dr. Chaos unerwünscht“.</li>
+        <li><b>Laborkittel:</b> Alte weiße Herren-T-Shirts in XXL oder billige Malerkittel. Die Kinder beschriften sie beim Ankommen mit Stoffmalstift, den Kittel behalten sie.</li>
+        <li><b>Schutzbrillen</b> für alle. Die gibt es im Baumarkt oder im 10er-Pack online. Sie sind Pflicht und zugleich Kostüm.</li>
+        <li><b>Stationsschilder</b> mit Nummer und Name, dazu eine Schnur mit Wäscheklammern für die Laborbuch-Seiten.</li>
+        <li><b>Schwarzlicht/UV-Lampe</b> fürs Leuchtgetränk und die UV-Geheimschrift.</li>
+        <li>Grüne Knicklichter in Gläsern, eine Periodensystem-Tischdecke (Papier) und Reagenzgläser als Vasen.</li>
+        <li><b>Laborbuch</b> pro Kind: ein geheftetes A5-Heft mit einer Seite pro Station (Beobachtung, Ziffer), Farbtabelle für den Rotkohl und Platz für den Fingerabdruck.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>✉️ Einladung</h3>
+      <div class="letter">
+        <b>STRENG GEHEIM!</b><br><br>
+        Professor Quark sucht Nachwuchs-Forscher!<br>
+        Am <span data-show="datum">[Datum]</span> von <span data-show="start">14:00</span> bis <span data-show="ende">17:00</span> Uhr öffnet [Name]s Labor seine Türen.<br><br>
+        Wir mischen Zaubertränke, lassen Raketen steigen und lösen ein Rätsel, an dem schon Dr. Chaos gescheitert ist.<br><br>
+        Bitte Kleidung mitbringen, die schmutzig werden darf!<br>
+        Antwort bis [Datum] an [Telefon].
+      </div>
+      <h3 style="margin-top:14px">Ideen für die Einladung selbst</h3>
+      <ul>
+        <li><b>Geheimtinten-Einladung:</b> Die wichtigsten Angaben mit Zitronensaft schreiben. Sichtbar steht nur: „Mit dem Föhn erwärmen!“. Vorher testen, ob es lesbar wird.</li>
+        <li><b>Reagenzglas-Post:</b> Die Einladung einrollen und in ein Kunststoff-Reagenzglas mit Korken stecken.</li>
+        <li><b>Mit UV-Stift</b> schreiben und eine kleine UV-Lampe dazulegen.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🎁 Mitgebsel (in der Kiste)</h3>
+      <ul>
+        <li>Lupe (aus der Fingerabdruck-Station)</li>
+        <li>UV-Geheimstift mit Lämpchen</li>
+        <li>Selbstgemachter Schleim im Döschen</li>
+        <li>Selbstgemischtes Brausepulver im Tütchen</li>
+        <li>Kristallzucht-Set klein (online) oder ein Glas Alaun aus der Apotheke zum Züchten zu Hause</li>
+        <li>Schutzbrille und Kittel behalten</li>
+        <li><b>Forscherdiplom</b> mit Name, „Spezialgebiet“ (z. B. „Meister der Raketen“) und Unterschrift von Professor Quark</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🎩 Mini-Tricks für Wartezeiten</h3>
+      <p class="muted">Für Lücken, für Kinder, die zu früh kommen, oder für Gruppen, die schneller fertig sind.</p>
+      <ul>
+        <li><b>Pfeffer flieht:</b> Teller mit Wasser, Pfeffer drauf streuen. Mit einem Finger voller Spülmittel antippen, und der Pfeffer flüchtet an den Rand.</li>
+        <li><b>Wasser, das nicht rausfällt:</b> Glas randvoll mit Wasser, Postkarte drauf, festhalten, umdrehen und loslassen. Die Karte hält, denn der Luftdruck drückt dagegen. Über dem Spülbecken machen!</li>
+        <li><b>Bleistift-Tüte:</b> Gefrierbeutel mit Wasser füllen und spitze Bleistifte durchstechen. Es läuft nichts aus, weil sich der Kunststoff um den Stift zieht.</li>
+        <li><b>Schwebender Ball:</b> Den Föhn nach oben richten und einen Tischtennisball in den Luftstrom legen. Er schwebt, sogar wenn man den Föhn etwas schräg hält.</li>
+        <li><b>Tanzende Rosinen:</b> Rosinen in ein Glas Sprudelwasser werfen. Die Bläschen heben sie hoch, oben platzen sie, und die Rosinen sinken wieder.</li>
+        <li><b>Münze im Wasser:</b> Wie viele Tropfen passen auf eine 1-Cent-Münze? Erst tippen, dann mit der Pipette zählen. Es sind erstaunlich viele, das liegt an der Oberflächenspannung.</li>
+      </ul>
+    </div>
+    <div class="card" style="grid-column:1/-1">
+      <h3>❓ Forscher-Quiz (fürs Essen oder zum Abschluss)</h3>
+      <ol class="quiz">
+        <li>Wie viele Knochen hat ein Erwachsener: etwa 50, 200 oder 1000? <details><summary>Antwort</summary> 206</details></li>
+        <li>Was ist schwerer: ein Kilo Federn oder ein Kilo Steine? <details><summary>Antwort</summary> Gleich schwer, beides ein Kilo.</details></li>
+        <li>Welches Tier kann sein ganzes Leben lang ohne Trinken auskommen? <details><summary>Antwort</summary> Die Kängururatte: Sie holt sich das Wasser aus ihrem Futter.</details></li>
+        <li>Wie heiß ist die Sonne an der Oberfläche: 500 °C, 5 500 °C oder 55 000 °C? <details><summary>Antwort</summary> Rund 5 500 °C</details></li>
+        <li>Welches Gas atmen wir aus und steckt im Sprudelwasser? <details><summary>Antwort</summary> Kohlendioxid (CO₂), dasselbe wie im Trockeneis</details></li>
+        <li>Haben Zwillinge dieselben Fingerabdrücke? <details><summary>Antwort</summary> Nein, jeder Mensch hat eigene.</details></li>
+        <li>Warum ist der Himmel blau? <details><summary>Antwort</summary> Blaues Licht wird in der Luft am stärksten gestreut.</details></li>
+        <li>Wie lange braucht das Licht von der Sonne zu uns: 8 Sekunden, 8 Minuten oder 8 Stunden? <details><summary>Antwort</summary> Gut 8 Minuten</details></li>
+        <li>Welches Metall ist bei Zimmertemperatur flüssig? <details><summary>Antwort</summary> Quecksilber</details></li>
+        <li>Kann ein Ei in Salzwasser schwimmen? <details><summary>Antwort</summary> Ja, Salzwasser ist dichter als das Ei. Gleich ausprobieren!</details></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EINKAUF ================= -->
+<section id="einkauf">
+  <h2>🛒 Einkaufsliste</h2>
+  <p class="lead">Die Liste entsteht automatisch aus allen eingeplanten Experimenten, dem Essen und der Grundausstattung. Mengen gelten für etwa 8 Kinder. Abgehakte Posten bleiben abgehakt. <b>Online-Sachen früh bestellen.</b></p>
+  <div class="summary-bar noprint"><button class="btn small" id="printBtn">🖨️ Seite drucken</button><button class="btn small" id="resetBought">Häkchen zurücksetzen</button></div>
+  <div class="grid g2" id="shopList"></div>
+</section>
+
+<!-- ================= SICHERHEIT ================= -->
+<section id="sicherheit">
+  <h2>🦺 Sicherheit</h2>
+  <div class="card">
+    <ul>
+      <li><b>Schutzbrille ist Pflicht</b> an jeder Station. Wer sie absetzt, macht Pause. Das als „Laborregel Nr. 1“ verkünden.</li>
+      <li><b>Feuer zünden nur Erwachsene</b> (Teebeutel-Rakete, Kerzen). Wasserglas und feuchtes Tuch bereitstellen, den Raum frei von Vorhängen halten.</li>
+      <li><b>Nichts aus den Experimenten essen oder trinken.</b> Labor- und Essbereich klar trennen: Laborbecher sind durchsichtig, Essbecher bunt.</li>
+      <li><b>Trockeneis</b> nur mit Handschuhen oder Zange anfassen, nie in verschlossene Gefäße, nie ins Getränk, Raum lüften. Details stehen bei der Trockeneis-Show.</li>
+      <li><b>Wasserstoffperoxid</b> (Elefantenzahnpasta) und <b>Waschsoda</b> geben nur Erwachsene aus, mit Handschuhen.</li>
+      <li><b>Raketen und Geysir draußen,</b> mit Abstand. Über eine Rakete, die nicht startet, beugt sich niemand, mindestens 1 Minute warten.</li>
+      <li>Boden abdecken (Malerfolie aus dem Baumarkt), Küchenrolle und Eimer mit Wasser bereitstellen.</li>
+      <li>Allergien vorher abfragen (siehe „Eckdaten“). Mögliche Auslöser sind Eier, Milch, Nüsse und Gluten in Knisterbrause oder Kuchen.</li>
+      <li>Erste Hilfe: Augendusche ist klares Wasser. Kühlpack im Gefrierfach, Pflaster bereitlegen.</li>
+    </ul>
+    <p class="muted">Alle Experimente sind für die Durchführung unter Aufsicht Erwachsener gedacht. Sie geschehen auf eigene Verantwortung; bitte jedes Experiment vorher einmal selbst ausprobieren.</p>
+  </div>
+</section>
+
+<!-- ================= NOTIZEN ================= -->
+<section id="notizen">
+  <h2>📝 Notizen</h2>
+  <div class="card"><textarea data-field="notizen" placeholder="Ideen, Wünsche des Geburtstagskinds, wer bringt was mit …"></textarea></div>
+</section>
+
+<div class="lab-foot">
+  <button class="btn small noprint" id="resetAll">Alles zurücksetzen (Auswahl, Häkchen, Eingaben)</button>
+</div>
+</main>
+
+<footer>
+  <nav>
+    <a href="/legal-notice/">Impressum</a>
+    <a href="/privacy/">Datenschutz</a>
+    <a href="/lernmaterial/">Lernmaterial</a>
+    <a href="/">Alle Apps</a>
+  </nav>
+  &copy; 2026 Remindery Apps
+</footer>
+
+<script>
+/* ---------- Daten ---------- */
+// Material: [Name, Menge, Laden]
+const SHOPS = ["Supermarkt","Drogerie","Apotheke","Baumarkt","Schreibwaren","Online","Gase-Händler","Haushalt"];
+const SHOP_NOTE = {
+  "Online":"2–3 Wochen vorher bestellen",
+  "Haushalt":"haben wir vermutlich schon",
+  "Apotheke":"6 % oft nur auf Nachfrage",
+  "Gase-Händler":"max. 1 Tag vorher holen"
+};
+
+const BASICS = {title:"Grundausstattung", material:[
+  ["Schutzbrillen","1 pro Kind + 2","Online"],
+  ["Weiße XXL-T-Shirts oder Malerkittel","1 pro Kind","Online"],
+  ["Stoffmalstifte","1 Set","Schreibwaren"],
+  ["Einweg-Handschuhe","1 Packung","Drogerie"],
+  ["Malerfolie zum Abdecken","2 Rollen","Baumarkt"],
+  ["Küchenrolle","4 Rollen","Supermarkt"],
+  ["Durchsichtige Plastikbecher","50 Stück","Supermarkt"],
+  ["Lebensmittelfarbe (flüssig, Set)","2 Sets","Supermarkt"],
+  ["Pipetten (Kunststoff)","20 Stück","Online"],
+  ["Zahlenschloss 4-stellig","1","Baumarkt"],
+  ["Kiste/Kassette für die Mitgebsel","1","Haushalt"],
+  ["Trillerpfeife fürs Stationswechseln","1","Online"],
+  ["Laborbücher (A5-Hefte oder Ausdrucke)","1 pro Kind","Schreibwaren"],
+  ["Tabletts oder Backbleche","4","Haushalt"]
+]};
+
+const EXP = [
+{id:"rotkohl",emoji:"🧪",title:"Rotkohl-Zaubertrank",typ:"Station",dauer:20,ort:"drinnen",chaos:2,wow:2,basis:true,
+ teaser:"Ein violetter Saft wird rot, blau, grün und gelb – nur durch Küchenzutaten.",
+ material:[["Rotkohl (frisch, kein Glas)","1 kleiner Kopf","Supermarkt"],["Zitronensaft","1 Flasche","Supermarkt"],["Essig (hell)","1 Flasche","Supermarkt"],["Natron","3 Päckchen","Supermarkt"],["Waschsoda oder Kernseife","1 Packung","Drogerie"],["Durchsichtige Plastikbecher","6 pro Gruppe","Supermarkt"],["Pipetten (Kunststoff)","4 pro Gruppe","Online"],["Sieb, Krug, Wasserkocher","–","Haushalt"]],
+ schritte:["<b>Am Vortag:</b> Rotkohl klein schneiden, mit 1 l kochendem Wasser übergießen, 15 Minuten ziehen lassen, abseihen. Der Saft ist violett. Im Kühlschrank aufbewahren.","Saft auf 5–6 Becher verteilen, jeweils ein Daumenbreit.","In jeden Becher eine andere Zutat: Zitronensaft, Essig, nichts (Vergleich), Natron, Seifenwasser bzw. Waschsoda. Flüssiges mit der Pipette tropfenweise.","Farben beobachten und ins Laborbuch malen: pink/rot → violett → blau → grün → gelbgrün.","Zum Schluss Natron in den roten Becher geben: Es schäumt, und der Trank wird wieder blau."],
+ warum:"Rotkohl enthält einen Farbstoff (Anthocyan), der auf Säure reagiert: sauer = rot, neutral = violett, basisch = blau bis grün. Chemiker nennen so etwas einen <i>Indikator</i>.",
+ sicher:"Waschsoda reizt die Augen: Brille auf, ausgeben dürfen nur Erwachsene. Nichts trinken.",
+ story:"Im Laborbuch steht: „Die Farbe, die meine Geheimzutat (Natron) erzeugt, ist der Schlüssel.“ Dazu die Farbtabelle: rot = 3, violett = 5, blau = 7, grün = 1 … So kommt die Ziffer zustande.",
+ tipp:"Rotkohl aus dem Glas funktioniert nicht, der ist schon mit Essig angesäuert."},
+{id:"geheimtinte",emoji:"🕵️",title:"Geheimtinte",typ:"Detektiv",dauer:15,ort:"drinnen",chaos:1,wow:2,basis:true,
+ teaser:"Ein leeres Blatt verrät mit Wärme eine Botschaft.",
+ material:[["Zitronen","2","Supermarkt"],["Wattestäbchen","1 Packung","Drogerie"],["Weißes Papier","10 Blatt","Haushalt"],["Föhn","1","Haushalt"],["UV-Geheimstifte mit Lämpchen","1 pro Kind","Online"]],
+ schritte:["<b>Vorher:</b> Botschaft oder Ziffer mit Zitronensaft und Wattestäbchen dick aufs Papier schreiben und trocknen lassen. Danach ist sie unsichtbar.","Die Kinder bekommen das „leere“ Blatt mit dem Hinweis aus dem Brief: „Wärme bringt die Wahrheit ans Licht.“","Föhn auf höchster Stufe nah übers Papier halten. Nach 1–2 Minuten wird die Schrift braun. Profi-Variante: Bügeleisen, aber nur durch Erwachsene.","Danach schreiben die Kinder eigene Geheimbotschaften und tauschen sie untereinander.","Variante mit UV-Stift: Die Schrift ist unsichtbar und leuchtet unter dem Lämpchen."],
+ warum:"Zitronensaft verändert das Papier: Die Stellen mit Saft werden bei Hitze schneller braun als das restliche Papier.",
+ sicher:"Föhn nicht zu lange auf eine Stelle halten. Das Bügeleisen bedienen nur Erwachsene.",
+ story:"Die Botschaft verrät eine Ziffer oder wo der nächste Hinweis versteckt ist.",
+ tipp:"Vorher ausprobieren: Dünnes Papier funktioniert besser als Karton."},
+{id:"oobleck",emoji:"🫠",title:"Oobleck – flüssig oder fest?",typ:"Station",dauer:15,ort:"drinnen",chaos:3,wow:3,basis:true,
+ teaser:"Eine Masse, die bei einem Schlag hart wird und in der Hand zerfließt.",
+ material:[["Speisestärke","2 × 400 g","Supermarkt"],["Lebensmittelfarbe (flüssig, Set)","–","Supermarkt"],["Große flache Wanne oder Auflaufform","1","Haushalt"],["Malerfolie zum Abdecken","–","Baumarkt"],["Döschen mit Deckel","1 pro Kind","Online"]],
+ schritte:["400 g Stärke in die Wanne geben, langsam ca. 250 ml Wasser mit etwas Farbe einrühren, bis die Masse zäh wie Honig ist.","Finger langsam hineintauchen: Er gleitet hinein wie in eine Flüssigkeit.","Mit der Faust schnell draufschlagen: Die Masse ist hart wie Stein!","In der Hand schnell zur Kugel kneten. Sobald man aufhört, zerfließt sie zwischen den Fingern.","Wettbewerb: Wer hält die Kugel am längsten?"],
+ warum:"Eine <i>nicht-newtonsche Flüssigkeit</i>: Bei plötzlichem Druck verhaken sich die Stärkekörner, ohne Druck gleiten sie aneinander vorbei.",
+ sicher:"Nicht in den Abfluss gießen, das verstopft! Reste in den Müll. Eingetrocknetes lässt sich einfach absaugen.",
+ story:"Am Boden der Wanne liegt eine laminierte Ziffer. Wer hastig greift, kommt nicht ran, nur wer langsam greift.",
+ tipp:"Hält gut für die ganze Party. Wird es zu fest, einen Schluck Wasser dazugeben."},
+{id:"elefant",emoji:"🐘",title:"Elefantenzahnpasta",typ:"Show",dauer:10,ort:"drinnen",chaos:3,wow:3,basis:true,
+ teaser:"Eine bunte Schaumwurst quillt aus der Flasche – und sie ist warm!",
+ material:[["Wasserstoffperoxid 6 % (oder 3 %)","2 × 100 ml","Apotheke"],["Trockenhefe","2 Päckchen","Supermarkt"],["Spülmittel","1 Flasche","Haushalt"],["Lebensmittelfarbe (flüssig, Set)","–","Supermarkt"],["Leere 0,5-l-Flasche (PET)","2","Haushalt"],["Einweg-Handschuhe","–","Drogerie"],["Trichter","1","Haushalt"]],
+ schritte:["Flasche in eine Wanne oder auf ein Backblech stellen.","Erwachsener mit Handschuhen: 100 ml Wasserstoffperoxid einfüllen, einen kräftigen Schuss Spülmittel dazu. Farbe an die Innenwand tropfen, das gibt Streifen.","In einem Becher 1 Päckchen Hefe mit 3 EL warmem Wasser 1 Minute verrühren.","Countdown! Hefe zügig durch den Trichter in die Flasche gießen und zurücktreten.","Die Schaumwurst wächst. Wenn sie nicht mehr wächst, anfassen: Sie ist warm!"],
+ warum:"Hefe zerlegt Wasserstoffperoxid blitzschnell in Wasser und Sauerstoff. Das Gas bläst das Spülmittel zu Schaum auf. Dabei wird Energie frei, die man als Wärme spürt.",
+ sicher:"Brille und Handschuhe beim Einfüllen. Die Lösung nicht auf die Haut bringen. Den fertigen Schaum (Wasser + Seife) erst anfassen, wenn er nicht mehr wächst, danach Hände waschen.",
+ story:"Unter der Flasche klebt der nächste Hinweis. Er ist erst zu lesen, wenn der Schaum weggewischt ist.",
+ tipp:"Unbedingt eine Woche vorher testen. Je schmaler die Flasche, desto höher die Wurst. Mit 6 % wird es deutlich spektakulärer als mit 3 %."},
+{id:"eifall",emoji:"🥚",title:"Ei-Fall-Challenge",typ:"Basteln",dauer:25,ort:"drinnen",chaos:2,wow:3,basis:true,
+ teaser:"Teams bauen eine Rettungskapsel, damit ein rohes Ei einen Sturz aus 2 m überlebt.",
+ material:[["Eier (roh)","1 pro Team + 4","Supermarkt"],["Strohhalme","50 Stück","Supermarkt"],["Kreppklebeband","2 Rollen","Baumarkt"],["Luftballons","1 Packung","Supermarkt"],["Gummibänder","1 Packung","Haushalt"],["Zeitung/Papier, Plastiktüten","–","Haushalt"],["Trittleiter","1","Haushalt"]],
+ schritte:["Jedes Team (2–3 Kinder) bekommt dasselbe: 10 Strohhalme, 1 m Klebeband, 2 Blatt Papier, 2 Gummis, 1 Ballon, 1 Tüte.","15 Minuten Bauzeit. Regel: Das Ei muss sich ohne Schere herausnehmen lassen.","Folie ausbreiten, ein Erwachsener lässt die Kapseln von der Leiter aus 2 m Höhe fallen.","Überlebt? Nächste Runde von noch höher: Treppe oder Balkon.","Preise vergeben: heil geblieben, schönste Konstruktion, verrückteste Idee."],
+ warum:"Gute Konstruktionen verlängern den Bremsweg (Federung, Knautschzone) oder bremsen den Fall (Fallschirm). Dann trifft das Ei die Wucht nicht auf einmal.",
+ sicher:"Auf die Leiter steigen nur Erwachsene.",
+ story:"Jedes Team, dessen Ei überlebt, darf einen Ziffer-Umschlag öffnen.",
+ tipp:"Ein paar Eier für Spontan-Versuche zurückhalten. Die Kinder wollen garantiert eine zweite Runde."},
+
+{id:"zitrone",neu:true,emoji:"⚡",title:"Zitronen-Batterie",typ:"Station",dauer:20,ort:"drinnen",chaos:1,wow:3,
+ teaser:"Vier Zitronen bringen eine LED zum Leuchten – Strom aus Obst.",
+ material:[["Zitronen","4 pro Gruppe","Supermarkt"],["Verzinkte Schrauben oder Nägel","4 pro Gruppe","Baumarkt"],["Kupferdraht dick oder Kupferblech-Streifen","4 Stücke pro Gruppe","Baumarkt"],["Kabel mit Krokodilklemmen","5 pro Gruppe","Online"],["Rote LEDs","1 Set","Online"]],
+ schritte:["Zitronen fest auf dem Tisch rollen, damit sie innen saftig werden.","In jede Zitrone eine verzinkte Schraube und ein Stück Kupfer stecken, ca. 2 cm auseinander, sie dürfen sich nicht berühren.","In Reihe verbinden: Kupfer von Zitrone 1 mit der Schraube von Zitrone 2, Kupfer von 2 mit der Schraube von 3 und so weiter.","Übrig bleiben ein Kupfer- und ein Schraubenende. Das <b>lange</b> LED-Beinchen kommt ans Kupfer, das kurze an die Schraube.","Raum abdunkeln: Die LED glimmt! Falls nicht, LED umdrehen oder eine Zitrone mehr anschließen."],
+ warum:"Zwei verschiedene Metalle in einer Säure ergeben eine Batterie. Jede Zitrone liefert knapp 1 Volt, eine rote LED braucht etwa 2 Volt, also mehrere Zitronen hintereinander.",
+ sicher:"Die Zitronen danach nicht essen (Metall).",
+ story:"Leuchtet die LED, darf das Team den versiegelten Umschlag mit der Ziffer öffnen.",
+ tipp:"Vorher unbedingt testen. Rote LEDs funktionieren am besten. Kartoffeln gehen auch, eine schöne Zusatzfrage: Wer liefert mehr Strom?"},
+{id:"chroma",neu:true,emoji:"🔍",title:"Wer war's? Stift-Detektive",typ:"Detektiv",dauer:15,ort:"drinnen",chaos:1,wow:2,
+ teaser:"Schwarze Tinte zerfällt in bunte Farben und überführt den Täter.",
+ material:[["Schwarze Filzstifte, 3–4 verschiedene Marken (wasserlöslich)","1 je Marke","Schreibwaren"],["Kaffeefilter","1 Packung","Supermarkt"],["Wäscheklammern","10","Haushalt"],["Gläser","4","Haushalt"]],
+ schritte:["<b>Vorher:</b> Einen Drohbrief von Dr. Chaos mit <i>einem</i> der Stifte schreiben (z. B. „Die Formel gehört bald mir!“). Jeder Stift „gehört“ einem Verdächtigen.","Kaffeefilter in Streifen schneiden. 2 cm über dem Ende mit jedem Stift einen dicken Punkt malen. Einen Streifen mit einem Schnipsel Tinte aus dem Brief präparieren.","Streifen so ins Glas mit 1 cm Wasser hängen, dass der Punkt über dem Wasser bleibt. Mit der Wäscheklammer am Glasrand befestigen.","Nach 5–10 Minuten ist das Schwarz in Blau, Gelb und Rosa zerlaufen, jede Marke anders.","Muster vergleichen: Welcher Stift hat den Drohbrief geschrieben? Damit steht der Täter fest!"],
+ warum:"Schwarze Tinte ist eine Mischung aus Farben. Das Wasser trägt sie unterschiedlich weit mit. Das heißt Chromatographie und ist eine echte Labor- und Polizeimethode.",
+ sicher:"Keine Permanent-Marker, die laufen nicht.",
+ story:"Auf der Rückseite der Täterkarte steht die Ziffer. Auf den Karten der Unschuldigen steht „Nicht ich!“.",
+ tipp:"Testen, ob sich die Stifte deutlich unterscheiden. Billige Marken laufen oft am schönsten auseinander."},
+{id:"finger",neu:true,emoji:"🖐️",title:"Fingerabdrücke sichern",typ:"Detektiv",dauer:15,ort:"drinnen",chaos:1,wow:2,
+ teaser:"Abdrücke abnehmen, mit der Lupe untersuchen, Verdächtige vergleichen.",
+ material:[["Weicher Bleistift (6B oder 8B)","3","Schreibwaren"],["Durchsichtiges Klebeband","2 Rollen","Supermarkt"],["Weiße Karteikarten","1 Packung","Schreibwaren"],["Lupen","1 pro Kind","Online"],["Kakaopulver","etwas","Supermarkt"],["Weicher Pinsel (Make-up oder Malpinsel)","2","Drogerie"],["Trinkglas als Beweisstück","1","Haushalt"]],
+ schritte:["Mit dem Bleistift auf Papier ein Feld dick schwärzen.","Fingerkuppe darüber reiben, dann ein Stück Klebeband auf die Kuppe drücken, abziehen und auf die Karteikarte kleben.","Mit der Lupe bestimmen: Bogen, Schleife oder Wirbel? Jeder klebt seinen Abdruck in den Forscherausweis.","Profi-Methode: Ein Erwachsener hinterlässt einen Abdruck am Beweis-Glas. Kakao vorsichtig drüber pinseln, mit Klebeband abnehmen.","Mit den Abdrücken auf den Verdächtigenkarten vergleichen."],
+ warum:"Jeder Mensch hat einzigartige Hautleisten, sogar Zwillinge. Hautfett hinterlässt das Muster auf glatten Flächen.",
+ sicher:"",
+ story:"Der Abdruck auf dem Glas passt zu einem Verdächtigen. Das ist der zweite Beweis gegen Dr. Chaos.",
+ tipp:"Für die Verdächtigenkarten die Abdrücke von drei Erwachsenen nehmen. Der „Täter“-Erwachsene drückt den Finger auch aufs Glas."},
+{id:"schleim",neu:true,emoji:"🟢",title:"Schleim-Labor",typ:"Station",dauer:20,ort:"drinnen",chaos:3,wow:2,
+ teaser:"Aus Kleber wird Glibber – und jeder nimmt seinen mit nach Hause.",
+ material:[["Weißer Bastelkleber auf PVA-Basis","100 ml pro Kind","Online"],["Kontaktlinsenlösung mit Borsäure","1 Flasche","Drogerie"],["Natron","–","Supermarkt"],["Glitzer","1 Döschen","Drogerie"],["Lebensmittelfarbe (flüssig, Set)","–","Supermarkt"],["Schüsseln und Löffel","1 pro Kind","Haushalt"],["Döschen mit Deckel","1 pro Kind","Online"]],
+ schritte:["100 ml Kleber in eine Schüssel geben, dazu ½ TL Natron, Farbe und Glitzer. Umrühren.","1 EL Kontaktlinsenlösung dazugeben und kräftig rühren: Die Masse löst sich vom Rand.","Mit den Händen kneten. Klebt es noch, ein paar Tropfen Lösung nachgeben.","Ab ins Döschen, das ist ein Mitgebsel."],
+ warum:"Die Borsäure verknüpft die langen Kleber-Moleküle zu einem Netz. Aus einer Flüssigkeit wird eine Gummimasse, ein sogenanntes <i>Polymer</i>.",
+ sicher:"Nicht in den Mund nehmen, danach Hände waschen. Auf der Linsenlösung muss „Borsäure“ oder „Natriumborat“ stehen. Er macht Flecken auf Textil, also Kittel an.",
+ story:"Keine Ziffer, aber eine Belohnungsstation: „Schleim ist Dr. Chaos' Lieblingsfeind.“",
+ tipp:"Vorher ein Probe-Schleim machen, die Linsenlösungen wirken unterschiedlich stark."},
+{id:"lava",neu:true,emoji:"🌋",title:"Lavalampe",typ:"Station",dauer:15,ort:"drinnen",chaos:2,wow:3,
+ teaser:"Bunte Blasen steigen im Öl auf und sinken wieder – wie eine echte Lavalampe.",
+ material:[["Hohe Gläser oder 0,5-l-PET-Flaschen","1 pro Kind","Haushalt"],["Sonnenblumenöl","2–3 l","Supermarkt"],["Brausetabletten (Vitamin C)","2 Röhrchen","Drogerie"],["Lebensmittelfarbe (flüssig, Set)","–","Supermarkt"],["Taschenlampe oder Handylicht","2","Haushalt"]],
+ schritte:["Glas zu einem Viertel mit Wasser füllen und kräftig färben.","Bis 3 cm unter den Rand mit Öl auffüllen und warten, bis sich Öl und Wasser getrennt haben.","Eine Brausetablette vierteln und ein Stück hineinwerfen.","Taschenlampe von unten: Bunte Blasen steigen auf, platzen und sinken wieder. Nachlegen, so oft man will."],
+ warum:"Öl ist leichter als Wasser und mischt sich nicht. Die Brausetablette macht Gasblasen, die Wassertropfen mit nach oben reißen. Oben entweicht das Gas, und das Wasser sinkt zurück.",
+ sicher:"Öl-Wasser nicht in den Ausguss: Flasche zuschrauben und in den Restmüll.",
+ story:"Unter dem Glas liegt eine Ziffer auf Folie. Lesen kann man sie erst, wenn die Taschenlampe von unten durchleuchtet.",
+ tipp:"In PET-Flaschen mit Deckel kann man die Lavalampe mitnehmen."},
+{id:"milch",neu:true,emoji:"🎨",title:"Farbexplosion in der Milch",typ:"Station",dauer:10,ort:"drinnen",chaos:1,wow:2,
+ teaser:"Ein Tropfen Spülmittel lässt Farben wild durch die Milch wirbeln.",
+ material:[["Vollmilch 3,5 %","1 l","Supermarkt"],["Lebensmittelfarbe (flüssig, Set)","–","Supermarkt"],["Spülmittel","–","Haushalt"],["Wattestäbchen","–","Drogerie"],["Tiefe Teller","4","Haushalt"]],
+ schritte:["Teller etwa 1 cm hoch mit Milch füllen.","Tropfen verschiedener Farben nah beieinander in die Mitte geben.","Wattestäbchen in Spülmittel tunken, in die Mitte tupfen und still halten.","Die Farben schießen auseinander und wirbeln. Mit einem frischen Spülmittel-Tupfer geht es wieder los."],
+ warum:"Spülmittel zerstört die Oberflächenspannung und jagt den Fetttröpfchen der Milch hinterher. Die Farben fahren dabei mit.",
+ sicher:"",
+ story:"Gute Lückenfüller-Station, schnell und ohne Ziffer.",
+ tipp:"Fettarme Milch klappt deutlich schlechter."},
+{id:"dichte",neu:true,emoji:"🌈",title:"Regenbogen-Turm",typ:"Station",dauer:15,ort:"drinnen",chaos:2,wow:2,
+ teaser:"Flüssigkeiten stapeln sich in Schichten – und Gegenstände schweben mittendrin.",
+ material:[["Hohes schmales Glas oder Vase","2","Haushalt"],["Honig","1 Glas","Supermarkt"],["Spülmittel (grün)","–","Haushalt"],["Sonnenblumenöl","–","Supermarkt"],["Lebensmittelfarbe (flüssig, Set)","–","Supermarkt"],["Testobjekte: Weintraube, Tischtennisball, Korken, Büroklammer, Legostein, Kirschtomate","je 1","Haushalt"]],
+ schritte:["Langsam übereinander einfüllen, immer über einen Löffelrücken an der Glaswand: zuerst Honig, dann Spülmittel, dann blau gefärbtes Wasser, zuletzt Öl.","Die Schichten bleiben getrennt!","Tippen lassen und notieren: Wo bleibt die Traube hängen? Wo der Korken? Wo der Legostein?","Gegenstände hineinlassen: Jeder bleibt auf „seiner“ Schicht liegen."],
+ warum:"Dichte heißt, wie schwer ein Stoff für seine Größe ist. Schwere Flüssigkeiten sinken nach unten, und ein Gegenstand schwimmt auf der ersten Schicht, die dichter ist als er selbst.",
+ sicher:"",
+ story:"Tipp-Wettbewerb: Wer am meisten richtig tippt, bekommt den Hinweis.",
+ tipp:""},
+{id:"rakete",neu:true,emoji:"🚀",title:"Brausetabletten-Raketen",typ:"Show",dauer:15,ort:"draußen",chaos:2,wow:3,
+ teaser:"Filmdosen knallen bis zu 5 m in die Luft.",
+ material:[["Filmdosen mit innen einrastendem Deckel","10 Stück","Online"],["Brausetabletten (Vitamin C)","1 Röhrchen","Drogerie"],["Buntes Papier, Klebeband","–","Haushalt"]],
+ schritte:["<b>Draußen!</b> Dose als Rakete bekleben: Papierröhre und Spitze, den Deckel unten frei lassen.","½ Brausetablette in die Dose, 1 TL Wasser dazu, Deckel fest zudrücken.","Sofort umdrehen (Deckel nach unten), auf den Boden stellen, 2 m zurücktreten.","5–20 Sekunden warten … PLOPP! Sie fliegt bis zu 5 m hoch.","Wettbewerb: Wessen Rakete fliegt am höchsten? Mit warmem Wasser geht es schneller."],
+ warum:"Das Gas der Brausetablette baut Druck auf, bis der Deckel nachgibt. Der Rückstoß treibt die Dose nach oben, genau wie bei echten Raketen.",
+ sicher:"Schutzbrille! Über eine Rakete, die nicht startet, beugt sich niemand, mindestens 1 Minute warten.",
+ story:"Raumfahrt-Prüfung: Wer es schafft, bekommt den Hinweis.",
+ tipp:"Nur Dosen, deren Deckel <i>innen</i> einrastet (wie die alten Fuji-Dosen), Deckel mit Außenrand springen nicht ab."},
+{id:"mentos",neu:true,emoji:"💥",title:"Cola-Geysir",typ:"Show",dauer:5,ort:"draußen",chaos:3,wow:3,
+ teaser:"Eine Cola-Fontäne schießt meterhoch – der perfekte Startschuss oder Knall zum Schluss.",
+ material:[["Cola light oder Zero, 2 l (zimmerwarm)","2 Flaschen","Supermarkt"],["Mentos Mint","2 Rollen","Supermarkt"],["Karteikarte und Papierröhre (oder „Geyser Tube“)","1","Haushalt"]],
+ schritte:["Draußen auf ebenem Boden aufstellen, Deckel ab.","Papierröhre mit 6–7 Mentos füllen, unten eine Karteikarte als Sperre drunter, auf den Flaschenhals setzen.","Countdown, Karte wegziehen und WEGRENNEN.","Die Fontäne schießt 3–5 m hoch."],
+ warum:"Die raue Oberfläche der Mentos hat Millionen winziger Löcher. Dort sammelt sich das gelöste Kohlendioxid schlagartig zu Blasen und schießt die Cola nach oben.",
+ sicher:"Nicht auf Menschen oder Fenster richten. Light/Zero klebt weniger.",
+ story:"Startsignal fürs Draußen-Programm.",
+ tipp:"Zimmerwarme Cola sprudelt stärker als kalte."},
+{id:"teebeutel",neu:true,emoji:"🔥",title:"Teebeutel-Rakete",typ:"Show",dauer:5,ort:"drinnen",chaos:1,wow:3,
+ teaser:"Ein brennender Teebeutel hebt ab und schwebt zur Decke.",
+ material:[["Teebeutel, die sich zur Röhre öffnen (z. B. Doppelkammer, vorher testen)","1 Packung","Supermarkt"],["Feuerfester Teller","1","Haushalt"],["Feuerzeug","1","Haushalt"]],
+ schritte:["Faden und Etikett abreißen, Beutel öffnen, Tee ausleeren und zu einer Röhre formen.","Aufrecht auf den Teller stellen. Fenster und Türen zu, kein Luftzug.","Erwachsener zündet die Röhre oben an.","Die Flamme frisst sich nach unten, kurz vor dem Ende hebt der Rest ab und schwebt nach oben!"],
+ warum:"Heiße Luft steigt auf, wie beim Heißluftballon. Am Ende ist die Asche so leicht, dass der warme Luftstrom sie trägt.",
+ sicher:"Nur Erwachsene zünden. Abstand zu Vorhängen, Glas Wasser bereit, Kinder 1 m zurück. Den Rauchmelder im Blick behalten.",
+ story:"Show im Block mit dem Feuerlöscher-Trick.",
+ tipp:"Nicht jeder Beutel fliegt. Zu Hause verschiedene Sorten durchprobieren."},
+{id:"co2",neu:true,emoji:"🕯️",title:"Unsichtbarer Feuerlöscher",typ:"Show",dauer:10,ort:"drinnen",chaos:1,wow:3,
+ teaser:"Man „gießt“ nichts über Kerzen – und sie gehen aus.",
+ material:[["Großer Krug oder hohes Glas","1","Haushalt"],["Natron","3 EL","Supermarkt"],["Essig (hell)","150 ml","Supermarkt"],["Teelichter","6","Supermarkt"],["Feuerzeug","1","Haushalt"]],
+ schritte:["Teelichter in einer Reihe aufstellen und anzünden.","In den Krug 3 EL Natron geben, den Essig dazu: Es sprudelt. Warten, bis es fast aufhört.","Den Krug über den Kerzen neigen, als würdest du etwas eingießen, aber <b>keine</b> Flüssigkeit herauslaufen lassen.","Die Kerzen gehen eine nach der anderen aus, scheinbar durch „nichts“!","Raten lassen: Was ist da herausgeflossen?"],
+ warum:"Es entsteht Kohlendioxid (CO₂). Es ist schwerer als Luft, fließt wie unsichtbares Wasser aus dem Krug und verdrängt den Sauerstoff, den die Flamme braucht.",
+ sicher:"Erwachsene zünden.",
+ story:"Die perfekte Brücke zur Trockeneis-Show: „Trockeneis ist genau dieses Gas, nur gefroren!“",
+ tipp:""},
+{id:"seilbahn",neu:true,emoji:"🎈",title:"Ballon-Seilbahn-Rennen",typ:"Basteln",dauer:15,ort:"drinnen",chaos:1,wow:2,
+ teaser:"Luftballons rasen an Schnüren quer durchs Zimmer.",
+ material:[["Paketschnur","2 × 5 m","Haushalt"],["Strohhalme","–","Supermarkt"],["Luftballons (lang und rund)","1 Packung","Supermarkt"],["Klebeband","–","Haushalt"],["Wäscheklammern","–","Haushalt"]],
+ schritte:["Zwei Schnüre parallel quer durch den Raum spannen (Türklinke → Stuhllehne), vorher je einen Strohhalm auffädeln.","Ballon aufblasen, mit Wäscheklammer zuhalten, mit zwei Streifen Klebeband unter den Strohhalm kleben.","Beide Teams gleichzeitig: Klammer weg, los!","Ausprobieren und optimieren: lange oder runde Ballons, mehr Luft, Schnur schräg nach oben."],
+ warum:"Rückstoß: Die Luft schießt nach hinten, der Ballon nach vorne. Das ist das dritte Newtonsche Gesetz.",
+ sicher:"",
+ story:"Am Ende der Schnur hängt ein Umschlag. Wessen Ballon ihn erreicht, bekommt ihn.",
+ tipp:""},
+{id:"katapult",neu:true,emoji:"🎯",title:"Marshmallow-Katapult",typ:"Basteln",dauer:25,ort:"drinnen",chaos:2,wow:2,
+ teaser:"Aus Eisstielen ein Katapult bauen und auf eine Becherpyramide schießen.",
+ material:[["Holzspatel/Eisstiele","50 Stück","Online"],["Gummibänder","1 Packung","Haushalt"],["Plastiklöffel","10","Supermarkt"],["Mini-Marshmallows","1 Tüte","Supermarkt"],["Pappbecher","10","Supermarkt"]],
+ schritte:["5 Stiele stapeln und an beiden Enden fest mit Gummis umwickeln: Das ist der Block.","2 Stiele an einem Ende zusammenbinden, wie ein V auseinanderspreizen und den Block dazwischenschieben.","Plastiklöffel mit Gummi oder Klebeband am oberen Stiel befestigen.","Marshmallow in den Löffel legen, herunterdrücken, loslassen!","Wettbewerb: Weitschuss und Zielwurf auf die Becherpyramide."],
+ warum:"Die gebogenen Stiele speichern Energie und geben sie schlagartig als Bewegung ab. Schiebt man den Block weiter nach vorne oder hinten, ändert sich die Flugbahn. Ausprobieren!",
+ sicher:"Nur Marshmallows verschießen, nicht auf Gesichter zielen.",
+ story:"Wer die Pyramide umschießt, gewinnt den Hinweis.",
+ tipp:"Das Katapult darf mit nach Hause."},
+{id:"gummiei",neu:true,emoji:"🫧",title:"Das Flummi-Ei",typ:"Station",dauer:10,ort:"drinnen",chaos:2,wow:3,
+ teaser:"Ein Ei ohne Schale: durchsichtig, gummiartig, es hüpft sogar.",
+ material:[["Eier (roh)","1 pro Kind + 3","Supermarkt"],["Essig (hell)","2 l","Supermarkt"],["Gläser","1 pro Ei","Haushalt"],["Taschenlampe oder Handylicht","1","Haushalt"]],
+ schritte:["<b>2–3 Tage vorher:</b> Eier in Gläser legen und mit Essig bedecken. Es steigen Bläschen auf.","Nach einem Tag den Essig wechseln.","Nach 2–3 Tagen ist die Schale weg. Ei vorsichtig abspülen: Es ist weich, gummiartig und durchscheinend.","Auf der Party: anfassen, mit der Taschenlampe durchleuchten (der Dotter ist zu sehen!) und aus 5–10 cm Höhe auf den Tisch hüpfen lassen. Wer traut sich höher?"],
+ warum:"Essig löst den Kalk der Schale auf (die Bläschen sind Kohlendioxid). Übrig bleibt die dünne Haut, die unter der Schale liegt.",
+ sicher:"Platzt irgendwann, also über einem Tablett hüpfen lassen. Nicht essen.",
+ story:"Das „Drachenei“ aus dem Labor des Professors.",
+ tipp:"Ein Ei einen Tag in Sirup oder Salzwasser legen: Es schrumpft. Ein anderes in gefärbtes Wasser: Es wird bunt und dicker."},
+{id:"ballon",neu:true,emoji:"🎈",title:"Ballon bläst sich selbst auf",typ:"Station",dauer:10,ort:"drinnen",chaos:1,wow:2,
+ teaser:"Ohne Pusten: Ein Ballon auf der Flasche bläst sich von allein auf.",
+ material:[["Leere 0,5-l-Flaschen","4","Haushalt"],["Luftballons","–","Supermarkt"],["Natron","–","Supermarkt"],["Essig (hell)","–","Supermarkt"],["Trichter","1","Haushalt"]],
+ schritte:["100 ml Essig in die Flasche gießen.","Mit dem Trichter 2 TL Natron in den Ballon füllen.","Ballon über den Flaschenhals stülpen, das Natron dabei noch im Ballon lassen.","Ballon aufrichten: Das Natron fällt hinein, es zischt, und der Ballon bläst sich auf.","Versuchsreihe: 1, 2 oder 3 TL Natron? Ballonumfang mit Schnur messen."],
+ warum:"Natron und Essig bilden Kohlendioxid-Gas. Das Gas braucht Platz und dehnt den Ballon.",
+ sicher:"",
+ story:"Schnelle Station für Gruppen, die früher fertig sind.",
+ tipp:""}
+];
+
+const ICE = {
+ material:[["Trockeneis-Pellets","2–3 kg","Gase-Händler"],["Styroporbox mit Deckel","1","Haushalt"],["Dicke Handschuhe (Leder/Ofen)","1 Paar","Haushalt"],["Grillzange","1","Haushalt"],["Große Glas- oder Metallschüssel","2","Haushalt"],["Seifenblasen","3 Dosen","Supermarkt"],["Spülmittel","–","Haushalt"],["Stoffstreifen (alter Lappen)","1","Haushalt"],["Taschenlampe oder Handylicht","1","Haushalt"]]
+};
+
+const FOOD = [
+{id:"messbecher",emoji:"🧫",title:"Getränke aus dem Labor",basis:true,
+ text:"Getränke kommen in Messbechern, Laborflaschen oder Reagenzgläsern auf den Tisch. Die Kinder dosieren den Sirup mit der Pipette selbst.",
+ material:[["Kunststoff-Reagenzgläser mit Ständer","1 pro Kind","Online"],["Messbecher (Kunststoff)","4","Online"],["Säfte: Apfel, Kirsch, Orange","je 1 l","Supermarkt"],["Sirup (Waldmeister, Himbeere)","2 Flaschen","Supermarkt"],["Etiketten","1 Bogen","Schreibwaren"]],
+ schritte:["Etiketten beschriften: „Formel G“ (Apfelsaft + Waldmeister = grün), „Blutprobe 0815“ (Kirschsaft), „Sonnenenergie“ (Orangensaft).","Sirup in Pipetten oder kleine Fläschchen füllen, damit die Kinder ihr Getränk selbst „anmischen“.","Wichtig: Essbecher sehen anders aus als die Laborbecher, z. B. bunt statt durchsichtig."]},
+{id:"farbwechsel",emoji:"🫖",title:"Farbwechsel-Trank",basis:true,
+ text:"Ein tiefblaues Getränk wird violett und pink, sobald man Zitrone dazugießt. Das ist der Rotkohl-Effekt zum Trinken und die perfekte „Formel“ aus der Kiste.",
+ material:[["Schmetterlingserbsenblüten-Tee (Butterfly Pea Tea)","1 Packung","Online"],["Zitronen oder Limetten","4","Supermarkt"],["Zucker oder Sirup","–","Supermarkt"],["Sprudelwasser oder Zitronenlimo","2 l","Supermarkt"]],
+ schritte:["Am Vortag: Tee nach Packung kochen (kräftig, tiefblau), süßen, kalt stellen.","Gläser halb mit dem blauen Tee füllen.","Jedes Kind gießt Zitronensaft oder Zitronenlimo dazu: Blau → Violett → Pink.","Erklärung: Wie beim Rotkohl reagiert der Farbstoff auf Säure."]},
+{id:"leucht",emoji:"💡",title:"Leucht-Trank unter UV",
+ text:"Tonic Water leuchtet unter Schwarzlicht hellblau. Pur ist es bitter, mit Limo gemischt schmeckt es Kindern.",
+ material:[["Tonic Water","1 l","Supermarkt"],["Zitronenlimonade","1 l","Supermarkt"],["UV-Taschenlampe oder Schwarzlicht-Lampe","1","Online"]],
+ schritte:["Tonic Water und Limo 1:1 mischen.","Raum abdunkeln, UV-Lampe drauf: Das Getränk leuchtet!","Bonus: Götterspeise mit Tonic statt Wasser leuchtet auch."]},
+{id:"bowle",emoji:"🌫️",title:"Nebel-Bowle",
+ text:"Eine Bowle, aus der Nebel quillt. Das Trockeneis kommt dabei <b>nicht</b> ins Getränk.",
+ material:[["Fruchtbowle ohne Alkohol (Saft + Sprudel + Obst)","3 l","Supermarkt"],["Große Schüssel + kleinere Bowleschüssel","je 1","Haushalt"]],
+ schritte:["Die Bowle in die kleinere Schüssel füllen.","Diese in eine größere Schüssel stellen.","In den Zwischenraum warmes Wasser und mit der Zange ein paar Trockeneis-Stücke geben.","Der Nebel quillt über den Rand und den Tisch. Bei Bedarf warmes Wasser nachgießen."]},
+{id:"brause",emoji:"✨",title:"Brausepulver selbst mischen",basis:true,
+ text:"Experiment und Süßigkeit zugleich: Auf der Zunge kribbelt es, weil dort dieselbe Reaktion wie beim Ballon-Versuch abläuft.",
+ material:[["Natron","–","Supermarkt"],["Zitronensäure (Backregal)","1 Packung","Supermarkt"],["Puderzucker","250 g","Supermarkt"],["Wackelpudding-Pulver zum Aromatisieren","1 Päckchen","Supermarkt"],["Kleine Tütchen","1 pro Kind","Online"]],
+ schritte:["Pro Portion: 1 TL Natron, 2 TL Zitronensäure, 4 TL Puderzucker.","Mit einer Prise Wackelpudding-Pulver für Geschmack und Farbe mischen.","Etwas auf die Zunge: kribbelt! Den Rest ins Tütchen als Mitgebsel.","Ein Löffel in Wasser ergibt eine Brauselimo."]},
+{id:"eisbeutel",emoji:"🍦",title:"Eis in 5 Minuten",
+ text:"Jedes Kind schüttelt sich sein eigenes Speiseeis, nur mit Eiswürfeln und Salz.",
+ material:[["Milch und Sahne","je 500 ml","Supermarkt"],["Zucker, Vanillezucker","–","Supermarkt"],["Gefrierbeutel klein und groß (mit Zipper)","je 1 pro Kind","Supermarkt"],["Eiswürfel","3 kg","Supermarkt"],["Grobes Salz","1 kg","Supermarkt"],["Geschirrtücher oder Handschuhe","–","Haushalt"]],
+ schritte:["Kleiner Beutel: 60 ml Milch, 60 ml Sahne, 1 EL Zucker, etwas Vanillezucker. Gut verschließen.","Großer Beutel: 2 Handvoll Eiswürfel und 6 EL Salz.","Kleinen Beutel in den großen, verschließen, in ein Geschirrtuch wickeln (es wird eiskalt!).","5–8 Minuten kräftig schütteln, dann direkt aus dem Beutel löffeln.","Warum: Salz senkt die Schmelztemperatur, das Eis-Salz-Gemisch wird viel kälter als 0 °C."]},
+{id:"vulkan",emoji:"🌋",title:"Vulkan-Kuchen",basis:true,
+ text:"Ein Gugelhupf als Vulkan mit roter Lava, der in der Mitte raucht.",
+ material:[["Gugelhupf (selbst gebacken oder Fertigmischung)","1","Supermarkt"],["Schokoglasur","2 Becher","Supermarkt"],["Puderzucker + rote Lebensmittelfarbe für die Lava","–","Supermarkt"],["Knisterbrause (Popping Candy)","2 Tütchen","Online"],["Kleines Schnapsglas (für den Rauch)","1","Haushalt"]],
+ schritte:["Gugelhupf mit Schokoglasur überziehen, das ist der Berg.","Rote Zuckerglasur (Puderzucker + Wasser + Farbe) vom oberen Rand herunterlaufen lassen, das ist die Lava.","In das Loch in der Mitte ein kleines Glas mit warmem Wasser stellen.","Beim Servieren mit der Zange ein Stück Trockeneis ins Glas: Der Vulkan raucht!","Knisterbrause erst kurz vor dem Essen drüberstreuen, dann knistert die Lava im Mund."]},
+{id:"petri",emoji:"🦠",title:"Petrischalen-Wackelpudding",
+ text:"Bunte Götterspeise in Petrischalen, mit Gummibärchen als „Bakterienkulturen“.",
+ material:[["Petrischalen aus Kunststoff","1 pro Kind","Online"],["Götterspeise (grün, rot)","2 Päckchen","Supermarkt"],["Saure Gummiwürmer, Gummibärchen","1 Tüte","Supermarkt"],["Zuckerperlen","–","Supermarkt"]],
+ schritte:["Am Vortag: Götterspeise nach Packung zubereiten, in Petrischalen gießen.","Bevor sie fest wird: Gummitiere und Zuckerperlen als „Kulturen“ hineinlegen.","Beschriften: „Probe 3: Grüner Glibber-Bazillus“."]},
+{id:"molekuel",emoji:"⚛️",title:"Molekül-Spieße",
+ text:"Obst und Käse als Atome, Zahnstocher als Bindungen. Das ist gesund und ein bisschen Chemie.",
+ material:[["Weintrauben (zwei Farben)","1 kg","Supermarkt"],["Käsewürfel","400 g","Supermarkt"],["Melone","1","Supermarkt"],["Zahnstocher","1 Packung","Supermarkt"]],
+ schritte:["Wasser (H₂O) ist eine große Melonenkugel mit zwei kleinen Trauben daran.","Kohlendioxid (CO₂) ist ein Käsewürfel mit zwei Melonenkugeln an den Seiten.","Danach eigene „Fantasie-Moleküle“ bauen lassen und aufessen."]},
+{id:"popcorn",emoji:"🍿",title:"Popcorn-Explosion",
+ text:"Popcorn im Topf mit Glasdeckel: Die Kinder sehen die Körner explodieren.",
+ material:[["Popcornmais","500 g","Supermarkt"],["Öl, Salz oder Zucker","–","Supermarkt"],["Topf mit Glasdeckel","1","Haushalt"]],
+ schritte:["Boden des Topfes mit Öl bedecken, eine Lage Mais hinein, Deckel drauf.","Mittlere Hitze, die Kinder schauen durch den Deckel zu.","Warum: In jedem Korn ist ein Tropfen Wasser. Er wird zu Dampf, der Druck sprengt die Schale.","Am Herd steht nur ein Erwachsener."]},
+{id:"pizza",emoji:"🍕",title:"Pizza-Kulturen",basis:true,
+ text:"Runde Mini-Pizzen, die jeder selbst belegt. Sie heißen „Kulturen“ und tragen ein Namensschild.",
+ material:[["Pizzateig (fertig, Kühlregal)","3 Rollen","Supermarkt"],["Tomatensoße","2 Gläser","Supermarkt"],["Geriebener Käse","600 g","Supermarkt"],["Beläge: Salami, Mais, Paprika, Schinken","–","Supermarkt"]],
+ schritte:["Teig mit einem Glas zu runden „Petrischalen“ ausstechen.","Jedes Kind belegt seine eigene Kultur, ein Zahnstocher-Fähnchen mit Namen kommt dazu.","Bei 220 °C 10–12 Minuten backen.","Das passt gut, während die Stationen aufgeräumt werden."]},
+{id:"knister",emoji:"🧁",title:"Knister-Muffins",
+ text:"Muffins mit Knisterbrause im Topping: Im Mund knallt es leise.",
+ material:[["Muffins (12 Stück, selbst gebacken oder gekauft)","12","Supermarkt"],["Frischkäse-Topping oder Zuckerguss","–","Supermarkt"],["Knisterbrause (Popping Candy)","2 Tütchen","Online"]],
+ schritte:["Muffins mit Topping bestreichen.","Knisterbrause erst kurz vor dem Servieren draufstreuen, sonst wird sie feucht und knistert nicht.","Erklärung: In jedem Bonbonstückchen sind winzige CO₂-Bläschen unter Druck eingeschlossen."]}
+];
+
+const PREP = [
+ ["3 Wochen vorher","Einladungen verschicken (Geheimtinte?), Online-Bestellungen aufgeben: Schutzbrillen, Filmdosen, Reagenzgläser, Petrischalen, Pipetten, Lupen, UV-Stifte, Butterfly-Pea-Tee, Knisterbrause."],
+ ["2 Wochen vorher","Experimente auswählen, Code-Planer ausfüllen, Zahlenschloss und Kiste besorgen, Trockeneis-Quelle klären (Abholshop oder Lieferung)."],
+ ["1 Woche vorher","Probelauf zu Hause: Elefantenzahnpasta, Teebeutel-Rakete, Zitronen-Batterie, Schleim, Chromatographie-Stifte."],
+ ["1 Woche vorher","Laborbücher, Verdächtigenkarten, Forscherausweise, Diplome und Stationsschilder vorbereiten und drucken."],
+ ["3 Tage vorher","Trockeneis bestellen bzw. Abholung reservieren, Gäste-Zusagen und Allergien prüfen."],
+ ["2–3 Tage vorher","Eier für das Flummi-Ei in Essig einlegen."],
+ ["1 Tag vorher","Großeinkauf frischer Sachen, Rotkohlsaft und Farbwechsel-Tee kochen, Petrischalen-Wackelpudding, Geheimtinten-Botschaften schreiben, Hinweis-Umschläge packen."],
+ ["1 Tag vorher","Trockeneis abholen (in die Styroporbox, Box mit lose aufgelegtem Deckel in Garage oder auf den Balkon)."],
+ ["Am Tag, vormittags","Kuchen dekorieren, Boden abdecken, Stationen aufbauen (je ein Tablett mit Material und Anleitungskarte), Kiste mit Mitgebseln verschließen."],
+ ["Am Tag, 30 Min. vorher","Kittel, Brillen und Stoffmalstifte am Eingang bereitlegen, Getränke anmischen, Brief für Professor Quark bereitlegen."]
+];
+
+const TIMELINE = [
+ [20,"Ankommen & Einkleiden","Kittel beschriften, Schutzbrille, Forscherausweis mit Fingerabdruck."],
+ [10,"Der Brief von Professor Quark","Vorlesen, Laborregeln, Gruppen einteilen, Laborbücher austeilen."],
+ [60,"Stationsrunde","4 Stationen à 15 Min. im Kreis, Pfiff = wechseln. Jede Station liefert eine Ziffer."],
+ [30,"Labor-Essen","Pizza-Kulturen, Farbwechsel-Trank, Forscher-Quiz."],
+ [20,"Show-Block drinnen","Elefantenzahnpasta, unsichtbarer Feuerlöscher, Teebeutel-Rakete."],
+ [20,"Draußen","Brausetabletten-Raketen, Cola-Geysir als großer Knall."],
+ [20,"Trockeneis-Finale & Kiste","Nebelmeer, Seifenblasen, Vulkan-Kuchen raucht, Täter enttarnen, Kiste knacken."],
+ [10,"Diplome & Abholen","Diplomverleihung durch Professor Quark, Mitgebsel, Fotos."]
+];
+
+/* ---------- Zustand ---------- */
+const KEY = "forscher-geburtstag-v1";
+let S = {sel:{}, food:{}, bought:{}, prep:{}, fields:{}, code:[{},{},{},{}], filter:"alle"};
+try { const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch(e) {}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {} }
+const isSel = e => (e.id in S.sel) ? S.sel[e.id] : !!e.basis;
+const isFood = f => (f.id in S.food) ? S.food[f.id] : !!f.basis;
+const iceOn = () => ("trockeneis" in S.sel) ? S.sel.trockeneis : true;
+const esc = s => String(s).replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const dots = (n, ch) => ch.repeat(n) + "<span style='opacity:.25'>" + ch.repeat(3 - n) + "</span>";
+
+/* ---------- Felder ---------- */
+document.querySelectorAll("[data-field]").forEach(el => {
+  const k = el.dataset.field;
+  if (S.fields[k] !== undefined) el.value = S.fields[k];
+  el.addEventListener("input", () => { S.fields[k] = el.value; save(); onFields(); });
+});
+function onFields(){
+  const f = S.fields;
+  const cd = document.getElementById("countdown");
+  if (f.datum) {
+    const d = new Date(f.datum + "T00:00:00"), t = new Date(); t.setHours(0,0,0,0);
+    const days = Math.round((d - t) / 86400000);
+    const ds = d.toLocaleDateString("de-DE", {weekday:"long", day:"numeric", month:"long", year:"numeric"});
+    cd.textContent = days > 1 ? `${ds} – noch ${days} Tage` : days === 1 ? `${ds} – morgen!` : days === 0 ? "Heute ist Party! 🎉" : `${ds} – vorbei`;
+  }
+  document.querySelectorAll("[data-show]").forEach(el => {
+    const v = f[el.dataset.show];
+    if (!v) return;
+    el.textContent = el.dataset.show === "datum" ? new Date(v + "T00:00:00").toLocaleDateString("de-DE", {weekday:"long", day:"numeric", month:"long"}) : v;
+  });
+  renderTimeline();
+}
+
+/* ---------- Ablauf ---------- */
+function renderTimeline(){
+  const start = (S.fields.start || "14:00").split(":").map(Number);
+  let m = start[0] * 60 + (start[1] || 0);
+  const fmt = x => String(Math.floor(x / 60) % 24).padStart(2,"0") + ":" + String(x % 60).padStart(2,"0");
+  document.getElementById("timeline").innerHTML = TIMELINE.map(([dur, t, d]) => {
+    const row = `<div class="tl"><div class="time">${fmt(m)}<br><small class="muted" style="font-weight:400;font-family:system-ui">${dur} Min.</small></div><div class="what"><b>${t}</b><span>${d}</span></div></div>`;
+    m += dur; return row;
+  }).join("") + `<div class="tl"><div class="time">${fmt(m)}</div><div class="what"><b>Ende</b><span>Puffer einplanen: Erfahrungsgemäß dauert alles 10–20 % länger.</span></div></div>`;
+}
+
+/* ---------- Vorbereitung ---------- */
+function renderPrep(){
+  document.getElementById("prepList").innerHTML = PREP.map(([when, what], i) =>
+    `<label class="check ${S.prep[i] ? "done" : ""}"><input type="checkbox" data-prep="${i}" ${S.prep[i] ? "checked" : ""}><span><b>${when}:</b> ${what}</span></label>`).join("");
+}
+document.getElementById("prepList").addEventListener("change", e => {
+  const i = e.target.dataset.prep; if (i === undefined) return;
+  S.prep[i] = e.target.checked; save(); renderPrep();
+});
+
+/* ---------- Experimente ---------- */
+const FILTERS = [["alle","Alle 20"],["sel","✓ Eingeplant"],["neu","Neu"],["Station","Stationen"],["Show","Shows"],["Basteln","Basteln"],["Detektiv","Detektiv"],["draußen","Draußen"]];
+function renderFilters(){
+  document.getElementById("filters").innerHTML = FILTERS.map(([k, l]) => `<button class="btn small ${S.filter === k ? "on" : ""}" data-filter="${k}">${l}</button>`).join("");
+}
+document.getElementById("filters").addEventListener("click", e => {
+  const k = e.target.dataset.filter; if (!k) return;
+  S.filter = k; save(); renderFilters(); renderExp();
+});
+function matMarkup(list){
+  return "<ul class='mat'>" + list.map(([n, q, s]) => `<li>${esc(n)} <span>· ${esc(q)} · ${s}</span></li>`).join("") + "</ul>";
+}
+function renderExp(){
+  const f = S.filter;
+  const list = EXP.filter(e => f === "alle" || (f === "sel" && isSel(e)) || (f === "neu" && e.neu) || e.typ === f || e.ort === f);
+  document.getElementById("expList").innerHTML = list.map(e => `
+    <article class="card exp ${isSel(e) ? "sel" : ""}">
+      <div class="exp-head">
+        <div class="exp-emoji">${e.emoji}</div>
+        <div class="grow">
+          <h3>${e.title}</h3>
+          <div class="badges">
+            ${e.neu ? '<span class="badge new">neu</span>' : ""}
+            <span class="badge t-${e.typ}">${e.typ}</span>
+            <span class="badge">⏱ ${e.dauer} Min.</span>
+            <span class="badge">${e.ort === "draußen" ? "🌳 draußen" : "🏠 drinnen"}</span>
+            <span class="badge" title="Wow-Faktor">Wow ${dots(e.wow,"★")}</span>
+            <span class="badge" title="Sauerei-Faktor">Sauerei ${dots(e.chaos,"💧")}</span>
+          </div>
+        </div>
+        <button class="btn small ${isSel(e) ? "on" : ""}" data-sel="${e.id}">${isSel(e) ? "✓ Eingeplant" : "+ Einplanen"}</button>
+      </div>
+      <p class="teaser">${e.teaser}</p>
+      <details>
+        <summary>Anleitung & Material</summary>
+        <h3>Material</h3>${matMarkup(e.material)}
+        <h3>So geht's</h3><ol class="steps">${e.schritte.map(s => `<li>${s}</li>`).join("")}</ol>
+        <div class="box why"><b>🔬 Was passiert da? (für die Kinder)</b>${e.warum}</div>
+        ${e.sicher ? `<div class="box safe"><b>🦺 Sicherheit</b>${e.sicher}</div>` : ""}
+        ${e.story ? `<div class="box story"><b>📜 In der Story</b>${e.story}</div>` : ""}
+        ${e.tipp ? `<div class="box tip"><b>💡 Tipp</b>${e.tipp}</div>` : ""}
+      </details>
+    </article>`).join("") || "<p class='muted'>Nichts in dieser Auswahl.</p>";
+  const sel = EXP.filter(isSel);
+  const st = sel.filter(e => e.typ === "Station" || e.typ === "Detektiv").length;
+  const minutes = sel.reduce((a, e) => a + e.dauer, 0);
+  document.getElementById("expSummary").innerHTML = `<span><b>${sel.length}</b> eingeplant</span><span>· davon <b>${st}</b> Stationen/Detektiv</span><span>· zusammen ca. <b>${minutes}</b> Min. Experimentierzeit</span><span class="muted">(Stationen laufen parallel, die Zeit an einer Station zählt also nur einmal pro Runde)</span>`;
+}
+document.getElementById("expList").addEventListener("click", e => {
+  const id = e.target.dataset.sel; if (!id) return;
+  const ex = EXP.find(x => x.id === id);
+  S.sel[id] = !isSel(ex); save(); renderExp(); renderShop(); renderCode();
+});
+
+/* ---------- Trockeneis ---------- */
+function renderIce(){
+  document.getElementById("iceBlock").innerHTML = `
+  <div class="card">
+    <div class="exp-head"><div class="exp-emoji">🌫️</div><div class="grow"><h3>Die Show (ca. 20 Min.)</h3></div>
+    <button class="btn small ${iceOn() ? "on" : ""}" id="iceToggle">${iceOn() ? "✓ Eingeplant" : "+ Einplanen"}</button></div>
+    <ol class="steps">
+      <li><b>Nebelmeer:</b> Warmes Wasser in eine große Schüssel, mit der Zange 3–4 Stücke hinein. Weißer Nebel wabert über den Tisch. Taschenlampe von der Seite ergibt Gruseleffekt.</li>
+      <li><b>Schwebende Seifenblasen:</b> Etwas Trockeneis in eine leere hohe Schüssel oder eine Plastikbox (ohne Wasser), ein paar Minuten warten. Dann Seifenblasen hineinpusten: Sie sinken und bleiben auf dem unsichtbaren CO₂ liegen, als würden sie schweben.</li>
+      <li><b>Riesen-Nebelblase:</b> Schüssel mit Wasser und Trockeneis. Einen Stoffstreifen in Spülmittellauge tränken und über den Rand ziehen, sodass ein Seifenfilm die Schüssel verschließt. Die Blase wächst zu einer riesigen Kuppel und platzt mit einer Nebelwolke.</li>
+      <li><b>Singender Löffel:</b> Einen Metalllöffel fest auf ein Trockeneis-Stück drücken: Er quietscht und „singt“.</li>
+      <li><b>Ballon auf der Flasche:</b> Ein kleines Stück in eine leere PET-Flasche, Luftballon drüber, er bläst sich auf. Das ist der Natron-Versuch, nur ohne Natron.</li>
+      <li><b>Vulkan-Kuchen und Nebel-Bowle</b> (siehe Labor-Essen) zum Abschluss.</li>
+    </ol>
+    <div class="box why"><b>🔬 Was passiert da?</b>Trockeneis ist gefrorenes Kohlendioxid, dasselbe Gas wie beim unsichtbaren Feuerlöscher. Bei −78 °C geht es direkt vom festen in den gasförmigen Zustand über. Der weiße Nebel ist kein CO₂, sondern winzige Wassertröpfchen aus der Luft, die das kalte Gas kondensieren lässt.</div>
+    <h3>Material</h3>${matMarkup(ICE.material)}
+  </div>
+  <div class="card">
+    <h3>🛒 Woher bekommen?</h3>
+    <ul>
+      <li><b>Technische-Gase-Händler</b> (Linde, Air Liquide, Westfalen) haben in vielen Städten Abholshops. Eine eigene Styroporbox mitbringen, oft geht Vorbestellung per Telefon. Meist der günstigste Weg.</li>
+      <li><b>Online-Versand:</b> „Trockeneis kaufen“ suchen. Es kommt per Express in der Styroporbox. Der Versand kostet oft mehr als das Eis, deshalb Lieferung am Vortag oder Partytag.</li>
+      <li><b>Zufallstreffer:</b> Eisdiele, Fischhändler, Großmarkt, Getränke- oder Partyverleih. Ein Anruf kostet nichts.</li>
+    </ul>
+    <p><b>Menge:</b> 2–3 kg <b>Pellets</b>, keine Blöcke. Auch in der Box verdampfen ca. 10 % pro Tag, also höchstens einen Tag vorher holen.</p>
+    <div class="box safe"><b>🦺 Sicherheit (wichtig!)</b>
+      <ul style="margin:4px 0;padding-left:18px">
+        <li>Nur mit Handschuhen oder Zange anfassen. Bei −78 °C entstehen in Sekunden Kälteverbrennungen.</li>
+        <li><b>Nie</b> in ein verschlossenes Gefäß (Flasche mit Deckel, Schraubglas, Gefrierbeutel), das kann platzen.</li>
+        <li><b>Nie</b> ins Getränk oder in den Mund, nie in den Gefrierschrank (stört den Thermostat).</li>
+        <li>Raum lüften. Das Gas sammelt sich am Boden, also nicht in kleinen Räumen oder im Keller.</li>
+        <li>Beim Transport im Auto das Fenster einen Spalt öffnen.</li>
+        <li>Zu Hause: Styroporbox mit lose aufgelegtem Deckel in Garage, auf dem Balkon oder an einem anderen kühlen, belüfteten Ort.</li>
+        <li>Die Kinder schauen zu und pusten Seifenblasen, das Eis berühren nur Erwachsene.</li>
+      </ul>
+    </div>
+  </div>`;
+  document.getElementById("iceToggle").onclick = () => { S.sel.trockeneis = !iceOn(); save(); renderIce(); renderShop(); };
+}
+
+/* ---------- Essen ---------- */
+function renderFood(){
+  document.getElementById("foodList").innerHTML = FOOD.map(f => `
+    <article class="card exp ${isFood(f) ? "sel" : ""}">
+      <div class="exp-head">
+        <div class="exp-emoji">${f.emoji}</div>
+        <div class="grow"><h3>${f.title}</h3></div>
+        <button class="btn small ${isFood(f) ? "on" : ""}" data-food="${f.id}">${isFood(f) ? "✓ Eingeplant" : "+ Einplanen"}</button>
+      </div>
+      <p class="teaser">${f.text}</p>
+      <details><summary>Rezept & Zutaten</summary>
+        <h3>Zutaten</h3>${matMarkup(f.material)}
+        <h3>So geht's</h3><ol class="steps">${f.schritte.map(s => `<li>${s}</li>`).join("")}</ol>
+      </details>
+    </article>`).join("");
+}
+document.getElementById("foodList").addEventListener("click", e => {
+  const id = e.target.dataset.food; if (!id) return;
+  const f = FOOD.find(x => x.id === id);
+  S.food[id] = !isFood(f); save(); renderFood(); renderShop();
+});
+
+/* ---------- Einkauf ---------- */
+function renderShop(){
+  const map = {};
+  const add = (src, title) => src.forEach(([n, q, s]) => {
+    const k = s + "|" + n.toLowerCase();
+    if (!map[k]) map[k] = {name:n, shop:s, qty:[], for:[]};
+    if (q && q !== "–" && !map[k].qty.includes(q)) map[k].qty.push(q);
+    if (!map[k].for.includes(title)) map[k].for.push(title);
+  });
+  add(BASICS.material, BASICS.title);
+  EXP.filter(isSel).forEach(e => add(e.material, e.title));
+  if (iceOn()) add(ICE.material, "Trockeneis-Show");
+  FOOD.filter(isFood).forEach(f => add(f.material, f.title));
+  const items = Object.entries(map);
+  document.getElementById("shopList").innerHTML = SHOPS.map(shop => {
+    const rows = items.filter(([, v]) => v.shop === shop).sort((a, b) => a[1].name.localeCompare(b[1].name, "de"));
+    if (!rows.length) return "";
+    const done = rows.filter(([k]) => S.bought[k]).length;
+    return `<div class="card shop-group"><h3>${shop} <small>${done}/${rows.length}${SHOP_NOTE[shop] ? " · " + SHOP_NOTE[shop] : ""}</small></h3>` +
+      rows.map(([k, v]) => `<label class="check shop-item ${S.bought[k] ? "done" : ""}"><input type="checkbox" data-buy="${esc(k)}" ${S.bought[k] ? "checked" : ""}><span>${esc(v.name)}${v.qty.length ? " – <b>" + esc(v.qty.join(" + ")) + "</b>" : ""}<span class="for">für: ${esc(v.for.join(", "))}</span></span></label>`).join("") +
+      `</div>`;
+  }).join("");
+}
+document.getElementById("shopList").addEventListener("change", e => {
+  const k = e.target.dataset.buy; if (k === undefined) return;
+  S.bought[k] = e.target.checked; save(); renderShop();
+});
+document.getElementById("resetBought").onclick = () => { if (confirm("Alle Einkaufs-Häkchen entfernen?")) { S.bought = {}; save(); renderShop(); } };
+
+/* ---------- Code-Planer ---------- */
+function renderCode(){
+  const sel = EXP.filter(isSel);
+  const opts = id => `<option value="">– Station wählen –</option>` + sel.map(e => `<option value="${e.id}" ${e.id === id ? "selected" : ""}>${e.emoji} ${e.title}</option>`).join("");
+  document.getElementById("codeTable").innerHTML = `<tr><th>#</th><th>Station</th><th>Ziffer</th></tr>` +
+    S.code.map((c, i) => `<tr><td>${i + 1}</td><td><select data-code-st="${i}">${opts(c.st)}</select></td><td><input type="text" maxlength="1" inputmode="numeric" data-code-d="${i}" value="${esc(c.d || "")}"></td></tr>`).join("");
+  document.getElementById("codeOut").textContent = S.code.map(c => c.d || "–").join(" ");
+}
+document.getElementById("codeTable").addEventListener("change", e => {
+  const i = e.target.dataset.codeSt; if (i === undefined) return;
+  S.code[i].st = e.target.value; save();
+});
+document.getElementById("codeTable").addEventListener("input", e => {
+  const i = e.target.dataset.codeD; if (i === undefined) return;
+  S.code[i].d = e.target.value.replace(/\D/g, ""); e.target.value = S.code[i].d; save();
+  document.getElementById("codeOut").textContent = S.code.map(c => c.d || "–").join(" ");
+});
+
+/* ---------- Drucken & Reset ---------- */
+function openAll(){ document.querySelectorAll("details").forEach(d => d.open = true); }
+window.addEventListener("beforeprint", openAll);
+document.getElementById("printBtn").onclick = () => { openAll(); window.print(); };
+document.getElementById("resetAll").onclick = () => {
+  if (!confirm("Wirklich alles zurücksetzen? Auswahl, Häkchen, Code und Eingaben gehen verloren.")) return;
+  try { localStorage.removeItem(KEY); } catch(e) {}
+  location.reload();
+};
+
+/* ---------- Start ---------- */
+renderPrep(); renderFilters(); renderExp(); renderIce(); renderFood(); renderShop(); renderCode(); onFields();
+</script>
+</body>
+</html>
