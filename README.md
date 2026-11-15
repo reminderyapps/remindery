@@ -29,6 +29,7 @@ englisch), Deutsch an der Wurzel, Englisch unter `en/`. Zuordnung alt → neu:
     clock/             index.html, privacy/        (Uhr lesen lernen)
     shopping/          index.html, privacy/, terms/, delete/
     puzzles/           index.html, privacy/        (Kinder Rätselheft 1. & 2. Klasse)
+    calendar/          index.html, privacy/, icon.png (Kalender und Wochentage lernen; Datenschutz aus calendar-app/tool/web_privacy.py)
     ubo/               index.html, privacy/, terms/, icon.png
     en/<app>/          englische Fassung der Produktseite
     geburtstage/, silben-lesen/, uhr-lesen-lernen/, ox/, raetselheft/
