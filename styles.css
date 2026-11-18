@@ -112,28 +112,26 @@ main {
   line-height: 0;
 }
 
-/* 232 px Breite ≈ 90 px Bildhöhe, davon ~60 px Badge selbst;
-   width + height:auto skaliert auf schmalen Screens verzerrungsfrei. */
+/* Studie A (PO 19.11.2026, docs/studie/badges-2026-11): alle Badges mit 40 px
+   sichtbarer Höhe (Apples Minimum) in einer Zeile. Play-PNG: Badge 192 von
+   250 px Bildhöhe, der Rest ist Schutzzone → Bildhöhe 52 px, Breite folgt. */
 .store-badge img {
-  width: 232px;
-  height: auto;
-  max-width: 100%;
+  height: 52px;
+  width: auto;
 }
 
 .store-badge:hover { text-decoration: none; }
 
-/* Amazon-Badge ohne Rand im Bild: 235 px ergeben dieselbe sichtbare Höhe
-   (~69 px) wie das Play-Badge mit seinem eingebauten Rand. */
-.store-badge--amazon { margin-left: 8px; }
-.store-badge--amazon img { width: 235px; margin: 10px 0; }
+/* Amazon-Badge ohne Rand im Bild: 40 px hoch, 6 px oben/unten = Zeile wie Play. */
+.store-badge--amazon { margin-left: 12px; }
+.store-badge--amazon img { height: 40px; margin: 6px 0; }
 
 /* Offizielles App-Store-Badge (app-store-badge-de.svg / -en.svg, unverändert
    von toolbox.marketingtools.apple.com). Apple: nur proportional skalieren,
    mindestens 40 px hoch, Schutzzone ≥ 1/4 der Badge-Höhe rundum.
-   180 px Breite ≈ 60 px Höhe wie das sichtbare Play-Badge; 15 px Rand
-   oben/unten ergeben dieselbe Zeilenhöhe (90 px). */
-.store-badge--apple { margin-left: 8px; }
-.store-badge--apple img { width: 180px; margin: 15px 0; }
+   40 px hoch, 12 px Abstand seitlich (≥ 1/4 Höhe), 6 px oben/unten = Zeile wie Play. */
+.store-badge--apple { margin-left: 12px; }
+.store-badge--apple img { height: 40px; margin: 6px 0; }
 
 /* Noch kein Store-Eintrag: Hinweis statt Badge (das Badge darf nur einen
    echten Eintrag verlinken). Auf Produktseiten und in den App-Karten. */
@@ -481,15 +479,13 @@ article blockquote {
 .home #family { padding-top: 8px; }
 @media (max-width: 480px) { .home .app { padding: 22px 18px; } .home .app-icon img { width: 68px; height: 68px; border-radius: 16px; } }
 
-/* Offizielle Badges, unverändert und nur proportional skaliert. Der weiße Rand
-   im Play-PNG ist die vorgeschriebene Schutzzone; Amazon hat keinen Rand im
-   Bild, daher Breite und Rand so, dass beide gleich hoch wirken. */
-.home .badges { display: flex; flex-wrap: wrap; align-items: center; gap: 0 10px; }
+/* Offizielle Badges, unverändert und nur proportional skaliert, alle 40 px
+   sichtbar hoch (Studie A, 19.11.2026). Der Rand im Play-PNG ist Schutzzone. */
+.home .badges { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; }
 .home .badge { display: inline-block; line-height: 0; border-radius: 10px; }
-.home .badge img { height: auto; }
-.home .badge.play img { width: 160px; }
-.home .badge.amazon img { width: 162px; margin: 7px 0; }
-.home .badge.apple img { width: 132px; margin: 9px 0; }
+.home .badge.play img { height: 52px; width: auto; }
+.home .badge.amazon img { height: 40px; width: auto; margin: 6px 0; }
+.home .badge.apple img { height: 40px; width: auto; margin: 6px 0; }
 .home .storelink { text-align: center; margin: 36px 0 0; }
 .home .storelink a { display: inline-flex; align-items: center; min-height: 44px; }
 
