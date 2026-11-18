@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Studie Store-Badges</title>
+<link rel="stylesheet" href="../../../styles.css">
+<style>
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); margin: 0; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 32px var(--gutter) 80px; }
+  h1 { font-family: var(--serif); margin: 0 0 6px; }
+  .lead { color: var(--text-soft); max-width: 52em; margin: 0 0 28px; }
+  .dir { border-top: 1px solid var(--line); padding: 36px 0 12px; }
+  .dir h2 { font-family: var(--serif); margin: 0 0 4px; }
+  .dir .why { color: var(--text-soft); margin: 0 0 22px; max-width: 60em; }
+  .row { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; }
+  .lbl { font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; color: var(--text-soft); margin: 0 0 8px; }
+  .home .app { width: 100%; box-sizing: border-box; }
+  .desk { width: 540px; } .phone { width: 360px; } .page { width: 600px; }
+  .pagebox { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 26px 28px; }
+  .pagebox h3 { font-family: var(--serif); margin: 0 0 8px; font-size: 1.4rem; }
+  .pagebox ul { margin: 0 0 6px; padding-left: 20px; color: var(--text-soft); }
+  .rec { background: var(--tint); border-radius: 14px; padding: 14px 18px; margin: 0 0 24px; max-width: 60em; }
+  .switch { display: inline-flex; gap: 6px; margin: 0 0 18px; flex-wrap: wrap; }
+  .switch button { font: inherit; font-size: .9rem; border: 1px solid var(--line); background: var(--card); color: var(--text);
+    border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+  .switch button[aria-pressed="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+  /* ---------- A: offizielle Badges, schlank, eine Höhe ---------- */
+  .A .badges { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
+  .A .badge { line-height: 0; display: inline-block; }
+  /* sichtbare Badge-Höhe überall 40 px (Apple-Minimum). Play-PNG: Badge 192 von 250 px Höhe,
+     der Rest ist Schutzzone und bleibt erhalten → Bildhöhe 52 px. */
+  .A .badge.play img { height: 52px; width: auto; margin: 0 -6px; }
+  .A .badge.amazon img { height: 40px; width: auto; }
+  .A .badge.apple img { height: 40px; width: auto; }
+  .A .pagebox .badges { margin-top: 14px; }
+
+  /* ---------- B: Store-Zeile als Text-Chips ---------- */
+  .B .stores { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .B .stores .k { font-size: .85rem; color: var(--text-soft); margin-right: 2px; }
+  .B .chip { display: inline-flex; align-items: center; gap: 7px; min-height: 36px; padding: 0 14px;
+    border-radius: 999px; border: 1.5px solid color-mix(in srgb, var(--c) 45%, var(--line));
+    color: var(--text); font-weight: 600; font-size: .92rem; text-decoration: none; background: var(--card);
+    transition: background .15s, border-color .15s; }
+  .B .chip:hover { background: color-mix(in srgb, var(--c) 10%, var(--card)); border-color: var(--c); text-decoration: none; }
+  .B .chip svg { width: 15px; height: 15px; flex: 0 0 auto; color: var(--c); }
+  .B .pagebox .stores { margin-top: 14px; }
+
+  /* ---------- C: ein Knopf passend zum Gerät ---------- */
+  .C .get { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+  .C .primary { display: inline-flex; align-items: center; gap: 10px; min-height: 46px; padding: 0 20px;
+    border-radius: 14px; background: var(--c); color: #fff; font-weight: 700; text-decoration: none; }
+  .C .primary small { font-weight: 500; opacity: .85; }
+  .C .primary:hover { text-decoration: none; filter: brightness(1.06); }
+  .C .also { font-size: .88rem; color: var(--text-soft); }
+  .C .also a { color: var(--text-soft); text-decoration: underline; text-underline-offset: 3px; }
+  .C .badgeone { line-height: 0; }
+  .C .badgeone img { height: 44px; width: auto; }
+  .C .badgeone img.play { height: 57px; margin: 0 -7px; }
+  .C .pagebox .get { margin-top: 14px; }
+  .C .desk-three { display: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Store-Badges: drei Richtungen</h1>
+  <p class="lead">Gleiche Karte überall: Silben Lesen mit allen drei Stores. Links die Kachel der Startseite (PC), daneben
+    am Handy (360 px), unten die App-Seite. Heute: Badges 160 px breit auf der Startseite, 232 px auf den App-Seiten,
+    bei drei Stores zwei Zeilen.</p>
+
+  <p class="rec"><b>Meine Empfehlung: C.</b> Wer am Handy ist, braucht genau einen Store. Ein Knopf in der Farbe
+    der App ist ruhiger als drei fremde Logos und führt direkt zum Ziel. Die anderen Stores bleiben als kleine Textzeile darunter.
+    Am PC zeigt C die Text-Chips aus B, weil dort kein Gerät feststeht.
+    Recht: Badge-Regeln gelten nur, wenn wir die Badges zeigen; Store-Namen als Text sind erlaubt. Logos (Play-Dreieck,
+    Apfel) verwenden B und C bewusst nicht, Apple verbietet den Apfel außerhalb des Badges.</p>
+
+  <!-- ===================== A ===================== -->
+  <section class="dir A">
+    <h2>A · Offiziell, aber schlank</h2>
+    <p class="why">Die echten Badges, alle auf 40 px sichtbare Höhe (Apples Minimum), in einer Zeile. Am wenigsten
+      Umbau, sofort erkennbar, bleibt aber bunt und dreimal „Logo“ pro Karte.</p>
+    <div class="row home">
+      <div class="desk"><p class="lbl">Startseite · PC</p>
+        <article class="app" style="--c: var(--silben)">
+          <div class="app-top"><a class="app-icon" href="#"><img src="../../../syllables/icon.png" alt=""></a>
+            <div><p class="meta">Grundschule · Lesen</p><h3><a href="#">Silben Lesen</a></h3></div></div>
+          <p class="desc">Lesen lernen mit der Silbenmethode: 58 Geschichten und 7 Bücher in zweifarbiger Silbenschrift.</p>
+          <div class="app-foot"><a class="more" href="#">Mehr über die App <span>→</span></a>
+            <div class="badges">
+              <a class="badge play" href="#"><img src="../../../google-play-badge-de.png" alt="Google Play"></a>
+              <a class="badge amazon" href="#"><img src="../../../amazon-appstore-badge-de.png" alt="Amazon"></a>
+              <a class="badge apple" href="#"><img src="../../../app-store-badge-de.svg" alt="App Store"></a>
+            </div></div>
+        </article></div>
+      <div class="phone"><p class="lbl">Startseite · Handy</p>
+        <article class="app" style="--c: var(--silben)">
+          <div class="app-top"><a class="app-icon" href="#"><img src="../../../syllables/icon.png" alt=""></a>
+            <div><p class="meta">Grundschule · Lesen</p><h3><a href="#">Silben Lesen</a></h3></div></div>
+          <p class="desc">Lesen lernen mit der Silbenmethode.</p>
+          <div class="app-foot"><a class="more" href="#">Mehr über die App <span>→</span></a>
+            <div class="badges">
+              <a class="badge play" href="#"><img src="../../../google-play-badge-de.png" alt="Google Play"></a>
+              <a class="badge amazon" href="#"><img src="../../../amazon-appstore-badge-de.png" alt="Amazon"></a>
+              <a class="badge apple" href="#"><img src="../../../app-store-badge-de.svg" alt="App Store"></a>
+            </div></div>
+        </article></div>
+    </div>
+    <div class="row" style="margin-top:24px"><div class="page"><p class="lbl">App-Seite</p>
+      <div class="pagebox"><h3>Für Eltern gemacht</h3><ul><li>Keine Werbung, kein Abo, kein Konto</li><li>Kostenlos: zwölf Inhalte, danach ein einmaliger Kauf</li></ul>
+        <div class="badges">
+          <a class="badge play" href="#"><img src="../../../google-play-badge-de.png" alt="Google Play"></a>
+          <a class="badge amazon" href="#"><img src="../../../amazon-appstore-badge-de.png" alt="Amazon"></a>
+          <a class="badge apple" href="#"><img src="../../../app-store-badge-de.svg" alt="App Store"></a>
+        </div></div></div></div>
+  </section>
+
+  <!-- ===================== B ===================== -->
+  <section class="dir B">
+    <h2>B · Store-Zeile als Text-Chips</h2>
+    <p class="why">Keine Badges, sondern drei schlanke Chips im Ton der Seite, umrandet in der App-Farbe. Kompakt,
+      einheitlich auf jeder Karte, passt zur ruhigen Typografie. Weniger „Signal“ als die bekannten Badges.</p>
+    <div class="row home">
+      <div class="desk"><p class="lbl">Startseite · PC</p>
+        <article class="app" style="--c: var(--silben)">
+          <div class="app-top"><a class="app-icon" href="#"><img src="../../../syllables/icon.png" alt=""></a>
+            <div><p class="meta">Grundschule · Lesen</p><h3><a href="#">Silben Lesen</a></h3></div></div>
+          <p class="desc">Lesen lernen mit der Silbenmethode: 58 Geschichten und 7 Bücher in zweifarbiger Silbenschrift.</p>
+          <div class="app-foot"><a class="more" href="#">Mehr über die App <span>→</span></a>
+            <div class="stores"><span class="k">Laden bei</span>
+              <a class="chip" href="#"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8m0 0-3-3m3 3 3-3M3 13h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Google Play</a>
+              <a class="chip" href="#"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8m0 0-3-3m3 3 3-3M3 13h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Amazon</a>
+              <a class="chip" href="#"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8m0 0-3-3m3 3 3-3M3 13h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>App Store</a>
+            </div></div>
+        </article></div>
+      <div class="phone"><p class="lbl">Startseite · Handy</p>
+        <article class="app" style="--c: var(--silben)">
+          <div class="app-top"><a class="app-icon" href="#"><img src="../../../syllables/icon.png" alt=""></a>
+            <div><p class="meta">Grundschule · Lesen</p><h3><a href="#">Silben Lesen</a></h3></div></div>
+          <p class="desc">Lesen lernen mit der Silbenmethode.</p>
+          <div class="app-foot"><a class="more" href="#">Mehr über die App <span>→</span></a>
+            <div class="stores">
+              <a class="chip" href="#">Google Play</a><a class="chip" href="#">Amazon</a><a class="chip" href="#">App Store</a>
+            </div></div>
+        </article></div>
+    </div>
+    <div class="row" style="margin-top:24px"><div class="page" style="--c: var(--silben)"><p class="lbl">App-Seite</p>
+      <div class="pagebox"><h3>Für Eltern gemacht</h3><ul><li>Keine Werbung, kein Abo, kein Konto</li><li>Kostenlos: zwölf Inhalte, danach ein einmaliger Kauf</li></ul>
+        <div class="stores"><span class="k">Laden bei</span>
+          <a class="chip" href="#">Google Play</a><a class="chip" href="#">Amazon</a><a class="chip" href="#">App Store</a>
+        </div></div></div></div>
+  </section>
+
+  <!-- ===================== C ===================== -->
+  <section class="dir C" id="C">
+    <h2>C · Ein Knopf, passend zum Gerät</h2>
+    <p class="why">Die Seite erkennt das Gerät: Android → Google Play, iPhone/iPad → App Store, Fire-Tablet → Amazon.
+      Ein Knopf in der App-Farbe, darunter klein „Auch bei …“. Am PC stehen die Chips aus B. Hat eine App den
+      erkannten Store nicht (z. B. Kalender noch ohne Play), zeigt der Knopf den ersten vorhandenen.</p>
+    <div class="switch" role="group" aria-label="Gerät simulieren">
+      <button data-dev="android" aria-pressed="true">Android</button>
+      <button data-dev="ios" aria-pressed="false">iPhone</button>
+      <button data-dev="fire" aria-pressed="false">Fire-Tablet</button>
+      <button data-dev="pc" aria-pressed="false">PC</button>
+    </div>
+    <div class="row home">
+      <div class="desk"><p class="lbl">Startseite · Kachel</p>
+        <article class="app" style="--c: var(--silben)">
+          <div class="app-top"><a class="app-icon" href="#"><img src="../../../syllables/icon.png" alt=""></a>
+            <div><p class="meta">Grundschule · Lesen</p><h3><a href="#">Silben Lesen</a></h3></div></div>
+          <p class="desc">Lesen lernen mit der Silbenmethode: 58 Geschichten und 7 Bücher in zweifarbiger Silbenschrift.</p>
+          <div class="app-foot"><a class="more" href="#">Mehr über die App <span>→</span></a>
+            <div class="get" data-variant="button"></div></div>
+        </article></div>
+      <div class="phone"><p class="lbl">Startseite · Handy</p>
+        <article class="app" style="--c: var(--silben)">
+          <div class="app-top"><a class="app-icon" href="#"><img src="../../../syllables/icon.png" alt=""></a>
+            <div><p class="meta">Grundschule · Lesen</p><h3><a href="#">Silben Lesen</a></h3></div></div>
+          <p class="desc">Lesen lernen mit der Silbenmethode.</p>
+          <div class="app-foot"><a class="more" href="#">Mehr über die App <span>→</span></a>
+            <div class="get" data-variant="button"></div></div>
+        </article></div>
+    </div>
+    <div class="row" style="margin-top:24px"><div class="page" style="--c: var(--silben)"><p class="lbl">App-Seite (Variante C2: ein offizielles Badge statt Knopf)</p>
+      <div class="pagebox"><h3>Für Eltern gemacht</h3><ul><li>Keine Werbung, kein Abo, kein Konto</li><li>Kostenlos: zwölf Inhalte, danach ein einmaliger Kauf</li></ul>
+        <div class="get" data-variant="badge"></div></div></div></div>
+  </section>
+</div>
+
+<script>
+  const STORES = {
+    android: { name: 'Google Play', badge: '../../../google-play-badge-de.png', cls: 'play' },
+    fire:    { name: 'Amazon',      badge: '../../../amazon-appstore-badge-de.png', cls: 'amazon' },
+    ios:     { name: 'App Store',   badge: '../../../app-store-badge-de.svg', cls: 'apple' },
+  };
+  const ORDER = ['android', 'fire', 'ios'];
+  function render(dev) {
+    document.querySelectorAll('#C .get').forEach(el => {
+      if (dev === 'pc') {
+        el.innerHTML = '<div class="stores" style="display:flex;flex-wrap:wrap;gap:8px">' +
+          ORDER.map(k => `<a class="chip" href="#" style="display:inline-flex;align-items:center;min-height:36px;padding:0 14px;border-radius:999px;border:1.5px solid color-mix(in srgb, var(--c) 45%, var(--line));color:var(--text);font-weight:600;font-size:.92rem;text-decoration:none;background:var(--card)">${STORES[k].name}</a>`).join('') + '</div>';
+        return;
+      }
+      const s = STORES[dev];
+      const others = ORDER.filter(k => k !== dev).map(k => `<a href="#">${STORES[k].name}</a>`).join(' · ');
+      el.innerHTML = el.dataset.variant === 'badge'
+        ? `<a class="badgeone" href="#"><img class="${s.cls}" src="${s.badge}" alt="${s.name}"></a><span class="also">Auch bei ${others}</span>`
+        : `<a class="primary" href="#">Kostenlos laden <small>· ${s.name}</small></a><span class="also">Auch bei ${others}</span>`;
+    });
+  }
+  document.querySelectorAll('.switch button').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.switch button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    render(b.dataset.dev);
+  }));
+  render('android');
+</script>
+</body>
+</html>
