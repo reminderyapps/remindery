@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grandi – Rätsel für jeden Tag</title>
+  <meta name="description" content="Grandi – Rätsel für jeden Tag, allein oder zu zweit.">
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href="https://remindery.de/grandi/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=k1">
+  <link rel="stylesheet" href="/styles.css">
+  <style>.stores{display:flex;flex-direction:column;gap:14px;margin:28px 0}.stores a{display:block;text-align:center;padding:18px 20px;font-size:1.25rem;font-weight:600;border:2px solid currentColor;border-radius:12px;text-decoration:none}.stores a:hover{background:rgba(127,127,127,.12)}</style>
+</head>
+<!--
+  Weiche für Grandi (Arbeitsname): nicht verlinkt, nicht in der Sitemap, noindex.
+  Store-URLs unten im Skript. Amazon und Apple sind Platzhalter (AMAZON_URL_TBD / APPLE_URL_TBD),
+  solange es dort noch keinen Eintrag gibt - dann geht dieser Store auf die Seite zurück (Knöpfe).
+-->
+<body>
+  <header class="site-head">
+    <div class="head-in">
+      <a class="site-brand" href="/"><img src="/favicon.svg?v=k1" width="34" height="34" alt=""><span>Remindery Apps</span></a>
+    </div>
+  </header>
+  <main>
+    <header class="page-header">
+      <span class="brand">Grandi</span>
+    </header>
+
+    <article>
+      <h1>Grandi</h1>
+      <p>Grandi – Rätsel für jeden Tag, allein oder zu zweit.</p>
+
+      <p id="redirect-note" hidden>Du wirst zu deinem Store weitergeleitet …</p>
+
+      <div class="stores">
+        <a id="link-play" href="https://play.google.com/store/apps/details?id=app.remindery.familypuzzle">Google Play</a>
+        <a id="link-amazon" href="#">Amazon Appstore</a>
+        <a id="link-apple" href="#">App Store (iPhone, iPad)</a>
+      </div>
+    </article>
+  </main>
+  <footer>
+    <nav>
+      <a href="/grandi/privacy/">Datenschutz</a>
+      <a href="/legal-notice/">Impressum</a>
+    </nav>
+    &copy; 2026 Remindery Apps
+  </footer>
+  <script>
+    (function () {
+      var PLAY_URL = 'https://play.google.com/store/apps/details?id=app.remindery.familypuzzle';
+      var AMAZON_URL = 'AMAZON_URL_TBD';
+      var APPLE_URL = 'APPLE_URL_TBD';
+      function ready(u) { return u && u.indexOf('_TBD') === -1; }
+      var ids = { 'link-play': PLAY_URL, 'link-amazon': AMAZON_URL, 'link-apple': APPLE_URL };
+      Object.keys(ids).forEach(function (id) {
+        var el = document.getElementById(id);
+        if (ready(ids[id])) { el.href = ids[id]; } else { el.style.opacity = '.5'; el.removeAttribute('href'); el.textContent += ' (bald)'; }
+      });
+      var ua = navigator.userAgent || '';
+      var target = null;
+      if (/Silk|KF[A-Z]{2,}|AFT[A-Z]/.test(ua)) target = AMAZON_URL;
+      else if (/iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) target = APPLE_URL;
+      else if (/Android/.test(ua)) target = PLAY_URL;
+      if (ready(target)) {
+        document.getElementById('redirect-note').hidden = false;
+        location.replace(target);
+      }
+    })();
+  </script>
+</body>
+</html>
