@@ -30,6 +30,8 @@ englisch), Deutsch an der Wurzel, Englisch unter `en/`. Zuordnung alt → neu:
     shopping/          index.html, privacy/, terms/, delete/
     puzzles/           index.html, privacy/        (Kinder Rätselheft 1. & 2. Klasse)
     calendar/          index.html, privacy/, icon.png (Kalender und Wochentage lernen; Datenschutz aus calendar-app/tool/web_privacy.py)
+    fahrradpruefung/   index.html, privacy/, icon.png (Fahrradprüfung üben, Trainer; nur deutsch, deutscher Pfad
+                       nach der SEO-Ausnahme PO 25.10.2026, kein en/; Pfad steht fest in der App)
     ubo/               index.html, privacy/, terms/, icon.png
     en/<app>/          englische Fassung der Produktseite
     geburtstage/, silben-lesen/, uhr-lesen-lernen/, ox/, raetselheft/
